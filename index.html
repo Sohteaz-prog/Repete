@@ -177,7 +177,7 @@ h2{font-size:19px;margin:0 0 2px}
 .sh-drop{position:relative;width:100%;max-width:640px;display:grid;grid-template-rows:0fr auto;transition:grid-template-rows .5s cubic-bezier(.3,.7,.2,1)}
 .sh-wrap.open .sh-drop{grid-template-rows:1fr auto}
 .sh-clip{min-height:0;overflow:hidden}
-.sh-panel{background:var(--card);padding:calc(14px + env(safe-area-inset-top)) 16px 18px;max-height:82vh;max-height:82dvh;overflow:auto;-webkit-overflow-scrolling:touch}
+.sh-panel{background:var(--card);padding:calc(14px + env(safe-area-inset-top)) 16px calc(44px + env(safe-area-inset-bottom));max-height:80vh;max-height:80dvh;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .sh-roll{height:0;box-shadow:0 6px 16px rgba(0,0,0,.3)}
 .sh-drop{border-radius:0 0 18px 18px}
 .sh-clip{border-radius:0 0 18px 18px}
@@ -1470,14 +1470,18 @@ function buzz(kind){
 }
 /* ---- Installation de l'appli (écran d'accueil) ---- */
 let installEvt = null;
+const instKey = 'repete.installed';
+const markInstalled = () => { try { localStorage.setItem(instKey, '1'); } catch(x) {} };
+const wasInstalled = () => { try { return localStorage.getItem(instKey) === '1'; } catch(x) { return false; } };
 const isStandalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
 const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent || '');
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; try { if (S.settings) renderSheet(); } catch(x) {} });
-window.addEventListener('appinstalled', () => { installEvt = null; try { if (S.settings) renderSheet(); } catch(x) {} });
+window.addEventListener('appinstalled', () => { installEvt = null; markInstalled(); try { if (S.settings) renderSheet(); } catch(x) {} });
 function installBlock(){
+  if (isStandalone()) { markInstalled(); return ''; }
+  if (wasInstalled()) return '';
   let body;
-  if (isStandalone()) body = '<div class="mute small">Installée : tu l’utilises en plein écran.</div>';
-  else if (installEvt) body = '<button class="btn sm" data-act="installapp" style="width:100%">Installer Répète sur ce téléphone</button><div class="mute small" style="margin-top:6px">Icône sur l’écran d’accueil, plein écran, fonctionne hors ligne.</div>';
+  if (installEvt) body = '<button class="btn sm" data-act="installapp" style="width:100%">Installer Répète sur ce téléphone</button><div class="mute small" style="margin-top:6px">Icône sur l’écran d’accueil, plein écran, fonctionne hors ligne.</div>';
   else if (isIOS) body = '<div class="mute small">Sur iPhone, dans Safari : bouton Partager, puis « Sur l’écran d’accueil ».</div>';
   else body = '<div class="mute small">Menu ⋮ du navigateur, puis « Installer l’application » (ou « Installer et créer un raccourci »).</div>';
   return '<div class="lbl">Application</div>' + body;
@@ -1763,7 +1767,28 @@ function renderSheet(){
     sheetTimer = setTimeout(() => { el.innerHTML = ''; document.body.style.overflow = ''; }, 520);
   } else { document.body.style.overflow = ''; }
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && S.settings) { S.settings = false; renderSheet(); } });
+/* Réglages et bouton retour du téléphone : l'ouverture ajoute une entrée d'historique, « retour » la ferme. */
+function openSettings(){ if (S.settings) return; S.settings = true; renderSheet(); try { history.pushState({ rsh: 1 }, ''); } catch(x) {} }
+function closeSettings(){ if (!S.settings) return; S.settings = false; renderSheet(); try { if (history.state && history.state.rsh) history.back(); } catch(x) {} }
+window.addEventListener('popstate', () => { if (S.settings) { S.settings = false; renderSheet(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && S.settings) closeSettings(); });
+/* Réglages : glisser vers le haut ferme la fenêtre (depuis le bas du contenu, ou depuis le fond assombri) */
+let shSwipe = null;
+document.addEventListener('touchstart', e => {
+  shSwipe = null;
+  if (!S.settings || e.touches.length !== 1) return;
+  const t = e.target; if (!t || !t.closest || !t.closest('.sh-wrap')) return;
+  if (t.closest('input[type=range],input[type=date]')) return;
+  const pn = t.closest('.sh-panel');
+  const atEnd = !pn || pn.scrollTop + pn.clientHeight >= pn.scrollHeight - 3;
+  shSwipe = { y: e.touches[0].clientY, x: e.touches[0].clientX, ok: atEnd };
+}, { passive: true });
+document.addEventListener('touchend', e => {
+  const g = shSwipe; shSwipe = null;
+  if (!g || !g.ok || !S.settings || !e.changedTouches.length) return;
+  const dy = e.changedTouches[0].clientY - g.y, dx = e.changedTouches[0].clientX - g.x;
+  if (dy < -60 && Math.abs(dy) > Math.abs(dx) * 1.5) closeSettings();
+}, { passive: true });
 
 let VOICES = [];
 function loadVoices(){ if (!synth) return; try { VOICES = synth.getVoices().filter(v => /^fr/i.test(v.lang)); } catch(e){} }
@@ -2198,7 +2223,7 @@ document.addEventListener('click', e => {
     case 'installapp': {
       const ev = installEvt; if (!ev) break;
       ev.prompt();
-      Promise.resolve(ev.userChoice).then(c => { installEvt = null; if (S.settings) renderSheet(); }).catch(() => {});
+      Promise.resolve(ev.userChoice).then(c => { installEvt = null; if (c && c.outcome === 'accepted') markInstalled(); if (S.settings) renderSheet(); }).catch(() => {});
       break;
     }
     case 'sethaptic': saved.haptic = b.dataset.v; persist(); render(); buzz('tap'); break;
@@ -2220,8 +2245,8 @@ document.addEventListener('click', e => {
     case 'badgesopen': S.view = 'badges'; S.bsel = null; render(); window.scrollTo(0, 0); break;
     case 'badgesback': S.view = 'library'; render(); window.scrollTo(0, 0); break;
     case 'badgesel': S.bsel = b.dataset.id; render(); break;
-    case 'settings': S.settings = true; renderSheet(); break;
-    case 'closesettings': S.settings = false; renderSheet(); break;
+    case 'settings': openSettings(); break;
+    case 'closesettings': closeSettings(); break;
     case 'setfs': S.fs = +b.dataset.v; applyFs(); persist(); render(); break;
     case 'settheme': saved.theme = b.dataset.v; applyTheme(); persist(); render(); break;
     case 'setcolor': saved.color = b.dataset.v; applyTheme(); persist(); render(); break;
