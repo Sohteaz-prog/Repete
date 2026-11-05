@@ -2019,7 +2019,17 @@ function renderSheet(){
    faisait quitter l'appli sans message). L'appli décide alors : écran ouvert → elle le ferme ; accueil → message, puis
    un second « retour » dans les 2 s quitte vraiment. Dans tous les cas la sentinelle est remise aussitôt. */
 let baseIdx = 0, staleGo = false;
-function topPush(){ try { history.pushState({ k: 'top', i: baseIdx + 1, a: baseIdx }, ''); } catch(x) {} }
+/* Remise de la sentinelle : pas dans le gestionnaire du retour lui-même (Android peut ignorer un pushState fait pendant
+   que le retour est en cours), mais juste après, avec de nouvelles tentatives, et à chaque toucher / retour au premier plan. */
+let leaving = false;
+const TOP_DEPTH = 3;
+const curIdx = () => { const st = history.state; return st && st.k === 'top' && typeof st.i === 'number' ? st.i : baseIdx; };
+function topPush(){ try { history.pushState({ k: 'top', i: curIdx() + 1, a: baseIdx }, ''); } catch(x) {} }
+function ensureTop(){ if (leaving) return; try { let n = TOP_DEPTH - (curIdx() - baseIdx), g = 5; while (n-- > 0 && g--) topPush(); } catch(x) {} }
+function topSoon(){ [0, 60, 250, 700].forEach(t => setTimeout(ensureTop, t)); }
+document.addEventListener('pointerup', ensureTop, { capture: true });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) topSoon(); });
+window.addEventListener('pageshow', topSoon);
 (function histInit(){
   try {
     const st = history.state;
@@ -2031,7 +2041,7 @@ function topPush(){ try { history.pushState({ k: 'top', i: baseIdx + 1, a: baseI
       if (d > 0 && !keep && history.length > d) { staleGo = true; history.go(-d); return; }
     } else baseIdx = (st && st.k === 'base' && typeof st.a === 'number') ? st.a : history.length - 1;
     history.replaceState({ k: 'base', a: baseIdx }, '');
-    topPush();
+    ensureTop();
   } catch(e) {}
 })();
 const navDepth = () => !!(S.settings || S.view !== 'library' || S.started || document.querySelector('.rwl.on') || (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()));
@@ -2187,12 +2197,19 @@ function exitToast(){
 function eggOpened(){}
 RepeteEgg.onClose = () => {};
 window.addEventListener('popstate', () => {
-  const st = history.state;
-  if (st && st.k === 'top') return;                      // retour sur la sentinelle : rien à faire
-  if (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()) { RepeteEgg.close(); topPush(); return; }
-  if (navDepth()) { navBack(); topPush(); return; }
-  if (Date.now() - exitAt < 2000) { history.back(); return; }   // 2e appui : on quitte
-  exitAt = Date.now(); exitToast(); topPush();
+  if (leaving) return;
+  /* Chaque « retour » du téléphone arrive ici, quelle que soit l'entrée sur laquelle on retombe. Le chemin est dégressif :
+     animation / fiche → écran → progression → accueil ; à l'accueil, il faut deux « retour » rapprochés pour quitter. */
+  if (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()) { RepeteEgg.close(); topSoon(); return; }
+  if (navDepth()) { navBack(); topSoon(); return; }
+  if (Date.now() - exitAt < 2000) {   // 2e appui : on quitte (retour jusqu'avant l'entrée de départ)
+    leaving = true;
+    try { history.go(-(curIdx() - baseIdx + 1)); } catch(x) {}
+    setTimeout(() => { try { window.close(); } catch(x) {} }, 400);
+    setTimeout(() => { leaving = false; ensureTop(); }, 1500);
+    return;
+  }
+  exitAt = Date.now(); exitToast(); topSoon();
 });
 function openSettings(){ if (S.settings) return; S.settings = true; renderSheet(); }
 function closeSettings(){ if (!S.settings) return; S.settings = false; renderSheet(); }
@@ -2442,7 +2459,7 @@ function mineView(){
 }
 /* ---- Classement (feuille Google + Apps Script ; voir claude/classement-concept.md) ---- */
 const RANK_URL = 'https://script.google.com/macros/s/AKfycbwAjizlS7bYfNKiqNpTfNEWg8Ce_KGkxilsifDI92WMbaxVzZFGsgd7SbUrIbvTk33Ngg/exec';
-const RANK_EVERY = 60000, RANK_VER = 'c50';
+const RANK_EVERY = 60000, RANK_VER = 'c52';
 const rk = () => (saved.rank = saved.rank || { on:false, pseudo:'', id:'', last:0, del:false, cache:null });
 let rankBusy = false, rankErr = '', rankT = 0, rankOpen = new Set();
 function rankId(){ const r = rk();
