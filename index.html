@@ -2013,35 +2013,29 @@ function renderSheet(){
   } else { document.body.style.overflow = ''; }
 }
 /* Bouton retour du téléphone = bouton « retour / fermer » de l'appli.
-   Dès qu'on quitte l'écran d'accueil (réglages, scène, répétition, badges), une entrée d'historique « garde »
-   est ajoutée : « retour » la consomme et déclenche l'action de retour de l'appli. À l'accueil, « retour » quitte l'appli. */
-let navGuard = false, navIgnore = false;
-/* Entrées d'historique : chacune porte son type (k), sa position (i) et la position de l'entrée de départ (a).
-   Si la page est rechargée (le téléphone a vidé l'appli de la mémoire pendant qu'elle était en arrière-plan), elle se
-   retrouve sur une entrée « garde » d'une visite précédente : un « retour » ressortirait alors de l'appli sans message.
-   On revient donc d'abord à l'entrée de départ, puis le fonctionnement normal reprend. */
+   Principe : l'historique ne contient jamais que DEUX entrées de l'appli : l'entrée de départ (« base ») et une entrée
+   « sentinelle » (« top ») sur laquelle on reste toujours. Un « retour » du téléphone ramène donc toujours sur la base,
+   jamais sur une entrée créée par nous (que Chrome peut sauter quand il estime qu'il n'y a pas eu d'interaction, ce qui
+   faisait quitter l'appli sans message). L'appli décide alors : écran ouvert → elle le ferme ; accueil → message, puis
+   un second « retour » dans les 2 s quitte vraiment. Dans tous les cas la sentinelle est remise aussitôt. */
 let baseIdx = 0, staleGo = false;
-function hpush(k){ history.pushState({ k: k, i: history.length, a: baseIdx }, ''); }
+function topPush(){ try { history.pushState({ k: 'top', i: baseIdx + 1, a: baseIdx }, ''); } catch(x) {} }
 (function histInit(){
   try {
     const st = history.state;
-    if (st && (st.k === 'rg' || st.k === 'home' || st.k === 'egg') && typeof st.i === 'number' && typeof st.a === 'number') {
+    if (st && st.k === 'top' && typeof st.i === 'number' && typeof st.a === 'number') {
+      // page rechargée sur la sentinelle d'une visite précédente : on revient d'abord à l'entrée de départ
       baseIdx = st.a;
       let keep = false; try { keep = !!sessionStorage.getItem('admToast'); } catch(e) {}
       const d = st.i - st.a;
       if (d > 0 && !keep && history.length > d) { staleGo = true; history.go(-d); return; }
     } else baseIdx = (st && st.k === 'base' && typeof st.a === 'number') ? st.a : history.length - 1;
     history.replaceState({ k: 'base', a: baseIdx }, '');
+    topPush();
   } catch(e) {}
 })();
-const navDepth = () => !!(S.settings || S.view !== 'library' || S.started);
-function navSync(){
-  try {
-    const need = navDepth();
-    if (need && !navGuard) { hpush('rg'); navGuard = true; }
-    else if (!need && navGuard) { navGuard = false; navIgnore = true; history.back(); }
-  } catch(x) {}
-}
+const navDepth = () => !!(S.settings || S.view !== 'library' || S.started || document.querySelector('.rwl.on') || (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()));
+function navSync(){}
 
 /* ===== Textes de la classe : fichier textes-classe.json placé à côté de index.html ===== */
 function mergeShared(arr){
@@ -2181,47 +2175,24 @@ function navBack(){
   if (S.view === 'progress' || S.view === 'import') { S.view = 'library'; render(); window.scrollTo(0, 0); return; }
   if (S.view === 'scene') { stopSpeech(); if (S.started) S.started = false; else S.view = 'library'; render(); window.scrollTo(0, 0); }
 }
-/* Quitter l'appli : à l'accueil, un premier « retour » affiche un message, un second dans les 2 s quitte vraiment.
-   Une entrée d'historique « accueil » est ajoutée au premier appui (les navigateurs ignorent celles créées sans geste). */
-let homeGuard = false, exitAt = 0, exitTimer = null;
-/* L'entrée « accueil » est ajoutée au relâchement du doigt (pointerup) ou au clic : ce sont les gestes que Chrome compte comme
-   une vraie interaction. Au simple toucher (pointerdown) l'entrée était créée « sans interaction » et Chrome la sautait au retour,
-   ce qui faisait quitter l'appli d'un coup sans message. */
-/* homeOk = l'entrée « accueil » a été créée pendant une vraie interaction. Sinon (créée au chargement ou pendant un retour),
-   Chrome peut la sauter : on en ajoute alors une autre dès le premier toucher, avant d'ouvrir un écran. */
-let homeOk = false;
-function homeAdd(real){ try { hpush('home'); homeGuard = true; homeOk = real; } catch(x) {} }
-function homeGuardAdd(){
-  if (homeOk || navGuard) return;
-  homeAdd(true);
-}
-/* Revenu sur l'entrée de départ (l'entrée « accueil » a été sautée) : on la remet pour que le retour suivant prévienne */
-function homeRestore(){ const st = history.state; if (st && st.k === 'base' && !navGuard) homeAdd(false); }
-/* Dès le chargement : entrée « accueil » tout de suite, pour que même un retour sans aucun toucher prévienne avant de quitter */
-if (!staleGo) homeAdd(false);
-document.addEventListener('pointerup', homeGuardAdd, { capture: true });
-document.addEventListener('click', homeGuardAdd, { capture: true });
-document.addEventListener('keydown', homeGuardAdd, { capture: true });
+/* Quitter l'appli : à l'accueil, un premier « retour » affiche un message, un second dans les 2 s quitte vraiment. */
+let exitAt = 0, exitTimer = null;
 function exitToast(){
   let t = document.getElementById('exittoast');
   if (!t) { t = document.createElement('div'); t.id = 'exittoast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
   t.textContent = 'Appuie encore sur retour pour quitter'; t.classList.add('on');
   clearTimeout(exitTimer); exitTimer = setTimeout(() => t.classList.remove('on'), 2000);
 }
-/* Easter egg : une entrée d'historique tant qu'il est ouvert (retour du téléphone = fermer le jeu) */
-let eggHist = false;
-function eggOpened(){ try { hpush('egg'); eggHist = true; } catch(x) {} }
-RepeteEgg.onClose = () => { if (eggHist) { eggHist = false; navIgnore = true; try { history.back(); } catch(x) {} } };
+/* Easter egg : fermé par le retour du téléphone (voir navBack / popstate) */
+function eggOpened(){}
+RepeteEgg.onClose = () => {};
 window.addEventListener('popstate', () => {
-  if (navIgnore) { navIgnore = false; homeRestore(); return; }
-  if (eggHist) { eggHist = false; if (RepeteEgg.isOpen()) RepeteEgg.close(); return; }
-  const wasDeep = navGuard;
-  navGuard = false;
-  if (wasDeep) { navBack(); navSync(); homeRestore(); return; }
-  if (!homeGuard) return;
-  if (Date.now() - exitAt < 2000) { homeGuard = false; navIgnore = false; history.back(); return; }   // 2e appui : on quitte
-  exitAt = Date.now(); exitToast();
-  homeAdd(false);
+  const st = history.state;
+  if (st && st.k === 'top') return;                      // retour sur la sentinelle : rien à faire
+  if (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()) { RepeteEgg.close(); topPush(); return; }
+  if (navDepth()) { navBack(); topPush(); return; }
+  if (Date.now() - exitAt < 2000) { history.back(); return; }   // 2e appui : on quitte
+  exitAt = Date.now(); exitToast(); topPush();
 });
 function openSettings(){ if (S.settings) return; S.settings = true; renderSheet(); }
 function closeSettings(){ if (!S.settings) return; S.settings = false; renderSheet(); }
@@ -2471,7 +2442,7 @@ function mineView(){
 }
 /* ---- Classement (feuille Google + Apps Script ; voir claude/classement-concept.md) ---- */
 const RANK_URL = 'https://script.google.com/macros/s/AKfycbwAjizlS7bYfNKiqNpTfNEWg8Ce_KGkxilsifDI92WMbaxVzZFGsgd7SbUrIbvTk33Ngg/exec';
-const RANK_EVERY = 60000, RANK_VER = 'c49';
+const RANK_EVERY = 60000, RANK_VER = 'c50';
 const rk = () => (saved.rank = saved.rank || { on:false, pseudo:'', id:'', last:0, del:false, cache:null });
 let rankBusy = false, rankErr = '', rankT = 0, rankOpen = new Set();
 function rankId(){ const r = rk();
