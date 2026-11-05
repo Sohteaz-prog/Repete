@@ -2016,11 +2016,29 @@ function renderSheet(){
    Dès qu'on quitte l'écran d'accueil (réglages, scène, répétition, badges), une entrée d'historique « garde »
    est ajoutée : « retour » la consomme et déclenche l'action de retour de l'appli. À l'accueil, « retour » quitte l'appli. */
 let navGuard = false, navIgnore = false;
+/* Entrées d'historique : chacune porte son type (k), sa position (i) et la position de l'entrée de départ (a).
+   Si la page est rechargée (le téléphone a vidé l'appli de la mémoire pendant qu'elle était en arrière-plan), elle se
+   retrouve sur une entrée « garde » d'une visite précédente : un « retour » ressortirait alors de l'appli sans message.
+   On revient donc d'abord à l'entrée de départ, puis le fonctionnement normal reprend. */
+let baseIdx = 0;
+function hpush(k){ history.pushState({ k: k, i: history.length, a: baseIdx }, ''); }
+(function histInit(){
+  try {
+    const st = history.state;
+    if (st && (st.k === 'rg' || st.k === 'home' || st.k === 'egg') && typeof st.i === 'number' && typeof st.a === 'number') {
+      baseIdx = st.a;
+      let keep = false; try { keep = !!sessionStorage.getItem('admToast'); } catch(e) {}
+      const d = st.i - st.a;
+      if (d > 0 && !keep && history.length > d) { history.go(-d); return; }
+    } else baseIdx = (st && st.k === 'base' && typeof st.a === 'number') ? st.a : history.length - 1;
+    history.replaceState({ k: 'base', a: baseIdx }, '');
+  } catch(e) {}
+})();
 const navDepth = () => !!(S.settings || S.view !== 'library' || S.started);
 function navSync(){
   try {
     const need = navDepth();
-    if (need && !navGuard) { history.pushState({ rg: 1 }, ''); navGuard = true; }
+    if (need && !navGuard) { hpush('rg'); navGuard = true; }
     else if (!need && navGuard) { navGuard = false; navIgnore = true; history.back(); }
   } catch(x) {}
 }
@@ -2171,7 +2189,7 @@ let homeGuard = false, exitAt = 0, exitTimer = null;
    ce qui faisait quitter l'appli d'un coup sans message. */
 function homeGuardAdd(){
   if (homeGuard) return;
-  try { history.pushState({ home: 1 }, ''); homeGuard = true; } catch(x) {}
+  try { hpush('home'); homeGuard = true; } catch(x) {}
 }
 document.addEventListener('pointerup', homeGuardAdd, { capture: true });
 document.addEventListener('click', homeGuardAdd, { capture: true });
@@ -2184,7 +2202,7 @@ function exitToast(){
 }
 /* Easter egg : une entrée d'historique tant qu'il est ouvert (retour du téléphone = fermer le jeu) */
 let eggHist = false;
-function eggOpened(){ try { history.pushState({ egg: 1 }, ''); eggHist = true; } catch(x) {} }
+function eggOpened(){ try { hpush('egg'); eggHist = true; } catch(x) {} }
 RepeteEgg.onClose = () => { if (eggHist) { eggHist = false; navIgnore = true; try { history.back(); } catch(x) {} } };
 window.addEventListener('popstate', () => {
   if (navIgnore) { navIgnore = false; return; }
@@ -2195,7 +2213,7 @@ window.addEventListener('popstate', () => {
   if (!homeGuard) return;
   if (Date.now() - exitAt < 2000) { homeGuard = false; navIgnore = false; history.back(); return; }   // 2e appui : on quitte
   exitAt = Date.now(); exitToast();
-  try { history.pushState({ home: 1 }, ''); } catch(x) {}
+  try { hpush('home'); } catch(x) {}
 });
 function openSettings(){ if (S.settings) return; S.settings = true; renderSheet(); }
 function closeSettings(){ if (!S.settings) return; S.settings = false; renderSheet(); }
@@ -2445,7 +2463,7 @@ function mineView(){
 }
 /* ---- Classement (feuille Google + Apps Script ; voir claude/classement-concept.md) ---- */
 const RANK_URL = 'https://script.google.com/macros/s/AKfycbwAjizlS7bYfNKiqNpTfNEWg8Ce_KGkxilsifDI92WMbaxVzZFGsgd7SbUrIbvTk33Ngg/exec';
-const RANK_EVERY = 60000, RANK_VER = 'c47';
+const RANK_EVERY = 60000, RANK_VER = 'c48';
 const rk = () => (saved.rank = saved.rank || { on:false, pseudo:'', id:'', last:0, del:false, cache:null });
 let rankBusy = false, rankErr = '', rankT = 0, rankOpen = new Set();
 function rankId(){ const r = rk();
