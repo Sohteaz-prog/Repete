@@ -1468,6 +1468,20 @@ function buzz(kind){
   const d = m === 'high' ? 28 : 10;
   try { navigator.vibrate(kind === 'ok' ? [d, 45, d] : d); } catch(e) {}
 }
+/* ---- Installation de l'appli (écran d'accueil) ---- */
+let installEvt = null;
+const isStandalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent || '');
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; try { if (S.settings) renderSheet(); } catch(x) {} });
+window.addEventListener('appinstalled', () => { installEvt = null; try { if (S.settings) renderSheet(); } catch(x) {} });
+function installBlock(){
+  let body;
+  if (isStandalone()) body = '<div class="mute small">Installée : tu l’utilises en plein écran.</div>';
+  else if (installEvt) body = '<button class="btn sm" data-act="installapp" style="width:100%">Installer Répète sur ce téléphone</button><div class="mute small" style="margin-top:6px">Icône sur l’écran d’accueil, plein écran, fonctionne hors ligne.</div>';
+  else if (isIOS) body = '<div class="mute small">Sur iPhone, dans Safari : bouton Partager, puis « Sur l’écran d’accueil ».</div>';
+  else body = '<div class="mute small">Menu ⋮ du navigateur, puis « Installer l’application » (ou « Installer et créer un raccourci »).</div>';
+  return '<div class="lbl">Application</div>' + body;
+}
 function sheetInner(){
   const dark = isDark(), cur = COLORS.find(x => x.id === saved.color) || COLORS[0];
   return `<div class="sh-head"><h2>Réglages</h2><button class="ghost" data-act="closesettings">Fermer</button></div>
@@ -1494,6 +1508,7 @@ function sheetInner(){
       <div class="mute small" style="margin-top:6px">${(saved.theme || 'auto') === 'auto' ? 'Auto : suit le thème de ton téléphone.' : ''}</div>
       <div class="lbl">Couleur de surlignage · ${esc(cur.name)}</div>
       <div class="swatches">${COLORS.map(c => { const v = dark ? c.d : c.l; return `<button class="swc ${c.id === cur.id ? 'on' : ''}" style="background:${v[0]};color:${v[3]}" data-act="setcolor" data-v="${c.id}" aria-label="${esc(c.name)}" aria-pressed="${c.id === cur.id}">${c.id === cur.id ? '✓' : ''}</button>`; }).join('')}</div>
+      ${installBlock()}
       ${ADMIN ? admPanel() : `<div class="admtap" data-act="admtap">Répète</div>${S.admAsk ? `<div class="admask"><input id="admcode" type="password" inputmode="numeric" autocomplete="off" placeholder="Code" aria-label="Code"><button class="ghost" data-act="admgo">OK</button></div>${S.admErr ? '<div class="mute small">Code incorrect.</div>' : ''}` : ''}`}`;
 }
 /* ---- Animations : déclencheurs et file d'attente (les visuels seront branchés dans ANIM) ---- */
@@ -2180,6 +2195,12 @@ document.addEventListener('click', e => {
       { const k = b.dataset.v, bg = BADGES[S.admB || 0], ti = S.admT == null ? 3 : S.admT;
       celebrate(k, k === 'title' ? { title:TITLE_IDX[ti], lvl:[10,20,30,40,50][ti] } : k === 'badge' ? { id:bg.id, name:bg.name, tier:S.admTier || 3, unique:!!bg.unique, label:bg.name } : { scene:'Test' }); break; }
     case 'setsound': saved.sound = b.dataset.v; persist(); render(); if (saved.sound === 'on') rwSound(() => { RepeteSons.unlock(); RepeteSons.badge('or'); }); break;
+    case 'installapp': {
+      const ev = installEvt; if (!ev) break;
+      ev.prompt();
+      Promise.resolve(ev.userChoice).then(c => { installEvt = null; if (S.settings) renderSheet(); }).catch(() => {});
+      break;
+    }
     case 'sethaptic': saved.haptic = b.dataset.v; persist(); render(); buzz('tap'); break;
     case 'open': {
       S.play = LIBRARY.find(p => p.id === b.dataset.play);
