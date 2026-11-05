@@ -2020,7 +2020,7 @@ let navGuard = false, navIgnore = false;
    Si la page est rechargée (le téléphone a vidé l'appli de la mémoire pendant qu'elle était en arrière-plan), elle se
    retrouve sur une entrée « garde » d'une visite précédente : un « retour » ressortirait alors de l'appli sans message.
    On revient donc d'abord à l'entrée de départ, puis le fonctionnement normal reprend. */
-let baseIdx = 0;
+let baseIdx = 0, staleGo = false;
 function hpush(k){ history.pushState({ k: k, i: history.length, a: baseIdx }, ''); }
 (function histInit(){
   try {
@@ -2029,7 +2029,7 @@ function hpush(k){ history.pushState({ k: k, i: history.length, a: baseIdx }, ''
       baseIdx = st.a;
       let keep = false; try { keep = !!sessionStorage.getItem('admToast'); } catch(e) {}
       const d = st.i - st.a;
-      if (d > 0 && !keep && history.length > d) { history.go(-d); return; }
+      if (d > 0 && !keep && history.length > d) { staleGo = true; history.go(-d); return; }
     } else baseIdx = (st && st.k === 'base' && typeof st.a === 'number') ? st.a : history.length - 1;
     history.replaceState({ k: 'base', a: baseIdx }, '');
   } catch(e) {}
@@ -2187,10 +2187,18 @@ let homeGuard = false, exitAt = 0, exitTimer = null;
 /* L'entrée « accueil » est ajoutée au relâchement du doigt (pointerup) ou au clic : ce sont les gestes que Chrome compte comme
    une vraie interaction. Au simple toucher (pointerdown) l'entrée était créée « sans interaction » et Chrome la sautait au retour,
    ce qui faisait quitter l'appli d'un coup sans message. */
+/* homeOk = l'entrée « accueil » a été créée pendant une vraie interaction. Sinon (créée au chargement ou pendant un retour),
+   Chrome peut la sauter : on en ajoute alors une autre dès le premier toucher, avant d'ouvrir un écran. */
+let homeOk = false;
+function homeAdd(real){ try { hpush('home'); homeGuard = true; homeOk = real; } catch(x) {} }
 function homeGuardAdd(){
-  if (homeGuard) return;
-  try { hpush('home'); homeGuard = true; } catch(x) {}
+  if (homeOk || navGuard) return;
+  homeAdd(true);
 }
+/* Revenu sur l'entrée de départ (l'entrée « accueil » a été sautée) : on la remet pour que le retour suivant prévienne */
+function homeRestore(){ const st = history.state; if (st && st.k === 'base' && !navGuard) homeAdd(false); }
+/* Dès le chargement : entrée « accueil » tout de suite, pour que même un retour sans aucun toucher prévienne avant de quitter */
+if (!staleGo) homeAdd(false);
 document.addEventListener('pointerup', homeGuardAdd, { capture: true });
 document.addEventListener('click', homeGuardAdd, { capture: true });
 document.addEventListener('keydown', homeGuardAdd, { capture: true });
@@ -2205,15 +2213,15 @@ let eggHist = false;
 function eggOpened(){ try { hpush('egg'); eggHist = true; } catch(x) {} }
 RepeteEgg.onClose = () => { if (eggHist) { eggHist = false; navIgnore = true; try { history.back(); } catch(x) {} } };
 window.addEventListener('popstate', () => {
-  if (navIgnore) { navIgnore = false; return; }
+  if (navIgnore) { navIgnore = false; homeRestore(); return; }
   if (eggHist) { eggHist = false; if (RepeteEgg.isOpen()) RepeteEgg.close(); return; }
   const wasDeep = navGuard;
   navGuard = false;
-  if (wasDeep) { navBack(); navSync(); return; }
+  if (wasDeep) { navBack(); navSync(); homeRestore(); return; }
   if (!homeGuard) return;
   if (Date.now() - exitAt < 2000) { homeGuard = false; navIgnore = false; history.back(); return; }   // 2e appui : on quitte
   exitAt = Date.now(); exitToast();
-  try { hpush('home'); } catch(x) {}
+  homeAdd(false);
 });
 function openSettings(){ if (S.settings) return; S.settings = true; renderSheet(); }
 function closeSettings(){ if (!S.settings) return; S.settings = false; renderSheet(); }
@@ -2463,7 +2471,7 @@ function mineView(){
 }
 /* ---- Classement (feuille Google + Apps Script ; voir claude/classement-concept.md) ---- */
 const RANK_URL = 'https://script.google.com/macros/s/AKfycbwAjizlS7bYfNKiqNpTfNEWg8Ce_KGkxilsifDI92WMbaxVzZFGsgd7SbUrIbvTk33Ngg/exec';
-const RANK_EVERY = 60000, RANK_VER = 'c48';
+const RANK_EVERY = 60000, RANK_VER = 'c49';
 const rk = () => (saved.rank = saved.rank || { on:false, pseudo:'', id:'', last:0, del:false, cache:null });
 let rankBusy = false, rankErr = '', rankT = 0, rankOpen = new Set();
 function rankId(){ const r = rk();
