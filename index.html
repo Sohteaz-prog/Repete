@@ -1739,10 +1739,10 @@ function sheetInner(){
       <div class="lbl">Vibration des boutons</div>
       <div class="seg sm">${HAPTICS.map(([id, n]) => `<button class="${hapticMode() === id ? 'on' : ''}" data-act="sethaptic" data-v="${id}">${n}</button>`).join('')}</div>
       ${canVibe ? '' : '<div class="mute small" style="margin-top:6px">Non prise en charge par cet appareil ou ce navigateur.</div>'}
-      <div class="lbl">Récompenses</div>
+      <div class="lbl">Animations</div>
       <div class="seg sm">${ANIM_MODES.map(([id, n]) => `<button class="${animMode() === id ? 'on' : ''}" data-act="setanim" data-v="${id}">${n}</button>`).join('')}</div>
-      <div class="mute small" style="margin-top:6px">${animMode() === 'auto' ? 'Auto : suit le réglage de ton téléphone.' : animMode() === 'off' ? 'Le résultat s’affiche sans mouvement.' : ''}</div>
-      <label class="sw"><input type="checkbox" data-act="soundck" ${soundOn() ? 'checked' : ''}> Sons des récompenses</label>
+      <div class="mute small" style="margin-top:6px">${animMode() === 'off' ? 'Le résultat s’affiche sans mouvement.' : animMode() === 'none' ? 'Aucune animation ni son.' : ''}</div>
+      ${animMode() === 'none' ? '' : `<label class="sw"><input type="checkbox" data-act="soundck" ${soundOn() ? 'checked' : ''}> Sons des animations</label>`}
       <div class="lbl">Thème</div>
       <div class="seg">${THEMES.map(([id, n]) => `<button class="${(saved.theme || 'auto') === id ? 'on' : ''}" data-act="settheme" data-v="${id}">${n}</button>`).join('')}</div>
       <div class="mute small" style="margin-top:6px">${(saved.theme || 'auto') === 'auto' ? 'Auto : suit le thème de ton téléphone.' : ''}</div>
@@ -1753,11 +1753,14 @@ function sheetInner(){
 }
 /* ---- Animations : déclencheurs et file d'attente (les visuels seront branchés dans ANIM) ---- */
 const ANIM = {};   /* ANIM.applause / ANIM.title / ANIM.badge = (data, {animate}) => Promise. Absent = rien ne s'affiche. */
-const ANIM_MODES = [['auto','Auto'],['on','Activées'],['off','Réduites']];
-const animMode = () => saved.anim || 'auto';
-const animsOn = () => animMode() === 'on' || (animMode() === 'auto' && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches));
+const ANIM_MODES = [['on','Activées'],['off','Réduites'],['none','Désactivées']];
+/* on = animation complète ; off = « réduites » (résultat sans mouvement) ; none = aucune récompense affichée, aucun son.
+   Ancien réglage « auto » (ou absent) : réduites si le téléphone demande moins de mouvement, sinon activées. */
+const animMode = () => { const v = saved.anim; if (v === 'on' || v === 'off' || v === 'none') return v;
+  return (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'off' : 'on'; };
+const animsOn = () => animMode() === 'on';
 let animQ = [], animBusy = false;
-function celebrate(kind, data){ animQ.push({ kind, data }); if (!animBusy) { animBusy = true; setTimeout(animNext, 0); } }
+function celebrate(kind, data){ if (animMode() === 'none') return; animQ.push({ kind, data }); if (!animBusy) { animBusy = true; setTimeout(animNext, 0); } }
 function animNext(){
   const e = animQ.shift(); if (!e) { animBusy = false; return; }
   animBusy = true; (window.__anim = window.__anim || []).push(e.kind);
@@ -2436,7 +2439,7 @@ function mineView(){
 }
 /* ---- Classement (feuille Google + Apps Script ; voir claude/classement-concept.md) ---- */
 const RANK_URL = 'https://script.google.com/macros/s/AKfycbwAjizlS7bYfNKiqNpTfNEWg8Ce_KGkxilsifDI92WMbaxVzZFGsgd7SbUrIbvTk33Ngg/exec';
-const RANK_EVERY = 60000, RANK_VER = 'c43';
+const RANK_EVERY = 60000, RANK_VER = 'c46';
 const rk = () => (saved.rank = saved.rank || { on:false, pseudo:'', id:'', last:0, del:false, cache:null });
 let rankBusy = false, rankErr = '', rankT = 0, rankOpen = new Set();
 function rankId(){ const r = rk();
@@ -2522,7 +2525,7 @@ function rankRow(p, i){
 function rankView(){
   const r = rk(), c = r.cache;
   let h = `<div class="bhead"><button class="ghost" data-act="rankback">‹ Retour</button><h2>Classement</h2><button class="ghost" data-act="rankrefresh">Actualiser</button></div>
-    <p class="mute small" style="margin:-4px 2px 12px">Saison : ${esc(saved.profile)} · statistiques cumulées depuis le début de cette saison</p>`;
+    <p class="mute small" style="margin:-4px 2px 12px">${esc(saved.profile)}</p>`;
   if (ADMIN) return h + '<section class="card"><p class="mute">Profil de test : le classement est désactivé (rien n’est envoyé).</p></section>';
   const info = `<div class="infobox" style="margin-top:10px"><p><b>Qu’est-ce qui est envoyé ?</b> Seuls ton pseudo et tes chiffres de progression : niveau, série, badges et nombre de répliques répondues. Aucun texte, aucun nom.</p>
       <p>Tu peux voir le classement sans participer. Tu peux te retirer à tout moment : ta ligne est alors supprimée.</p></div>`;
