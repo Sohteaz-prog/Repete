@@ -452,11 +452,11 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:18px}
 .hm{min-width:0}.hti{font-size:20px;font-weight:800}
 .tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 14px}
 .tile{display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 6px}
-.tile .tv{font-size:19px;font-weight:800}.tile .tk{font-size:12px;color:var(--mute);line-height:1.2}.tile .tn{font-size:11.5px;color:var(--mute);line-height:1.2}.tile .tn.ok{color:#1f8a5a;font-weight:700}
+.tile .tv{font-size:19px;font-weight:800}.tile .tk{font-size:12px;color:var(--mute);line-height:1.2}.tile .tn{white-space:nowrap;font-size:11.5px;color:var(--mute);line-height:1.2}.tile .tn.ok{color:#1f8a5a;font-weight:700}
 .tile .dim{opacity:.35}
-.tic{color:var(--accent-ink);display:flex;line-height:0}.band .bm small .ico{color:var(--accent-ink);vertical-align:-2px}
+.tic{color:var(--accent-ink);display:flex;line-height:0;height:62px;align-items:center;justify-content:center}.band .bm small .ico{color:var(--accent-ink);vertical-align:-2px}
 .tile .tv{color:var(--ink)}
-.tic.fl{color:inherit;line-height:0}.fli{display:inline-block;vertical-align:-5px;line-height:0}
+.tic.fl{color:inherit;line-height:0}.tic.fl svg{position:relative;top:-5px}.fli{display:inline-block;vertical-align:-5px;line-height:0;position:relative;top:-1.5px}
 .pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .pill{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 14px;border-radius:22px;border:1.5px solid var(--line);background:var(--card);font-weight:600;font-size:14px;text-align:left}
 .pill.done{background:#e1f1e7;border-color:#1f8a5a;color:#14573a}
@@ -1594,6 +1594,13 @@ saved.prog = saved.prog || {}; saved.me = saved.me || {};
 saved.mine = saved.mine || []; saved.lines = saved.lines || {};
 if (!saved.goalDate) saved.goalDate = '2027-01-19';
 if (!saved.profile) saved.profile = ADMIN ? 'Profil de test' : 'Présentation du 19 janvier';
+/* Saisons (préparation, sans effet visible pour l'instant) : un profil appartient à une saison ; la bibliothèque n'affiche que les pièces de la saison du profil actif.
+   Une pièce sans champ « season » appartient à la saison d'origine (2027-01). Le classement sera lui aussi filtré par saison.
+   Au prochain profil (après le 19 janvier) : saison différente, nouveaux textes avec "season":"…" dans leurs fichiers. */
+const LEGACY_SEASON = '2027-01';
+if (!saved.season) saved.season = LEGACY_SEASON;
+const playSeason = p => p.season || LEGACY_SEASON;
+const inSeason = p => playSeason(p) === saved.season;
 const today = () => { const d = new Date(); if (ADMIN && saved.dayShift) d.setDate(d.getDate() + saved.dayShift); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
 const dayNum = ds => { const [y, m, d] = ds.split('-').map(Number); return Date.UTC(y, m - 1, d) / 86400000; };
 const daysBetween = (a, b) => Math.round(dayNum(b) - dayNum(a));
@@ -1999,12 +2006,24 @@ function mergeShared(arr){
   (Array.isArray(arr) ? arr : []).forEach(pl => {
     if (!pl || !pl.id || !Array.isArray(pl.scenes)) return;
     const have = LIBRARY.find(x => x.id === pl.id);
-    if (!have) { pl.shared = true; LIBRARY.push(pl); n++; return; }
+    if (!have) { pl.shared = true; pl.season = playSeason(pl); LIBRARY.push(pl); n++; return; }
     pl.scenes.forEach(sc => { if (!have.scenes.some(x => x.id === sc.id)) { have.scenes.push(sc); n++; } });
   });
   return n;
 }
-try { fetch('textes-classe.json', { cache:'no-cache' }).then(r => r.ok ? r.json() : null).then(j => { if (j && mergeShared(j)) render(); }).catch(() => {}); } catch(e) {}
+/* Fichiers partagés : textes-classe.json, puis textes-classe-2.json, -3.json… (on s'arrête au premier absent, 20 max) */
+async function loadShared(){
+  for (let i = 1; i <= 20; i++) {
+    const name = i === 1 ? 'textes-classe.json' : 'textes-classe-' + i + '.json';
+    try {
+      const r = await fetch(name, { cache:'no-cache' });
+      if (!r.ok) break;
+      const j = await r.json();
+      if (mergeShared(j)) render();
+    } catch(e) { break; }
+  }
+}
+try { loadShared(); } catch(e) {}
 function exportTexts(){
   const blob = new Blob([JSON.stringify(saved.userLib, null, 1)], { type:'application/json' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'textes-classe.json';
@@ -2061,8 +2080,8 @@ const impNew = () => ({ title:'', author:'', scene:'', text:'', step:1, parsed:n
 function impSave(){
   const I = S.imp, pr = I.parsed;
   const title = I.title.trim(), scene = (I.scene.trim() || 'Scène');
-  let play = saved.userLib.find(p => p.title.toLowerCase() === title.toLowerCase());
-  if (!play) { play = { id:'u' + Date.now(), title, author:I.author.trim() || '—', note:'Ajouté par moi', mine:true, scenes:[] };
+  let play = saved.userLib.find(p => p.title.toLowerCase() === title.toLowerCase() && playSeason(p) === saved.season);
+  if (!play) { play = { id:'u' + Date.now(), title, author:I.author.trim() || '—', note:'Ajouté par moi', mine:true, season:saved.season, scenes:[] };
     saved.userLib.push(play); LIBRARY.push(play); }
   play.scenes.push({ id:'u' + Date.now() + play.scenes.length, title:scene, characters:pr.chars.slice(), roles:{}, items:pr.items });
   persist();
@@ -2106,7 +2125,7 @@ function importView(){
   const mine = []; saved.userLib.forEach(p => p.scenes.forEach(sc => mine.push([p, sc])));
   if (mine.length && I.step === 1) h += `<section class="card"><div class="lbl">Mes textes ajoutés</div>` + mine.map(([p, sc]) =>
     `<div style="display:flex;align-items:center;gap:8px;margin:6px 0"><span style="flex:1">${esc(p.title)} · ${esc(sc.title)}</span><button class="btn sm ko" data-act="importdel" data-play="${p.id}" data-scene="${sc.id}">Supprimer</button></div>`).join('') + `<button class="btn sm" style="width:100%;margin-top:8px" data-act="exporttexts">Exporter mes textes (fichier à partager)</button><p class="mute small">Pour les mettre dans l’application de la classe : envoie le fichier <b>textes-classe.json</b> sur GitHub, à côté de index.html.</p></section>`;
-  if (I.step === 1) h += `<section class="card"><div class="lbl">Importer un fichier de textes</div><p class="mute small">Si on t’a envoyé un fichier <b>textes-classe.json</b>, choisis-le ici.</p><input type="file" accept=".json,application/json" data-act="importfile"></section>`;
+  if (I.step === 1) h += `<section class="card"><div class="lbl">Importer un fichier de textes</div><p class="mute small">Si on t’a envoyé un ou plusieurs fichiers <b>textes-classe</b> (.json), choisis-les ici ; tu peux en sélectionner plusieurs d’un coup.</p><input type="file" accept=".json,application/json" multiple data-act="importfile"></section>`;
   return h;
 }
 function navBack(){
@@ -2320,7 +2339,7 @@ const sceneRow = (p, s) => {
     <button class="star ${on ? 'on' : ''}" data-act="togglemine" data-play="${p.id}" data-scene="${s.id}" aria-pressed="${on}" aria-label="${on ? 'Retirer de mes scènes' : 'Ajouter à mes scènes'}">${STAR}</button></div>`;
 };
 function allView(){
-  return LIBRARY.map(p => `<section class="card"><h2>${esc(p.title)}</h2>
+  return LIBRARY.filter(inSeason).map(p => `<section class="card"><h2>${esc(p.title)}</h2>
       <div class="mute">${esc(p.author)} · ${esc(p.note)}</div>
       ${p.scenes.map(s => sceneRow(p, s)).join('')}
     </section>`).join('') + `<p class="tip">Touche l’étoile ☆ à côté d’une scène pour l’ajouter à « Mes scènes ». </p><button class="btn pri" style="width:100%" data-act="importopen">＋ Ajouter mon texte</button>`;
@@ -2344,6 +2363,9 @@ function flameSvg(n, w){
   else g = stack(32, 56, '#D8341F', '#F28A1C', '#FFE27A') + '<circle cx="12" cy="14" r="1.8" fill="#F5A300"/><circle cx="53" cy="10" r="1.5" fill="#F5A300"/><circle cx="50" cy="26" r="1.2" fill="#D8341F"/>';
   return `<svg class="flame" viewBox="0 0 64 56" width="${w}" height="${(w * 56 / 64).toFixed(0)}" aria-hidden="true" focusable="false">${g}</svg>`;
 }
+// marges négatives : le dessin de la flamme est entouré de vide (cadre 64 × 56), on la colle au titre à gauche et au chiffre à droite
+function fliMargin(n){ const m = n <= 0 ? [-9, -6] : n < 7 ? [-11, -7.8] : n < 30 ? [-9, -6.2] : [-4, -0.5];
+  return 'margin:0 ' + m[1] + 'px 0 ' + m[0] + 'px'; }
 const ring = (pct, size, sw) => { const c = 276.46, d = Math.max(0, Math.min(100, pct)) / 100 * c;
   return `<svg width="${size}" height="${size}" viewBox="0 0 104 104" aria-hidden="true" focusable="false"><circle cx="52" cy="52" r="44" fill="none" stroke="color-mix(in srgb,var(--ink) 14%,transparent)" stroke-width="${sw}"/><circle cx="52" cy="52" r="44" fill="none" stroke="var(--accent)" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${d.toFixed(1)} ${c}" transform="rotate(-90 52 52)"/></svg>`; };
 function progData(){
@@ -2371,7 +2393,7 @@ function mineView(){
   let h = `<button class="band" data-act="progressopen" aria-label="Ouvrir Ma progression">
     <span class="rg">${ring(lv.max ? 100 : lv.toNext, 52, 10)}<b>${lv.lvl}</b></span>
     <span class="bm"><b>${lv.title ? esc(lv.title) + ' · ' : ''}niveau ${lv.lvl}</b>
-    <small>${t ? '<span class="fli">' + flameSvg(t.streak.n, 30) + '</span> ' + t.streak.n + ' j · objectif du jour ' + Math.min(t.objDone, t.objNeed) + ' / ' + t.objNeed + ' · ' : ''}${dl > 0 ? 'J-' + dl : dl === 0 ? 'Jour J' : 'Date passée'}</small></span><span class="ch">›</span></button>`;
+    <small>${t ? '<span class="fli" style="' + fliMargin(t.streak.n) + '">' + flameSvg(t.streak.n, 30) + '</span>' + t.streak.n + ' j · objectif du jour ' + Math.min(t.objDone, t.objNeed) + ' / ' + t.objNeed + ' · ' : ''}${dl > 0 ? 'J-' + dl : dl === 0 ? 'Jour J' : 'Date passée'}</small></span><span class="ch">›</span></button>`;
   list.forEach(([p, s]) => {
     const st = stats(p, s), at = `data-play="${p.id}" data-scene="${s.id}"`, k = keyOf(p, s);
     h += `<section class="card"><div class="bar2"><div class="sct"><h2 class="one">${esc(s.title)}</h2><div class="mute small">${esc(p.title)}</div></div>
@@ -2391,7 +2413,7 @@ function mineView(){
 }
 function progressView(){
   const D = progData(), lv = D.lv, dl = daysBetween(today(), saved.goalDate);
-  const gdate = new Date(saved.goalDate + 'T12:00:00').toLocaleDateString('fr-BE', { day:'numeric', month:'long', year:'numeric' });
+  const gdate = saved.goalDate.split('-').reverse().join('/');
   const items = allStats(), t = items.length ? todayInfo(items) : null, bg = saved.bg || {};
   let h = `<div class="bhead"><button class="ghost" data-act="progressback">‹ Retour</button><h2>Ma progression</h2></div>
     <section class="card hero"><div class="herorow"><span class="rg big">${ring(lv.max ? 100 : lv.toNext, 108, 9)}<span class="rgt"><small>Niveau</small><b>${lv.lvl}</b></span></span>
@@ -2400,7 +2422,7 @@ function progressView(){
       ${t && t.gain > 0 ? `<div class="gain">+${t.gain} % aujourd’hui</div>` : ''}</div></div>
       ${D.withMe < D.list.length ? `<p class="hint" style="margin:10px 0 0">Choisis ton personnage dans chaque scène pour suivre ta progression.</p>` : ''}</section>`;
   if (t) {
-    h += `<div class="tiles"><div class="tile"><span class="tic fl">${flameSvg(t.streak.n, 46)}</span><span class="tv">${t.streak.n} j</span><span class="tk">Série</span><span class="tn ${t.streak.lit ? 'ok' : ''}">${t.streak.lit ? '✓ validée' : 'encore ' + t.rem + ' réplique' + (t.rem > 1 ? 's' : '')}</span></div>
+    h += `<div class="tiles"><div class="tile"><span class="tic fl">${flameSvg(t.streak.n, 46)}</span><span class="tv">${t.streak.n} j</span><span class="tk">Série</span><span class="tn ${t.streak.lit ? 'ok' : ''}">${t.streak.lit ? '✓ validée' : t.rem + (t.rem > 1 ? ' restantes' : ' restante')}</span></div>
       <div class="tile"><span class="tic">${ico('target', 28)}</span><span class="tv">${Math.min(t.objDone, t.objNeed)} / ${t.objNeed}</span><span class="tk">Objectif du jour</span><span class="tn ${t.met ? 'ok' : ''}">${t.met ? '✓ atteint' : ''}</span></div>
       <div class="tile"><span class="tic">${ico('cal', 28)}</span><span class="tv">${dl > 0 ? 'J-' + dl : dl === 0 ? 'Jour J' : '—'}</span><span class="tk">${esc(gdate)}</span></div></div>`;
     const byK = {}; items.forEach(x => { byK[x.k] = x; });
@@ -2712,13 +2734,17 @@ document.addEventListener('input', e => {
 });
 document.addEventListener('change', e => {
   const t = e.target, a = t.dataset && t.dataset.act; if (!a) return;
-  if (a === 'importfile') { const f = t.files && t.files[0]; if (!f) return;
-    f.text().then(txt => { let arr; try { arr = JSON.parse(txt); } catch(x) { alert('Fichier illisible.'); return; }
-      let n = 0; (Array.isArray(arr) ? arr : []).forEach(pl => { if (!pl || !pl.id || !Array.isArray(pl.scenes)) return;
-        let up = saved.userLib.find(x => x.id === pl.id);
-        if (!up) { up = { id:pl.id, title:pl.title, author:pl.author, note:pl.note || 'Ajouté par moi', mine:true, scenes:[] }; saved.userLib.push(up); if (!LIBRARY.includes(up)) { const ex = LIBRARY.find(x => x.id === pl.id); if (ex) { ex.scenes.forEach(sc => up.scenes.push(sc)); LIBRARY.splice(LIBRARY.indexOf(ex), 1); } LIBRARY.push(up); } }
+  if (a === 'importfile') { const files = Array.from(t.files || []); if (!files.length) return;
+    Promise.all(files.map(f => f.text().then(txt => { try { return JSON.parse(txt); } catch(x) { return null; } }, () => null))).then(list => {
+      let n = 0, bad = 0;
+      list.forEach(arr => { if (!Array.isArray(arr)) { bad++; return; }
+        (Array.isArray(arr) ? arr : []).forEach(pl => { if (!pl || !pl.id || !Array.isArray(pl.scenes)) return;
+        let up = saved.userLib.find(x => x.id === pl.id && playSeason(x) === playSeason(pl));
+        if (!up) { up = { id:pl.id, title:pl.title, author:pl.author, note:pl.note || 'Ajouté par moi', mine:true, season:playSeason(pl), scenes:[] }; saved.userLib.push(up); if (!LIBRARY.includes(up)) { const ex = LIBRARY.find(x => x.id === pl.id); if (ex) { ex.scenes.forEach(sc => up.scenes.push(sc)); LIBRARY.splice(LIBRARY.indexOf(ex), 1); } LIBRARY.push(up); } }
         pl.scenes.forEach(sc => { if (!up.scenes.some(x => x.id === sc.id)) { up.scenes.push(sc); n++; } }); });
-      persist(); alert(n ? n + ' scène(s) ajoutée(s).' : 'Rien de nouveau dans ce fichier.'); render(); }); return; }
+      });
+      persist(); t.value = '';
+      alert((n ? n + ' scène(s) ajoutée(s).' : 'Rien de nouveau.') + (bad ? '\n' + bad + ' fichier(s) illisible(s) ignoré(s).' : '')); render(); }); return; }
   if (a === 'showprog') { saved.showProg = t.checked; persist(); render(); }
   else if (a === 'thide') { S.textHide = t.checked; S.revealed = new Set(); render(); }
   else if (a === 'cue') { S.cue = t.checked; render(); }
