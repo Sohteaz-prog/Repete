@@ -177,8 +177,9 @@ h2{font-size:19px;margin:0 0 2px}
 .sh-drop{position:relative;width:100%;max-width:640px;display:grid;grid-template-rows:0fr auto;transition:grid-template-rows .5s cubic-bezier(.3,.7,.2,1)}
 .sh-wrap.open .sh-drop{grid-template-rows:1fr auto}
 .sh-clip{min-height:0;overflow:hidden}
-.sh-panel{background:var(--card);padding:calc(14px + env(safe-area-inset-top)) 16px calc(44px + env(safe-area-inset-bottom));max-height:80vh;max-height:80dvh;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
-.sh-roll{height:0;box-shadow:0 6px 16px rgba(0,0,0,.3)}
+.sh-panel{background:var(--card);padding:calc(14px + env(safe-area-inset-top)) 16px 28px;max-height:calc(100vh - 96px);max-height:calc(100dvh - 96px);overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.sh-roll{height:44px;display:flex;align-items:center;justify-content:center;background:var(--card);border-radius:0 0 18px 18px;border-top:1px solid var(--line);color:var(--mute);cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.3)}
+.sh-roll svg{display:block;width:30px;height:20px}
 .sh-drop{border-radius:0 0 18px 18px}
 .sh-clip{border-radius:0 0 18px 18px}
 @media (prefers-reduced-motion:reduce){.sh-back,.sh-drop{transition:none}}
@@ -1758,7 +1759,7 @@ function renderSheet(){
     el.innerHTML = `<div class="sh-wrap"><div class="sh-back" data-act="closesettings"></div>
       <div class="sh-drop" role="dialog" aria-modal="true" aria-label="Réglages">
         <div class="sh-clip"><div class="sh-panel">${sheetInner()}</div></div>
-        <div class="sh-roll"></div>
+        <div class="sh-roll" data-act="closesettings" role="button" aria-label="Fermer les réglages"><svg viewBox="0 0 30 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4h22M4 10h22M4 16h22"/></svg></div>
       </div></div>`;
     const w = el.querySelector('.sh-wrap'); void w.offsetHeight;
     requestAnimationFrame(() => w.classList.add('open'));
