@@ -18,7 +18,7 @@ L'appli s'ouvre alors en plein écran avec son icône et fonctionne hors ligne a
 ## Contenu du dépôt
 
 - `index.html` : toute l'appli
-- `manifest.webmanifest`, `sw.js`, `icons/` : installation et mode hors ligne
+- `manifest.webmanifest`, `sw.js`, icônes (`icon-*.png`, `icon.svg`, `apple-touch-icon.png`, `favicon-32.png`) : installation et mode hors ligne
 - `README.md` : ce fichier
 
 ## Mettre à jour
