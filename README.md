@@ -4,20 +4,26 @@ Appli web mobile pour apprendre des textes de théâtre : lecture, répétition 
 
 Un seul fichier HTML, JavaScript sans librairie, aucune dépendance, aucun serveur. Les données restent dans le navigateur (localStorage).
 
-> **Dépôt privé.** Le fichier contient des textes protégés par le droit d'auteur (Brèves de trottoirs, Comédies tragiques, Building). Ne pas rendre ce dépôt public.
+> Les textes intégrés sont protégés par le droit d'auteur : usage privé, pour la classe de théâtre.
 
-## Utiliser l'appli
+## Installer sur le téléphone
 
-1. Télécharger `index.html` (bouton « Download raw file » sur GitHub).
-2. L'ouvrir dans le navigateur du téléphone ou de l'ordinateur.
-3. Choisir un texte, un rôle et les scènes à travailler, puis aller dans l'onglet « Répéter ».
+Ouvrir l'adresse de l'appli (https) dans le navigateur, puis :
 
-Ta progression est enregistrée sur ton appareil, dans ce navigateur. Elle n'est pas partagée entre appareils.
+- **iPhone (Safari)** : bouton Partager, puis « Sur l'écran d'accueil ».
+- **Android (Chrome)** : menu ⋮, puis « Installer l'application » ou « Ajouter à l'écran d'accueil ».
+
+L'appli s'ouvre alors en plein écran avec son icône et fonctionne hors ligne après la première ouverture. La progression est enregistrée sur l'appareil.
 
 ## Contenu du dépôt
 
 - `index.html` : toute l'appli
+- `manifest.webmanifest`, `sw.js`, `icons/` : installation et mode hors ligne
 - `README.md` : ce fichier
+
+## Mettre à jour
+
+Remplacer `index.html`, puis changer le numéro de version dans `sw.js` (`repete-v1` devient `repete-v2`, etc.) pour que les téléphones récupèrent la nouvelle version.
 
 ## Principes
 
