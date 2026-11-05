@@ -2166,10 +2166,16 @@ function navBack(){
 /* Quitter l'appli : à l'accueil, un premier « retour » affiche un message, un second dans les 2 s quitte vraiment.
    Une entrée d'historique « accueil » est ajoutée au premier appui (les navigateurs ignorent celles créées sans geste). */
 let homeGuard = false, exitAt = 0, exitTimer = null;
-document.addEventListener('pointerdown', () => {
+/* L'entrée « accueil » est ajoutée au relâchement du doigt (pointerup) ou au clic : ce sont les gestes que Chrome compte comme
+   une vraie interaction. Au simple toucher (pointerdown) l'entrée était créée « sans interaction » et Chrome la sautait au retour,
+   ce qui faisait quitter l'appli d'un coup sans message. */
+function homeGuardAdd(){
   if (homeGuard) return;
   try { history.pushState({ home: 1 }, ''); homeGuard = true; } catch(x) {}
-}, { capture: true });
+}
+document.addEventListener('pointerup', homeGuardAdd, { capture: true });
+document.addEventListener('click', homeGuardAdd, { capture: true });
+document.addEventListener('keydown', homeGuardAdd, { capture: true });
 function exitToast(){
   let t = document.getElementById('exittoast');
   if (!t) { t = document.createElement('div'); t.id = 'exittoast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
@@ -2439,7 +2445,7 @@ function mineView(){
 }
 /* ---- Classement (feuille Google + Apps Script ; voir claude/classement-concept.md) ---- */
 const RANK_URL = 'https://script.google.com/macros/s/AKfycbwAjizlS7bYfNKiqNpTfNEWg8Ce_KGkxilsifDI92WMbaxVzZFGsgd7SbUrIbvTk33Ngg/exec';
-const RANK_EVERY = 60000, RANK_VER = 'c46';
+const RANK_EVERY = 60000, RANK_VER = 'c47';
 const rk = () => (saved.rank = saved.rank || { on:false, pseudo:'', id:'', last:0, del:false, cache:null });
 let rankBusy = false, rankErr = '', rankT = 0, rankOpen = new Set();
 function rankId(){ const r = rk();
