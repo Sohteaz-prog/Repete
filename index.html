@@ -1686,16 +1686,12 @@ function buzz(kind){
 }
 /* ---- Installation de l'appli (écran d'accueil) ---- */
 let installEvt = null;
-const instKey = 'repete.installed';
-const markInstalled = () => { try { localStorage.setItem(instKey, '1'); } catch(x) {} };
-const wasInstalled = () => { try { return localStorage.getItem(instKey) === '1'; } catch(x) { return false; } };
 const isStandalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
 const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent || '');
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; try { if (S.settings) renderSheet(); } catch(x) {} });
-window.addEventListener('appinstalled', () => { installEvt = null; markInstalled(); try { if (S.settings) renderSheet(); } catch(x) {} });
+window.addEventListener('appinstalled', () => { installEvt = null; try { if (S.settings) renderSheet(); } catch(x) {} });
 function installBlock(){
-  if (isStandalone()) { markInstalled(); return ''; }
-  if (wasInstalled()) return '';
+  if (isStandalone()) return '';   // masqué seulement quand l'appli tourne installée (pas de mémoire : un autre téléphone doit voir le bouton)
   let body;
   if (installEvt) body = '<button class="btn sm" data-act="installapp" style="width:100%">Installer Répète sur ce téléphone</button><div class="mute small" style="margin-top:6px">Icône sur l’écran d’accueil, plein écran, fonctionne hors ligne.</div>';
   else if (isIOS) body = '<div class="mute small">Sur iPhone, dans Safari : bouton Partager, puis « Sur l’écran d’accueil ».</div>';
@@ -2650,7 +2646,7 @@ document.addEventListener('click', e => {
     case 'installapp': {
       const ev = installEvt; if (!ev) break;
       ev.prompt();
-      Promise.resolve(ev.userChoice).then(c => { installEvt = null; if (c && c.outcome === 'accepted') markInstalled(); if (S.settings) renderSheet(); }).catch(() => {});
+      Promise.resolve(ev.userChoice).then(c => { installEvt = null; if (S.settings) renderSheet(); }).catch(() => {});
       break;
     }
     case 'sethaptic': saved.haptic = b.dataset.v; persist(); render(); buzz('tap'); break;
