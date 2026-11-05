@@ -430,6 +430,36 @@ h2{font-size:19px;margin:0 0 2px}
 .medal{width:84px;height:auto;margin:0 0 10px;border-radius:0;clip-path:none;background:none}
 .bdet .bigart{width:132px;margin:6px auto 16px}
 
+
+.band{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--card);border:1.5px solid color-mix(in srgb,var(--accent) 55%,var(--line));border-radius:14px;padding:12px 14px;margin:0 0 14px;min-height:64px}
+.rg{position:relative;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.rg>b{position:absolute;font-size:16px;font-weight:800}
+.band .bm{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.band .bm b{font-size:16px}.band .bm small{color:var(--mute);font-size:13px}
+.band .ch{font-size:24px;color:var(--mute)}
+.pcb{text-align:right;flex:none}.pcb b{display:block;font-size:22px;line-height:1}.pcb span{font-size:12px;color:var(--mute)}
+.sct{flex:1;min-width:0}.dotsb{font-size:24px;line-height:1;padding:6px 8px;min-height:36px;color:var(--mute)}
+.scm{margin:0 0 8px}
+h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:18px}
+.dnrow{display:flex;align-items:center;gap:16px;margin:10px 0 14px}.dn{position:relative;width:84px;height:84px;flex:none}.dnt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05}.dnt b{font-size:17px;font-weight:800}.dnt small{font-size:10.5px;color:var(--mute)}
+.dnlg{display:flex;flex-direction:column;gap:4px;font-size:14px}.dnlg .dot{margin-right:8px;width:10px;height:10px}
+.playrow{display:flex;align-items:center;gap:10px;margin-top:2px}.chips.tight{flex:1;min-width:0;gap:6px;margin:0}.chip.curc{flex:1;min-width:0;display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:6px;min-height:46px;text-align:left}.chip.curc span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.chip.curc i{font-style:normal;color:var(--mute)}.chips.pk{margin:8px 0 0}
+.btn.go{flex:none;min-height:46px;padding:0 18px;font-size:16px;border-radius:12px}
+.seg+.legend{margin-bottom:8px}
+.seg{display:flex;gap:2px;height:10px;border-radius:5px;overflow:hidden;margin:12px 0 8px}.seg i{display:block}
+.herorow{display:flex;align-items:center;gap:16px}
+.rg.big .rgt{position:absolute;display:flex;flex-direction:column;align-items:center}.rg.big .rgt small{font-size:11px;color:var(--mute)}.rg.big .rgt b{font-size:30px;line-height:1;font-weight:800}
+.hm{min-width:0}.hti{font-size:20px;font-weight:800}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 14px}
+.tile{display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 6px}
+.tile .tv{font-size:19px;font-weight:800}.tile .tk{font-size:12px;color:var(--mute);line-height:1.2}.tile .tn{font-size:11.5px;color:var(--mute);line-height:1.2}.tile .tn.ok{color:#1f8a5a;font-weight:700}
+.tile .dim{opacity:.35}
+.tic{color:var(--accent-ink);display:flex;line-height:0}.band .bm small .ico{color:var(--accent-ink);vertical-align:-2px}
+.tile .tv{color:var(--ink)}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pill{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 14px;border-radius:22px;border:1.5px solid var(--line);background:var(--card);font-weight:600;font-size:14px;text-align:left}
+.pill.done{background:#e1f1e7;border-color:#1f8a5a;color:#14573a}
+.bstrip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;margin-top:10px}
+.bstrip .medal{width:100%;margin:0 0 8px}
 </style>
 </head>
 <body>
@@ -1929,7 +1959,8 @@ function navBack(){
   const rw = document.querySelector('.rwl.on');
   if (rw) { if (rw._close) rw._close(); else rw.click(); return; }
   if (S.settings) { S.settings = false; renderSheet(); return; }
-  if (S.view === 'badges' || S.view === 'import') { S.view = 'library'; render(); window.scrollTo(0, 0); return; }
+  if (S.view === 'badges') { S.view = 'progress'; render(); window.scrollTo(0, 0); return; }
+  if (S.view === 'progress' || S.view === 'import') { S.view = 'library'; render(); window.scrollTo(0, 0); return; }
   if (S.view === 'scene') { stopSpeech(); if (S.started) S.started = false; else S.view = 'library'; render(); window.scrollTo(0, 0); }
 }
 window.addEventListener('popstate', () => {
@@ -2001,7 +2032,7 @@ function render(){
   try { ensureDay(); } catch(e) {}
   let nb = []; try { nb = checkBadges(); } catch(e) {}
   nb.forEach(x => celebrate('badge', { id:x.b.id, name:x.b.name, tier:x.tier, unique:!!x.b.unique, label:x.b.name + (x.b.unique ? '' : ' · ' + TIERS[x.tier - 1]) }));
-  $('#app').innerHTML = (ADMIN ? admBar() : '') + (S.view === 'library' ? libView() : S.view === 'badges' ? badgesView() : S.view === 'import' ? importView() : sceneView());
+  $('#app').innerHTML = (ADMIN ? admBar() : '') + (S.view === 'library' ? libView() : S.view === 'badges' ? badgesView() : S.view === 'progress' ? progressView() : S.view === 'import' ? importView() : sceneView());
   renderSheet();
 }
 function progText(p, s){
@@ -2143,45 +2174,88 @@ function todayBlock(){
     ${t.gain > 0 ? `<div class="gain">+${t.gain} % de maîtrise aujourd’hui</div>` : ''}
   </div>`;
 }
-function mineView(){
-  const list = saved.mine.map(k => { const [pid, sid] = k.split('/'); return findScene(pid, sid); }).filter(Boolean);
-  if (!list.length) return `<p class="hint big">Aucune scène pour l’instant.<br>Dans la bibliothèque, touche l’étoile ☆ à côté des scènes que tu joues.</p>
-    <button class="btn pri" style="width:100%" data-act="libtab" data-v="all">Ouvrir la bibliothèque</button>`;
+const ICO = {
+  flame:'<path d="M12 12c2-2.96 0-7-1-8 0 3.038-1.773 4.741-3 6-1.226 1.26-2 3.24-2 5a6 6 0 1 0 12 0c0-1.532-1.056-3.94-2-5-1.786 3-2.791 3-4 2z"/>',
+  target:'<circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9"/>',
+  cal:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/><rect x="8" y="15" width="2" height="2"/>'
+};
+const ico = (n, sz) => `<svg class="ico" width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICO[n]}</svg>`;
+const ring = (pct, size, sw) => { const c = 276.46, d = Math.max(0, Math.min(100, pct)) / 100 * c;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 104 104" aria-hidden="true" focusable="false"><circle cx="52" cy="52" r="44" fill="none" stroke="color-mix(in srgb,var(--ink) 14%,transparent)" stroke-width="${sw}"/><circle cx="52" cy="52" r="44" fill="none" stroke="var(--accent)" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${d.toFixed(1)} ${c}" transform="rotate(-90 52 52)"/></svg>`; };
+function progData(){
+  const list = mineList();
   let T = 0, P = 0, SOL = 0, KO = 0, withMe = 0;
   list.forEach(([p, s]) => { const st = stats(p, s); if (!st) return; withMe++; T += st.total; P += st.pts; SOL += st.counts.solid; KO += st.counts.ko; });
-  const pctExact = T ? P / (5 * T) * 100 : 0, pct = Math.round(pctExact);
-  const lv = levelInfo(pctExact);
-  const dl = daysBetween(today(), saved.goalDate);
-  const gtxt = dl > 0 ? 'J-' + dl : dl === 0 ? 'Jour J !' : 'Date passée';
-  const gdate = new Date(saved.goalDate + 'T12:00:00').toLocaleDateString('fr-BE', { day:'numeric', month:'long', year:'numeric' });
-  const open = !!saved.heroOpen;
-  let h = `<section class="card hero"><button class="hdtog" data-act="togglehero" aria-expanded="${open}"><span class="lbl">Ma progression</span><span class="tg">${open ? 'Réduire ▴' : 'Détails ▾'}</span></button>
-    <div class="lvrow"><span class="lvn">Niveau ${lv.lvl}</span>${lv.title ? `<span class="lvt">${esc(lv.title)}</span>` : ''}</div>
-    <div class="prog ${lv.max ? 'ok' : ''}"><i style="width:${lv.toNext}%"></i></div>
-    <div class="pcount"><span>${lv.max ? 'Niveau maximum' : lv.toNext + ' % vers le niveau ' + (lv.lvl + 1)}</span><span></span></div>
-    ${withMe < list.length ? `<p class="hint" style="margin:8px 0 0">Choisis ton personnage dans chaque scène pour suivre ta progression.</p>` : ''}
-    ${open ? `<button class="ghost bbtn" data-act="badgesopen">Mes badges · ${BADGES.filter(b => (saved.bg || {})[b.id]).length} / ${BADGES.length} ›</button>
-    <div class="mline"><b>${pct} %</b> de maîtrise · ${SOL} / ${T} solides${KO ? ' · ' + KO + ' à revoir' : ''}</div>
-    ${todayBlock()}
-    <div class="goal"><b>${gtxt}</b><span>${esc(gdate)}</span></div>
-    <p class="mute small" style="margin:8px 0 0">Une réplique devient solide après 5 jours de validation différents. Chaque « À revoir » la remet à zéro.</p>` : ''}
-  </section>`;
+  const pctExact = T ? P / (5 * T) * 100 : 0;
+  return { list, T, SOL, KO, withMe, pct: Math.round(pctExact), lv: levelInfo(pctExact) };
+}
+function donut(st){
+  const c = st.counts, tot = st.total || 1, C = 213.6, col = { solid:'#F2B01E', known:'#22A06B', ko:'#E5484D', new:'color-mix(in srgb,var(--ink) 16%,transparent)' };
+  let off = 0, segs = '';
+  ['solid','known','ko','new'].forEach(k => { if (!c[k]) return; const L = c[k] / tot * C;
+    segs += `<circle cx="40" cy="40" r="34" fill="none" stroke="${col[k]}" stroke-width="9" stroke-dasharray="${L.toFixed(1)} ${(C - L).toFixed(1)}" stroke-dashoffset="${(-off).toFixed(1)}" transform="rotate(-90 40 40)"/>`; off += L; });
+  const lg = [['solid', c.solid, 'solide'], ['known', c.known, 'connue'], ['ko', c.ko, 'à revoir'], ['new', c.new, 'nouvelle']].filter(x => x[1])
+    .map(([k, n, w]) => `<span><i class="dot ${k}"></i>${n} ${k === 'ko' ? w : w + (n > 1 ? 's' : '')}</span>`).join('');
+  return `<div class="dnrow"><div class="dn"><svg width="84" height="84" viewBox="0 0 80 80" role="img" aria-label="Statut des répliques">${segs}</svg><div class="dnt"><b>${st.pct} %</b><small>maîtrise</small></div></div><div class="dnlg">${lg}</div></div>`;
+}
+function segBar(st){
+  const c = st.counts, col = { solid:'#F2B01E', known:'#22A06B', ko:'#E5484D', new:'color-mix(in srgb,var(--ink) 16%,transparent)' };
+  return `<div class="seg" role="img" aria-label="Statut des répliques">${['solid','known','ko','new'].filter(k => c[k]).map(k => `<i style="flex:${c[k]};background:${col[k]}"></i>`).join('')}</div>`;
+}
+function mineView(){
+  const D = progData(), list = D.list;
+  if (!list.length) return `<p class="hint big">Aucune scène pour l’instant.<br>Dans la bibliothèque, touche l’étoile ☆ à côté des scènes que tu joues.</p>
+    <button class="btn pri" style="width:100%" data-act="libtab" data-v="all">Ouvrir la bibliothèque</button>`;
+  const lv = D.lv, dl = daysBetween(today(), saved.goalDate);
+  const items = allStats(), t = items.length ? todayInfo(items) : null;
+  let h = `<button class="band" data-act="progressopen" aria-label="Ouvrir Ma progression">
+    <span class="rg">${ring(lv.max ? 100 : lv.toNext, 52, 10)}<b>${lv.lvl}</b></span>
+    <span class="bm"><b>${lv.title ? esc(lv.title) + ' · ' : ''}niveau ${lv.lvl}</b>
+    <small>${t ? ico('flame', 15) + ' ' + t.streak.n + ' j · objectif du jour ' + Math.min(t.objDone, t.objNeed) + ' / ' + t.objNeed + ' · ' : ''}${dl > 0 ? 'J-' + dl : dl === 0 ? 'Jour J' : 'Date passée'}</small></span><span class="ch">›</span></button>`;
   list.forEach(([p, s]) => {
-    const st = stats(p, s), at = `data-play="${p.id}" data-scene="${s.id}"`;
-    h += `<section class="card"><div class="bar2"><div><h2>${esc(s.title)}</h2><div class="mute small">${esc(p.title)}</div></div>
-        <button class="ghost" data-act="togglemine" ${at}>Retirer</button></div>
-      <div class="lbl">Je joue</div>
-      <div class="chips">${s.characters.map(c => `<button class="chip sm ${st && st.c === c ? 'on' : ''}" data-act="setme" ${at} data-c="${esc(c)}">${esc(c)}</button>`).join('')}</div>`;
-    if (!st) h += `<p class="hint" style="margin:10px 0 0">Choisis ton personnage pour voir ta progression.</p>`;
-    else if (!st.total) h += `<p class="hint" style="margin:10px 0 0">${esc(st.c)} n’a aucune réplique dans cette scène.</p>`;
-    else h += `<div class="prog ${st.pct === 100 ? 'ok' : ''}" style="margin-top:12px"><i style="width:${st.pct}%"></i></div>
-      <div class="pcount"><span>Maîtrise ${st.pct} %</span><span>${st.counts.solid} / ${st.total} solides</span></div>
-      ${dotsStrip(st)}
-      <div class="row2">
-        <button class="btn pri" data-act="open" data-go="1" ${at}>Répéter</button>
-      </div>${weakList(s, st)}`;
+    const st = stats(p, s), at = `data-play="${p.id}" data-scene="${s.id}"`, k = keyOf(p, s);
+    h += `<section class="card"><div class="bar2"><div class="sct"><h2 class="one">${esc(s.title)}</h2><div class="mute small">${esc(p.title)}</div></div>
+        <button class="ghost dotsb" data-act="scmenu" data-k="${esc(k)}" aria-label="Plus d’options" aria-expanded="${S.menuK === k}">⋯</button></div>
+      ${S.menuK === k ? `<div class="scm"><button class="btn sm ko" data-act="togglemine" ${at}>Retirer de mes scènes</button></div>` : ''}`;
+    if (!st) h += `<div class="lbl">Je joue</div><div class="chips">${s.characters.map(c => `<button class="chip sm" data-act="setme" ${at} data-c="${esc(c)}">${esc(c)}</button>`).join('')}</div><p class="hint" style="margin:10px 0 0">Choisis ton personnage pour voir ta progression.</p>`;
+    else {
+      h += (st.total ? donut(st) : `<p class="hint" style="margin:10px 0 0">${esc(st.c)} n’a aucune réplique dans cette scène.</p>`) +
+        `<div class="playrow"><button class="chip sm on curc" data-act="pickme" data-k="${esc(k)}" aria-expanded="${S.pickK === k}" aria-label="Personnage joué : ${esc(st.c)}. Changer"><span>${esc(st.c)}</span>${s.characters.length > 1 ? '<i>⇅</i>' : ''}</button>
+        ${st.total ? `<button class="btn pri go" data-act="open" data-go="1" ${at}>▶ Répéter</button>` : ''}</div>
+        ${S.pickK === k && s.characters.length > 1 ? `<div class="chips tight pk" role="group" aria-label="Je joue">${s.characters.map(c => `<button class="chip sm ${st.c === c ? 'on' : ''}" data-act="setme" ${at} data-c="${esc(c)}" aria-pressed="${st.c === c}">${esc(c)}</button>`).join('')}</div>` : ''}`;
+      if (st.total) h += weakList(s, st);
+    }
     h += `</section>`;
   });
+  return h;
+}
+function progressView(){
+  const D = progData(), lv = D.lv, dl = daysBetween(today(), saved.goalDate);
+  const gdate = new Date(saved.goalDate + 'T12:00:00').toLocaleDateString('fr-BE', { day:'numeric', month:'long', year:'numeric' });
+  const items = allStats(), t = items.length ? todayInfo(items) : null, bg = saved.bg || {};
+  let h = `<div class="bhead"><button class="ghost" data-act="progressback">‹ Retour</button><h2>Ma progression</h2></div>
+    <section class="card hero"><div class="herorow"><span class="rg big">${ring(lv.max ? 100 : lv.toNext, 108, 9)}<span class="rgt"><small>Niveau</small><b>${lv.lvl}</b></span></span>
+      <div class="hm"><div class="hti">${lv.title ? esc(lv.title) : 'Niveau ' + lv.lvl}</div><div class="mute small">${lv.max ? 'Niveau maximum' : lv.toNext + ' % vers le niveau ' + (lv.lvl + 1)}</div>
+      <div class="mline"><b>${D.pct} %</b> de maîtrise</div><div class="mute small">${D.SOL} / ${D.T} solides${D.KO ? ' · ' + D.KO + ' à revoir' : ''}</div>
+      ${t && t.gain > 0 ? `<div class="gain">+${t.gain} % aujourd’hui</div>` : ''}</div></div>
+      ${D.withMe < D.list.length ? `<p class="hint" style="margin:10px 0 0">Choisis ton personnage dans chaque scène pour suivre ta progression.</p>` : ''}</section>`;
+  if (t) {
+    h += `<div class="tiles"><div class="tile"><span class="tic ${t.streak.lit ? '' : 'dim'}">${ico('flame', 28)}</span><span class="tv">${t.streak.n} j</span><span class="tk">Série</span><span class="tn ${t.streak.lit ? 'ok' : ''}">${t.streak.lit ? '✓ validée' : 'encore ' + t.rem + ' réplique' + (t.rem > 1 ? 's' : '')}</span></div>
+      <div class="tile"><span class="tic">${ico('target', 28)}</span><span class="tv">${Math.min(t.objDone, t.objNeed)} / ${t.objNeed}</span><span class="tk">Objectif du jour</span><span class="tn ${t.met ? 'ok' : ''}">${t.met ? '✓ atteint' : ''}</span></div>
+      <div class="tile"><span class="tic">${ico('cal', 28)}</span><span class="tv">${dl > 0 ? 'J-' + dl : dl === 0 ? 'Jour J' : '—'}</span><span class="tk">${esc(gdate)}</span></div></div>`;
+    const byK = {}; items.forEach(x => { byK[x.k] = x; });
+    const lst = t.h.obj ? t.h.obj.list.filter(k => byK[k]) : [];
+    h += `<section class="card"><div class="tline"><span class="lbl" style="margin:0;flex:1">Objectif du jour : scènes à répéter</span>
+      <button class="info" data-act="infoobj" aria-label="Comment sont choisis les objectifs" aria-expanded="${S.infoObj ? 'true' : 'false'}">i</button></div>
+      <div class="pills">${lst.map(k => { const x = byK[k], done = t.h.done.includes(k);
+        return `<button class="pill ${done ? 'done' : ''}" data-act="open" data-play="${x.p.id}" data-scene="${x.s.id}" data-go="1">${done ? '✓' : '▶'} ${esc(x.s.title)}</button>`; }).join('') || '<span class="mute small">Aucune scène pour l’instant.</span>'}</div>
+      ${S.infoObj ? `<div class="infobox" style="margin-top:10px"><p><b>Objectif du jour.</b> Ce sont les scènes qui ont le plus besoin de toi : répliques à revoir ou à rafraîchir d’abord, puis celles que tu as répétées le moins récemment. La liste est fixée à la première ouverture de la journée.</p>
+      <p><b>Série.</b> Une journée compte quand tu as noté l’équivalent de 15 % de ton texte. Un jour d’absence est toléré, deux d’affilée cassent la série.</p></div>` : ''}</section>`;
+  }
+  const got = BADGES.filter(b => bg[b.id]).length;
+  h += `<section class="card"><button class="hdtog" data-act="badgesopen"><span class="lbl" style="margin:0">Mes badges · ${got} / ${BADGES.length}</span><span class="tg">Tout voir ›</span></button>
+    <div class="bstrip">${BADGES.map(b => medal(b, bg[b.id] || 0)).join('')}</div></section>
+    <p class="mute small" style="margin:4px 4px 16px">Une réplique devient solide après 5 jours de validation différents. Chaque « À revoir » la remet à zéro.</p>`;
   return h;
 }
 function libView(){
@@ -2421,7 +2495,10 @@ document.addEventListener('click', e => {
     case 'importedit': S.imp.step = 1; render(); break;
     case 'importsave': impSave(); S.imp = null; S.view = 'library'; saved.libTab = 'all'; render(); window.scrollTo(0, 0); break;
     case 'importdel': if (confirm('Supprimer ce texte de ce téléphone ?')) { impDelete(b.dataset.play, b.dataset.scene); render(); } break;
-    case 'badgesback': S.view = 'library'; render(); window.scrollTo(0, 0); break;
+    case 'progressopen': S.view = 'progress'; S.menuK = null; render(); window.scrollTo(0, 0); break;
+    case 'progressback': S.view = 'library'; render(); window.scrollTo(0, 0); break;
+    case 'scmenu': S.menuK = S.menuK === b.dataset.k ? null : b.dataset.k; render(); break;
+    case 'badgesback': S.view = 'progress'; render(); window.scrollTo(0, 0); break;
     case 'badgesel': S.bsel = b.dataset.id; render(); break;
     case 'settings': openSettings(); break;
     case 'closesettings': closeSettings(); break;
@@ -2434,8 +2511,9 @@ document.addEventListener('click', e => {
     case 'togglemine': {
       const k = b.dataset.play + '/' + b.dataset.scene, i = saved.mine.indexOf(k);
       if (i < 0) saved.mine.push(k); else saved.mine.splice(i, 1);
-      persist(); render(); break; }
-    case 'setme': saved.me[b.dataset.play + '/' + b.dataset.scene] = b.dataset.c; persist(); render(); break;
+      S.menuK = null; persist(); render(); break; }
+    case 'pickme': if (S.pickK !== b.dataset.k) S.pickK = b.dataset.k; else S.pickK = null; render(); break;
+    case 'setme': saved.me[b.dataset.play + '/' + b.dataset.scene] = b.dataset.c; S.pickK = null; persist(); render(); break;
     case 'back': stopSpeech(); S.view = 'library'; S.started = false; render(); window.scrollTo(0,0); break;
     case 'leave': stopSpeech(); S.started = false; render(); window.scrollTo(0,0); break;
     case 'pick': S.pick = true; render(); break;
