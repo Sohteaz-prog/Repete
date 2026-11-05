@@ -462,6 +462,31 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:18px}
 .pill.done{background:#e1f1e7;border-color:#1f8a5a;color:#14573a}
 .bstrip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;margin-top:10px}
 .bstrip .medal{width:100%;margin:0 0 8px}
+/* Classement */
+.rkl{display:flex;flex-direction:column;gap:8px;margin:0 0 12px}
+.rkp{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.rkp.you{background:color-mix(in srgb,var(--accent-bg) 60%,var(--card));border-color:var(--accent)}
+.rkh{display:flex;align-items:center;gap:8px;width:100%;padding:11px 12px;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.rkn{flex:none;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;line-height:1;padding-top:1.5px;box-sizing:border-box;background:var(--line);color:var(--ink)}
+.rkn.r1{background:#F2B01E;color:#2A1A00}.rkn.r2{background:#C0C4CC;color:#1b1d22}.rkn.r3{background:#C98A55;color:#2A1A00}
+.rkm{flex:1;min-width:0}
+.rk1{display:flex;align-items:baseline;gap:7px;min-width:0}.rknm{font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.rkago{flex:none;font-size:11.5px;font-weight:500;color:var(--mute);opacity:.85;white-space:nowrap}
+.rks{display:flex;flex-wrap:wrap;gap:2px 10px;font-size:12.5px;color:var(--mute);margin-top:2px}
+.rks span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.rks .fl{gap:2px}.rks .bgc{gap:3px}
+.rksc{flex:none;text-align:right}
+.rksc b{display:block;font-size:21px;font-weight:800;line-height:1.1;color:var(--ink)}
+.rksc small{display:block;font-size:13px;font-weight:700;color:var(--ink);margin-top:2px;min-height:16px;white-space:nowrap}
+.rkch{flex:none;width:22px;height:22px;color:var(--mute);transition:transform .2s}
+.rkp.open .rkch{transform:rotate(180deg)}
+.rkd{display:none;border-top:1px solid var(--line);padding:10px 12px 12px}
+.rkp.open .rkd{display:block}
+.rkd .rkb{font-size:12px;color:var(--mute);margin:0 0 6px}
+.rkd .bstrip{margin-top:0}
+.rkst{display:flex;gap:16px;margin-top:10px;font-size:13px;color:var(--mute)}.rkst b{color:var(--ink);font-size:16px}
+.rkpart .rkpseudo{display:flex;gap:8px;align-items:center;margin-top:10px}
+.rkpart input[type=text]{flex:1;min-width:0;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 12px;font:600 16px system-ui}
+.rkpart small{color:var(--mute);font-size:12px;min-width:34px;text-align:right}
+.rkfoot{font-size:12px;color:var(--mute);text-align:center;margin:0 0 16px}
 </style>
 </head>
 <body>
@@ -1632,6 +1657,7 @@ function persist(){
     saved.audio = S.audio; saved.rate = S.rate; saved.voice = S.voice; saved.rehHide = S.rehHide; saved.fs = S.fs; saved.bold = S.bold;
     localStorage.setItem(KEY, JSON.stringify(saved));
   } catch(e) {}
+  try { rankSoon(); } catch(e) {}
 }
 function saveProg(){
   if (!S.stepsAll || !S.scene) return;
@@ -2130,6 +2156,7 @@ function navBack(){
   if (S.settings) { S.settings = false; renderSheet(); return; }
   if (S.view === 'badges' && S.bsel) { S.bsel = null; render(); return; }
   if (S.view === 'badges') { S.view = 'progress'; render(); window.scrollTo(0, 0); return; }
+  if (S.view === 'rank') { S.view = 'progress'; render(); window.scrollTo(0, 0); return; }
   if (S.view === 'progress' || S.view === 'import') { S.view = 'library'; render(); window.scrollTo(0, 0); return; }
   if (S.view === 'scene') { stopSpeech(); if (S.started) S.started = false; else S.view = 'library'; render(); window.scrollTo(0, 0); }
 }
@@ -2224,7 +2251,7 @@ function render(){
   try { ensureDay(); } catch(e) {}
   let nb = []; try { nb = checkBadges(); } catch(e) {}
   nb.forEach(x => celebrate('badge', { id:x.b.id, name:x.b.name, tier:x.tier, unique:!!x.b.unique, label:x.b.name + (x.b.unique ? '' : ' · ' + TIERS[x.tier - 1]) }));
-  $('#app').innerHTML = (ADMIN ? admBar() : '') + (S.view === 'library' ? libView() : S.view === 'badges' ? badgesView() : S.view === 'progress' ? progressView() : S.view === 'import' ? importView() : sceneView());
+  $('#app').innerHTML = (ADMIN ? admBar() : '') + (S.view === 'library' ? libView() : S.view === 'badges' ? badgesView() : S.view === 'progress' ? progressView() : S.view === 'rank' ? rankView() : S.view === 'import' ? importView() : sceneView());
   renderSheet();
 }
 function progText(p, s){
@@ -2407,6 +2434,104 @@ function mineView(){
   });
   return h;
 }
+/* ---- Classement (feuille Google + Apps Script ; voir claude/classement-concept.md) ---- */
+const RANK_URL = 'https://script.google.com/macros/s/AKfycbzvFo1M5IRxNB0vMGEND--rakM4vK-Zwi4ssFI483aTYLBnXnp3hDj17tgMydfu-xQ5TQ/exec';
+const RANK_EVERY = 60000, RANK_VER = 'c40';
+const rk = () => (saved.rank = saved.rank || { on:false, pseudo:'', id:'', last:0, del:false, cache:null });
+let rankBusy = false, rankErr = '', rankT = 0, rankOpen = new Set();
+function rankId(){ const r = rk();
+  if (!r.id) { try { r.id = Array.from(crypto.getRandomValues(new Uint8Array(12)), b => b.toString(16).padStart(2, '0')).join(''); }
+    catch(x) { r.id = 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10); } persist(); }
+  return r.id; }
+const rankClean = s => String(s || '').replace(/[\u0000-\u001f<>="'`\\]/g, '').replace(/\s+/g, ' ').trim().slice(0, 10);
+function rankBadges(){ const bg = saved.bg || {};
+  return { serie:bg.streak || 0, obj:bg.obj || 0, sc:bg.scenes || 0, sol:bg.solid || 0, par:bg.perfect ? 1 : 0, jj:bg.ready ? 1 : 0 }; }
+function rankPayload(){
+  const D = progData(), b = rankBadges(); let T = 0, NEW = 0;
+  allStats().forEach(x => { T += x.st.total; NEW += x.st.counts.new; });
+  return { action:'upsert', id:rankId(), season:saved.season, pseudo:rankClean(rk().pseudo), level:D.lv.lvl, streak:streakInfo().n,
+    badgeCount:b.serie + b.obj + b.sc + b.sol + b.par + b.jj, badges:b, answered:Math.max(0, T - NEW), version:RANK_VER };
+}
+async function rankPost(body){
+  const opt = { method:'POST', headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body:JSON.stringify(body) };
+  try { const res = await fetch(RANK_URL, opt); return await res.json(); }
+  catch(x) { /* lecture de la réponse bloquée (CORS) : on tente un envoi « à l'aveugle » */
+    try { await fetch(RANK_URL, Object.assign({ mode:'no-cors' }, opt)); return { ok:true, blind:true }; } catch(y) { return null; } }
+}
+async function rankSend(force){
+  const r = rk(); if (ADMIN || !r.on || !rankClean(r.pseudo) || rankBusy) return;
+  if (!force && Date.now() - r.last < RANK_EVERY) return;
+  if (!navigator.onLine) return;
+  rankBusy = true;
+  const j = await rankPost(rankPayload());
+  rankBusy = false;
+  if (j && j.ok) { r.last = Date.now(); rankErr = ''; } else rankErr = j && j.error ? j.error : 'net';
+  persist(); if (S.view === 'rank') rankFoot();
+}
+async function rankDelete(){
+  const r = rk(); if (ADMIN || !r.id) { r.del = false; return; }
+  const j = await rankPost({ action:'delete', id:r.id, season:saved.season });
+  r.del = !(j && j.ok); persist();
+}
+async function rankLoad(){
+  if (ADMIN) return;
+  try { const res = await fetch(RANK_URL + '?action=list&season=' + encodeURIComponent(saved.season) + '&id=' + encodeURIComponent(rk().on ? rk().id : ''));
+    const j = await res.json();
+    if (j && j.ok) { rk().cache = { at:Date.now(), now:j.now, players:j.players }; rankErr = ''; persist(); } else rankErr = 'srv';
+  } catch(x) { rankErr = 'net'; }
+  if (S.view === 'rank' && !(document.activeElement && document.activeElement.id === 'rankpseudo')) render(); else if (S.view === 'rank') rankFoot();
+}
+function rankSync(){ if (ADMIN) return; const r = rk(); if (r.del) rankDelete(); else if (r.on) rankSend(); if (S.view === 'rank') rankLoad(); }
+function rankSoon(){ if (ADMIN || !saved.rank || !saved.rank.on) return; clearTimeout(rankT); rankT = setTimeout(() => rankSend(), 5000); }
+function rankFoot(){ const el = document.getElementById('rankfoot'); if (el) el.innerHTML = rankFootText(); }
+function rankFootText(){
+  const c = rk().cache, n = c ? c.players.length : 0;
+  if (rankErr && !c) return 'Classement indisponible pour l’instant.';
+  if (!c) return 'Chargement…';
+  const m = Math.floor((Date.now() - c.at) / 60000);
+  return n + ' participant' + (n > 1 ? 's' : '') + ' · mis à jour ' + (m < 1 ? 'à l’instant' : 'il y a ' + (m < 60 ? m + ' min' : Math.floor(m / 60) + ' h')) + (rankErr ? ' · hors ligne' : '');
+}
+function rankAgo(min){ if (min < 1) return 'à l’instant'; if (min < 60) return Math.floor(min) + ' min'; if (min < 1440) return Math.floor(min / 60) + ' h'; return Math.floor(min / 1440) + ' j'; }
+/* petite flamme de ligne : le dessin est entouré de vide dans son cadre ; on la rapproche du chiffre et on aligne sa base sur le texte */
+function rankFlame(n){
+  const w = 20, c = n <= 0 ? 30.5 : n < 7 ? 36.7 : n < 30 ? 30.5 : 27;
+  const ex = n <= 0 ? 0.6 : n < 7 ? 0.7 : n < 30 ? 1.3 : 1.7;
+  const up = ((c - 28) * w / 64 + 0.4 + ex).toFixed(1);
+  const m = n <= 0 ? 2.5 : n < 7 ? 4 : n < 30 ? 2.5 : 1;
+  return flameSvg(n, w).replace('<svg class="flame"', '<svg class="flame" style="position:relative;top:-' + up + 'px;margin:0 -' + m + 'px"');
+}
+function rankBest(b){ return Math.max(b.serie || 0, b.obj || 0, b.sc || 0, b.sol || 0); }
+function rankRow(p, i){
+  const b = p.badges || {}, best = rankBest(b), n = p.badgeCount | 0, key = p.pseudo + '|' + i, open = rankOpen.has(p.pseudo);
+  const col = best ? TIERC[Math.min(4, best - 1)] : '#9a948a';
+  const got = BADGES.map(x => [x, (b[{ streak:'serie', obj:'obj', scenes:'sc', solid:'sol', perfect:'par', ready:'jj' }[x.id]] | 0)]).filter(z => z[1] > 0);
+  const lvl = p.level | 0, st = p.streak | 0;
+  const min = p.you ? 0 : Math.max(0, ((rk().cache.now - p.seen) + (Date.now() - rk().cache.at)) / 60000);
+  return `<div class="rkp ${p.you ? 'you' : ''} ${open ? 'open' : ''}">
+    <button class="rkh" type="button" data-act="rankrow" data-p="${esc(p.pseudo)}" aria-expanded="${open}">
+      <span class="rkn ${i < 3 ? 'r' + (i + 1) : ''}">${i + 1}</span>
+      <span class="rkm"><span class="rk1"><span class="rknm">${esc(p.pseudo)}</span><span class="rkago">${p.you ? 'en ligne' : rankAgo(min)}</span></span>
+        <span class="rks"><span class="fl">${rankFlame(st)}${st} j</span><span class="bgc"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="${col}" stroke="rgba(0,0,0,.28)"/><circle cx="12" cy="12" r="7.6" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6"/></svg>${n}</span></span></span>
+      <span class="rksc"><b>Niv. ${lvl}</b><small>${esc(titleOf(lvl))}</small></span>
+      <svg class="rkch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="rkd"><p class="rkb">Badges obtenus (${n})</p>
+      ${got.length ? `<div class="bstrip">${got.map(z => medal(z[0], z[1])).join('')}</div>` : '<div class="mute small">Aucun badge pour l’instant.</div>'}
+      <div class="rkst"><span><b>${p.answered | 0}</b> répliques répondues</span><span>Série : <b>${st}</b> j</span></div></div></div>`;
+}
+function rankView(){
+  const r = rk(), c = r.cache;
+  let h = `<div class="bhead"><button class="ghost" data-act="rankback">‹ Retour</button><h2>Classement</h2></div>
+    <p class="mute small" style="margin:-4px 2px 12px">Saison : ${esc(saved.profile)} · statistiques cumulées depuis le début de cette saison</p>`;
+  if (ADMIN) return h + '<section class="card"><p class="mute">Profil de test : le classement est désactivé (rien n’est envoyé).</p></section>';
+  h += `<section class="card rkpart"><label class="sw"><input type="checkbox" data-act="rankon" ${r.on ? 'checked' : ''}> Participer au classement</label>
+    ${r.on ? `<div class="rkpseudo"><input id="rankpseudo" type="text" maxlength="10" value="${esc(r.pseudo)}" placeholder="Ton pseudo" autocomplete="off" aria-label="Pseudo" data-act="rankpseudo"><small id="rankcnt">${rankClean(r.pseudo).length} / 10</small></div>
+      <p class="mute small" style="margin:8px 0 0">${rankClean(r.pseudo) ? '' : 'Choisis un pseudo pour apparaître dans le classement. '}Seuls ton pseudo et tes chiffres de progression (niveau, série, badges, nombre de répliques) sont envoyés. Aucun texte, aucun nom.</p>${rankErr === 'blocked' ? '<p class="warnbox" style="margin:8px 0 0">Ce pseudo est refusé. Choisis-en un autre.</p>' : rankErr === 'full' ? '<p class="warnbox" style="margin:8px 0 0">Le classement est complet pour cette saison.</p>' : ''}` :
+      '<p class="mute small" style="margin:8px 0 0">Tu peux voir le classement sans y participer. Participer envoie ton pseudo et tes chiffres de progression (jamais de texte).</p>'}</section>`;
+  const list = c ? c.players.slice().sort((a, b) => (b.level | 0) - (a.level | 0) || (b.badgeCount | 0) - (a.badgeCount | 0) || (b.streak | 0) - (a.streak | 0)) : [];
+  h += c && list.length ? `<div class="rkl">${list.map(rankRow).join('')}</div>` : `<section class="card"><p class="mute" style="margin:0">${c ? 'Personne dans le classement pour l’instant.' : rankErr ? 'Classement indisponible pour l’instant (pas de connexion ?).' : 'Chargement…'}</p></section>`;
+  return h + `<p class="rkfoot" id="rankfoot">${rankFootText()}</p>`;
+}
 function progressView(){
   const D = progData(), lv = D.lv, dl = daysBetween(today(), saved.goalDate);
   const gdate = saved.goalDate.split('-').reverse().join('/');
@@ -2433,6 +2558,7 @@ function progressView(){
   const got = BADGES.filter(b => bg[b.id]).length;
   h += `<section class="card"><button class="hdtog" data-act="badgesopen"><span class="lbl" style="margin:0">Mes badges · ${got} / ${BADGES.length}</span><span class="tg">Tout voir ›</span></button>
     <div class="bstrip">${BADGES.map(b => medal(b, bg[b.id] || 0)).join('')}</div></section>
+    <section class="card"><button class="hdtog" data-act="rankopen"><span class="lbl" style="margin:0">Classement</span><span class="tg">Voir ›</span></button></section>
     <p class="mute small" style="margin:4px 4px 16px">Une réplique devient solide après 5 jours de validation différents. Chaque « À revoir » la remet à zéro.</p>`;
   return h;
 }
@@ -2676,6 +2802,9 @@ document.addEventListener('click', e => {
     case 'importsave': impSave(); S.imp = null; S.view = 'library'; saved.libTab = 'all'; render(); window.scrollTo(0, 0); break;
     case 'importdel': if (confirm('Supprimer ce texte de ce téléphone ?')) { impDelete(b.dataset.play, b.dataset.scene); render(); } break;
     case 'progressopen': S.view = 'progress'; S.menuK = null; render(); window.scrollTo(0, 0); break;
+    case 'rankopen': S.view = 'rank'; render(); window.scrollTo(0, 0); rankSync(); rankLoad(); break;
+    case 'rankback': S.view = 'progress'; render(); window.scrollTo(0, 0); break;
+    case 'rankrow': { const k = b.dataset.p; rankOpen.has(k) ? rankOpen.delete(k) : rankOpen.add(k); const el = b.closest('.rkp'); if (el) { el.classList.toggle('open'); b.setAttribute('aria-expanded', rankOpen.has(k)); } break; }
     case 'progressback': S.view = 'library'; render(); window.scrollTo(0, 0); break;
     case 'scmenu': S.menuK = S.menuK === b.dataset.k ? null : b.dataset.k; render(); break;
     case 'badgesback': S.view = 'progress'; render(); window.scrollTo(0, 0); break;
@@ -2726,10 +2855,14 @@ document.addEventListener('click', e => {
   }
 });
 document.addEventListener('input', e => {
-  const t = e.target; if (t.dataset && t.dataset.imp && S.imp) { S.imp[t.dataset.imp] = t.value; return; } if (t.dataset && t.dataset.act === 'rate') { const v = parseFloat(t.value).toFixed(1); const el = document.getElementById('rateval'); if (el) el.textContent = v; }
+  const t = e.target; if (t.dataset && t.dataset.act === 'rankpseudo') { rk().pseudo = t.value; const c = document.getElementById('rankcnt'); if (c) c.textContent = rankClean(t.value).length + ' / 10'; return; } if (t.dataset && t.dataset.imp && S.imp) { S.imp[t.dataset.imp] = t.value; return; } if (t.dataset && t.dataset.act === 'rate') { const v = parseFloat(t.value).toFixed(1); const el = document.getElementById('rateval'); if (el) el.textContent = v; }
 });
 document.addEventListener('change', e => {
   const t = e.target, a = t.dataset && t.dataset.act; if (!a) return;
+  if (a === 'rankon') { const r = rk(); r.on = t.checked;
+    if (r.on) { r.del = false; rankId(); persist(); render(); if (rankClean(r.pseudo)) rankSend(true).then(rankLoad); else rankLoad(); }
+    else { r.del = true; persist(); render(); rankDelete().then(rankLoad); } return; }
+  if (a === 'rankpseudo') { const r = rk(); r.pseudo = rankClean(t.value); persist(); render(); if (r.pseudo) rankSend(true).then(rankLoad); return; }
   if (a === 'importfile') { const files = Array.from(t.files || []); if (!files.length) return;
     Promise.all(files.map(f => f.text().then(txt => { try { return JSON.parse(txt); } catch(x) { return null; } }, () => null))).then(list => {
       let n = 0, bad = 0;
@@ -2771,7 +2904,9 @@ document.addEventListener('keydown', e => {
   else if ((e.key === 'i' || e.key === 'I') && !S.hint) { S.hint = true; render(); }
   else if ((e.key === 'x' || e.key === 'X') && S.stepRevealed && gradable(S.steps[S.pos])) grade('ko');
 });
-document.addEventListener('visibilitychange', () => { if (document.hidden) stopSpeech(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden) stopSpeech(); else { try { rankSync(); } catch(e) {} } });
+window.addEventListener('online', () => { try { rankSync(); } catch(e) {} });
+try { rankSync(); } catch(e) {}
 /* Après chaque affichage, synchroniser l'historique avec l'écran courant (bouton retour du téléphone) */
 { const r0 = render, s0 = renderSheet;
   render = function(){ const v = r0.apply(this, arguments); navSync(); return v; };
