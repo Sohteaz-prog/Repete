@@ -210,6 +210,7 @@ h2{font-size:19px;margin:0 0 2px}
 .trow2 .ck{width:22px;height:22px;border-radius:50%;border:2px solid var(--mute);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex:none}
 .trow2.done{border-color:#1f8a5a}.trow2.done .ck{background:#1f8a5a;border-color:#1f8a5a;color:#fff}
 .trow2 .tt{flex:1;min-width:0}
+#exittoast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font:600 14px/1.2 system-ui,sans-serif;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:9999;max-width:90vw;text-align:center}#exittoast.on{opacity:1;transform:translate(-50%,0)}
 .infobox{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.45}
 .infobox p{margin:0 0 6px}.infobox p:last-child{margin:0}
 .gain{font-size:14px;font-weight:700;color:#1f8a5a}
@@ -950,7 +951,7 @@ const LIBRARY = [{
       L('Trois',`Je vois… (Brandissant l’oreille, comme en transe) Je ne vois rien, mais j’entends.`),
       L('Un',`Une voyante qui entend, maintenant…`),
       L('Deux',`Et qu’est-ce que vous entendez ?`),
-      L('Trois',`J’entends une voix… qui vient de très loin.`,`Imprimé « Un » dans ton texte : sans doute une coquille, c’est Trois (la voyante) qui entend la voix.`),
+      L('Trois',`J’entends une voix… qui vient de très loin.`,`Dans ton texte imprimé, cette réplique est attribuée à « Un ». C’est sans doute une coquille : c’est Trois (la voyante) qui entend la voix.`),
       L('Deux',`Et qu’est-ce qu’elle dit, cette voix ?`),
       L('Trois',`J’entends… des chiffres !`),
       L('Un',`Des chiffres ?`),
@@ -1965,11 +1966,28 @@ function navBack(){
   if (S.view === 'progress' || S.view === 'import') { S.view = 'library'; render(); window.scrollTo(0, 0); return; }
   if (S.view === 'scene') { stopSpeech(); if (S.started) S.started = false; else S.view = 'library'; render(); window.scrollTo(0, 0); }
 }
+/* Quitter l'appli : à l'accueil, un premier « retour » affiche un message, un second dans les 2 s quitte vraiment.
+   Une entrée d'historique « accueil » est ajoutée au premier appui (les navigateurs ignorent celles créées sans geste). */
+let homeGuard = false, exitAt = 0, exitTimer = null;
+document.addEventListener('pointerdown', () => {
+  if (homeGuard) return;
+  try { history.pushState({ home: 1 }, ''); homeGuard = true; } catch(x) {}
+}, { capture: true });
+function exitToast(){
+  let t = document.getElementById('exittoast');
+  if (!t) { t = document.createElement('div'); t.id = 'exittoast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+  t.textContent = 'Appuie encore sur retour pour quitter'; t.classList.add('on');
+  clearTimeout(exitTimer); exitTimer = setTimeout(() => t.classList.remove('on'), 2000);
+}
 window.addEventListener('popstate', () => {
   if (navIgnore) { navIgnore = false; return; }
+  const wasDeep = navGuard;
   navGuard = false;
-  navBack();
-  navSync();
+  if (wasDeep) { navBack(); navSync(); return; }
+  if (!homeGuard) return;
+  if (Date.now() - exitAt < 2000) { homeGuard = false; navIgnore = false; history.back(); return; }   // 2e appui : on quitte
+  exitAt = Date.now(); exitToast();
+  try { history.pushState({ home: 1 }, ''); } catch(x) {}
 });
 function openSettings(){ if (S.settings) return; S.settings = true; renderSheet(); }
 function closeSettings(){ if (!S.settings) return; S.settings = false; renderSheet(); }
@@ -2278,6 +2296,8 @@ function sceneView(){
 }
 
 /* --- onglet Texte --- */
+function noteBtn(it, k){ return it.note ? `<button class="info" data-act="note" data-k="${k}" aria-label="Note sur cette réplique" aria-expanded="${S.noteK === k ? 'true' : 'false'}">i</button>` : ''; }
+function noteBox(it, k){ return it.note && S.noteK === k ? `<div class="infobox" style="margin-top:6px;font-family:system-ui,sans-serif">${esc(it.note)}</div>` : ''; }
 function lineHtml(it, i, mine){
   const hidden = mine && S.textHide && !S.revealed.has(i);
   const wc = words(it.t).length;
@@ -2285,9 +2305,9 @@ function lineHtml(it, i, mine){
   const from = S.me ? `<button class="mini" data-act="from" data-i="${i}" aria-label="Répéter à partir d’ici">▶ d’ici</button>` : '';
   const ps = mine && S.stMap ? S.stMap[i] : null;
   return `<div class="line ${mine?'me':''} ${ps ? 'ps ' + ps.st : ''}">
-    <div class="who2"><span class="num">${lineNo(i)}</span>${esc(it.c)}${ps && ps.stale ? '<span class="stg">À rafraîchir</span>' : ''}${listen}${from}</div>
+    <div class="who2"><span class="num">${lineNo(i)}</span>${esc(it.c)}${ps && ps.stale ? '<span class="stg">À rafraîchir</span>' : ''}${noteBtn(it, 'l' + i)}${listen}${from}</div>
     ${hidden ? `<button class="mask" data-act="reveal" data-i="${i}">Toucher pour révéler · ${wc} mot${wc>1?'s':''}</button>` : `<p>${fmt(it.t)}</p>`}
-    ${it.note && !hidden ? `<p class="note">${esc(it.note)}</p>` : ''}
+    ${hidden ? '' : noteBox(it, 'l' + i)}
   </div>`;
 }
 function textView(){
@@ -2365,8 +2385,8 @@ function stepView(){
       <div class="small">${w.length} mot${w.length>1?'s':''}${S.hint ? ` — commence par : « ${esc(w.slice(0,3).join(' '))}… »` : ' · touche la carte pour la révéler'}</div>
       ${S.hint ? '' : `<div class="row2"><button class="btn sm" data-act="hint">Indice</button></div>`}</div>`;
   } else {
-    card = `<div class="cur ${mine?'me':''}"><div class="who2"><span class="num">${lineNo(si)}</span>${esc(it.c)}${mine?' · toi':''}${!mine?`<button class="mini" data-act="${synth ? 'speak' : 'nosound'}" data-i="${si}">🔊 Réécouter</button>`:''}</div>
-      ${fmt(it.t)}${it.note?`<p class="note">${esc(it.note)}</p>`:''}</div>`;
+    card = `<div class="cur ${mine?'me':''}"><div class="who2"><span class="num">${lineNo(si)}</span>${esc(it.c)}${mine?' · toi':''}${noteBtn(it, 'c' + si)}${!mine?`<button class="mini" data-act="${synth ? 'speak' : 'nosound'}" data-i="${si}">🔊 Réécouter</button>`:''}</div>
+      ${fmt(it.t)}${noteBox(it, 'c' + si)}</div>`;
   }
   const prevBtn = `<button class="btn sq" data-act="prev" ${S.pos===0?'disabled':''} aria-label="Réplique précédente">‹</button>`;
   let actions;
@@ -2459,7 +2479,7 @@ document.addEventListener('click', e => {
       S.scene = S.play.scenes.find(s => s.id === b.dataset.scene);
       const m = saved.me[key()];
       S.me = S.scene.characters.includes(m) ? m : null;
-      Object.assign(S, {view:'scene', tab:'text', mode:'all', textHide:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set()});
+      Object.assign(S, {view:'scene', noteK:null, tab:'text', mode:'all', textHide:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set()});
       saved.last = { play:S.play.id, scene:S.scene.id }; persist();
       if (b.dataset.go && S.me) S.tab = 'reh';
       render(); window.scrollTo(0,0); break; }
@@ -2490,6 +2510,7 @@ document.addEventListener('click', e => {
     case 'setfs': S.fs = +b.dataset.v; applyFs(); persist(); render(); break;
     case 'settheme': saved.theme = b.dataset.v; applyTheme(); persist(); render(); break;
     case 'setcolor': saved.color = b.dataset.v; applyTheme(); persist(); render(); break;
+    case 'note': S.noteK = S.noteK === b.dataset.k ? null : b.dataset.k; render(); break;
     case 'infoobj': S.infoObj = !S.infoObj; render(); break;
     case 'libtab': saved.libTab = b.dataset.v; persist(); render(); window.scrollTo(0,0); break;
     case 'togglemine': {
