@@ -262,8 +262,8 @@ h2{font-size:19px;margin:0 0 2px}
 .weak .miss{margin:6px 0 0;padding-left:28px;font-size:14px;color:var(--mute)}
 .rng{width:100%;accent-color:var(--accent);height:34px}
 .rngs{display:flex;justify-content:space-between;font-size:13px;color:var(--mute)}
-.swatches{display:flex;flex-wrap:wrap;gap:12px}
-.swc{width:46px;height:46px;border-radius:50%;border:0;display:flex;align-items:center;justify-content:center;font:800 20px system-ui,sans-serif;padding:0}
+.swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:14px 10px;padding:6px 4px}
+.swc{width:100%;max-width:62px;aspect-ratio:1;justify-self:center;border-radius:50%;border:0;display:flex;align-items:center;justify-content:center;font:800 20px system-ui,sans-serif;padding:0}
 .swc.on{box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--ink)}
 /* ===== ovation ===== */
 .ov-scr{position:relative;width:390px;height:340px;overflow:hidden;border-radius:28px;background:var(--rbg);box-shadow:inset 0 0 0 1px var(--edge);flex:none}
@@ -467,7 +467,8 @@ h2{font-size:19px;margin:0 0 2px}
  *
  * Réglages :
  *   RepeteSons.setEnabled(true|false);   // option « Sons des récompenses »
- *   RepeteSons.setVolume(0..1);          // 0.8 par défaut
+ *   RepeteSons.setVolume(0..1);          // 0.5 par défaut
+ *   RepeteSons.stop();                   // coupe le son en cours (fondu de 0,12 s)
  *   RepeteSons.unlock();                 // à appeler dans un geste utilisateur (iOS/Safari)
  *
  * Silence automatique si prefers-reduced-motion: reduce.
@@ -476,8 +477,8 @@ h2{font-size:19px;margin:0 0 2px}
 (function (g) {
   'use strict';
 
-  var ctx = null, master = null, verbIn = null, noiseBuf = null;
-  var volume = 0.8, enabled = true;
+  var ctx = null, master = null, verbIn = null, noiseBuf = null, verbBuf = null, bus = null, cur = null;
+  var volume = 0.4, enabled = true;
 
   /* ---------- moteur ---------- */
   function reduced() {
@@ -502,10 +503,7 @@ h2{font-size:19px;margin:0 0 2px}
     master.gain.value = volume;
     var comp = ctx.createDynamicsCompressor();
     master.connect(comp); comp.connect(ctx.destination);
-    var verb = ctx.createConvolver();
-    verb.buffer = impulse(1.9, 2.6);
-    verbIn = ctx.createGain(); verbIn.gain.value = 0.4;
-    verbIn.connect(verb); verb.connect(master);
+    verbBuf = impulse(1.9, 2.6);
     var n = ctx.sampleRate * 2;
     noiseBuf = ctx.createBuffer(1, n, ctx.sampleRate);
     var d = noiseBuf.getChannelData(0);
@@ -514,8 +512,8 @@ h2{font-size:19px;margin:0 0 2px}
   }
 
   function send(node, wet) {
-    node.connect(master);
-    if (wet > 0) {
+    node.connect(bus || master);
+    if (wet > 0 && verbIn) {
       var s = ctx.createGain(); s.gain.value = wet;
       node.connect(s); s.connect(verbIn);
     }
@@ -578,7 +576,28 @@ h2{font-size:19px;margin:0 0 2px}
   function go(fn) {
     if (!enabled || reduced()) return;
     if (!init()) return;
+    stop();
+    newBus();
     fn(ctx.currentTime + 0.06);
+  }
+
+  /* chaque son a son propre circuit (bus + réverbération) : on peut le couper net sans toucher au suivant */
+  function newBus() {
+    bus = ctx.createGain(); bus.connect(master);
+    var vi = ctx.createGain(); vi.gain.value = 0.4;
+    var v = ctx.createConvolver(); v.buffer = verbBuf;
+    vi.connect(v); v.connect(bus);
+    verbIn = vi; cur = bus;
+  }
+  function stop() {
+    if (!ctx || !cur) return;
+    var t = ctx.currentTime, b = cur; cur = null;
+    try {
+      b.gain.cancelScheduledValues(t);
+      b.gain.setValueAtTime(b.gain.value, t);
+      b.gain.linearRampToValueAtTime(0, t + 0.12);
+      setTimeout(function () { try { b.disconnect(); } catch (e) {} }, 400);
+    } catch (e) {}
   }
 
   /* ---------- 1 · Ovation — « Scène terminée » : rideau, projecteur, cordes ---------- */
@@ -718,6 +737,7 @@ h2{font-size:19px;margin:0 0 2px}
     unlock: init,
     setEnabled: function (b) { enabled = !!b; },
     isEnabled: function () { return enabled; },
+    stop: stop,
     setVolume: function (v) { volume = Math.max(0, Math.min(1, v)); if (master) master.gain.value = volume; }
   };
 })(window);
@@ -1437,6 +1457,7 @@ const COLORS = [
   {id:'ambre',    name:'Jaune', l:['#F5A300','#9A5A00','#FFF1CC','#2A1A00'], d:['#F5A300','#F5B335','#3A2D10','#2A1A00']},
   {id:'orange',   name:'Orange',       l:['#F26B1D','#A8430A','#FFE7D8','#2B1000'], d:['#F26B1D','#FF9D6B','#40240F','#2B1000']},
   {id:'rouge',    name:'Rouge',        l:['#E5484D','#B1252B','#FFE3E4','#2D0306'], d:['#E5484D','#FF8B8F','#43191B','#2D0306']},
+  {id:'bordeaux', name:'Bordeaux', l:['#8D183B','#8D183B','#F6DDE3','#FFF5F7'], d:['#A32249','#EE8FA8','#3E1A25','#FFF5F7']},
   {id:'rose',     name:'Rose',         l:['#EC4899','#B0206B','#FFE2F0','#2D0517'], d:['#EC4899','#FF8CC4','#40182E','#2D0517']},
   {id:'violet',   name:'Violet',       l:['#8B5CF6','#5B2FC9','#EDE6FF','#14072E'], d:['#8B5CF6','#B9A3FB','#2E2347','#14072E']},
   {id:'bleu',     name:'Bleu',         l:['#3B82F6','#1D5BD1','#DDEBFF','#04142E'], d:['#3B82F6','#8AB8FF','#1B2A44','#04142E']},
@@ -1502,12 +1523,10 @@ function sheetInner(){
       <div class="lbl">Vibration des boutons</div>
       <div class="seg sm">${HAPTICS.map(([id, n]) => `<button class="${hapticMode() === id ? 'on' : ''}" data-act="sethaptic" data-v="${id}">${n}</button>`).join('')}</div>
       ${canVibe ? '' : '<div class="mute small" style="margin-top:6px">Non prise en charge par cet appareil ou ce navigateur.</div>'}
-      <div class="lbl">Animations</div>
+      <div class="lbl">Récompenses</div>
       <div class="seg sm">${ANIM_MODES.map(([id, n]) => `<button class="${animMode() === id ? 'on' : ''}" data-act="setanim" data-v="${id}">${n}</button>`).join('')}</div>
       <div class="mute small" style="margin-top:6px">${animMode() === 'auto' ? 'Auto : suit le réglage de ton téléphone.' : animMode() === 'off' ? 'Le résultat s’affiche sans mouvement.' : ''}</div>
-      <div class="lbl">Sons des récompenses</div>
-      <div class="seg sm"><button class="${soundOn() ? '' : 'on'}" data-act="setsound" data-v="off">Désactivés</button><button class="${soundOn() ? 'on' : ''}" data-act="setsound" data-v="on">Activés</button></div>
-      <div class="mute small" style="margin-top:6px">Désactivés par défaut. Joués avec les animations de récompense.</div>
+      <label class="sw"><input type="checkbox" data-act="soundck" ${soundOn() ? 'checked' : ''}> Sons des récompenses</label>
       <div class="lbl">Thème</div>
       <div class="seg">${THEMES.map(([id, n]) => `<button class="${(saved.theme || 'auto') === id ? 'on' : ''}" data-act="settheme" data-v="${id}">${n}</button>`).join('')}</div>
       <div class="mute small" style="margin-top:6px">${(saved.theme || 'auto') === 'auto' ? 'Auto : suit le thème de ton téléphone.' : ''}</div>
@@ -1552,10 +1571,16 @@ function rwShow(kind, html, ms, snd, animate){
     const rw = lay.querySelector('[class$="-rw"],[class*="-rw "]');
     rw.classList.remove('go'); void rw.offsetWidth;
     requestAnimationFrame(() => { lay.classList.add('on'); rw.classList.add('go'); if (animate && snd) snd(); });
-    let done = false;
-    const close = () => { if (done) return; done = true; lay.classList.remove('on'); setTimeout(() => { lay.remove(); res(); }, animate ? 260 : 0); };
-    lay.addEventListener('click', close);
-    setTimeout(close, animate ? ms : 2600);
+    let done = false, skipped = !animate, timer = 0;
+    const close = () => { if (done) return; done = true; clearTimeout(timer); try { if (window.RepeteSons) RepeteSons.stop(); } catch(x) {} lay.classList.remove('on'); setTimeout(() => { lay.remove(); res(); }, animate ? 260 : 0); };
+    lay._close = close;
+    /* 1er appui : l'animation saute à son état final ; 2e appui : l'affichage se ferme. */
+    lay.addEventListener('click', () => {
+      if (skipped) { close(); return; }
+      skipped = true; lay.classList.add('rw-still');
+      clearTimeout(timer); timer = setTimeout(close, 2600);
+    });
+    timer = setTimeout(close, animate ? ms : 2600);
   });
 }
 const rwFit = (t, big) => { const n = Math.max(...t.split(/\s+/).map(w => w.length)); return n > 9 ? big - 10 : n > 7 ? big - 4 : big; };
@@ -1768,10 +1793,33 @@ function renderSheet(){
     sheetTimer = setTimeout(() => { el.innerHTML = ''; document.body.style.overflow = ''; }, 520);
   } else { document.body.style.overflow = ''; }
 }
-/* Réglages et bouton retour du téléphone : l'ouverture ajoute une entrée d'historique, « retour » la ferme. */
-function openSettings(){ if (S.settings) return; S.settings = true; renderSheet(); try { history.pushState({ rsh: 1 }, ''); } catch(x) {} }
-function closeSettings(){ if (!S.settings) return; S.settings = false; renderSheet(); try { if (history.state && history.state.rsh) history.back(); } catch(x) {} }
-window.addEventListener('popstate', () => { if (S.settings) { S.settings = false; renderSheet(); } });
+/* Bouton retour du téléphone = bouton « retour / fermer » de l'appli.
+   Dès qu'on quitte l'écran d'accueil (réglages, scène, répétition, badges), une entrée d'historique « garde »
+   est ajoutée : « retour » la consomme et déclenche l'action de retour de l'appli. À l'accueil, « retour » quitte l'appli. */
+let navGuard = false, navIgnore = false;
+const navDepth = () => !!(S.settings || S.view !== 'library' || S.started);
+function navSync(){
+  try {
+    const need = navDepth();
+    if (need && !navGuard) { history.pushState({ rg: 1 }, ''); navGuard = true; }
+    else if (!need && navGuard) { navGuard = false; navIgnore = true; history.back(); }
+  } catch(x) {}
+}
+function navBack(){
+  const rw = document.querySelector('.rwl.on');
+  if (rw) { if (rw._close) rw._close(); else rw.click(); return; }
+  if (S.settings) { S.settings = false; renderSheet(); return; }
+  if (S.view === 'badges') { S.view = 'library'; render(); window.scrollTo(0, 0); return; }
+  if (S.view === 'scene') { stopSpeech(); if (S.started) S.started = false; else S.view = 'library'; render(); window.scrollTo(0, 0); }
+}
+window.addEventListener('popstate', () => {
+  if (navIgnore) { navIgnore = false; return; }
+  navGuard = false;
+  navBack();
+  navSync();
+});
+function openSettings(){ if (S.settings) return; S.settings = true; renderSheet(); }
+function closeSettings(){ if (!S.settings) return; S.settings = false; renderSheet(); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && S.settings) closeSettings(); });
 /* Réglages : glisser vers le haut ferme la fenêtre (depuis le bas du contenu, ou depuis le fond assombri) */
 let shSwipe = null;
@@ -2299,6 +2347,7 @@ document.addEventListener('change', e => {
   else if (a === 'thide') { S.textHide = t.checked; S.revealed = new Set(); render(); }
   else if (a === 'cue') { S.cue = t.checked; render(); }
   else if (a === 'boldck') { S.bold = t.checked; persist(); render(); }
+  else if (a === 'soundck') { saved.sound = t.checked ? 'on' : 'off'; persist(); render(); if (t.checked) rwSound(() => { RepeteSons.unlock(); RepeteSons.badge('or'); }); }
   else if (a === 'audio') { S.audio = t.checked; persist(); render(); }
   else if (a === 'voice') { S.voice = t.value; persist(); }
   else if (a === 'goaldate') { if (t.value) { saved.goalDate = t.value; persist(); render(); } }
@@ -2325,6 +2374,10 @@ document.addEventListener('keydown', e => {
   else if ((e.key === 'x' || e.key === 'X') && S.stepRevealed && gradable(S.steps[S.pos])) grade('ko');
 });
 document.addEventListener('visibilitychange', () => { if (document.hidden) stopSpeech(); });
+/* Après chaque affichage, synchroniser l'historique avec l'écran courant (bouton retour du téléphone) */
+{ const r0 = render, s0 = renderSheet;
+  render = function(){ const v = r0.apply(this, arguments); navSync(); return v; };
+  renderSheet = function(){ const v = s0.apply(this, arguments); navSync(); return v; }; }
 render();
 </script>
 <script>
