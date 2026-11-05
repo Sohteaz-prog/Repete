@@ -1420,6 +1420,9 @@ if (saved.mastery) {
   delete saved.mastery;
 }
 if (!saved.libTab) saved.libTab = saved.mine.length ? 'mine' : 'all';
+saved.userLib = Array.isArray(saved.userLib) ? saved.userLib : [];
+saved.userLib.forEach(up => { LIBRARY.push(up); });
+
 const synth = ('speechSynthesis' in window) ? window.speechSynthesis : null;
 const FS = [[16,19],[18,22],[21,26],[25,31]];
 const S = {
@@ -1805,11 +1808,128 @@ function navSync(){
     else if (!need && navGuard) { navGuard = false; navIgnore = true; history.back(); }
   } catch(x) {}
 }
+
+/* ===== Textes de la classe : fichier textes-classe.json placé à côté de index.html ===== */
+function mergeShared(arr){
+  let n = 0;
+  (Array.isArray(arr) ? arr : []).forEach(pl => {
+    if (!pl || !pl.id || !Array.isArray(pl.scenes)) return;
+    const have = LIBRARY.find(x => x.id === pl.id);
+    if (!have) { pl.shared = true; LIBRARY.push(pl); n++; return; }
+    pl.scenes.forEach(sc => { if (!have.scenes.some(x => x.id === sc.id)) { have.scenes.push(sc); n++; } });
+  });
+  return n;
+}
+try { fetch('textes-classe.json', { cache:'no-cache' }).then(r => r.ok ? r.json() : null).then(j => { if (j && mergeShared(j)) render(); }).catch(() => {}); } catch(e) {}
+function exportTexts(){
+  const blob = new Blob([JSON.stringify(saved.userLib, null, 1)], { type:'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'textes-classe.json';
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+/* ===== Ajouter mon texte ===== */
+const NM = "[A-ZÀ-ÖØ-Þa-zà-öø-ÿ][A-ZÀ-ÖØ-Þa-zà-öø-ÿ'’]*(?: [A-ZÀ-ÖØ-Þa-zà-öø-ÿ'’]+){0,3}";
+const RE_DASH = new RegExp("^(" + NM + ")\\s*(?:\\(([^)]*)\\)|,\\s*([^—–:.]{1,60}?))?\\s*[.:]?\\s*[—–-]\\s*(.*)$");
+const RE_UP = /^([A-ZÀ-Þ][A-ZÀ-Þ'’ ]{1,38}?)\s*(?:\(([^)]*)\))?\s*[.:]\s*(.*)$/;
+const RE_UPONLY = /^([A-ZÀ-Þ][A-ZÀ-Þ'’ ]{1,38})\s*$/;
+function normName(n){
+  n = n.replace(/’/g, "'").replace(/\s+/g, ' ').trim();
+  if (n === n.toUpperCase()) n = n.charAt(0) + n.slice(1).toLowerCase();
+  return n;
+}
+function parseScript(raw){
+  let src = String(raw).replace(/\r/g, '');
+  const ti = src.search(/^#+\s*Texte\s*$/mi);
+  if (ti >= 0) { src = src.slice(src.indexOf('\n', ti) + 1); const ne = src.search(/^#+\s/m); if (ne >= 0) src = src.slice(0, ne); }
+  src = src.replace(/\[[^\]]*incertain[^\]]*\]/gi, '');
+  const lines = src.split('\n').map(x => x.replace(/­/g, '').trim());
+  const items = [], chars = [], counts = {}, canon = {};
+  let cur = null;
+  const flush = () => { cur = null; };
+  const addChar = n => { const k = n.toLowerCase(); if (!canon[k]) { canon[k] = n; chars.push(n); counts[n] = 0; } return canon[k]; };
+  const join = (a, b) => /[A-Za-zÀ-ÿ]-$/.test(a) && /^[a-zà-ÿ]/.test(b) ? a.slice(0, -1) + b : a + ' ' + b;
+  lines.forEach(l => {
+    if (!l || /^\d{1,3}$/.test(l) || /^#+\s/.test(l)) return;
+    const em = l.match(/^\*([^*]+)\*$/);
+    if (em) { flush(); items.push({ k:'dir', t:em[1].trim() }); return; }
+    l = l.replace(/\*\*?([^*]+)\*\*?/g, '$1');
+    let m, name = null, aside = '', txt = '';
+    if ((m = l.match(RE_DASH))) { name = m[1]; aside = m[2] || m[3] || ''; txt = m[4]; }
+    else if ((m = l.match(RE_UP))) { name = m[1]; aside = m[2] || ''; txt = m[3]; }
+    else if ((m = l.match(RE_UPONLY))) { name = m[1]; txt = ''; }
+    if (name) {
+      const c = addChar(normName(name));
+      const t = ((aside ? '(' + aside.trim() + ') ' : '') + txt).trim();
+      cur = { k:'l', c, t };
+      items.push(cur); counts[c]++;
+    } else if (cur) {
+      cur.t = cur.t ? join(cur.t, l) : l;
+    } else {
+      items.push({ k:'dir', t:l });
+    }
+  });
+  // fusionne les didascalies d’ouverture
+  const out = [];
+  items.forEach(it => { const last = out[out.length - 1];
+    if (it.k === 'dir' && last && last.k === 'dir') last.t = join(last.t, it.t); else out.push(it); });
+  return { items: out.filter(i => i.k === 'dir' || i.t), chars, counts };
+}
+const impNew = () => ({ title:'', author:'', scene:'', text:'', step:1, parsed:null });
+function impSave(){
+  const I = S.imp, pr = I.parsed;
+  const title = I.title.trim(), scene = (I.scene.trim() || 'Scène');
+  let play = saved.userLib.find(p => p.title.toLowerCase() === title.toLowerCase());
+  if (!play) { play = { id:'u' + Date.now(), title, author:I.author.trim() || '—', note:'Ajouté par moi', mine:true, scenes:[] };
+    saved.userLib.push(play); LIBRARY.push(play); }
+  play.scenes.push({ id:'u' + Date.now() + play.scenes.length, title:scene, characters:pr.chars.slice(), roles:{}, items:pr.items });
+  persist();
+}
+function impDelete(pid, sid){
+  const p = saved.userLib.find(x => x.id === pid); if (!p) return;
+  p.scenes = p.scenes.filter(x => x.id !== sid);
+  const k = pid + '/' + sid;
+  saved.mine = saved.mine.filter(x => x !== k && !(x && x.k === k));
+  delete saved.me[k]; delete saved.prog[k]; delete saved.lines[k];
+  if (!p.scenes.length) {
+    saved.userLib = saved.userLib.filter(x => x !== p);
+    const i = LIBRARY.indexOf(p); if (i >= 0) LIBRARY.splice(i, 1);
+  }
+  persist();
+}
+function importView(){
+  const I = S.imp || (S.imp = impNew());
+  let h = `<div class="bhead"><button class="ghost" data-act="importback">‹ Retour</button><h2>Ajouter mon texte</h2></div>`;
+  if (I.step === 1) {
+    h += `<section class="card"><p class="hint">Copie le texte de ta scène (depuis un PDF ou Google Lens) et colle-le ci-dessous. Chaque réplique doit commencer par le nom du personnage, par exemple <b>LA PRÉSENTATRICE. — Bonjour…</b> ou <b>Pierre : Bonjour…</b>. Ce qui est entre parenthèses s’affiche en gris comme une didascalie.</p>
+      <div class="lbl">Titre de la pièce</div><input class="dateinp" data-imp="title" value="${esc(I.title)}" placeholder="Télévision, mon amour"><div style="height:10px"></div>
+      <div class="lbl">Auteur</div><input class="dateinp" data-imp="author" value="${esc(I.author)}" placeholder="Jean Legeay"><div style="height:10px"></div>
+      <div class="lbl">Titre de la scène</div><input class="dateinp" data-imp="scene" value="${esc(I.scene)}" placeholder="Téléshopping"><div style="height:10px"></div>
+      <div class="lbl">Texte</div><textarea class="dateinp" data-imp="text" rows="10" style="min-height:200px;resize:vertical;font-family:inherit" placeholder="Colle ici le texte de la scène">${esc(I.text)}</textarea>
+      <p class="mute small">Le texte reste uniquement sur ce téléphone.</p>
+      <div class="row2" style="display:flex;gap:8px;margin-top:8px"><button class="btn pri" data-act="importparse">Analyser le texte</button></div></section>`;
+  } else {
+    const pr = I.parsed, n = pr.items.filter(i => i.k === 'l').length;
+    if (!n) h += `<section class="card"><p class="hint">Aucune réplique détectée. Vérifie que chaque réplique commence par le nom du personnage suivi d’un tiret ou de deux-points.</p><button class="btn" data-act="importedit">‹ Modifier le texte</button></section>`;
+    else {
+      h += `<section class="card"><div class="lbl">${esc(I.title)} · ${esc(I.scene || 'Scène')}</div>
+        <p><b>${n}</b> répliques, <b>${pr.chars.length}</b> personnage${pr.chars.length > 1 ? 's' : ''} :</p>
+        <ul>${pr.chars.map(c => `<li>${esc(c)} — ${pr.counts[c]} réplique${pr.counts[c] > 1 ? 's' : ''}</li>`).join('')}</ul>
+        <p class="mute small">Si un personnage apparaît en trop (ou en double), retourne modifier le texte.</p>
+        <div style="max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:8px 0">
+        ${pr.items.map(i => i.k === 'dir' ? `<p class="mute small">${fmt(i.t)}</p>` : `<p><b>${esc(i.c)}</b> — ${fmt(i.t)}</p>`).join('')}</div>
+        <div class="row2" style="display:flex;gap:8px"><button class="btn" data-act="importedit">‹ Modifier</button><button class="btn pri" data-act="importsave">Ajouter à la bibliothèque</button></div></section>`;
+    }
+  }
+  const mine = []; saved.userLib.forEach(p => p.scenes.forEach(sc => mine.push([p, sc])));
+  if (mine.length && I.step === 1) h += `<section class="card"><div class="lbl">Mes textes ajoutés</div>` + mine.map(([p, sc]) =>
+    `<div style="display:flex;align-items:center;gap:8px;margin:6px 0"><span style="flex:1">${esc(p.title)} · ${esc(sc.title)}</span><button class="btn sm ko" data-act="importdel" data-play="${p.id}" data-scene="${sc.id}">Supprimer</button></div>`).join('') + `<button class="btn sm" style="width:100%;margin-top:8px" data-act="exporttexts">Exporter mes textes (fichier à partager)</button><p class="mute small">Pour les mettre dans l’application de la classe : envoie le fichier <b>textes-classe.json</b> sur GitHub, à côté de index.html.</p></section>`;
+  if (I.step === 1) h += `<section class="card"><div class="lbl">Importer un fichier de textes</div><p class="mute small">Si on t’a envoyé un fichier <b>textes-classe.json</b>, choisis-le ici.</p><input type="file" accept=".json,application/json" data-act="importfile"></section>`;
+  return h;
+}
 function navBack(){
   const rw = document.querySelector('.rwl.on');
   if (rw) { if (rw._close) rw._close(); else rw.click(); return; }
   if (S.settings) { S.settings = false; renderSheet(); return; }
-  if (S.view === 'badges') { S.view = 'library'; render(); window.scrollTo(0, 0); return; }
+  if (S.view === 'badges' || S.view === 'import') { S.view = 'library'; render(); window.scrollTo(0, 0); return; }
   if (S.view === 'scene') { stopSpeech(); if (S.started) S.started = false; else S.view = 'library'; render(); window.scrollTo(0, 0); }
 }
 window.addEventListener('popstate', () => {
@@ -1881,7 +2001,7 @@ function render(){
   try { ensureDay(); } catch(e) {}
   let nb = []; try { nb = checkBadges(); } catch(e) {}
   nb.forEach(x => celebrate('badge', { id:x.b.id, name:x.b.name, tier:x.tier, unique:!!x.b.unique, label:x.b.name + (x.b.unique ? '' : ' · ' + TIERS[x.tier - 1]) }));
-  $('#app').innerHTML = (ADMIN ? admBar() : '') + (S.view === 'library' ? libView() : S.view === 'badges' ? badgesView() : sceneView());
+  $('#app').innerHTML = (ADMIN ? admBar() : '') + (S.view === 'library' ? libView() : S.view === 'badges' ? badgesView() : S.view === 'import' ? importView() : sceneView());
   renderSheet();
 }
 function progText(p, s){
@@ -2003,7 +2123,7 @@ function allView(){
   return LIBRARY.map(p => `<section class="card"><h2>${esc(p.title)}</h2>
       <div class="mute">${esc(p.author)} · ${esc(p.note)}</div>
       ${p.scenes.map(s => sceneRow(p, s)).join('')}
-    </section>`).join('') + `<p class="tip">Touche l’étoile ☆ à côté d’une scène pour l’ajouter à « Mes scènes ». Pour ajouter un texte, envoie simplement les photos des pages à Claude.</p>`;
+    </section>`).join('') + `<p class="tip">Touche l’étoile ☆ à côté d’une scène pour l’ajouter à « Mes scènes ». </p><button class="btn pri" style="width:100%" data-act="importopen">＋ Ajouter mon texte</button>`;
 }
 function todayBlock(){
   const items = allStats(); if (!items.length) return '';
@@ -2292,6 +2412,15 @@ document.addEventListener('click', e => {
       if (b.dataset.in) { const el = document.getElementById(b.dataset.in); if (!el || el.value === '') break; v = Math.max(0, +el.value); if (op === 'mastery') v = Math.min(100, v); }
       admOp(op, v); admFeedback(op, v, b.dataset.v); break; }
     case 'badgesopen': S.view = 'badges'; S.bsel = null; render(); window.scrollTo(0, 0); break;
+    case 'importopen': S.imp = S.imp || impNew(); S.imp.step = 1; S.view = 'import'; render(); window.scrollTo(0, 0); break;
+    case 'importback': S.view = 'library'; render(); window.scrollTo(0, 0); break;
+    case 'importparse': { const I = S.imp;
+      if (!I.title.trim()) { alert('Indique le titre de la pièce.'); break; }
+      I.parsed = parseScript(I.text); I.step = 2; render(); window.scrollTo(0, 0); break; }
+    case 'exporttexts': exportTexts(); break;
+    case 'importedit': S.imp.step = 1; render(); break;
+    case 'importsave': impSave(); S.imp = null; S.view = 'library'; saved.libTab = 'all'; render(); window.scrollTo(0, 0); break;
+    case 'importdel': if (confirm('Supprimer ce texte de ce téléphone ?')) { impDelete(b.dataset.play, b.dataset.scene); render(); } break;
     case 'badgesback': S.view = 'library'; render(); window.scrollTo(0, 0); break;
     case 'badgesel': S.bsel = b.dataset.id; render(); break;
     case 'settings': openSettings(); break;
@@ -2339,10 +2468,17 @@ document.addEventListener('click', e => {
   }
 });
 document.addEventListener('input', e => {
-  const t = e.target; if (t.dataset && t.dataset.act === 'rate') { const v = parseFloat(t.value).toFixed(1); const el = document.getElementById('rateval'); if (el) el.textContent = v; }
+  const t = e.target; if (t.dataset && t.dataset.imp && S.imp) { S.imp[t.dataset.imp] = t.value; return; } if (t.dataset && t.dataset.act === 'rate') { const v = parseFloat(t.value).toFixed(1); const el = document.getElementById('rateval'); if (el) el.textContent = v; }
 });
 document.addEventListener('change', e => {
   const t = e.target, a = t.dataset && t.dataset.act; if (!a) return;
+  if (a === 'importfile') { const f = t.files && t.files[0]; if (!f) return;
+    f.text().then(txt => { let arr; try { arr = JSON.parse(txt); } catch(x) { alert('Fichier illisible.'); return; }
+      let n = 0; (Array.isArray(arr) ? arr : []).forEach(pl => { if (!pl || !pl.id || !Array.isArray(pl.scenes)) return;
+        let up = saved.userLib.find(x => x.id === pl.id);
+        if (!up) { up = { id:pl.id, title:pl.title, author:pl.author, note:pl.note || 'Ajouté par moi', mine:true, scenes:[] }; saved.userLib.push(up); if (!LIBRARY.includes(up)) { const ex = LIBRARY.find(x => x.id === pl.id); if (ex) { ex.scenes.forEach(sc => up.scenes.push(sc)); LIBRARY.splice(LIBRARY.indexOf(ex), 1); } LIBRARY.push(up); } }
+        pl.scenes.forEach(sc => { if (!up.scenes.some(x => x.id === sc.id)) { up.scenes.push(sc); n++; } }); });
+      persist(); alert(n ? n + ' scène(s) ajoutée(s).' : 'Rien de nouveau dans ce fichier.'); render(); }); return; }
   if (a === 'showprog') { saved.showProg = t.checked; persist(); render(); }
   else if (a === 'thide') { S.textHide = t.checked; S.revealed = new Set(); render(); }
   else if (a === 'cue') { S.cue = t.checked; render(); }
