@@ -162,7 +162,6 @@ h2{font-size:19px;margin:0 0 2px}
 .card .lbl{margin-top:2px}
 .card.hero{background:color-mix(in srgb,var(--accent) 2%,var(--card));border:1.5px solid color-mix(in srgb,var(--accent) 55%,var(--line));padding:18px 16px;box-shadow:0 3px 14px color-mix(in srgb,var(--accent) 15%,transparent)}
 .card.hero .lbl{color:var(--accent-ink);font-weight:800;font-size:13px}
-.card.hero .big2{font-size:30px;line-height:1.1;margin:4px 0 10px}
 .card.hero .prog{height:12px;border-radius:6px;background:color-mix(in srgb,var(--ink) 14%,transparent)}
 .card.hero .pcount{font-size:14px;margin-top:6px}
 .row em.me{font-style:normal;font-weight:700;color:var(--accent-ink)}
@@ -197,7 +196,6 @@ h2{font-size:19px;margin:0 0 2px}
 .dot.known{background:#22A06B}
 .dot.solid{background:#F2B01E;box-shadow:0 0 0 1.5px #A87400}
 .dot.stale{outline:2px solid #E8710A;outline-offset:1px}
-.dots{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0 6px}
 .legend{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font-size:12.5px;color:var(--mute);margin-bottom:12px}
 .legend .dot{margin-right:4px;width:9px;height:9px}
 .legend .sep{opacity:.5}
@@ -217,14 +215,8 @@ h2{font-size:19px;margin:0 0 2px}
 .gain{font-size:14px;font-weight:700;color:#1f8a5a}
 .hdtog{display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0 0 2px;min-height:32px;text-align:left}
 .hdtog .tg{font-size:13px;font-weight:700;color:var(--accent-ink)}
-.lvrow{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:2px 0 10px}
-.lvn{font-size:32px;font-weight:800;line-height:1.05}
-.lvt{font-size:16px;font-weight:700;color:var(--accent-ink)}
 .mline{font-size:14px;margin-top:6px}
 .mline b{font-size:15px}
-.goal{display:flex;gap:10px;align-items:baseline;margin-top:10px;font-size:14px}
-.goal b{color:var(--accent-ink);font-size:16px}
-.goal span{color:var(--mute)}
 .big2 small{font-size:14px;font-weight:500;color:var(--mute)}
 .wl{border-top:1px solid var(--line);margin-top:6px}
 .wl summary{display:flex;gap:8px;align-items:center;min-height:40px;font-size:14px;cursor:pointer;list-style:none}
@@ -235,13 +227,23 @@ h2{font-size:19px;margin:0 0 2px}
 .wfull .mute{margin-top:6px}
 .bhead{display:flex;align-items:center;gap:8px;margin:0 0 12px}
 .bhead h2{flex:1;margin:0;font-size:20px}
-.bgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.bgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:min(10px,1.4dvh) 10px;margin-bottom:10px}
 .bcell{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 8px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;text-align:center}
 .bcell.sel{border-color:var(--accent)}
-.bn{font-weight:700;font-size:14px}
-.bt{font-size:12px;color:var(--mute)}
+.bn{font-weight:700;font-size:12.5px;line-height:1.15}
+.bcell .bt{font-size:11.5px;color:var(--mute);flex:none;white-space:normal;font-weight:400}
+.bgrid .bcell{padding:10px 4px;gap:2px;justify-content:flex-start}
+.bgrid .medal{width:min(88px,30vw,11.5dvh);margin:0 0 min(8px,1dvh)}
+.bgrid{grid-auto-rows:minmax(0,max-content)}
+.bgrid .bcell{padding:min(14px,1.5dvh) 6px}
+.bn{font-size:clamp(12px,2dvh,14px)}
+@media (max-height:620px){.bgrid+.tip{display:none}}
+.bov .bdet .bigart{width:min(132px,36vw,20dvh);margin:2px auto min(12px,1.6dvh)}
+.bov .bdet{max-height:calc(100dvh - 40px);overflow:auto}
+.bov{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}
+.bov .bdet{width:100%;max-width:340px;margin:0;position:relative;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.bx{position:absolute;top:6px;right:6px;width:44px;height:44px;border:0;background:none;font-size:20px;color:var(--mute)}
 .bdet h3{margin:0 0 4px;font-size:17px}.bdet p{margin:0 0 8px}
-.bbtn{display:block;margin:2px 0 4px;padding:6px 0;min-height:36px}
 .admtap{margin-top:22px;text-align:center;font-size:11px;color:var(--mute);opacity:.45;padding:10px;user-select:none}
 .admask{display:flex;gap:8px;align-items:center}
 .admask input,.admrow input{min-height:40px;font-size:16px;padding:6px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);width:100%}
@@ -455,6 +457,7 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:18px}
 .tile .dim{opacity:.35}
 .tic{color:var(--accent-ink);display:flex;line-height:0}.band .bm small .ico{color:var(--accent-ink);vertical-align:-2px}
 .tile .tv{color:var(--ink)}
+.tic.fl{color:inherit;line-height:0}.fli{display:inline-block;vertical-align:-5px;line-height:0}
 .pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .pill{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 14px;border-radius:22px;border:1.5px solid var(--line);background:var(--card);font-weight:600;font-size:14px;text-align:left}
 .pill.done{background:#e1f1e7;border-color:#1f8a5a;color:#14573a}
@@ -1450,7 +1453,7 @@ if (saved.mastery) {
   delete saved.mastery;
 }
 if (!saved.libTab) saved.libTab = saved.mine.length ? 'mine' : 'all';
-saved.userLib = Array.isArray(saved.userLib) ? saved.userLib : [];
+saved.userLib = Array.isArray(saved.userLib) ? saved.userLib.filter(pl => pl && pl.id && Array.isArray(pl.scenes)) : [];
 saved.userLib.forEach(up => { LIBRARY.push(up); });
 
 const synth = ('speechSynthesis' in window) ? window.speechSynthesis : null;
@@ -1691,11 +1694,11 @@ function badgesView(){
   h += '</div>';
   const sel = BADGES.find(b => b.id === S.bsel);
   if (sel) { const t = bg[sel.id] || 0, p = sel.unique ? null : badgeProg(sel);
-    h += `<section class="card bdet"><div class="bigart">${badgeArt(sel, t)}</div><h3>${esc(sel.name)}</h3><p>${esc(sel.desc)}</p>
+    h += `<div class="bov" data-act="badgeclose"><section class="card bdet" role="dialog" aria-label="${esc(sel.name)}"><button class="bx" data-act="badgeclose" aria-label="Fermer">✕</button><div class="bigart">${badgeArt(sel, t)}</div><h3>${esc(sel.name)}</h3><p>${esc(sel.desc)}</p>
       ${sel.unique ? `<p class="mute small">${t ? 'Obtenu.' : 'Pas encore obtenu.'}</p>`
         : p === null ? `<p class="mute small">Palier maximum atteint.</p>`
-        : `<div class="prog"><i style="width:${p}%"></i></div><div class="pcount"><span>${p} % vers le palier suivant</span><span></span></div>`}</section>`; }
-  else h += `<p class="tip">Touche un badge pour voir comment le gagner.</p>`;
+        : `<div class="prog"><i style="width:${p}%"></i></div><div class="pcount"><span>${p} % vers le palier suivant</span><span></span></div>`}</section></div>`; }
+  h += `<p class="tip">Touche un badge pour voir comment le gagner.</p>`;
   return h;
 }
 /* ---- Mode admin (profil de test) ---- */
@@ -1959,6 +1962,7 @@ function navBack(){
   const rw = document.querySelector('.rwl.on');
   if (rw) { if (rw._close) rw._close(); else rw.click(); return; }
   if (S.settings) { S.settings = false; renderSheet(); return; }
+  if (S.view === 'badges' && S.bsel) { S.bsel = null; render(); return; }
   if (S.view === 'badges') { S.view = 'progress'; render(); window.scrollTo(0, 0); return; }
   if (S.view === 'progress' || S.view === 'import') { S.view = 'library'; render(); window.scrollTo(0, 0); return; }
   if (S.view === 'scene') { stopSpeech(); if (S.started) S.started = false; else S.view = 'library'; render(); window.scrollTo(0, 0); }
@@ -2135,14 +2139,6 @@ function weakList(s, st){
     ${st.att.map(a => `<details class="wl"><summary><i class="dot ${a.st}${a.stale ? ' stale' : ''}"></i><b>${num(a.i)}.</b><span class="wt">${esc(tail(s.items[a.i].t))}</span>${a.stale ? '<span class="tag">À rafraîchir</span>' : ''}</summary>
       <div class="wfull">${fmt(s.items[a.i].t)}<div class="mute small">${STLAB[a.st]}${a.st === 'known' ? ' · ' + a.n + ' / 5 jours' : ''}${a.age !== null && a.age > 0 ? ' · dernière validation il y a ' + a.age + ' jour' + (a.age > 1 ? 's' : '') : ''}</div></div></details>`).join('')}</details>`;
 }
-function dotsStrip(st){
-  const c = st.counts, bits = [];
-  if (c.solid) bits.push(`<i class="dot solid"></i>${c.solid} solide${c.solid > 1 ? 's' : ''}`);
-  if (c.known) bits.push(`<i class="dot known"></i>${c.known} connue${c.known > 1 ? 's' : ''}`);
-  if (c.ko) bits.push(`<i class="dot ko"></i>${c.ko} à revoir`);
-  if (c.new) bits.push(`<i class="dot new"></i>${c.new} nouvelle${c.new > 1 ? 's' : ''}`);
-  return `<div class="legend">${bits.join('<span class="sep">·</span>')}</div>`;
-}
 const sceneRow = (p, s) => {
   const on = isMine(p, s), me = saved.me[keyOf(p, s)];
   const chars = s.characters.map(c => c === me ? `<em class="me">${esc(c)}</em>` : esc(c)).join(' · ');
@@ -2156,30 +2152,25 @@ function allView(){
       ${p.scenes.map(s => sceneRow(p, s)).join('')}
     </section>`).join('') + `<p class="tip">Touche l’étoile ☆ à côté d’une scène pour l’ajouter à « Mes scènes ». </p><button class="btn pri" style="width:100%" data-act="importopen">＋ Ajouter mon texte</button>`;
 }
-function todayBlock(){
-  const items = allStats(); if (!items.length) return '';
-  const t = todayInfo(items), byK = {}; items.forEach(x => { byK[x.k] = x; });
-  const sv = t.streak, list = t.h.obj ? t.h.obj.list : [];
-  const rows = list.filter(k => byK[k]).map(k => { const x = byK[k], done = t.h.done.includes(k);
-    return `<button class="trow2 ${done ? 'done' : ''}" data-act="open" data-play="${x.p.id}" data-scene="${x.s.id}" data-go="1"><span class="ck">${done ? '✓' : ''}</span><span class="tt">${esc(x.s.title)}</span></button>`; }).join('');
-  return `<div class="today">
-    <div class="tline"><span class="tk">${sv.lit ? '🔥' : '<span class="dim">🔥</span>'} Série</span><span class="tv">${sv.n} jour${sv.n > 1 ? 's' : ''}</span>
-      <span class="tn ${sv.lit ? 'ok' : ''}">${sv.lit ? '✓ validée aujourd’hui' : 'encore ' + t.rem + ' réplique' + (t.rem > 1 ? 's' : '') + ' à noter'}</span></div>
-    <div class="tline"><span class="tk">Objectif du jour</span><span class="tv">${Math.min(t.objDone, t.objNeed)} / ${t.objNeed} scène${t.objNeed > 1 ? 's' : ''}</span>
-      <span class="tn ${t.met ? 'ok' : ''}">${t.met ? '✓ atteint' : ''}</span>
-      <button class="info" data-act="infoobj" aria-label="Comment sont choisis les objectifs" aria-expanded="${S.infoObj ? 'true' : 'false'}">i</button></div>
-    ${rows ? `<div class="tlist">${rows}</div>` : ''}
-    ${S.infoObj ? `<div class="infobox"><p><b>Objectif du jour.</b> Ce sont les scènes qui ont le plus besoin de toi : répliques à revoir ou à rafraîchir d’abord, puis celles que tu as répétées le moins récemment. La liste est fixée à la première ouverture de la journée. Elle s’allonge à l’approche de ta date objectif. Une scène est faite quand toutes tes répliques ont été notées.</p>
-      <p><b>Série.</b> Une journée compte quand tu as noté l’équivalent de 15 % de ton texte. Un jour d’absence est toléré, deux d’affilée cassent la série.</p></div>` : ''}
-    ${t.gain > 0 ? `<div class="gain">+${t.gain} % de maîtrise aujourd’hui</div>` : ''}
-  </div>`;
-}
 const ICO = {
   flame:'<path d="M12 12c2-2.96 0-7-1-8 0 3.038-1.773 4.741-3 6-1.226 1.26-2 3.24-2 5a6 6 0 1 0 12 0c0-1.532-1.056-3.94-2-5-1.786 3-2.791 3-4 2z"/>',
   target:'<circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9"/>',
   cal:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/><rect x="8" y="15" width="2" height="2"/>'
 };
 const ico = (n, sz) => `<svg class="ico" width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICO[n]}</svg>`;
+const FL_O = 'M24 3C25 11 34 15 34 28C34 37 29.5 43 24 43C18.5 43 14 37 14 28C14 22 17 18.5 19.5 14.5C20.5 18 22 19.5 23.5 19C25 15 24.5 8 24 3Z';
+const FL_C = 'M24 24C25 28.5 29 30 29 35C29 38.5 26.8 41 24 41C21.2 41 19 38.5 19 35C19 31 22.5 29.5 24 24Z';
+function flameSvg(n, w){
+  const yy = s => 52 - 0.896 * s;
+  const sh = (d, cx, s, fill, line) => `<g transform="translate(${(cx - s / 2).toFixed(1)} ${yy(s).toFixed(1)}) scale(${(s / 48).toFixed(3)})"><path d="${d}" fill="${fill}"${line ? ` stroke="${line}" stroke-width="${(1.6 * 48 / s).toFixed(2)}"` : ''}/></g>`;
+  const stack = (cx, s, o, m, c) => sh(FL_O, cx, s, o) + (m ? sh(FL_O, cx, s * 0.72, m) : '') + sh(FL_C, cx, s, c);
+  let g;
+  if (n <= 0) g = sh(FL_O, 32, 48, 'none', '#9a948a');
+  else if (n < 7) g = stack(32, 34, '#F08A24', null, '#FFD54A');
+  else if (n < 30) g = stack(32, 48, '#EE6A1E', null, '#FFC83D');
+  else g = stack(32, 56, '#D8341F', '#F28A1C', '#FFE27A') + '<circle cx="12" cy="14" r="1.8" fill="#F5A300"/><circle cx="53" cy="10" r="1.5" fill="#F5A300"/><circle cx="50" cy="26" r="1.2" fill="#D8341F"/>';
+  return `<svg class="flame" viewBox="0 0 64 56" width="${w}" height="${(w * 56 / 64).toFixed(0)}" aria-hidden="true" focusable="false">${g}</svg>`;
+}
 const ring = (pct, size, sw) => { const c = 276.46, d = Math.max(0, Math.min(100, pct)) / 100 * c;
   return `<svg width="${size}" height="${size}" viewBox="0 0 104 104" aria-hidden="true" focusable="false"><circle cx="52" cy="52" r="44" fill="none" stroke="color-mix(in srgb,var(--ink) 14%,transparent)" stroke-width="${sw}"/><circle cx="52" cy="52" r="44" fill="none" stroke="var(--accent)" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${d.toFixed(1)} ${c}" transform="rotate(-90 52 52)"/></svg>`; };
 function progData(){
@@ -2198,10 +2189,6 @@ function donut(st){
     .map(([k, n, w]) => `<span><i class="dot ${k}"></i>${n} ${k === 'ko' ? w : w + (n > 1 ? 's' : '')}</span>`).join('');
   return `<div class="dnrow"><div class="dn"><svg width="84" height="84" viewBox="0 0 80 80" role="img" aria-label="Statut des répliques">${segs}</svg><div class="dnt"><b>${st.pct} %</b><small>maîtrise</small></div></div><div class="dnlg">${lg}</div></div>`;
 }
-function segBar(st){
-  const c = st.counts, col = { solid:'#F2B01E', known:'#22A06B', ko:'#E5484D', new:'color-mix(in srgb,var(--ink) 16%,transparent)' };
-  return `<div class="seg" role="img" aria-label="Statut des répliques">${['solid','known','ko','new'].filter(k => c[k]).map(k => `<i style="flex:${c[k]};background:${col[k]}"></i>`).join('')}</div>`;
-}
 function mineView(){
   const D = progData(), list = D.list;
   if (!list.length) return `<p class="hint big">Aucune scène pour l’instant.<br>Dans la bibliothèque, touche l’étoile ☆ à côté des scènes que tu joues.</p>
@@ -2211,7 +2198,7 @@ function mineView(){
   let h = `<button class="band" data-act="progressopen" aria-label="Ouvrir Ma progression">
     <span class="rg">${ring(lv.max ? 100 : lv.toNext, 52, 10)}<b>${lv.lvl}</b></span>
     <span class="bm"><b>${lv.title ? esc(lv.title) + ' · ' : ''}niveau ${lv.lvl}</b>
-    <small>${t ? ico('flame', 15) + ' ' + t.streak.n + ' j · objectif du jour ' + Math.min(t.objDone, t.objNeed) + ' / ' + t.objNeed + ' · ' : ''}${dl > 0 ? 'J-' + dl : dl === 0 ? 'Jour J' : 'Date passée'}</small></span><span class="ch">›</span></button>`;
+    <small>${t ? '<span class="fli">' + flameSvg(t.streak.n, 30) + '</span> ' + t.streak.n + ' j · objectif du jour ' + Math.min(t.objDone, t.objNeed) + ' / ' + t.objNeed + ' · ' : ''}${dl > 0 ? 'J-' + dl : dl === 0 ? 'Jour J' : 'Date passée'}</small></span><span class="ch">›</span></button>`;
   list.forEach(([p, s]) => {
     const st = stats(p, s), at = `data-play="${p.id}" data-scene="${s.id}"`, k = keyOf(p, s);
     h += `<section class="card"><div class="bar2"><div class="sct"><h2 class="one">${esc(s.title)}</h2><div class="mute small">${esc(p.title)}</div></div>
@@ -2240,7 +2227,7 @@ function progressView(){
       ${t && t.gain > 0 ? `<div class="gain">+${t.gain} % aujourd’hui</div>` : ''}</div></div>
       ${D.withMe < D.list.length ? `<p class="hint" style="margin:10px 0 0">Choisis ton personnage dans chaque scène pour suivre ta progression.</p>` : ''}</section>`;
   if (t) {
-    h += `<div class="tiles"><div class="tile"><span class="tic ${t.streak.lit ? '' : 'dim'}">${ico('flame', 28)}</span><span class="tv">${t.streak.n} j</span><span class="tk">Série</span><span class="tn ${t.streak.lit ? 'ok' : ''}">${t.streak.lit ? '✓ validée' : 'encore ' + t.rem + ' réplique' + (t.rem > 1 ? 's' : '')}</span></div>
+    h += `<div class="tiles"><div class="tile"><span class="tic fl">${flameSvg(t.streak.n, 46)}</span><span class="tv">${t.streak.n} j</span><span class="tk">Série</span><span class="tn ${t.streak.lit ? 'ok' : ''}">${t.streak.lit ? '✓ validée' : 'encore ' + t.rem + ' réplique' + (t.rem > 1 ? 's' : '')}</span></div>
       <div class="tile"><span class="tic">${ico('target', 28)}</span><span class="tv">${Math.min(t.objDone, t.objNeed)} / ${t.objNeed}</span><span class="tk">Objectif du jour</span><span class="tn ${t.met ? 'ok' : ''}">${t.met ? '✓ atteint' : ''}</span></div>
       <div class="tile"><span class="tic">${ico('cal', 28)}</span><span class="tv">${dl > 0 ? 'J-' + dl : dl === 0 ? 'Jour J' : '—'}</span><span class="tk">${esc(gdate)}</span></div></div>`;
     const byK = {}; items.forEach(x => { byK[x.k] = x; });
@@ -2462,7 +2449,6 @@ document.addEventListener('click', e => {
       list.forEach(([bg, tr]) => celebrate('badge', { id:bg.id, name:bg.name, tier:tr, unique:!!bg.unique, label:bg.name })); break; }
       { const k = b.dataset.v, bg = BADGES[S.admB || 0], ti = S.admT == null ? 3 : S.admT;
       celebrate(k, k === 'title' ? { title:TITLE_IDX[ti], lvl:[10,20,30,40,50][ti] } : k === 'badge' ? { id:bg.id, name:bg.name, tier:S.admTier || 3, unique:!!bg.unique, label:bg.name } : { scene:'Test' }); break; }
-    case 'setsound': saved.sound = b.dataset.v; persist(); render(); if (saved.sound === 'on') rwSound(() => { RepeteSons.unlock(); RepeteSons.badge('or'); }); break;
     case 'installapp': {
       const ev = installEvt; if (!ev) break;
       ev.prompt();
@@ -2500,12 +2486,12 @@ document.addEventListener('click', e => {
     case 'scmenu': S.menuK = S.menuK === b.dataset.k ? null : b.dataset.k; render(); break;
     case 'badgesback': S.view = 'progress'; render(); window.scrollTo(0, 0); break;
     case 'badgesel': S.bsel = b.dataset.id; render(); break;
+    case 'badgeclose': if (b.classList.contains('bov') && e.target !== b) break; S.bsel = null; render(); break;
     case 'settings': openSettings(); break;
     case 'closesettings': closeSettings(); break;
     case 'setfs': S.fs = +b.dataset.v; applyFs(); persist(); render(); break;
     case 'settheme': saved.theme = b.dataset.v; applyTheme(); persist(); render(); break;
     case 'setcolor': saved.color = b.dataset.v; applyTheme(); persist(); render(); break;
-    case 'togglehero': saved.heroOpen = !saved.heroOpen; persist(); render(); break;
     case 'infoobj': S.infoObj = !S.infoObj; render(); break;
     case 'libtab': saved.libTab = b.dataset.v; persist(); render(); window.scrollTo(0,0); break;
     case 'togglemine': {
@@ -2529,7 +2515,6 @@ document.addEventListener('click', e => {
     case 'nosound': S.tts = { status:'unsupported' }; render(); break;
     case 'ttstest': say('Bonjour, ceci est un test de la voix.', 1); break;
     case 'bold': S.bold = !S.bold; persist(); render(); break;
-    case 'fs': S.fs = (S.fs + 1) % FS.length; applyFs(); persist(); break;
     case 'audiotoggle': S.audio = !S.audio; persist(); if (!S.audio) stopSpeech(); else autoSpeak(); render(); break;
     case 'from': { const all = allSteps(); S.missed = new Set(); beginSteps(all, Math.max(0, all.indexOf(+b.dataset.i)), true); break; }
     case 'start': S.missed = new Set(); beginSteps(allSteps(), 0, true); break;
