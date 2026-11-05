@@ -2436,7 +2436,7 @@ function mineView(){
 }
 /* ---- Classement (feuille Google + Apps Script ; voir claude/classement-concept.md) ---- */
 const RANK_URL = 'https://script.google.com/macros/s/AKfycbwAjizlS7bYfNKiqNpTfNEWg8Ce_KGkxilsifDI92WMbaxVzZFGsgd7SbUrIbvTk33Ngg/exec';
-const RANK_EVERY = 60000, RANK_VER = 'c40';
+const RANK_EVERY = 60000, RANK_VER = 'c43';
 const rk = () => (saved.rank = saved.rank || { on:false, pseudo:'', id:'', last:0, del:false, cache:null });
 let rankBusy = false, rankErr = '', rankT = 0, rankOpen = new Set();
 function rankId(){ const r = rk();
@@ -2521,13 +2521,15 @@ function rankRow(p, i){
 }
 function rankView(){
   const r = rk(), c = r.cache;
-  let h = `<div class="bhead"><button class="ghost" data-act="rankback">‹ Retour</button><h2>Classement</h2></div>
+  let h = `<div class="bhead"><button class="ghost" data-act="rankback">‹ Retour</button><h2>Classement</h2><button class="ghost" data-act="rankrefresh">Actualiser</button></div>
     <p class="mute small" style="margin:-4px 2px 12px">Saison : ${esc(saved.profile)} · statistiques cumulées depuis le début de cette saison</p>`;
   if (ADMIN) return h + '<section class="card"><p class="mute">Profil de test : le classement est désactivé (rien n’est envoyé).</p></section>';
-  h += `<section class="card rkpart"><label class="sw"><input type="checkbox" data-act="rankon" ${r.on ? 'checked' : ''}> Participer au classement</label>
-    ${r.on ? `<div class="rkpseudo"><input id="rankpseudo" type="text" maxlength="10" value="${esc(r.pseudo)}" placeholder="Ton pseudo" autocomplete="off" aria-label="Pseudo" data-act="rankpseudo"><small id="rankcnt">${rankClean(r.pseudo).length} / 10</small></div>
-      <p class="mute small" style="margin:8px 0 0">${rankClean(r.pseudo) ? '' : 'Choisis un pseudo pour apparaître dans le classement. '}Seuls ton pseudo et tes chiffres de progression (niveau, série, badges, nombre de répliques) sont envoyés. Aucun texte, aucun nom.</p>${rankErr === 'blocked' ? '<p class="warnbox" style="margin:8px 0 0">Ce pseudo est refusé. Choisis-en un autre.</p>' : rankErr === 'full' ? '<p class="warnbox" style="margin:8px 0 0">Le classement est complet pour cette saison.</p>' : ''}` :
-      '<p class="mute small" style="margin:8px 0 0">Tu peux voir le classement sans y participer. Participer envoie ton pseudo et tes chiffres de progression (jamais de texte).</p>'}</section>`;
+  const info = `<div class="infobox" style="margin-top:10px"><p><b>Qu’est-ce qui est envoyé ?</b> Seuls ton pseudo et tes chiffres de progression : niveau, série, badges et nombre de répliques répondues. Aucun texte, aucun nom.</p>
+      <p>Tu peux voir le classement sans participer. Tu peux te retirer à tout moment : ta ligne est alors supprimée.</p></div>`;
+  h += `<section class="card rkpart"><div class="tline"><label class="sw" style="flex:1"><input type="checkbox" data-act="rankon" ${r.on ? 'checked' : ''}> Participer au classement</label>
+    <button class="info" data-act="inforank" aria-label="Quelles données sont envoyées ?" aria-expanded="${S.infoRank ? 'true' : 'false'}">i</button></div>
+    ${S.infoRank ? info : ''}
+    ${r.on ? `<div class="rkpseudo"><input id="rankpseudo" type="text" maxlength="10" value="${esc(r.pseudo)}" placeholder="Ton pseudo" autocomplete="off" aria-label="Pseudo" data-act="rankpseudo"><small id="rankcnt">${rankClean(r.pseudo).length} / 10</small></div>${rankErr === 'blocked' ? '<p class="warnbox" style="margin:8px 0 0">Ce pseudo est refusé. Choisis-en un autre.</p>' : rankErr === 'full' ? '<p class="warnbox" style="margin:8px 0 0">Le classement est complet pour cette saison.</p>' : ''}` : ''}</section>`;
   const list = c ? c.players.slice().sort((a, b) => (b.level | 0) - (a.level | 0) || (b.badgeCount | 0) - (a.badgeCount | 0) || (b.streak | 0) - (a.streak | 0)) : [];
   h += c && list.length ? `<div class="rkl">${list.map(rankRow).join('')}</div>` : `<section class="card"><p class="mute" style="margin:0">${c ? 'Personne dans le classement pour l’instant.' : rankErr ? 'Classement indisponible pour l’instant (pas de connexion ?).' : 'Chargement…'}</p></section>`;
   return h + `<p class="rkfoot" id="rankfoot">${rankFootText()}</p>`;
@@ -2803,6 +2805,9 @@ document.addEventListener('click', e => {
     case 'importdel': if (confirm('Supprimer ce texte de ce téléphone ?')) { impDelete(b.dataset.play, b.dataset.scene); render(); } break;
     case 'progressopen': S.view = 'progress'; S.menuK = null; render(); window.scrollTo(0, 0); break;
     case 'rankopen': S.view = 'rank'; render(); window.scrollTo(0, 0); rankSync(); rankLoad(); break;
+    case 'rankrefresh': { if (b.disabled) break; b.disabled = true; b.textContent = 'Actualisation…';
+      (rk().on && rankClean(rk().pseudo) ? rankSend(true) : Promise.resolve()).then(rankLoad).then(() => { const x = document.querySelector('[data-act=rankrefresh]'); if (x) { x.disabled = false; x.textContent = 'Actualiser'; } }); break; }
+    case 'inforank': S.infoRank = !S.infoRank; render(); break;
     case 'rankback': S.view = 'progress'; render(); window.scrollTo(0, 0); break;
     case 'rankrow': { const k = b.dataset.p; rankOpen.has(k) ? rankOpen.delete(k) : rankOpen.add(k); const el = b.closest('.rkp'); if (el) { el.classList.toggle('open'); b.setAttribute('aria-expanded', rankOpen.has(k)); } break; }
     case 'progressback': S.view = 'library'; render(); window.scrollTo(0, 0); break;
