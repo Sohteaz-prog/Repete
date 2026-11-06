@@ -253,6 +253,7 @@ h2{font-size:19px;margin:0 0 2px}
 .admsec{margin-top:22px;padding-top:14px;border-top:1.5px dashed var(--line)}
 .admrow{display:grid;grid-template-columns:1fr 84px 52px;gap:8px;align-items:center;margin-bottom:8px;font-size:14px}
 .admgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.hlog{margin:6px 0 8px;padding:8px;max-height:220px;overflow:auto;white-space:pre-wrap;word-break:break-word;font:11px/1.35 ui-monospace,Menlo,Consolas,monospace;background:var(--card);border:1.5px solid var(--line);border-radius:10px;color:var(--ink)}
 .admb{min-height:40px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font-weight:600;font-size:13px;padding:6px 8px}
 .admb.flash{background:var(--accent-bg);border-color:var(--accent);transition:none}
 #admtoast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,16px);z-index:60;max-width:calc(100% - 32px);padding:10px 16px;border-radius:12px;background:#3b3b46;color:#fff;font-size:14px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.28);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;text-align:center}
@@ -1749,7 +1750,7 @@ function sheetInner(){
       <div class="lbl">Couleur de surlignage · ${esc(cur.name)}</div>
       <div class="swatches">${COLORS.map(c => { const v = dark ? c.d : c.l; return `<button class="swc ${c.id === cur.id ? 'on' : ''}" style="background:${v[0]};color:${v[3]}" data-act="setcolor" data-v="${c.id}" aria-label="${esc(c.name)}" aria-pressed="${c.id === cur.id}">${c.id === cur.id ? '✓' : ''}</button>`; }).join('')}</div>
       ${installBlock()}
-      ${ADMIN ? admPanel() : `<div class="admtap" data-act="admtap">Répète</div>${S.admAsk ? `<div class="admask"><input id="admcode" type="password" inputmode="numeric" autocomplete="off" placeholder="Code" aria-label="Code"><button class="ghost" data-act="admgo">OK</button></div>${S.admErr ? '<div class="mute small">Code incorrect.</div>' : ''}` : ''}`}`;
+      ${ADMIN ? admPanel() : `<div class="admtap" data-act="admtap">Répète · v${APP_VER}</div>${S.admAsk ? `<div class="admask"><input id="admcode" type="password" inputmode="numeric" autocomplete="off" placeholder="Code" aria-label="Code"><button class="ghost" data-act="admgo">OK</button></div>${S.admErr ? '<div class="mute small">Code incorrect.</div>' : ''}` : ''}`}`;
 }
 /* ---- Animations : déclencheurs et file d'attente (les visuels seront branchés dans ANIM) ---- */
 const ANIM = {};   /* ANIM.applause / ANIM.title / ANIM.badge = (data, {animate}) => Promise. Absent = rien ne s'affiche. */
@@ -1946,7 +1947,7 @@ function admOp(op, v){
 function admPanel(){
   const lv = levelInfo(Math.round(((allStats().reduce((a, x) => a + x.st.pts, 0)) / Math.max(1, 5 * allStats().reduce((a, x) => a + x.st.total, 0))) * 100));
   const row = (lab, id, ph, op) => `<div class="admrow"><span>${lab}</span><input id="${id}" type="number" inputmode="numeric" placeholder="${ph}"><button class="admb" data-act="adm" data-op="${op}" data-in="${id}">OK</button></div>`;
-  return `<div class="admsec"><div class="lbl">Mode admin · profil de test</div>
+  return `<div class="admsec"><div class="lbl">Mode admin · profil de test · v${APP_VER}</div>
     <div class="mute small" style="margin-bottom:8px">Jour simulé : <b>${today()}</b></div>
     ${row('Maîtrise globale (%)', 'adm-m', '0 – 100', 'mastery')}
     ${row('Niveau', 'adm-l', '0 – 50', 'level')}
@@ -1985,6 +1986,10 @@ function admPanel(){
       <button class="admb dng" data-act="adm" data-op="wipe">Effacer le profil de test</button>
     </div>
     <div class="mute small" style="margin-top:8px">Rien de tout ça ne touche à ta vraie progression. Les badges viendront ici dès qu’ils seront créés.</div>
+    <div class="lbl" style="margin-top:14px">Journal du bouton retour</div>
+    <pre class="hlog" id="hlog">${esc(hlogLines().join('\n') || '(vide)')}</pre>
+    <div class="admgrid"><button class="admb" data-act="hlogrefresh">Actualiser</button><button class="admb" data-act="hlogcopy">Copier</button>
+      <button class="admb dng" data-act="hlogclear" style="grid-column:1/3">Effacer le journal</button></div>
     <button class="admb" style="margin-top:10px;width:100%" data-act="admquit">Quitter le mode admin</button></div>`;
 }
 let sheetTimer = 0;
@@ -2012,40 +2017,59 @@ function renderSheet(){
     sheetTimer = setTimeout(() => { el.innerHTML = ''; document.body.style.overflow = ''; }, 520);
   } else { document.body.style.overflow = ''; }
 }
-/* Bouton retour du téléphone = bouton « retour / fermer » de l'appli.
-   Principe : l'historique ne contient jamais que DEUX entrées de l'appli : l'entrée de départ (« base ») et une entrée
-   « sentinelle » (« top ») sur laquelle on reste toujours. Un « retour » du téléphone ramène donc toujours sur la base,
-   jamais sur une entrée créée par nous (que Chrome peut sauter quand il estime qu'il n'y a pas eu d'interaction, ce qui
-   faisait quitter l'appli sans message). L'appli décide alors : écran ouvert → elle le ferme ; accueil → message, puis
-   un second « retour » dans les 2 s quitte vraiment. Dans tous les cas la sentinelle est remise aussitôt. */
-let baseIdx = 0, staleGo = false;
-/* Remise de la sentinelle : pas dans le gestionnaire du retour lui-même (Android peut ignorer un pushState fait pendant
-   que le retour est en cours), mais juste après, avec de nouvelles tentatives, et à chaque toucher / retour au premier plan. */
-let leaving = false;
+/* ===== Bouton retour du téléphone =====
+   Il fait exactement la même chose que le bouton « Retour / Fermer » de l'appli (voir navBack) ; à l'accueil, il faut
+   deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
+   TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
+   sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
+const APP_VER = 53;
+const HLOG_KEY = 'repete.hlog';
+/* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
+function hlog(msg){
+  if (!ADMIN) return;
+  try {
+    const a = JSON.parse(localStorage.getItem(HLOG_KEY) || '[]'), t = new Date(), p = n => String(n).padStart(2, '0');
+    a.push(p(t.getHours()) + ':' + p(t.getMinutes()) + ':' + p(t.getSeconds()) + ' ' + msg);
+    while (a.length > 60) a.shift();
+    localStorage.setItem(HLOG_KEY, JSON.stringify(a));
+  } catch(e) {}
+}
+const hlogLines = () => { try { return JSON.parse(localStorage.getItem(HLOG_KEY) || '[]'); } catch(e) { return []; } };
+const hst = () => { const st = history.state; return st ? st.k + '/' + (st.i == null ? '-' : st.i) : 'aucun'; };
+let baseIdx = 0, leaving = false;
 const TOP_DEPTH = 3;
 const curIdx = () => { const st = history.state; return st && st.k === 'top' && typeof st.i === 'number' ? st.i : baseIdx; };
 function topPush(){ try { history.pushState({ k: 'top', i: curIdx() + 1, a: baseIdx }, ''); } catch(x) {} }
-function ensureTop(){ if (leaving) return; try { let n = TOP_DEPTH - (curIdx() - baseIdx), g = 5; while (n-- > 0 && g--) topPush(); } catch(x) {} }
+function ensureTop(){
+  if (leaving) return;
+  try {
+    let n = TOP_DEPTH - (curIdx() - baseIdx), g = 5;
+    if (n > 0) hlog('+' + n + ' sentinelle(s) depuis ' + hst());
+    while (n-- > 0 && g--) topPush();
+  } catch(x) {}
+}
 function topSoon(){ [0, 60, 250, 700].forEach(t => setTimeout(ensureTop, t)); }
 document.addEventListener('pointerup', ensureTop, { capture: true });
-document.addEventListener('visibilitychange', () => { if (!document.hidden) topSoon(); });
-window.addEventListener('pageshow', topSoon);
+document.addEventListener('visibilitychange', () => { hlog(document.hidden ? 'appli masquée' : 'appli visible'); if (!document.hidden) topSoon(); });
+window.addEventListener('pageshow', e => { hlog('pageshow' + (e.persisted ? ' (cache)' : '')); topSoon(); });
+window.addEventListener('pagehide', () => hlog('pagehide'));
+document.addEventListener('freeze', () => hlog('gel'));
 (function histInit(){
   try {
     const st = history.state;
+    hlog('chargement v' + APP_VER + ' état=' + hst() + ' hist=' + history.length + (((window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true) ? ' installée' : ' navigateur'));
     if (st && st.k === 'top' && typeof st.i === 'number' && typeof st.a === 'number') {
-      // page rechargée sur la sentinelle d'une visite précédente : on revient d'abord à l'entrée de départ
+      // page rechargée sur une sentinelle d'une visite précédente : on revient d'abord à l'entrée de départ
       baseIdx = st.a;
       let keep = false; try { keep = !!sessionStorage.getItem('admToast'); } catch(e) {}
       const d = st.i - st.a;
-      if (d > 0 && !keep && history.length > d) { staleGo = true; history.go(-d); return; }
+      if (d > 0 && !keep && history.length > d) { hlog('page rechargée sur une sentinelle : retour de ' + d); leaving = true; history.go(-d); setTimeout(() => { leaving = false; ensureTop(); }, 500); return; }
     } else baseIdx = (st && st.k === 'base' && typeof st.a === 'number') ? st.a : history.length - 1;
     history.replaceState({ k: 'base', a: baseIdx }, '');
     ensureTop();
   } catch(e) {}
 })();
 const navDepth = () => !!(S.settings || S.view !== 'library' || S.started || document.querySelector('.rwl.on') || (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()));
-function navSync(){}
 
 /* ===== Textes de la classe : fichier textes-classe.json placé à côté de index.html ===== */
 function mergeShared(arr){
@@ -2193,16 +2217,14 @@ function exitToast(){
   t.textContent = 'Appuie encore sur retour pour quitter'; t.classList.add('on');
   clearTimeout(exitTimer); exitTimer = setTimeout(() => t.classList.remove('on'), 2000);
 }
-/* Easter egg : fermé par le retour du téléphone (voir navBack / popstate) */
-function eggOpened(){}
-RepeteEgg.onClose = () => {};
 window.addEventListener('popstate', () => {
   if (leaving) return;
-  /* Chaque « retour » du téléphone arrive ici, quelle que soit l'entrée sur laquelle on retombe. Le chemin est dégressif :
-     animation / fiche → écran → progression → accueil ; à l'accueil, il faut deux « retour » rapprochés pour quitter. */
-  if (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()) { RepeteEgg.close(); topSoon(); return; }
-  if (navDepth()) { navBack(); topSoon(); return; }
-  if (Date.now() - exitAt < 2000) {   // 2e appui : on quitte (retour jusqu'avant l'entrée de départ)
+  const egg = typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen();
+  const deep = navDepth();
+  hlog('retour reçu état=' + hst() + ' écran=' + S.view + (S.settings ? '+réglages' : '') + (egg ? ' jeu' : '') + ' → ' + (egg ? 'ferme le jeu' : deep ? 'ferme l’écran' : Date.now() - exitAt < 2000 ? 'QUITTE' : 'message'));
+  if (egg) { RepeteEgg.close(); topSoon(); return; }
+  if (deep) { navBack(); topSoon(); return; }
+  if (Date.now() - exitAt < 2000) {   // 2e appui rapproché : on quitte (retour jusqu'avant l'entrée de départ)
     leaving = true;
     try { history.go(-(curIdx() - baseIdx + 1)); } catch(x) {}
     setTimeout(() => { try { window.close(); } catch(x) {} }, 400);
@@ -2459,7 +2481,7 @@ function mineView(){
 }
 /* ---- Classement (feuille Google + Apps Script ; voir claude/classement-concept.md) ---- */
 const RANK_URL = 'https://script.google.com/macros/s/AKfycbwAjizlS7bYfNKiqNpTfNEWg8Ce_KGkxilsifDI92WMbaxVzZFGsgd7SbUrIbvTk33Ngg/exec';
-const RANK_EVERY = 60000, RANK_VER = 'c52';
+const RANK_EVERY = 60000, RANK_VER = 'c' + APP_VER;
 const rk = () => (saved.rank = saved.rank || { on:false, pseudo:'', id:'', last:0, del:false, cache:null });
 let rankBusy = false, rankErr = '', rankT = 0, rankOpen = new Set();
 function rankId(){ const r = rk();
@@ -2780,7 +2802,7 @@ function primary(swipe){
 }
 
 document.addEventListener('click', e => {
-  if (S.bsel === 'scenes' && e.target.closest && e.target.closest('.bov .bigart')) { try { if (RepeteEgg.tap()) eggOpened(); } catch(x) {} }
+  if (S.bsel === 'scenes' && e.target.closest && e.target.closest('.bov .bigart')) { try { RepeteEgg.tap(); } catch(x) {} }
   if (soundOn()) { try { RepeteSons.unlock(); } catch(x) {} }
   const b = e.target.closest('[data-act]');
   if (!b || b.tagName === 'INPUT' || b.tagName === 'SELECT') return;
@@ -2812,13 +2834,16 @@ document.addEventListener('click', e => {
       render(); window.scrollTo(0,0); break; }
     case 'admtap': S.admTaps = (S.admTaps || 0) + 1; if (S.admTaps >= 5) { S.admAsk = true; S.admTaps = 0; renderSheet(); } break;
     case 'admgo': { const v = ($('#admcode') || {}).value || ''; if (admHash(v) === ADM_OK) { try { localStorage.setItem('repete.active', 'admin'); } catch(e) {} location.reload(); } else { S.admErr = true; renderSheet(); } break; }
+    case 'hlogrefresh': renderSheet(); break;
+    case 'hlogclear': try { localStorage.removeItem(HLOG_KEY); } catch(e) {} renderSheet(); break;
+    case 'hlogcopy': try { navigator.clipboard.writeText(hlogLines().join('\n')); admToast('Journal copié'); } catch(e) { admToast('Copie impossible'); } break;
     case 'admquit': try { localStorage.setItem('repete.active', 'main'); } catch(e) {} location.reload(); break;
     case 'adm': { const op = b.dataset.op; let v = b.dataset.v !== undefined ? +b.dataset.v : 0;
       if (b.dataset.in) { const el = document.getElementById(b.dataset.in); if (!el || el.value === '') break; v = Math.max(0, +el.value); if (op === 'mastery') v = Math.min(100, v); }
       admOp(op, v); admFeedback(op, v, b.dataset.v); break; }
     case 'badgesopen': S.view = 'badges'; S.bsel = null; render(); window.scrollTo(0, 0); break;
     case 'importopen': S.imp = S.imp || impNew(); S.imp.step = 1; S.view = 'import'; render(); window.scrollTo(0, 0); break;
-    case 'importback': S.view = 'library'; render(); window.scrollTo(0, 0); break;
+    case 'importback': navBack(); break;
     case 'importparse': { const I = S.imp;
       if (!I.title.trim()) { alert('Indique le titre de la pièce.'); break; }
       I.parsed = parseScript(I.text); I.step = 2; render(); window.scrollTo(0, 0); break; }
@@ -2831,11 +2856,11 @@ document.addEventListener('click', e => {
     case 'rankrefresh': { if (b.disabled) break; b.disabled = true; b.textContent = 'Actualisation…';
       (rk().on && rankClean(rk().pseudo) ? rankSend(true) : Promise.resolve()).then(rankLoad).then(() => { const x = document.querySelector('[data-act=rankrefresh]'); if (x) { x.disabled = false; x.textContent = 'Actualiser'; } }); break; }
     case 'inforank': S.infoRank = !S.infoRank; render(); break;
-    case 'rankback': S.view = 'progress'; render(); window.scrollTo(0, 0); break;
+    case 'rankback': navBack(); break;
     case 'rankrow': { const k = b.dataset.p; rankOpen.has(k) ? rankOpen.delete(k) : rankOpen.add(k); const el = b.closest('.rkp'); if (el) { el.classList.toggle('open'); b.setAttribute('aria-expanded', rankOpen.has(k)); } break; }
-    case 'progressback': S.view = 'library'; render(); window.scrollTo(0, 0); break;
+    case 'progressback': navBack(); break;
     case 'scmenu': S.menuK = S.menuK === b.dataset.k ? null : b.dataset.k; render(); break;
-    case 'badgesback': S.view = 'progress'; render(); window.scrollTo(0, 0); break;
+    case 'badgesback': navBack(); break;
     case 'badgesel': S.bsel = b.dataset.id; render(); break;
     case 'badgeclose': if (b.classList.contains('bov') && e.target !== b) break; S.bsel = null; render(); break;
     case 'settings': openSettings(); break;
@@ -2935,10 +2960,6 @@ document.addEventListener('keydown', e => {
 document.addEventListener('visibilitychange', () => { if (document.hidden) stopSpeech(); else { try { rankSync(); } catch(e) {} } });
 window.addEventListener('online', () => { try { rankSync(); } catch(e) {} });
 try { rankSync(); } catch(e) {}
-/* Après chaque affichage, synchroniser l'historique avec l'écran courant (bouton retour du téléphone) */
-{ const r0 = render, s0 = renderSheet;
-  render = function(){ const v = r0.apply(this, arguments); navSync(); return v; };
-  renderSheet = function(){ const v = s0.apply(this, arguments); navSync(); return v; }; }
 render();
 </script>
 <script>
