@@ -2022,7 +2022,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 53;
+const APP_VER = 54;
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 function hlog(msg){
@@ -2037,36 +2037,34 @@ function hlog(msg){
 const hlogLines = () => { try { return JSON.parse(localStorage.getItem(HLOG_KEY) || '[]'); } catch(e) { return []; } };
 const hst = () => { const st = history.state; return st ? st.k + '/' + (st.i == null ? '-' : st.i) : 'aucun'; };
 let baseIdx = 0, leaving = false;
-const TOP_DEPTH = 3;
+const TOP_DEPTH = 6;
 const curIdx = () => { const st = history.state; return st && st.k === 'top' && typeof st.i === 'number' ? st.i : baseIdx; };
-function topPush(){ try { history.pushState({ k: 'top', i: curIdx() + 1, a: baseIdx }, ''); } catch(x) {} }
-function ensureTop(){
-  if (leaving) return;
+const uact = () => { try { return navigator.userActivation ? (navigator.userActivation.isActive ? 'actif' : navigator.userActivation.hasBeenActive ? 'ancien' : 'aucun') : '?'; } catch(x) { return '?'; } };
+/* Les sentinelles sont ajoutées UNIQUEMENT pendant un vrai toucher (pointerup / clic / touche) : Chrome saute (et, en appli
+   installée, ferme l'appli à la place) les entrées d'historique créées sans interaction de l'utilisateur. Journal du
+   5 novembre : après un retour, aucun « popstate » n'arrivait et l'appli se fermait, avec des sentinelles créées au chargement. */
+function ensureTop(e){
+  if (leaving || !e || e.isTrusted === false) return;
   try {
-    let n = TOP_DEPTH - (curIdx() - baseIdx), g = 5;
-    if (n > 0) hlog('+' + n + ' sentinelle(s) depuis ' + hst());
-    while (n-- > 0 && g--) topPush();
+    let n = TOP_DEPTH - (curIdx() - baseIdx), g = 8;
+    if (n > 0) hlog('+' + n + ' sentinelle(s) depuis ' + hst() + ' (interaction ' + uact() + ')');
+    while (n-- > 0 && g--) history.pushState({ k: 'top', i: curIdx() + 1, a: baseIdx }, '');
   } catch(x) {}
 }
-function topSoon(){ [0, 60, 250, 700].forEach(t => setTimeout(ensureTop, t)); }
-document.addEventListener('pointerup', ensureTop, { capture: true });
-document.addEventListener('visibilitychange', () => { hlog(document.hidden ? 'appli masquée' : 'appli visible'); if (!document.hidden) topSoon(); });
-window.addEventListener('pageshow', e => { hlog('pageshow' + (e.persisted ? ' (cache)' : '')); topSoon(); });
+['pointerup', 'click', 'keydown', 'touchend'].forEach(t => document.addEventListener(t, ensureTop, { capture: true }));
+document.addEventListener('visibilitychange', () => hlog(document.hidden ? 'appli masquée' : 'appli visible'));
+window.addEventListener('pageshow', e => hlog('pageshow' + (e.persisted ? ' (cache)' : '')));
 window.addEventListener('pagehide', () => hlog('pagehide'));
 document.addEventListener('freeze', () => hlog('gel'));
 (function histInit(){
   try {
     const st = history.state;
     hlog('chargement v' + APP_VER + ' état=' + hst() + ' hist=' + history.length + (((window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true) ? ' installée' : ' navigateur'));
-    if (st && st.k === 'top' && typeof st.i === 'number' && typeof st.a === 'number') {
-      // page rechargée sur une sentinelle d'une visite précédente : on revient d'abord à l'entrée de départ
-      baseIdx = st.a;
-      let keep = false; try { keep = !!sessionStorage.getItem('admToast'); } catch(e) {}
-      const d = st.i - st.a;
-      if (d > 0 && !keep && history.length > d) { hlog('page rechargée sur une sentinelle : retour de ' + d); leaving = true; history.go(-d); setTimeout(() => { leaving = false; ensureTop(); }, 500); return; }
-    } else baseIdx = (st && st.k === 'base' && typeof st.a === 'number') ? st.a : history.length - 1;
-    history.replaceState({ k: 'base', a: baseIdx }, '');
-    ensureTop();
+    if (st && st.k === 'top' && typeof st.a === 'number') baseIdx = st.a;      // sentinelles d'une visite précédente : on les réutilise
+    else {
+      baseIdx = (st && st.k === 'base' && typeof st.a === 'number') ? st.a : history.length - 1;
+      history.replaceState({ k: 'base', a: baseIdx }, '');
+    }
   } catch(e) {}
 })();
 const navDepth = () => !!(S.settings || S.view !== 'library' || S.started || document.querySelector('.rwl.on') || (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()));
@@ -2222,16 +2220,16 @@ window.addEventListener('popstate', () => {
   const egg = typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen();
   const deep = navDepth();
   hlog('retour reçu état=' + hst() + ' écran=' + S.view + (S.settings ? '+réglages' : '') + (egg ? ' jeu' : '') + ' → ' + (egg ? 'ferme le jeu' : deep ? 'ferme l’écran' : Date.now() - exitAt < 2000 ? 'QUITTE' : 'message'));
-  if (egg) { RepeteEgg.close(); topSoon(); return; }
-  if (deep) { navBack(); topSoon(); return; }
+  if (egg) { RepeteEgg.close(); return; }
+  if (deep) { navBack(); return; }
   if (Date.now() - exitAt < 2000) {   // 2e appui rapproché : on quitte (retour jusqu'avant l'entrée de départ)
     leaving = true;
     try { history.go(-(curIdx() - baseIdx + 1)); } catch(x) {}
     setTimeout(() => { try { window.close(); } catch(x) {} }, 400);
-    setTimeout(() => { leaving = false; ensureTop(); }, 1500);
+    setTimeout(() => { leaving = false; }, 1500);
     return;
   }
-  exitAt = Date.now(); exitToast(); topSoon();
+  exitAt = Date.now(); exitToast();
 });
 function openSettings(){ if (S.settings) return; S.settings = true; renderSheet(); }
 function closeSettings(){ if (!S.settings) return; S.settings = false; renderSheet(); }
