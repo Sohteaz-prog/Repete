@@ -19,6 +19,14 @@
   --accent:#f5a300;--accent-ink:#9a5a00;--accent-bg:#fff1cc;--on-accent:#2a1a00;--ok:#2f6f4f;--ko:#a33a2a;
 }
 :root{color-scheme:light dark}
+:root{--st-ko:#E5484D;--st-known:#22A06B;--st-solid:#F2B01E;--st-ring:#A87400}
+/* Mode daltonien : autres couleurs + formes (losange = à revoir, rond = connue, étoile = solide) et motifs du liseré */
+:root[data-cb=rv]{--st-ko:#D55E00;--st-known:#0072B2;--st-solid:#F0E442;--st-ring:#8A7F00}
+:root[data-cb=by]{--st-ko:#B71C1C;--st-known:#00A88F;--st-solid:#FFC400;--st-ring:#7A5C00}
+:root[data-cb] .dot.ko{clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);border-radius:0}
+:root[data-cb] .dot.solid{clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);border-radius:0;box-shadow:none}
+:root[data-cb] .line.ps.ko{border-left-style:dashed}
+:root[data-cb] .line.ps.solid{border-left-width:6px;border-left-style:double;padding-left:10px}
 :root[data-theme=light]{color-scheme:light}
 :root[data-theme=dark]{color-scheme:dark}
 @media (prefers-color-scheme:dark){
@@ -77,9 +85,9 @@ h2{font-size:19px;margin:0 0 2px}
   letter-spacing:.08em;color:var(--mute);margin-bottom:2px}
 .line.me .who2{color:var(--mute)}
 .line.ps.new{border-left-color:var(--mute)}
-.line.ps.ko{border-left-color:#E5484D}
-.line.ps.known{border-left-color:#22A06B}
-.line.ps.solid{border-left-color:#F2B01E}
+.line.ps.ko{border-left-color:var(--st-ko)}
+.line.ps.known{border-left-color:var(--st-known)}
+.line.ps.solid{border-left-color:var(--st-solid)}
 .stg{font-size:11px;font-weight:700;color:#B4560A;border:1.5px solid #E8710A;border-radius:6px;padding:1px 6px;text-transform:none;letter-spacing:0;white-space:nowrap}
 .pgl{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--mute);margin:2px 0 6px}
 .pgl .dot{width:9px;height:9px;margin-right:5px;vertical-align:-1px}
@@ -112,6 +120,7 @@ h2{font-size:19px;margin:0 0 2px}
 .btn.pri{background:var(--accent);border-color:var(--accent);color:var(--on-accent);flex:2;font-size:17px}
 .btn.ok{background:#1f8a5a;border-color:#1f8a5a;color:#fff;flex:2}
 .btn.ko{background:#c2403a;border-color:#c2403a;color:#fff}
+.updlk{border:0;background:none;padding:6px 4px;font-size:inherit;font-weight:600;color:var(--mute);text-decoration:underline;min-height:32px}
 .btn.sm{min-height:44px;flex:0 0 auto;font-size:14px}
 .row2{display:flex;gap:10px;margin-top:10px}
 .set{display:flex;flex-direction:column;gap:12px}
@@ -143,18 +152,21 @@ h2{font-size:19px;margin:0 0 2px}
 .nb svg{width:12px;height:12px}
 .nb .cv{width:10px;height:10px;margin-left:1px;transition:transform .15s}
 .nb[aria-expanded=true] .cv{transform:rotate(180deg)}
+.nb,.who2 .mini,.nbub .nact button{position:relative}
+.nb::after,.who2 .mini::after{content:"";position:absolute;inset:-6px -4px}
+.nbub .nact button::after{content:"";position:absolute;inset:-4px -3px}
 .who2 .mini{min-height:24px;height:24px;padding:0 6px;border-radius:7px;font-size:11.5px;font-weight:400;display:inline-flex;align-items:center}
 .nb.has{background:var(--card);border-color:var(--line);color:var(--ink);font-weight:600}
 .nbub{margin-top:8px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 12px;font:13.5px/1.45 system-ui,sans-serif;text-transform:none;letter-spacing:0;color:var(--ink)}
 .nbub .nact{display:flex;gap:6px;margin-top:8px}
 .nbub .nact button{background:none;border:1px solid var(--line);border-radius:8px;padding:0 9px;min-height:28px;font:600 12.5px system-ui,sans-serif;color:var(--ink)}
-.nbub .nact button.dg{border-color:#b3261e;color:#b3261e}
+.nbub .nact button.dg{background:#c2403a;border-color:#c2403a;color:#fff}
 .nsb{position:fixed;inset:0;z-index:55;background:rgba(0,0,0,.45)}
 .nsh{position:fixed;left:0;right:0;bottom:0;z-index:56;max-width:640px;margin:0 auto;background:var(--card);color:var(--ink);border-radius:16px 16px 0 0;padding:14px 16px calc(16px + env(safe-area-inset-bottom));max-height:85vh;max-height:85dvh;overflow:auto;-webkit-overflow-scrolling:touch}
 .nsh .nt{font-weight:700;font-size:16px;margin:0 0 2px}
 .nsh .ns{font-size:13px;color:var(--mute);margin:0 0 12px}
 .nsh textarea{width:100%;min-height:84px;font:15px/1.45 system-ui,sans-serif;padding:10px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);resize:vertical}
-.nsh .nerr{color:#b3261e;font-size:13px;margin:6px 0 0}
+.nsh .nerr{color:var(--ko);font-size:13px;margin:6px 0 0}
 .nsh .nbtns{display:flex;align-items:center;gap:8px;margin-top:12px}
 .nsh .nbtns .sp{flex:1}
 .nrow{display:flex;gap:10px;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:11px 0;color:var(--ink)}
@@ -216,9 +228,9 @@ h2{font-size:19px;margin:0 0 2px}
 .weak > summary{font-weight:650;color:var(--ko);cursor:pointer;min-height:36px;display:flex;align-items:center}
 .dot{display:inline-block;width:11px;height:11px;border-radius:50%;flex:none;vertical-align:middle}
 .dot.new{border:1.5px solid var(--mute);background:transparent}
-.dot.ko{background:#E5484D}
-.dot.known{background:#22A06B}
-.dot.solid{background:#F2B01E;box-shadow:0 0 0 1.5px #A87400}
+.dot.ko{background:var(--st-ko)}
+.dot.known{background:var(--st-known)}
+.dot.solid{background:var(--st-solid);box-shadow:0 0 0 1.5px var(--st-ring)}
 .dot.stale{outline:2px solid #E8710A;outline-offset:1px}
 .today{border-top:1px solid color-mix(in srgb,var(--accent) 40%,transparent);margin-top:12px;padding-top:10px;display:flex;flex-direction:column;gap:8px}
 .tline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px}
@@ -285,6 +297,8 @@ h2{font-size:19px;margin:0 0 2px}
 .swc.on{box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--ink)}
 /* ===== ovation ===== */
 .ov-scr{position:relative;width:390px;height:340px;overflow:hidden;border-radius:28px;background:var(--rbg);box-shadow:inset 0 0 0 1px var(--edge);flex:none}
+.lw-scr{position:relative;width:390px;height:530px;overflow:hidden;border-radius:28px;background:var(--rbg);box-shadow:inset 0 0 0 1px var(--edge);flex:none}
+.bd-scr{position:relative;width:390px;height:420px;overflow:hidden;border-radius:28px;background:var(--rbg);box-shadow:inset 0 0 0 1px var(--edge);flex:none}
 .ov-rw{position:absolute;inset:0}
 .ov-sc{position:absolute;left:0;top:0;display:block}
 .ov-cone{fill:url(#apCone)}
@@ -317,7 +331,6 @@ h2{font-size:19px;margin:0 0 2px}
 }
 
 /* ===== laurier ===== */
-.lw-scr{position:relative;width:390px;height:530px;overflow:hidden;border-radius:28px;background:var(--rbg);box-shadow:inset 0 0 0 1px var(--edge);flex:none}
 .lw-rw{position:absolute;inset:0}
 .lw-sc{position:absolute;left:0;top:0;display:block}
 .lw-lwst{fill:none;stroke:var(--gold-line);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
@@ -364,7 +377,6 @@ h2{font-size:19px;margin:0 0 2px}
 .t-platine{--m1:#f6fafd;--m2:#cfdbe8;--m3:#93a6ba;--m4:#46576a;--mglow:rgba(170,200,235,.55);--mt-l:#4a5f74;--mt-d:#c4d4e6}
 .t-diamant{--m1:#eefcff;--m2:#9ee6ff;--m3:#4fb2e6;--m4:#1f5f9a;--mglow:rgba(90,200,255,.6);--mt-l:#1a649f;--mt-d:#8fdcff}
 .t-unique{--m1:#f3e2ff;--m2:#c89cff;--m3:#8850e2;--m4:#3b1b78;--mglow:rgba(160,100,255,.6);--mt-l:#6b35c2;--mt-d:#d2b0ff}
-.bd-scr{position:relative;width:390px;height:420px;overflow:hidden;border-radius:28px;background:var(--rbg);box-shadow:inset 0 0 0 1px var(--edge);flex:none}
 .bd-rw{position:absolute;inset:0}
 .bd-med{position:absolute;left:95px;top:58px;width:200px;height:200px}
 .bd-aura{position:absolute;left:-60px;top:-60px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,var(--mglow),transparent 64%);opacity:.5}
@@ -819,6 +831,7 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:18px}
     '<path d="M3 17a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /> <path d="M13 17a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /> <path d="M9 17v-13h10v13" /> <path d="M9 8h10" />',
     '<path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6" />'
   ];
+  var REDO = '<svg ' + S + ' aria-hidden="true"><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" /><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" /></svg>';
   function svg(i, size) { return '<svg ' + S + ' width="' + size + '" height="' + size + '" aria-hidden="true">' + ICONS[i] + '</svg>'; }
 
   var CSS = '' +
@@ -830,7 +843,7 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:18px}
     '.eg-ic{width:40px;height:40px;padding:0;box-sizing:border-box;border-radius:50%;border:.5px solid var(--eg-line);background:var(--eg-card);color:var(--eg-ink);font-size:18px;line-height:1;cursor:pointer}' +
     '.eg-st{display:flex;gap:18px;font-size:15px;color:var(--eg-mut)}' +
     '.eg-st b{color:var(--eg-ink);font-weight:600}' +
-    '.eg-grid{width:min(100%,420px,calc((100dvh - 150px) * .8));aspect-ratio:4/5;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr));gap:8px}' +
+    '.eg-grid{width:min(100%,420px,calc((100dvh - 215px) * .8));aspect-ratio:4/5;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr));gap:8px}' +
     '.eg-c{perspective:600px;background:none;border:0;padding:0;margin:0;cursor:pointer;-webkit-tap-highlight-color:transparent;min-width:0;min-height:0}' +
     '.eg-in{position:relative;display:block;width:100%;height:100%;transition:transform .45s cubic-bezier(.3,.7,.3,1);transform-style:preserve-3d}' +
     '.eg-c.up .eg-in{transform:rotateY(180deg)}' +
@@ -847,7 +860,9 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:18px}
     '.eg-pan p{margin:6px 0 16px;font-size:15px;line-height:1.4;color:var(--eg-mut)}' +
     '.eg-pan .nw{color:var(--eg-acc);font-weight:600}' +
     '.eg-row{display:flex;gap:10px}' +
-    '.eg-b{flex:1;padding:12px 10px;border-radius:12px;border:1px solid var(--eg-acc);background:var(--eg-acc);color:var(--on-accent,var(--on-acc,#fff));font:600 15px inherit;font-family:inherit;cursor:pointer}' +
+    '.eg-b{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:12px 10px;border-radius:12px;border:1px solid var(--eg-acc);background:var(--eg-acc);color:var(--on-accent,var(--on-acc,#fff));font:600 15px inherit;font-family:inherit;cursor:pointer}' +
+    '.eg-b svg{width:18px;height:18px;flex:none}' +
+    '.eg-bot{width:100%;max-width:420px;margin-top:14px}' +
     '.eg-b.g{background:transparent;color:var(--eg-acc)}';
 
   var root, grid, panel, elMv, elPr, opened = false, G = null, best = 0, taps = { n: 0, t: 0 };
@@ -859,10 +874,12 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:18px}
     var st = document.createElement('style'); st.textContent = CSS; document.head.appendChild(st);
     root = document.createElement('div'); root.className = 'eg';
     root.setAttribute('role', 'dialog'); root.setAttribute('aria-label', 'Memory');
-    root.innerHTML = '<div class="eg-top"><button class="eg-ic" data-eg="new" aria-label="Nouvelle partie">↻</button>' +
+    root.innerHTML = '<div class="eg-top">' +
       '<div class="eg-st"><span>Coups : <b class="eg-mv">0</b></span><span>Paires : <b class="eg-pr">0</b> / 10</span></div>' +
       '<button class="eg-ic" data-eg="quit" aria-label="Fermer">✕</button></div>' +
-      '<div class="eg-grid"></div><div class="eg-pan"></div>';
+      '<div class="eg-grid"></div>' +
+      '<div class="eg-row eg-bot"><button class="eg-b g" data-eg="quit">Quitter</button><button class="eg-b" data-eg="new">' + REDO + 'Recommencer</button></div>' +
+      '<div class="eg-pan"></div>';
     document.body.appendChild(root);
     grid = root.querySelector('.eg-grid'); panel = root.querySelector('.eg-pan');
     elMv = root.querySelector('.eg-mv'); elPr = root.querySelector('.eg-pr');
@@ -923,7 +940,7 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:18px}
     if (isNew) { best = G.moves; wr(best); }
     panel.innerHTML = '<h2>Bien joué</h2>' + (isNew ? '<p class="nw">Nouveau record</p>' : '') +
       '<p>Terminé en ' + G.moves + ' coups.<br>Record : ' + best + ' coups.</p>' +
-      '<div class="eg-row"><button class="eg-b g" data-eg="quit">Fermer</button><button class="eg-b" data-eg="again">Rejouer</button></div>';
+      '<div class="eg-row"><button class="eg-b g" data-eg="quit">Quitter</button><button class="eg-b" data-eg="again">' + REDO + 'Recommencer</button></div>';
     panel.style.display = 'block';
   }
 
@@ -1590,7 +1607,7 @@ Qui fait plus tôt une plaie incurable ?”`),
 
 /* ============ OUTILS ============ */
 const $ = s => document.querySelector(s);
-const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt = t => {
   let s = S.bold ? t.replace(/(^|[^\p{L}\p{N}-])([\p{L}\p{N}])/gu, '$1\u0001$2\u0002') : t;
   s = esc(s).replace(/\n/g, '<br>').replace(/\(([^)]*)\)/g, '<span class="aside">($1)</span>');
@@ -1611,7 +1628,28 @@ const KEY = ADMIN ? 'repete.admin' : 'repete.v1';
 const admHash = t => { let h = 5381; for (const c of String(t)) h = ((h * 33) ^ c.charCodeAt(0)) >>> 0; return h; };
 const ADM_OK = 1760501547;
 let saved = {};
-try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+const BAK = KEY + '.bak';
+let restoredFromBak = false;
+try {
+  const raw = localStorage.getItem(KEY);
+  let ok = true, v = {};
+  try { v = JSON.parse(raw || '{}'); } catch(e) { ok = false; }
+  if (ok && !(v && typeof v === 'object' && !Array.isArray(v))) ok = false;
+  if (ok) saved = v;
+  else {
+    /* données abîmées : on garde une trace de la copie illisible, puis on reprend la dernière sauvegarde automatique valide */
+    try { localStorage.setItem(KEY + '.corrupt', String(raw)); } catch(e) {}
+    try { const b = JSON.parse(localStorage.getItem(BAK) || 'null'); if (b && typeof b === 'object' && !Array.isArray(b)) { saved = b; restoredFromBak = true; } } catch(e) {}
+  }
+} catch(e) {}
+/* Données illisibles ou de mauvais type : on garde ce qui est valide, on repart de zéro pour le reste (évite un écran vide). */
+const isObj = v => !!v && typeof v === 'object' && !Array.isArray(v);
+if (!isObj(saved)) saved = {};
+['prog','me','lines','hist','notes','bg','bgc','rank','mastery'].forEach(k => { if (k in saved && !isObj(saved[k])) delete saved[k]; });
+['prog','lines','notes'].forEach(k => { if (saved[k]) Object.keys(saved[k]).forEach(q => { if (!isObj(saved[k][q])) delete saved[k][q]; }); });
+saved.mine = Array.isArray(saved.mine) ? saved.mine.filter(x => typeof x === 'string') : [];
+if (typeof saved.goalDate !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(saved.goalDate)) delete saved.goalDate;
+if (typeof saved.season !== 'string') delete saved.season;
 saved.prog = saved.prog || {}; saved.me = saved.me || {};
 saved.mine = saved.mine || []; saved.lines = saved.lines || {};
 if (!saved.goalDate) saved.goalDate = '2027-01-19';
@@ -1650,9 +1688,26 @@ const S = {
 };
 const key = () => S.play.id + '/' + S.scene.id;
 const lineNo = i => { let n = 0; const it = S.scene.items; for (let j = 0; j <= i; j++) if (it[j].k === 'l') n++; return n; };
+/* Copie automatique : l'état précédent (valide) est recopié au plus toutes les 5 min ; une copie bien plus petite n'écrase jamais une grosse copie. */
+function autoBackup(){
+  try {
+    const prev = localStorage.getItem(KEY), now = Date.now(), last = +localStorage.getItem(BAK + '.t') || 0;
+    if (!prev || now - last < 300000) return;
+    const o = JSON.parse(prev); if (!isObj(o)) return;
+    const old = localStorage.getItem(BAK);
+    if (old && prev.length < old.length * 0.5) return;
+    localStorage.setItem(BAK, prev); localStorage.setItem(BAK + '.t', String(now));
+  } catch(e) {}
+}
+function flashMsg(msg){
+  try { const d = document.createElement('div'); d.setAttribute('role', 'status');
+    d.style.cssText = 'position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:99998;background:var(--ink);color:var(--card);padding:12px 14px;border-radius:12px;font-size:14px;text-align:center';
+    d.textContent = msg; document.body.appendChild(d); setTimeout(() => d.remove(), 7000); } catch(e) {}
+}
 function persist(){
   try {
     saved.audio = S.audio; saved.rate = S.rate; saved.voice = S.voice; saved.rehHide = S.rehHide; saved.fs = S.fs; saved.bold = S.bold;
+    autoBackup();
     localStorage.setItem(KEY, JSON.stringify(saved));
   } catch(e) {}
   try { rankSoon(); } catch(e) {}
@@ -1694,6 +1749,9 @@ function applyTheme(){
   try { const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = getComputedStyle(root).getPropertyValue('--bg').trim(); } catch(e) {}
 }
 applyTheme();
+const CB_MODES = [['', 'Aucun'], ['rv', 'Rouge-vert'], ['by', 'Bleu-jaune']];
+function applyCb(){ const r = document.documentElement; if (saved.cb === 'rv' || saved.cb === 'by') r.setAttribute('data-cb', saved.cb); else r.removeAttribute('data-cb'); }
+applyCb();
 if (mq) { const onMq = () => { if ((saved.theme || 'auto') === 'auto') { applyTheme(); render(); } }; mq.addEventListener ? mq.addEventListener('change', onMq) : mq.addListener(onMq); }
 
 const STAR = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z"/></svg>`;
@@ -1724,6 +1782,25 @@ function installBlock(){
   else body = '<div class="mute small">Menu ⋮ du navigateur, puis « Installer l’application » (ou « Installer et créer un raccourci »).</div>';
   return '<div class="lbl">Application</div>' + body;
 }
+let updMsg = '', updBusy = false;
+async function checkUpdate(){
+  if (updBusy) return;
+  updBusy = true; updMsg = ''; renderSheet();
+  let found = false;
+  try {
+    if (navigator.onLine === false) throw new Error('offline');
+    const r = await fetch('index.html', { cache: 'reload' });   // recharge aussi la copie du cache HTTP et du mode hors ligne
+    const m = /APP_VER\s*=\s*(\d+)/.exec(await r.text()), remote = m ? +m[1] : 0;
+    try { const reg = navigator.serviceWorker && await navigator.serviceWorker.getRegistration(); if (reg) await reg.update(); } catch(e) {}
+    if (remote > APP_VER) { found = true; updMsg = 'Nouvelle version v' + remote + ' trouvée. Rechargement…'; }
+    else updMsg = 'Tu as la dernière version : v' + APP_VER + '.';
+  } catch(e) { updMsg = 'Vérification impossible (hors ligne ?).'; }
+  updBusy = false; try { renderSheet(); } catch(e) {}
+  if (found) { try { sessionStorage.setItem('repete.reopenSet', '1'); } catch(e) {} setTimeout(() => location.reload(), 900); }
+}
+function updateBlock(){
+  return `<div class="mute small" style="margin-top:14px;text-align:center">${updMsg || 'Version installée : v' + APP_VER + '.'} <button class="updlk" data-act="chkupd" ${updBusy ? 'disabled' : ''}>${updBusy ? 'Vérification…' : 'Vérifier'}</button></div>`;
+}
 function sheetInner(){
   const dark = isDark(), cur = COLORS.find(x => x.id === saved.color) || COLORS[0];
   return `<div class="sh-head"><h2>Réglages</h2><button class="ghost" data-act="closesettings">Fermer</button></div>
@@ -1748,7 +1825,11 @@ function sheetInner(){
       <div class="mute small" style="margin-top:6px">${(saved.theme || 'auto') === 'auto' ? 'Auto : suit le thème de ton téléphone.' : ''}</div>
       <div class="lbl">Couleur de surlignage · ${esc(cur.name)}</div>
       <div class="swatches">${COLORS.map(c => { const v = dark ? c.d : c.l; return `<button class="swc ${c.id === cur.id ? 'on' : ''}" style="background:${v[0]};color:${v[3]}" data-act="setcolor" data-v="${c.id}" aria-label="${esc(c.name)}" aria-pressed="${c.id === cur.id}">${c.id === cur.id ? '✓' : ''}</button>`; }).join('')}</div>
+      <div class="lbl">Daltonisme</div>
+      <div class="seg sm">${CB_MODES.map(([id, n]) => `<button class="${(saved.cb || '') === id ? 'on' : ''}" data-act="setcb" data-v="${id}">${n}</button>`).join('')}</div>
+      <div class="mute small" style="margin-top:6px">${saved.cb ? 'Couleurs adaptées et formes en plus : losange = à revoir, rond = connue, étoile = solide.' : 'Change les couleurs des niveaux et ajoute des formes pour les distinguer.'}</div>
       ${installBlock()}
+      ${updateBlock()}
       ${ADMIN ? admPanel() : `<div class="admtap" data-act="admtap">Répète · v${APP_VER}</div>${S.admAsk ? `<div class="admask"><input id="admcode" type="password" inputmode="numeric" autocomplete="off" placeholder="Code" aria-label="Code"><button class="ghost" data-act="admgo">OK</button></div>${S.admErr ? '<div class="mute small">Code incorrect.</div>' : ''}` : ''}`}`;
 }
 /* ---- Animations : déclencheurs et file d'attente (les visuels seront branchés dans ANIM) ---- */
@@ -1940,11 +2021,28 @@ function admOp(op, v){
   else if (op === 'wipe') { try { localStorage.removeItem('repete.admin'); sessionStorage.setItem('admToast', 'Profil de test effacé'); } catch(e) {} location.reload(); return; }
   persist(); render();
 }
+let offMsg = '';
+async function checkOffline(){
+  offMsg = 'Vérification…'; renderSheet();
+  try {
+    if (!('caches' in window) || !navigator.serviceWorker) throw new Error('nosw');
+    const txt = await (await fetch('sw.js', { cache: 'no-store' })).text();
+    const m = /FILES\s*=\s*\[([^\]]*)\]/.exec(txt);
+    const files = m ? (m[1].match(/'[^']*'|"[^"]*"/g) || []).map(x => x.slice(1, -1)) : [];
+    const cn = (/CACHE\s*=\s*'([^']+)'/.exec(txt) || [])[1];
+    const c = cn && await caches.open(cn), miss = [];
+    for (const f of files) { if (!c || !(await c.match(new URL(f, location.href).href))) miss.push(f); }
+    const reg = await navigator.serviceWorker.getRegistration();
+    offMsg = (miss.length ? '✗ Hors ligne incomplet : manque ' + miss.join(', ') : '✓ Hors ligne prêt (' + files.length + ' fichiers en mémoire, ' + cn + ')') + (reg && reg.active ? '' : ' · service worker non actif');
+  } catch(e) { offMsg = '✗ Vérification impossible (' + (e && e.message || e) + ')'; }
+  try { renderSheet(); } catch(e) {}
+}
 function admPanel(){
   const lv = levelInfo(Math.round(((allStats().reduce((a, x) => a + x.st.pts, 0)) / Math.max(1, 5 * allStats().reduce((a, x) => a + x.st.total, 0))) * 100));
   const row = (lab, id, ph, op) => `<div class="admrow"><span>${lab}</span><input id="${id}" type="number" inputmode="numeric" placeholder="${ph}"><button class="admb" data-act="adm" data-op="${op}" data-in="${id}">OK</button></div>`;
   return `<div class="admsec"><div class="lbl">Mode admin · profil de test · v${APP_VER}</div>
     <div class="mute small" style="margin-bottom:8px">Jour simulé : <b>${today()}</b></div>
+    <div class="admrow"><span>${offMsg || 'Mode hors ligne'}</span><button class="admb" data-act="chkoff">Vérifier</button></div>
     ${row('Maîtrise globale (%)', 'adm-m', '0 – 100', 'mastery')}
     ${row('Niveau', 'adm-l', '0 – 50', 'level')}
     ${row('Série (jours, jusqu’à hier)', 'adm-s', '0 – 60', 'streak')}
@@ -2020,7 +2118,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 64;
+const APP_VER = 67;
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 function hlog(msg){
@@ -2125,6 +2223,48 @@ async function loadShared(){
   if (navPending) { navPending = null; navSave(); }   // scène introuvable : on reste sur l'accueil
 }
 try { loadShared(); } catch(e) {}
+function dlJson(name, obj){
+  const blob = new Blob([JSON.stringify(obj, null, 1)], { type:'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+const noteCount = n => Object.keys(n || {}).reduce((a, k) => a + Object.keys(n[k] || {}).length, 0);
+function exportProg(){
+  const o = {}; Object.keys(saved).forEach(k => { if (k !== 'userLib' && k !== 'notes' && k !== 'dayShift') o[k] = saved[k]; });
+  dlJson('progression-repete.json', { repete:'progression', v:APP_VER, date:today(), data:o });
+}
+function exportNotes(){
+  if (!noteCount(saved.notes)) { alert('Aucune note à exporter.'); return; }
+  dlJson('notes-repete.json', { repete:'notes', v:APP_VER, date:today(), data:saved.notes });
+}
+function readJsonFile(f, kind, cb){
+  f.text().then(txt => { let j = null; try { j = JSON.parse(txt); } catch(e) {}
+    if (!j || j.repete !== kind || !isObj(j.data)) { alert('Ce fichier n’est pas un fichier « ' + (kind === 'notes' ? 'notes' : 'progression') + ' » de Répète.'); return; }
+    cb(j.data); }, () => alert('Fichier illisible.'));
+}
+function importProg(f){
+  readJsonFile(f, 'progression', data => {
+    const n = Object.keys(data.prog || {}).length + Object.keys(data.lines || {}).length;
+    if (!confirm('Remplacer la progression de ce téléphone par celle du fichier ?\n\nTes notes et tes textes ajoutés sont conservés. Une copie de l’état actuel est gardée en sauvegarde automatique.')) return;
+    try {
+      const cur = localStorage.getItem(KEY); if (cur) { localStorage.setItem(BAK, cur); localStorage.setItem(BAK + '.t', String(Date.now())); }
+      const nw = Object.assign({}, data, { userLib: saved.userLib, notes: saved.notes });
+      localStorage.setItem(KEY, JSON.stringify(nw));
+    } catch(e) { alert('Import impossible (stockage plein ?).'); return; }
+    location.reload();
+  });
+}
+function importNotes(f){
+  readJsonFile(f, 'notes', data => {
+    let add = 0;
+    Object.keys(data).forEach(k => { const sc = data[k]; if (!isObj(sc)) return;
+      Object.keys(sc).forEach(i => { const nt = sc[i], x = nt && typeof nt.x === 'string' ? nt.x.trim().slice(0, 300) : '';
+        if (!x) return; saved.notes[k] = isObj(saved.notes[k]) ? saved.notes[k] : {};
+        if (!saved.notes[k][i]) { saved.notes[k][i] = { x }; add++; } }); });
+    persist();
+    alert(add ? add + ' note(s) ajoutée(s). Tes notes existantes sont conservées.' : 'Rien de nouveau : toutes ces notes existent déjà.'); render();
+  });
+}
 function exportTexts(){
   const blob = new Blob([JSON.stringify(saved.userLib, null, 1)], { type:'application/json' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'textes-classe.json';
@@ -2226,7 +2366,11 @@ function importView(){
   const mine = []; saved.userLib.forEach(p => p.scenes.forEach(sc => mine.push([p, sc])));
   if (mine.length && I.step === 1) h += `<section class="card"><div class="lbl">Mes textes ajoutés</div>` + mine.map(([p, sc]) =>
     `<div style="display:flex;align-items:center;gap:8px;margin:6px 0"><span style="flex:1">${esc(p.title)} · ${esc(sc.title)}</span><button class="btn sm ko" data-act="importdel" data-play="${p.id}" data-scene="${sc.id}">Supprimer</button></div>`).join('') + `<button class="btn sm" style="width:100%;margin-top:8px" data-act="exporttexts">Exporter mes textes (fichier à partager)</button><p class="mute small">Pour les mettre dans l’application de la classe : envoie le fichier <b>textes-classe.json</b> sur GitHub, à côté de index.html.</p></section>`;
-  if (I.step === 1) h += `<section class="card"><div class="lbl">Importer un fichier de textes</div><p class="mute small">Si on t’a envoyé un ou plusieurs fichiers <b>textes-classe</b> (.json), choisis-les ici ; tu peux en sélectionner plusieurs d’un coup.</p><input type="file" accept=".json,application/json" multiple data-act="importfile"></section>`;
+  if (I.step === 1) h += `<section class="card"><div class="lbl">Importer un fichier de textes</div><p class="mute small">Si on t’a envoyé un ou plusieurs fichiers <b>textes-classe</b> (.json), choisis-les ici ; tu peux en sélectionner plusieurs d’un coup.</p><input type="file" accept=".json,application/json" multiple data-act="importfile"></section>
+    <section class="card"><div class="lbl">Sauvegarde</div><p class="mute small">Pour garder ta progression ou tes notes en lieu sûr, ou les passer d’un téléphone à l’autre. Les fichiers restent chez toi.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" style="flex:1 1 140px" data-act="expprog">Exporter ma progression</button><button class="btn sm" style="flex:1 1 140px" data-act="expnotes">Exporter mes notes</button></div>
+      <div class="lbl" style="margin-top:12px">Importer une progression</div><input type="file" accept=".json,application/json" data-act="impprog">
+      <div class="lbl" style="margin-top:12px">Importer des notes</div><input type="file" accept=".json,application/json" data-act="impnotes"></section>`;
   return h;
 }
 function navBack(){
@@ -2234,7 +2378,7 @@ function navBack(){
   if (rw) { if (rw._close) rw._close(); else rw.click(); return; }
   if (S.nEdit || S.nList) { S.nEdit = null; S.nList = false; render(); return; }
   if (S.nView != null) { S.nView = null; render(); return; }
-  if (S.settings) { S.settings = false; renderSheet(); return; }
+  if (S.settings) { S.settings = false; try { sessionStorage.removeItem('repete.reopenSet'); } catch(e) {} renderSheet(); return; }
   if (S.view === 'badges' && S.bsel) { S.bsel = null; render(); return; }
   if (S.view === 'badges') { S.view = 'progress'; render(); window.scrollTo(0, 0); return; }
   if (S.view === 'rank') { S.view = 'progress'; render(); window.scrollTo(0, 0); return; }
@@ -2273,8 +2417,8 @@ window.addEventListener('popstate', () => {
   clearTimeout(rearmT);
   rearmT = setTimeout(() => { try { if (curIdx() === baseIdx && !leaving) { hlog('message expiré : sentinelle remise'); history.pushState({ k: 'top', i: baseIdx + 1, a: baseIdx }, ''); } } catch(x) {} }, 2300);
 });
-function openSettings(){ if (S.settings) return; S.settings = true; renderSheet(); }
-function closeSettings(){ if (!S.settings) return; S.settings = false; renderSheet(); }
+function openSettings(){ if (S.settings) return; S.settings = true; try { sessionStorage.setItem('repete.reopenSet', '1'); } catch(e) {} renderSheet(); }
+function closeSettings(){ if (!S.settings) return; S.settings = false; try { sessionStorage.removeItem('repete.reopenSet'); } catch(e) {} renderSheet(); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && S.settings) closeSettings(); });
 /* Réglages : glisser vers le haut ferme la fenêtre (depuis le bas du contenu, ou depuis le fond assombri) */
 let shSwipe = null;
@@ -2486,10 +2630,10 @@ function progData(){
   return { list, T, SOL, KO, withMe, pct: Math.round(pctExact), lv: levelInfo(pctExact) };
 }
 function donut(st){
-  const c = st.counts, tot = st.total || 1, C = 213.6, col = { solid:'#F2B01E', known:'#22A06B', ko:'#E5484D', new:'color-mix(in srgb,var(--ink) 16%,transparent)' };
+  const c = st.counts, tot = st.total || 1, C = 213.6, col = { solid:'var(--st-solid)', known:'var(--st-known)', ko:'var(--st-ko)', new:'color-mix(in srgb,var(--ink) 16%,transparent)' };
   let off = 0, segs = '';
   ['solid','known','ko','new'].forEach(k => { if (!c[k]) return; const L = c[k] / tot * C;
-    segs += `<circle cx="40" cy="40" r="34" fill="none" stroke="${col[k]}" stroke-width="9" stroke-dasharray="${L.toFixed(1)} ${(C - L).toFixed(1)}" stroke-dashoffset="${(-off).toFixed(1)}" transform="rotate(-90 40 40)"/>`; off += L; });
+    segs += `<circle cx="40" cy="40" r="34" fill="none" style="stroke:${col[k]}" stroke-width="9" stroke-dasharray="${L.toFixed(1)} ${(C - L).toFixed(1)}" stroke-dashoffset="${(-off).toFixed(1)}" transform="rotate(-90 40 40)"/>`; off += L; });
   const lg = [['solid', c.solid, 'solide'], ['known', c.known, 'connue'], ['ko', c.ko, 'à revoir'], ['new', c.new, 'nouvelle']].filter(x => x[1])
     .map(([k, n, w]) => `<span><i class="dot ${k}"></i>${n} ${k === 'ko' ? w : w + (n > 1 ? 's' : '')}</span>`).join('');
   return `<div class="dnrow"><div class="dn"><svg width="84" height="84" viewBox="0 0 80 80" role="img" aria-label="Statut des répliques">${segs}</svg><div class="dnt"><b>${st.pct} %</b><small>maîtrise</small></div></div><div class="dnlg">${lg}</div></div>`;
@@ -2793,7 +2937,7 @@ function introView(){
       <label class="f">Vitesse de lecture : ${S.rate.toFixed(1)}×<input type="range" min="1" max="2" step="0.1" value="${S.rate}" data-act="rate"></label>` : ''}`
       : `<div class="warnbox">🔇 La lecture vocale n’est pas disponible dans ce navigateur ou cette application. Ouvre le lien dans Chrome (menu ⋮ → « Ouvrir dans le navigateur ») pour l’essayer. Le reste de l’application fonctionne normalement.</div>`}
     ${synth && S.audio ? `<div class="row2" style="align-items:center"><button class="btn sm" data-act="ttstest" style="flex:0 0 auto;padding:0 14px">🔊 Tester la voix</button><span class="mute small">${VOICES.length ? VOICES.length + ' voix française' + (VOICES.length>1?'s':'') + ' détectée' + (VOICES.length>1?'s':'') : 'aucune voix française détectée'}</span></div>${ttsWarn()}` : ''}
-    <div class="mute small">Astuce : glisse vers la gauche pour passer à la réplique suivante, vers la droite pour revenir. Au clavier : flèches, R pour réécouter.</div>
+    <div class="mute small">Glisse vers la gauche pour passer à la suivante.</div>
     <div class="row2">
       ${canResume ? `<button class="btn" data-act="resume">Reprendre (${pr.pos+1}/${countLines(S.scene)})</button>` : ''}
       <button class="btn pri" data-act="start">${canResume ? 'Depuis le début' : 'Commencer'}</button>
@@ -2942,6 +3086,8 @@ document.addEventListener('click', e => {
       if (!I.title.trim()) { alert('Indique le titre de la pièce.'); break; }
       I.parsed = parseScript(I.text); I.step = 2; render(); window.scrollTo(0, 0); break; }
     case 'exporttexts': exportTexts(); break;
+    case 'expprog': exportProg(); break;
+    case 'expnotes': exportNotes(); break;
     case 'importedit': S.imp.step = 1; render(); break;
     case 'importsave': impSave(); S.imp = null; S.view = 'library'; saved.libTab = 'all'; render(); window.scrollTo(0, 0); break;
     case 'importdel': if (confirm('Supprimer ce texte de ce téléphone ?')) { impDelete(b.dataset.play, b.dataset.scene); render(); } break;
@@ -2959,6 +3105,9 @@ document.addEventListener('click', e => {
     case 'badgeclose': if (b.classList.contains('bov') && e.target !== b) break; S.bsel = null; render(); break;
     case 'settings': openSettings(); break;
     case 'closesettings': closeSettings(); break;
+    case 'chkupd': checkUpdate(); break;
+    case 'chkoff': checkOffline(); break;
+    case 'setcb': saved.cb = (b.dataset.v === 'rv' || b.dataset.v === 'by') ? b.dataset.v : ''; applyCb(); persist(); renderSheet(); render(); break;
     case 'setfs': S.fs = +b.dataset.v; applyFs(); persist(); render(); break;
     case 'settheme': saved.theme = b.dataset.v; applyTheme(); persist(); render(); break;
     case 'setcolor': saved.color = b.dataset.v; applyTheme(); persist(); render(); break;
@@ -3024,6 +3173,7 @@ document.addEventListener('change', e => {
     if (r.on) { r.del = false; rankId(); persist(); render(); if (rankClean(r.pseudo)) rankSend(true).then(rankLoad); else rankLoad(); }
     else { r.del = true; persist(); render(); rankDelete().then(rankLoad); } return; }
   if (a === 'rankpseudo') { const r = rk(); r.pseudo = rankClean(t.value); persist(); render(); if (r.pseudo) rankSend(true).then(rankLoad); return; }
+  if (a === 'impprog' || a === 'impnotes') { const f = t.files && t.files[0]; if (!f) return; (a === 'impprog' ? importProg : importNotes)(f); t.value = ''; return; }
   if (a === 'importfile') { const files = Array.from(t.files || []); if (!files.length) return;
     Promise.all(files.map(f => f.text().then(txt => { try { return JSON.parse(txt); } catch(x) { return null; } }, () => null))).then(list => {
       let n = 0, bad = 0;
@@ -3068,7 +3218,22 @@ document.addEventListener('keydown', e => {
 document.addEventListener('visibilitychange', () => { if (document.hidden) stopSpeech(); else { try { rankSync(); } catch(e) {} } });
 window.addEventListener('online', () => { try { rankSync(); } catch(e) {} });
 try { rankSync(); } catch(e) {}
-try { if (tryRestoreNav()) { render(); navScroll(); } else render(); } catch(e) { render(); }
+function showRecovery(){
+  const d = document.getElementById('app') || document.body;
+  let hasBak = false; try { const b = JSON.parse(localStorage.getItem(BAK) || 'null'); hasBak = isObj(b); } catch(e) {}
+  const bs = 'display:block;width:100%;min-height:52px;margin:10px 0 0;font:inherit;font-weight:700;border-radius:12px;border:1.5px solid #888;background:transparent;color:inherit';
+  d.innerHTML = '<div style="padding:28px 20px;font:16px/1.5 system-ui,sans-serif;max-width:480px;margin:0 auto"><h2 style="margin:0 0 8px">Les données de l’appli sont illisibles</h2><p>Recharge la page d’abord.' + (hasBak ? ' Une sauvegarde automatique existe : tu peux la restaurer sans rien perdre d’important.' : '') + '</p><button id="rcr" style="' + bs + '">Recharger</button>' + (hasBak ? '<button id="rcb" style="' + bs + '">Restaurer la sauvegarde automatique</button>' : '') + '<p style="margin-top:26px;font-size:14px;opacity:.75">Dernier recours : tout effacer sur ce téléphone (progression, notes et textes ajoutés).</p><button id="rcz" style="' + bs + ';font-weight:600;font-size:14px;min-height:44px">Tout effacer…</button></div>';
+  document.getElementById('rcr').onclick = () => location.reload();
+  const rb = document.getElementById('rcb');
+  if (rb) rb.onclick = () => { try { localStorage.setItem(KEY, localStorage.getItem(BAK)); } catch(e) {} location.reload(); };
+  document.getElementById('rcz').onclick = () => {
+    if (!confirm('Tout effacer sur ce téléphone ?\n\nProgression, notes et textes ajoutés seront perdus. Cette action est définitive.')) return;
+    if (!confirm('Dernière confirmation : effacer définitivement toutes les données de l’appli ?')) return;
+    try { localStorage.removeItem(KEY); localStorage.removeItem(BAK); localStorage.removeItem(BAK + '.t'); sessionStorage.clear(); } catch(e) {} location.reload(); };
+}
+try { if (tryRestoreNav()) { render(); navScroll(); } else render(); } catch(e) { try { render(); } catch(e2) { showRecovery(); } }
+if (restoredFromBak) { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {} flashMsg('Données abîmées : la dernière sauvegarde automatique a été restaurée.'); }
+try { if (sessionStorage.getItem('repete.reopenSet')) { sessionStorage.removeItem('repete.reopenSet'); openSettings(); } } catch(e) {}
 </script>
 <script>
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {

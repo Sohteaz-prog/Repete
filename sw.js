@@ -1,5 +1,5 @@
 /* Répète — hors ligne. Changer le numéro de CACHE à chaque mise à jour des fichiers listés. */
-const CACHE = 'repete-v65';
+const CACHE = 'repete-v68';
 const FILES = [
   './', './index.html', './manifest.webmanifest',
   './icon-192.png', './icon-512.png', './icon-maskable-512.png',
@@ -7,7 +7,8 @@ const FILES = [
 ];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
+  /* Chaque fichier est ajouté séparément : un fichier manquant (icône…) n'empêche plus l'installation du mode hors ligne. */
+  e.waitUntil(caches.open(CACHE).then(c => Promise.all(FILES.map(f => c.add(f).catch(() => {})))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', e => {
