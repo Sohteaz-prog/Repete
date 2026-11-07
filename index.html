@@ -25,8 +25,11 @@
 :root[data-cb=by]{--st-ko:#B71C1C;--st-known:#00A88F;--st-solid:#FFC400;--st-ring:#7A5C00}
 :root[data-cb] .dot.ko{clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);border-radius:0}
 :root[data-cb] .dot.solid{clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);border-radius:0;box-shadow:none}
-:root[data-cb] .line.ps.ko{border-left-style:dashed}
-:root[data-cb] .line.ps.solid{border-left-width:6px;border-left-style:double;padding-left:10px}
+:root[data-cb=rv]{--st-solid:#C99700}
+:root[data-cb=by]{--st-solid:#D19A00}
+:root[data-theme=dark][data-cb=rv]{--st-solid:#F0E442}
+:root[data-theme=dark][data-cb=by]{--st-solid:#FFC400}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light])[data-cb=rv]{--st-solid:#F0E442}:root:not([data-theme=light])[data-cb=by]{--st-solid:#FFC400}}
 :root[data-theme=light]{color-scheme:light}
 :root[data-theme=dark]{color-scheme:dark}
 @media (prefers-color-scheme:dark){
@@ -120,6 +123,18 @@ h2{font-size:19px;margin:0 0 2px}
 .btn.pri{background:var(--accent);border-color:var(--accent);color:var(--on-accent);flex:2;font-size:17px}
 .btn.ok{background:#1f8a5a;border-color:#1f8a5a;color:#fff;flex:2}
 .btn.ko{background:#c2403a;border-color:#c2403a;color:#fff}
+.gsec{border-bottom:1px solid var(--line)}
+.gsh{display:flex;align-items:center;gap:12px;width:100%;min-height:58px;padding:8px 2px;border:0;background:none;text-align:left;color:var(--ink)}
+.gsh .ico{color:var(--mute);flex:none}
+.gtx{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.gt{font-size:16px;font-weight:700}
+.gs{font-size:12.5px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gch{color:var(--mute);flex:none;transition:transform .15s}
+.gsec.open .gch{transform:rotate(180deg)}
+.gbd{padding:0 2px 16px}
+.gbd>.lbl:first-child{margin-top:4px}
+#ptr{position:fixed;left:0;right:0;top:calc(10px + env(safe-area-inset-top));text-align:center;z-index:400;pointer-events:none}
+#ptr span{display:inline-block;background:var(--ink);color:var(--card);padding:8px 14px;border-radius:18px;font-size:13px;font-weight:600}
 .updlk{border:0;background:none;padding:6px 4px;font-size:inherit;font-weight:600;color:var(--mute);text-decoration:underline;min-height:32px}
 .btn.sm{min-height:44px;flex:0 0 auto;font-size:14px}
 .row2{display:flex;gap:10px;margin-top:10px}
@@ -889,6 +904,8 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:18px}
         if (t.getAttribute) { if (!a && t.getAttribute('data-eg')) a = t.getAttribute('data-eg'); if (!c && t.getAttribute('data-i') !== null) c = t; }
         t = t.parentNode;
       }
+      var inPlay = !!G && G.moves > 0 && G.pairs < 10;
+      if ((a === 'quit' || a === 'new') && inPlay && !confirm(a === 'quit' ? 'Quitter la partie en cours ?' : 'Recommencer la partie en cours ?')) return;
       if (a === 'quit') close(); else if (a === 'new' || a === 'again') newGame(); else if (c) pick(+c.getAttribute('data-i'));
     });
     window.addEventListener('keydown', function (e) { if (opened && e.key === 'Escape') close(); });
@@ -1799,27 +1816,26 @@ async function checkUpdate(){
   if (found) { try { sessionStorage.setItem('repete.reopenSet', '1'); } catch(e) {} setTimeout(() => location.reload(), 900); }
 }
 function updateBlock(){
-  return `<div class="mute small" style="margin-top:14px;text-align:center">${updMsg || 'Version installée : v' + APP_VER + '.'} <button class="updlk" data-act="chkupd" ${updBusy ? 'disabled' : ''}>${updBusy ? 'Vérification…' : 'Vérifier'}</button></div>`;
+  return `<div class="mute small" style="margin-top:14px;text-align:center">${updMsg || 'Version installée : v' + APP_VER + '.'} <button class="updlk" data-act="chkupd" ${updBusy ? 'disabled' : ''}>${updBusy ? 'Vérification…' : 'Vérifier'}</button><br><span style="font-size:11.5px">Tirer vers le bas depuis le haut : actualiser.</span></div>`;
+}
+function secBlock(id, icon, title, sum, body){
+  const o = S.setSec === id;
+  return `<div class="gsec${o ? ' open' : ''}"><button class="gsh" data-act="setsec" data-v="${id}" aria-expanded="${o}">${ico(icon, 20)}<span class="gtx"><span class="gt">${title}</span><span class="gs">${sum}</span></span><svg class="gch" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>${o ? '<div class="gbd">' + body + '</div>' : ''}</div>`;
 }
 function sheetInner(){
   const dark = isDark(), cur = COLORS.find(x => x.id === saved.color) || COLORS[0];
+  const nm = (arr, v) => (arr.find(x => x[0] === v) || ['', ''])[1];
+  const cbName = nm(CB_MODES, saved.cb || '').toLowerCase();
   return `<div class="sh-head"><h2>Réglages</h2><button class="ghost" data-act="closesettings">Fermer</button></div>
+      ${secBlock('txt', 'text', 'Texte et lecture', FS_NAMES[S.fs] + (synth ? ' · lecture ' + S.rate.toFixed(1).replace('.', ',') + '×' : ''), `
       <div class="lbl">Taille du texte</div>
       <div class="seg sm">${FS_NAMES.map((n, i) => `<button class="${S.fs === i ? 'on' : ''}" data-act="setfs" data-v="${i}">${n}</button>`).join('')}</div>
       <div class="script sh-prev"><div class="line me"><div class="who2">Aperçu</div><p>${fmt('Je ne sais pas… Les oreilles, ça marche par deux, non ?')}</p></div></div>
       <label class="sw"><input type="checkbox" data-act="boldck" ${S.bold ? 'checked' : ''}> Mettre la première lettre en gras</label>
-      <div class="lbl">Date objectif</div>
-      <input type="date" class="dateinp" data-act="goaldate" value="${saved.goalDate}" aria-label="Date objectif">
       ${synth ? `<div class="lbl">Vitesse de lecture · <span id="rateval">${S.rate.toFixed(1)}</span>×</div>
       <input type="range" class="rng" min="1" max="2" step="0.1" value="${S.rate}" data-act="rate" aria-label="Vitesse de lecture">
-      <div class="rngs"><span>1× normale</span><span>2× rapide</span></div>` : ''}
-      <div class="lbl">Vibration des boutons</div>
-      <div class="seg sm">${HAPTICS.map(([id, n]) => `<button class="${hapticMode() === id ? 'on' : ''}" data-act="sethaptic" data-v="${id}">${n}</button>`).join('')}</div>
-      ${canVibe ? '' : '<div class="mute small" style="margin-top:6px">Non prise en charge par cet appareil ou ce navigateur.</div>'}
-      <div class="lbl">Animations</div>
-      <div class="seg sm">${ANIM_MODES.map(([id, n]) => `<button class="${animMode() === id ? 'on' : ''}" data-act="setanim" data-v="${id}">${n}</button>`).join('')}</div>
-      <div class="mute small" style="margin-top:6px">${animMode() === 'off' ? 'Le résultat s’affiche sans mouvement.' : animMode() === 'none' ? 'Aucune animation ni son.' : ''}</div>
-      ${animMode() === 'none' ? '' : `<label class="sw"><input type="checkbox" data-act="soundck" ${soundOn() ? 'checked' : ''}> Sons des animations</label>`}
+      <div class="rngs"><span>1× normale</span><span>2× rapide</span></div>` : ''}`)}
+      ${secBlock('look', 'palette', 'Apparence', 'Thème ' + nm(THEMES, saved.theme || 'auto').toLowerCase() + ' · ' + esc(cur.name).toLowerCase() + ' · daltonisme : ' + cbName, `
       <div class="lbl">Thème</div>
       <div class="seg">${THEMES.map(([id, n]) => `<button class="${(saved.theme || 'auto') === id ? 'on' : ''}" data-act="settheme" data-v="${id}">${n}</button>`).join('')}</div>
       <div class="mute small" style="margin-top:6px">${(saved.theme || 'auto') === 'auto' ? 'Auto : suit le thème de ton téléphone.' : ''}</div>
@@ -1827,8 +1843,25 @@ function sheetInner(){
       <div class="swatches">${COLORS.map(c => { const v = dark ? c.d : c.l; return `<button class="swc ${c.id === cur.id ? 'on' : ''}" style="background:${v[0]};color:${v[3]}" data-act="setcolor" data-v="${c.id}" aria-label="${esc(c.name)}" aria-pressed="${c.id === cur.id}">${c.id === cur.id ? '✓' : ''}</button>`; }).join('')}</div>
       <div class="lbl">Daltonisme</div>
       <div class="seg sm">${CB_MODES.map(([id, n]) => `<button class="${(saved.cb || '') === id ? 'on' : ''}" data-act="setcb" data-v="${id}">${n}</button>`).join('')}</div>
-      <div class="mute small" style="margin-top:6px">${saved.cb ? 'Couleurs adaptées et formes en plus : losange = à revoir, rond = connue, étoile = solide.' : 'Change les couleurs des niveaux et ajoute des formes pour les distinguer.'}</div>
-      ${installBlock()}
+      <div class="mute small" style="margin-top:6px">${saved.cb ? 'Couleurs adaptées et formes en plus : losange = à revoir, rond = connue, étoile = solide.' : 'Change les couleurs des niveaux et ajoute des formes pour les distinguer.'}</div>`)}
+      ${secBlock('anim', 'sparkles', 'Animations et vibration', nm(ANIM_MODES, animMode()) + ' · vibration ' + nm(HAPTICS, hapticMode()).toLowerCase(), `
+      <div class="lbl">Animations</div>
+      <div class="seg sm">${ANIM_MODES.map(([id, n]) => `<button class="${animMode() === id ? 'on' : ''}" data-act="setanim" data-v="${id}">${n}</button>`).join('')}</div>
+      <div class="mute small" style="margin-top:6px">${animMode() === 'off' ? 'Le résultat s’affiche sans mouvement.' : animMode() === 'none' ? 'Aucune animation ni son.' : ''}</div>
+      ${animMode() === 'none' ? '' : `<label class="sw"><input type="checkbox" data-act="soundck" ${soundOn() ? 'checked' : ''}> Sons des animations</label>`}
+      <div class="lbl">Vibration des boutons</div>
+      <div class="seg sm">${HAPTICS.map(([id, n]) => `<button class="${hapticMode() === id ? 'on' : ''}" data-act="sethaptic" data-v="${id}">${n}</button>`).join('')}</div>
+      ${canVibe ? '' : '<div class="mute small" style="margin-top:6px">Non prise en charge par cet appareil ou ce navigateur.</div>'}`)}
+      ${secBlock('goal', 'target', 'Objectif', 'Date objectif : ' + (() => { const [y, m, d] = String(saved.goalDate).split('-').map(Number); try { return new Date(y, m - 1, d).toLocaleDateString('fr-BE', { day:'numeric', month:'long', year:'numeric' }); } catch(e) { return esc(saved.goalDate); } })(), `
+      <div class="lbl">Date objectif</div>
+      <input type="date" class="dateinp" data-act="goaldate" value="${saved.goalDate}" aria-label="Date objectif">`)}
+      ${secBlock('data', 'database', 'Données et appli', 'Sauvegarde · installation', `
+      <div class="lbl">Sauvegarde</div>
+      <div class="mute small" style="margin:-4px 0 8px">Garde ta progression ou tes notes en lieu sûr, ou passe-les d’un téléphone à l’autre. Les fichiers restent chez toi.</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" style="flex:1 1 140px" data-act="expprog">Exporter ma progression</button><button class="btn sm" style="flex:1 1 140px" data-act="expnotes">Exporter mes notes</button></div>
+      <div class="mute small" style="margin-top:12px">Importer une progression</div><input type="file" accept=".json,application/json" data-act="impprog">
+      <div class="mute small" style="margin-top:10px">Importer des notes</div><input type="file" accept=".json,application/json" data-act="impnotes">
+      ${installBlock()}`)}
       ${updateBlock()}
       ${ADMIN ? admPanel() : `<div class="admtap" data-act="admtap">Répète · v${APP_VER}</div>${S.admAsk ? `<div class="admask"><input id="admcode" type="password" inputmode="numeric" autocomplete="off" placeholder="Code" aria-label="Code"><button class="ghost" data-act="admgo">OK</button></div>${S.admErr ? '<div class="mute small">Code incorrect.</div>' : ''}` : ''}`}`;
 }
@@ -2118,7 +2151,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 67;
+const APP_VER = 69;
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 function hlog(msg){
@@ -2366,18 +2399,19 @@ function importView(){
   const mine = []; saved.userLib.forEach(p => p.scenes.forEach(sc => mine.push([p, sc])));
   if (mine.length && I.step === 1) h += `<section class="card"><div class="lbl">Mes textes ajoutés</div>` + mine.map(([p, sc]) =>
     `<div style="display:flex;align-items:center;gap:8px;margin:6px 0"><span style="flex:1">${esc(p.title)} · ${esc(sc.title)}</span><button class="btn sm ko" data-act="importdel" data-play="${p.id}" data-scene="${sc.id}">Supprimer</button></div>`).join('') + `<button class="btn sm" style="width:100%;margin-top:8px" data-act="exporttexts">Exporter mes textes (fichier à partager)</button><p class="mute small">Pour les mettre dans l’application de la classe : envoie le fichier <b>textes-classe.json</b> sur GitHub, à côté de index.html.</p></section>`;
-  if (I.step === 1) h += `<section class="card"><div class="lbl">Importer un fichier de textes</div><p class="mute small">Si on t’a envoyé un ou plusieurs fichiers <b>textes-classe</b> (.json), choisis-les ici ; tu peux en sélectionner plusieurs d’un coup.</p><input type="file" accept=".json,application/json" multiple data-act="importfile"></section>
-    <section class="card"><div class="lbl">Sauvegarde</div><p class="mute small">Pour garder ta progression ou tes notes en lieu sûr, ou les passer d’un téléphone à l’autre. Les fichiers restent chez toi.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" style="flex:1 1 140px" data-act="expprog">Exporter ma progression</button><button class="btn sm" style="flex:1 1 140px" data-act="expnotes">Exporter mes notes</button></div>
-      <div class="lbl" style="margin-top:12px">Importer une progression</div><input type="file" accept=".json,application/json" data-act="impprog">
-      <div class="lbl" style="margin-top:12px">Importer des notes</div><input type="file" accept=".json,application/json" data-act="impnotes"></section>`;
+  if (I.step === 1) h += `<section class="card"><div class="lbl">Importer un fichier de textes</div><p class="mute small">Si on t’a envoyé un ou plusieurs fichiers <b>textes-classe</b> (.json), choisis-les ici ; tu peux en sélectionner plusieurs d’un coup.</p><input type="file" accept=".json,application/json" multiple data-act="importfile"></section>`;
   return h;
 }
 function navBack(){
   const rw = document.querySelector('.rwl.on');
   if (rw) { if (rw._close) rw._close(); else rw.click(); return; }
   if (S.nEdit || S.nList) { S.nEdit = null; S.nList = false; render(); return; }
-  if (S.nView != null) { S.nView = null; render(); return; }
+  if (S.nView != null) {
+    const q = '.nb[data-i="' + S.nView + '"]', e = document.querySelector(q), t0 = e ? e.getBoundingClientRect().top : null;
+    S.nView = null; render();
+    if (t0 !== null) { const n = document.querySelector(q); if (n) window.scrollBy(0, n.getBoundingClientRect().top - t0); }
+    return;
+  }
   if (S.settings) { S.settings = false; try { sessionStorage.removeItem('repete.reopenSet'); } catch(e) {} renderSheet(); return; }
   if (S.view === 'badges' && S.bsel) { S.bsel = null; render(); return; }
   if (S.view === 'badges') { S.view = 'progress'; render(); window.scrollTo(0, 0); return; }
@@ -2438,6 +2472,31 @@ document.addEventListener('touchend', e => {
   if (dy < -60 && Math.abs(dy) > Math.abs(dx) * 1.5) closeSettings();
 }, { passive: true });
 
+/* Réglages : tirer vers le bas depuis le haut = actualiser l'appli (revient dans les Réglages) */
+let ptr = null;
+const ptrHide = () => { const d = document.getElementById('ptr'); if (d) d.remove(); };
+document.addEventListener('touchstart', e => {
+  ptr = null;
+  if (!S.settings || e.touches.length !== 1) return;
+  const pn = e.target && e.target.closest && e.target.closest('.sh-panel');
+  if (pn && pn.scrollTop <= 0 && !e.target.closest('input[type=range],input[type=date]')) ptr = { y: e.touches[0].clientY, x: e.touches[0].clientX };
+}, { passive: true });
+document.addEventListener('touchmove', e => {
+  if (!ptr || !S.settings) return;
+  const dy = e.touches[0].clientY - ptr.y, dx = Math.abs(e.touches[0].clientX - ptr.x);
+  if (dy > 25 && dy > dx * 1.5) {
+    let d = document.getElementById('ptr');
+    if (!d) { d = document.createElement('div'); d.id = 'ptr'; d.innerHTML = '<span></span>'; document.body.appendChild(d); }
+    d.firstChild.textContent = dy > 90 ? 'Relâche pour actualiser' : 'Tire pour actualiser';
+  } else ptrHide();
+}, { passive: true });
+document.addEventListener('touchend', e => {
+  const g = ptr; ptr = null; ptrHide();
+  if (!g || !S.settings || !e.changedTouches.length) return;
+  const dy = e.changedTouches[0].clientY - g.y, dx = Math.abs(e.changedTouches[0].clientX - g.x);
+  if (dy > 90 && dy > dx * 1.5) { try { sessionStorage.setItem('repete.reopenSet', '1'); } catch(x) {} location.reload(); }
+}, { passive: true });
+
 let VOICES = [];
 function loadVoices(){ if (!synth) return; try { VOICES = synth.getVoices().filter(v => /^fr/i.test(v.lang)); } catch(e){} }
 loadVoices();
@@ -2456,11 +2515,13 @@ function say(text, pitch){
     if (v) u.voice = v;
     u.rate = S.rate; u.pitch = pitch || 1;
     S.tts = { status:'wait' };
-    u.onstart = () => { if (id === ttsId) { S.tts = { status:'ok' }; } };
+    u.onstart = () => { if (id === ttsId) { S.tts = { status:'ok' }; stopPill(true); } };
+    u.onend = () => { if (id === ttsId) stopPill(false); };
     u.onerror = e => {
       if (id !== ttsId) return;
       const err = (e && e.error) || '';
       if (err === 'interrupted' || err === 'canceled') return;
+      stopPill(false);
       S.tts = { status:'err', msg:err }; refreshTts();
     };
     synth.speak(u);
@@ -2472,7 +2533,18 @@ function speak(i){
   const it = S.scene.items[i]; if (!it || it.k !== 'l') return;
   say(spokenText(it.t), PITCH[Math.max(0, S.scene.characters.indexOf(it.c)) % PITCH.length]);
 }
-function stopSpeech(){ ttsId++; try { synth && synth.cancel(); } catch(e){} }
+function stopSpeech(){ ttsId++; try { synth && synth.cancel(); } catch(e){} stopPill(false); }
+/* Bouton « Arrêter la lecture » : visible tant qu'une réplique est lue à voix haute */
+function stopPill(on){
+  let d = document.getElementById('ttsstop');
+  if (!on) { if (d) d.remove(); return; }
+  if (d) return;
+  d = document.createElement('button'); d.id = 'ttsstop'; d.type = 'button';
+  d.textContent = '■ Arrêter la lecture';
+  d.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom));z-index:250;min-height:44px;padding:0 18px;border-radius:22px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-size:14px;box-shadow:0 4px 14px rgba(0,0,0,.25)';
+  d.onclick = () => stopSpeech();
+  document.body.appendChild(d);
+}
 const isFocus = () => S.view === 'scene' && S.tab === 'reh' && !!S.me && S.started;
 
 /* ============ VUES ============ */
@@ -2601,6 +2673,10 @@ function allView(){
 const ICO = {
   flame:'<path d="M12 12c2-2.96 0-7-1-8 0 3.038-1.773 4.741-3 6-1.226 1.26-2 3.24-2 5a6 6 0 1 0 12 0c0-1.532-1.056-3.94-2-5-1.786 3-2.791 3-4 2z"/>',
   target:'<circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9"/>',
+  text:'<path d="M4 15v-6.5a3.5 3.5 0 0 1 7 0V15"/><path d="M4 12h7"/><circle cx="17.5" cy="14.5" r="2.5"/><path d="M20 12v5"/>',
+  palette:'<path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25"/><circle cx="8.5" cy="10.5" r=".5"/><circle cx="12.5" cy="7.5" r=".5"/><circle cx="16.5" cy="10.5" r=".5"/>',
+  sparkles:'<path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/>',
+  database:'<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6a8 3 0 0 0 16 0v-6"/><path d="M4 12v6a8 3 0 0 0 16 0v-6"/>',
   cal:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/><rect x="8" y="15" width="2" height="2"/>'
 };
 const ico = (n, sz) => `<svg class="ico" width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICO[n]}</svg>`;
@@ -2646,7 +2722,7 @@ function mineView(){
   const items = allStats(), t = items.length ? todayInfo(items) : null;
   let h = `<button class="band" data-act="progressopen" aria-label="Ouvrir Ma progression">
     <span class="rg">${ring(lv.max ? 100 : lv.toNext, 52, 10)}<b>${lv.lvl}</b></span>
-    <span class="bm"><b>${lv.title ? esc(lv.title) + ' · ' : ''}niveau ${lv.lvl}</b>
+    <span class="bm"><b>${lv.title ? esc(lv.title) + ' · ' : ''}Niveau ${lv.lvl}</b>
     <small>${t ? '<span class="fli" style="' + fliMargin(t.streak.n) + '">' + flameSvg(t.streak.n, 30) + '</span>' + t.streak.n + ' j · <span role="img" aria-label="Objectif du jour">' + ico('target', 15) + '</span> ' + Math.min(t.objDone, t.objNeed) + ' / ' + t.objNeed + ' · ' : ''}<span role="img" aria-label="Date objectif">${ico('cal', 15)}</span> ${dl > 0 ? 'J-' + dl : dl === 0 ? 'Jour J' : 'Date passée'}</small></span><span class="ch">›</span></button>`;
   list.forEach(([p, s]) => {
     const st = stats(p, s), at = `data-play="${p.id}" data-scene="${s.id}"`, k = keyOf(p, s);
@@ -3106,6 +3182,7 @@ document.addEventListener('click', e => {
     case 'settings': openSettings(); break;
     case 'closesettings': closeSettings(); break;
     case 'chkupd': checkUpdate(); break;
+    case 'setsec': S.setSec = S.setSec === b.dataset.v ? null : b.dataset.v; renderSheet(); break;
     case 'chkoff': checkOffline(); break;
     case 'setcb': saved.cb = (b.dataset.v === 'rv' || b.dataset.v === 'by') ? b.dataset.v : ''; applyCb(); persist(); renderSheet(); render(); break;
     case 'setfs': S.fs = +b.dataset.v; applyFs(); persist(); render(); break;
@@ -3119,7 +3196,7 @@ document.addEventListener('click', e => {
       const k = key(); (saved.notes[k] = saved.notes[k] || {})[S.nEdit.i] = { x: S.nEdit.x.trim() };
       S.nView = S.nEdit.i; S.nEdit = null; persist(); render();
     } break;
-    case 'ndel': { const k = key(), i = +b.dataset.i; if (saved.notes[k]) { delete saved.notes[k][i]; if (!Object.keys(saved.notes[k]).length) delete saved.notes[k]; } S.nEdit = null; S.nView = null; persist(); render(); break; }
+    case 'ndel': { if (!confirm('Supprimer cette note ?')) break; const k = key(), i = +b.dataset.i; if (saved.notes[k]) { delete saved.notes[k][i]; if (!Object.keys(saved.notes[k]).length) delete saved.notes[k]; } S.nEdit = null; S.nView = null; persist(); render(); break; }
     case 'nclose': S.nEdit = null; S.nList = false; render(); break;
     case 'nlist': S.nList = true; S.nView = null; render(); break;
     case 'ngo': { const i = +b.dataset.i; S.nList = false; S.mode = 'all'; render();

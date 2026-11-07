@@ -24,7 +24,7 @@ L'appli s'ouvre alors en plein écran avec son icône et fonctionne hors ligne a
 
 ## Mettre à jour
 
-Remplacer `index.html` et `sw.js` sur GitHub, puis attendre la coche verte du déploiement (onglet « Actions »). Le numéro du cache dans `sw.js` change à chaque version (`repete-v67` devient `repete-v68`, etc.) : c'est ce qui fait récupérer la nouvelle version aux téléphones. Il faut ensuite fermer complètement l'appli et la rouvrir une fois. Le numéro de version de l'appli (« v67 ») s'affiche en petit en bas des Réglages.
+Remplacer `index.html` et `sw.js` sur GitHub, puis attendre la coche verte du déploiement (onglet « Actions »). Le numéro du cache dans `sw.js` change à chaque version (`repete-v69` devient `repete-v70`, etc.) : c'est ce qui fait récupérer la nouvelle version aux téléphones. Il faut ensuite fermer complètement l'appli et la rouvrir une fois. Le numéro de version de l'appli (« v69 ») s'affiche en petit en bas des Réglages.
 
 ## Principes
 
@@ -33,8 +33,9 @@ Remplacer `index.html` et `sw.js` sur GitHub, puis attendre la coche verte du d�
 - Série de jours, objectif du jour, badges et titres.
 - **Animations** réglables : Activées, Réduites (sans mouvement) ou Désactivées (ni animation ni son). Sons des animations désactivés par défaut. Vibration réglable.
 - Thème clair / sombre / automatique.
-- **Sauvegarde** : copie automatique des données (restaurée si elles deviennent illisibles) ; dans « Ajouter mon texte », export / import de la progression et des notes (fichiers `progression-repete.json`, `notes-repete.json`).
-- **Daltonisme** (Réglages) : deux modes (rouge-vert, bleu-jaune) qui changent les couleurs des niveaux et ajoutent des formes et des motifs.
+- **Réglages** regroupés en 5 sections repliables avec résumé (Texte et lecture, Apparence, Animations et vibration, Objectif, Données et appli) ; tirer vers le bas depuis le haut des Réglages actualise l'appli.
+- **Sauvegarde** : copie automatique des données (restaurée si elles deviennent illisibles) ; dans les Réglages, export / import de la progression et des notes (fichiers `progression-repete.json`, `notes-repete.json`).
+- **Daltonisme** (Réglages) : deux modes (rouge-vert, bleu-jaune) qui changent les couleurs des niveaux et ajoutent des formes.
 - **Vérifier** la mise à jour (Réglages, lien discret) : cherche une nouvelle version et recharge l'appli ; un rechargement fait depuis les Réglages y ramène toujours.
 - **Ajouter mon texte** : coller un texte, il est découpé en répliques par personnage ; export et import possibles (fichier `textes-classe.json`).
 - **Notes sur les répliques** (onglet Texte, version test) : un libellé « ✎ Notes » en haut à droite de chaque réplique ; une note est un texte libre (obligatoire, 300 caractères). Une réplique qui a une note affiche un petit chevron : un appui déplie ou replie la note, avec « Modifier » et « Supprimer ». Le bouton « Notes · n » en haut à gauche du texte ouvre la liste des notes de la scène : un appui sur une ligne saute à la réplique. Stockées sur le téléphone uniquement.
