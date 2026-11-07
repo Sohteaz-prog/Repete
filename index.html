@@ -1818,14 +1818,14 @@ async function checkUpdate(){
     const r = await fetch('index.html', { cache: 'reload' });   // recharge aussi la copie du cache HTTP et du mode hors ligne
     const m = /APP_VER\s*=\s*(\d+)/.exec(await r.text()), remote = m ? +m[1] : 0;
     try { const reg = navigator.serviceWorker && await navigator.serviceWorker.getRegistration(); if (reg) await reg.update(); } catch(e) {}
-    if (remote > APP_VER) { found = true; updMsg = 'Nouvelle version v' + remote + ' trouvée. Rechargement…'; }
-    else updMsg = 'Tu as la dernière version : v' + APP_VER + '.';
+    if (remote > APP_VER) { found = true; updMsg = 'Nouvelle version trouvée. Rechargement…'; }
+    else updMsg = 'Tu as la dernière version : v' + APP_LABEL + '.';
   } catch(e) { updMsg = 'Vérification impossible (hors ligne ?).'; }
   updBusy = false; try { renderSheet(); } catch(e) {}
   if (found) { try { sessionStorage.setItem('repete.reopenSet', '1'); } catch(e) {} setTimeout(() => location.reload(), 900); }
 }
 function updateBlock(){
-  return `<div class="mute small" style="margin-top:14px;text-align:center">${updMsg || 'Version installée : v' + APP_VER + '.'} <button class="updlk" data-act="chkupd" ${updBusy ? 'disabled' : ''}>${updBusy ? 'Vérification…' : 'Vérifier'}</button></div>`;
+  return `<div class="mute small" style="margin-top:14px;text-align:center">${updMsg || 'Version installée : v' + APP_LABEL + '.'} <button class="updlk" data-act="chkupd" ${updBusy ? 'disabled' : ''}>${updBusy ? 'Vérification…' : 'Vérifier'}</button></div>`;
 }
 function secBlock(id, icon, title, sum, body){
   const o = S.setSec === id;
@@ -1872,7 +1872,7 @@ function sheetInner(){
       <div class="mute small" style="margin-top:10px">Importer des notes</div><input type="file" accept=".json,application/json" data-act="impnotes">
       ${installBlock()}`)}
       ${updateBlock()}
-      ${ADMIN ? admPanel() : `<div class="admtap" data-act="admtap">Répète · v${APP_VER}</div>${S.admAsk ? `<div class="admask"><input id="admcode" type="password" inputmode="numeric" autocomplete="off" placeholder="Code" aria-label="Code"><button class="ghost" data-act="admgo">OK</button></div>${S.admErr ? '<div class="mute small">Code incorrect.</div>' : ''}` : ''}`}`;
+      ${ADMIN ? admPanel() : `<div class="admtap" data-act="admtap">Répète · v${APP_LABEL}</div>${S.admAsk ? `<div class="admask"><input id="admcode" type="password" inputmode="numeric" autocomplete="off" placeholder="Code" aria-label="Code"><button class="ghost" data-act="admgo">OK</button></div>${S.admErr ? '<div class="mute small">Code incorrect.</div>' : ''}` : ''}`}`;
 }
 /* ---- Animations : déclencheurs et file d'attente (les visuels seront branchés dans ANIM) ---- */
 const ANIM = {};   /* ANIM.applause / ANIM.title / ANIM.badge = (data, {animate}) => Promise. Absent = rien ne s'affiche. */
@@ -2083,7 +2083,7 @@ async function checkOffline(){
 function admPanel(){
   const lv = levelInfo(Math.round(((allStats().reduce((a, x) => a + x.st.pts, 0)) / Math.max(1, 5 * allStats().reduce((a, x) => a + x.st.total, 0))) * 100));
   const row = (lab, id, ph, op) => `<div class="admrow"><span>${lab}</span><input id="${id}" type="number" inputmode="numeric" placeholder="${ph}"><button class="admb" data-act="adm" data-op="${op}" data-in="${id}">OK</button></div>`;
-  return `<div class="admsec"><div class="lbl">Mode admin · profil de test · v${APP_VER}</div>
+  return `<div class="admsec"><div class="lbl">Mode admin · profil de test · v${APP_LABEL}</div>
     <div class="mute small" style="margin-bottom:8px">Jour simulé : <b>${today()}</b></div>
     <div class="admrow"><span>${offMsg || 'Mode hors ligne'}</span><button class="admb" data-act="chkoff">Vérifier</button></div>
     ${row('Maîtrise globale (%)', 'adm-m', '0 – 100', 'mastery')}
@@ -2161,7 +2161,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 73;
+const APP_VER = 74, APP_LABEL = '2.00'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 function hlog(msg){
@@ -2200,7 +2200,7 @@ document.addEventListener('freeze', () => hlog('gel'));
 (function histInit(){
   try {
     const st = history.state;
-    hlog('chargement v' + APP_VER + ' état=' + hst() + ' hist=' + history.length + (((window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true) ? ' installée' : ' navigateur'));
+    hlog('chargement v' + APP_LABEL + ' (build ' + APP_VER + ')' + ' état=' + hst() + ' hist=' + history.length + (((window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true) ? ' installée' : ' navigateur'));
     if (st && st.k === 'top' && typeof st.a === 'number') baseIdx = st.a;      // sentinelles d'une visite précédente : on les réutilise
     else {
       baseIdx = (st && st.k === 'base' && typeof st.a === 'number') ? st.a : history.length - 1;
