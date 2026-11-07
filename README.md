@@ -24,7 +24,7 @@ L'appli s'ouvre alors en plein écran avec son icône et fonctionne hors ligne a
 
 ## Mettre à jour
 
-Remplacer `index.html` et `sw.js` sur GitHub, puis attendre la coche verte du déploiement (onglet « Actions »). Le numéro du cache dans `sw.js` change à chaque version (`repete-v69` devient `repete-v70`, etc.) : c'est ce qui fait récupérer la nouvelle version aux téléphones. Il faut ensuite fermer complètement l'appli et la rouvrir une fois. Le numéro de version de l'appli (« v69 ») s'affiche en petit en bas des Réglages.
+Remplacer `index.html` et `sw.js` sur GitHub, puis attendre la coche verte du déploiement (onglet « Actions »). Le numéro du cache dans `sw.js` change à chaque version (`repete-v70` devient `repete-v71`, etc.) : c'est ce qui fait récupérer la nouvelle version aux téléphones. Il faut ensuite fermer complètement l'appli et la rouvrir une fois. Le numéro de version de l'appli (« v70 ») s'affiche en petit en bas des Réglages.
 
 ## Principes
 
@@ -33,7 +33,7 @@ Remplacer `index.html` et `sw.js` sur GitHub, puis attendre la coche verte du d�
 - Série de jours, objectif du jour, badges et titres.
 - **Animations** réglables : Activées, Réduites (sans mouvement) ou Désactivées (ni animation ni son). Sons des animations désactivés par défaut. Vibration réglable.
 - Thème clair / sombre / automatique.
-- **Réglages** regroupés en 5 sections repliables avec résumé (Texte et lecture, Apparence, Animations et vibration, Objectif, Données et appli) ; tirer vers le bas depuis le haut des Réglages actualise l'appli.
+- **Réglages** regroupés en 5 sections repliables avec résumé (Texte et lecture, Apparence, Animations et vibration, Objectif, Données et appli) ; tirer vers le bas depuis le haut des Réglages actualise l'appli (sans indicateur).
 - **Sauvegarde** : copie automatique des données (restaurée si elles deviennent illisibles) ; dans les Réglages, export / import de la progression et des notes (fichiers `progression-repete.json`, `notes-repete.json`).
 - **Daltonisme** (Réglages) : deux modes (rouge-vert, bleu-jaune) qui changent les couleurs des niveaux et ajoutent des formes.
 - **Vérifier** la mise à jour (Réglages, lien discret) : cherche une nouvelle version et recharge l'appli ; un rechargement fait depuis les Réglages y ramène toujours.
