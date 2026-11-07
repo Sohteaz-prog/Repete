@@ -255,7 +255,7 @@ h2{font-size:19px;margin:0 0 2px}
 .admgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
 .hlog{margin:6px 0 8px;padding:8px;max-height:220px;overflow:auto;white-space:pre-wrap;word-break:break-word;font:11px/1.35 ui-monospace,Menlo,Consolas,monospace;background:var(--card);border:1.5px solid var(--line);border-radius:10px;color:var(--ink)}
 .admb{min-height:40px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font-weight:600;font-size:13px;padding:6px 8px}
-.admb.flash{background:var(--accent-bg);border-color:var(--accent);transition:none}
+.admsec .flash{background:var(--accent-bg);border-color:var(--accent);transition:none}
 #admtoast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,16px);z-index:60;max-width:calc(100% - 32px);padding:10px 16px;border-radius:12px;background:#3b3b46;color:#fff;font-size:14px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.28);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;text-align:center}
 #admtoast.show{opacity:1;transform:translate(-50%,0)}
 .admb.dng{color:#b3261e}
@@ -1705,7 +1705,9 @@ const gearBtn = () => `<button class="ib" data-act="settings" aria-label="Régla
 const FS_NAMES = ['Petit','Moyen','Grand','Très grand'];
 const HAPTICS = [['off','Aucune'],['low','Légère'],['high','Forte']];
 const canVibe = typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function';
-const hapticMode = () => saved.haptic || 'low';
+/* Le profil de test n'a pas ses propres réglages : il reprend la vibration choisie dans le vrai profil (sinon « Légère » = 10 ms, quasi imperceptible) */
+const mainHaptic = () => { try { return (JSON.parse(localStorage.getItem('repete.v1') || '{}') || {}).haptic || 'low'; } catch(e) { return 'low'; } };
+const hapticMode = () => saved.haptic || (ADMIN ? mainHaptic() : 'low');
 function buzz(kind){
   const m = hapticMode(); if (m === 'off' || !canVibe) return;
   const d = m === 'high' ? 28 : 10;
@@ -1901,8 +1903,6 @@ function admFeedback(op, v, raw){
     shift: saved.dayShift ? 'Jour simulé : ' + today() : 'Retour au jour réel : ' + today() };
   if (op === 'wipe') return;
   admToast(M[op] || 'Fait');
-  const sel = '.admsec [data-op="' + op + '"]' + (raw !== undefined ? '[data-v="' + raw + '"]' : '');
-  const el = document.querySelector(sel); if (el) { el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 180); }
 }
 try { const m = sessionStorage.getItem('admToast'); if (m) { sessionStorage.removeItem('admToast'); setTimeout(() => admToast(m), 300); } } catch(e) {}
 const admBar = () => `<div class="admbar"><span><b>Mode admin</b> · profil de test, ta vraie progression n’est pas touchée</span><button data-act="admquit">Quitter</button></div>`;
@@ -2022,7 +2022,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 56;
+const APP_VER = 57;
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 function hlog(msg){
@@ -2848,7 +2848,17 @@ document.addEventListener('click', e => {
   const b = e.target.closest('[data-act]');
   if (!b || b.tagName === 'INPUT' || b.tagName === 'SELECT') return;
   const a = b.dataset.act;
-  if (a !== 'admtap' && !b.classList.contains('sh-back')) buzz(a === 'adm' ? 'ok' : 'tap');
+  /* Panneau admin : tous les boutons réagissent pareil (même vibration, même éclair de 150 ms, puis plus rien) */
+  const admSec = b.closest('.admsec');
+  if (a !== 'admtap' && !b.classList.contains('sh-back')) buzz(a === 'adm' || admSec ? 'ok' : 'tap');
+  if (admSec) {
+    const idx = Array.prototype.indexOf.call(admSec.querySelectorAll('.admb, .seg button'), b);
+    try { b.blur(); } catch(x) {}
+    if (idx >= 0) setTimeout(() => {
+      const el = document.querySelectorAll('.admsec .admb, .admsec .seg button')[idx];
+      if (el) { el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 150); }
+    }, 0);
+  }
   switch (a) {
     case 'setanim': saved.anim = b.dataset.v; persist(); render(); break;
     case 'admpick': S[b.dataset.k] = +b.dataset.v; renderSheet(); break;
@@ -2875,8 +2885,8 @@ document.addEventListener('click', e => {
       render(); window.scrollTo(0,0); break; }
     case 'admtap': S.admTaps = (S.admTaps || 0) + 1; if (S.admTaps >= 5) { S.admAsk = true; S.admTaps = 0; renderSheet(); } break;
     case 'admgo': { const v = ($('#admcode') || {}).value || ''; if (admHash(v) === ADM_OK) { try { localStorage.setItem('repete.active', 'admin'); } catch(e) {} location.reload(); } else { S.admErr = true; renderSheet(); } break; }
-    case 'hlogrefresh': renderSheet(); break;
-    case 'hlogclear': try { localStorage.removeItem(HLOG_KEY); } catch(e) {} renderSheet(); break;
+    case 'hlogrefresh': renderSheet(); admToast('Journal actualisé'); break;
+    case 'hlogclear': try { localStorage.removeItem(HLOG_KEY); } catch(e) {} renderSheet(); admToast('Journal effacé'); break;
     case 'hlogcopy': try { navigator.clipboard.writeText(hlogLines().join('\n')); admToast('Journal copié'); } catch(e) { admToast('Copie impossible'); } break;
     case 'admquit': try { localStorage.setItem('repete.active', 'main'); } catch(e) {} location.reload(); break;
     case 'adm': { const op = b.dataset.op; let v = b.dataset.v !== undefined ? +b.dataset.v : 0;
