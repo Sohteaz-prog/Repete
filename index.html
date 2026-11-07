@@ -219,6 +219,7 @@ h2{font-size:19px;margin:0 0 2px}
 .hd{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .hd h1{margin:18px 0 2px}
 .ib svg{display:block;margin:0 auto}
+.sh-wrap.instant,.sh-wrap.instant *{transition:none!important;animation:none!important}
 .sh-wrap{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center}
 .sh-back{position:absolute;inset:0;background:rgba(0,0,0,.45);opacity:0;transition:opacity .4s ease}
 .sh-wrap.open .sh-back{opacity:1}
@@ -444,7 +445,7 @@ h2{font-size:19px;margin:0 0 2px}
 /* fond uni, translucide, plein écran : laisse deviner la fenêtre ouverte derrière (teinte selon le thème) */
 .rwl{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--rbg) 80%,transparent);-webkit-backdrop-filter:blur(1.5px);backdrop-filter:blur(1.5px);-webkit-tap-highlight-color:transparent;opacity:0;transition:opacity .25s}
 .rwl.on{opacity:1}
-.rwc{transform:scale(var(--k,1));transform-origin:center}
+.rwc{transform:translateY(calc(var(--dy,0px) * -1)) scale(var(--k,1));transform-origin:center}
 .rwl.rw-still *{animation:none!important}
 .rwl.rw-still{transition:none}
 
@@ -1906,7 +1907,8 @@ function rwShow(kind, html, ms, snd, animate){
     if (!document.getElementById('rwdefs')) { const d = document.createElement('div'); d.id = 'rwdefs'; d.setAttribute('aria-hidden','true'); d.innerHTML = RW_DEFS; document.body.appendChild(d); }
     const lay = document.createElement('div'); lay.className = 'rwl' + (animate ? '' : ' rw-still'); lay.setAttribute('role','dialog'); lay.setAttribute('aria-label','Récompense');
     const k = Math.min(1, (window.innerWidth - 8) / 390, (window.innerHeight - 8) / (kind === 'title' ? 530 : kind === 'badge' ? 420 : 340));
-    lay.innerHTML = '<div class="rwc" style="--k:' + k + '">' + html + '</div>';
+    const hh = kind === 'title' ? 530 : kind === 'badge' ? 420 : 340, dy = Math.max(0, Math.min(44, (window.innerHeight - hh * k) / 2 - 24));
+    lay.innerHTML = '<div class="rwc" style="--k:' + k + ';--dy:' + Math.round(dy) + 'px">' + html + '</div>';
     document.body.appendChild(lay);
     const rw = lay.querySelector('[class$="-rw"],[class*="-rw "]');
     rw.classList.remove('go'); void rw.offsetWidth;
@@ -2148,7 +2150,7 @@ function renderSheet(){
           <div class="sh-roll" data-act="closesettings" role="button" aria-label="Fermer les réglages"><svg viewBox="0 0 30 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4h22M4 10h22M4 16h22"/></svg></div></div>
       </div></div>`;
     const w = el.querySelector('.sh-wrap'); void w.offsetHeight;
-    requestAnimationFrame(() => w.classList.add('open'));
+    if (S.shInstant) { S.shInstant = false; w.classList.add('instant', 'open'); setTimeout(() => w.classList.remove('instant'), 80); } else requestAnimationFrame(() => w.classList.add('open'));
   } else if (wrap) {                  // fermeture : le panneau s'enroule vers le haut
     wrap.classList.remove('open');
     sheetTimer = setTimeout(() => { el.innerHTML = ''; document.body.style.overflow = ''; }, 520);
@@ -2159,7 +2161,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 71;
+const APP_VER = 72;
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 function hlog(msg){
@@ -2556,7 +2558,7 @@ function speak(i){
 }
 function stopSpeech(){ ttsId++; try { synth && synth.cancel(); } catch(e){} S.speakI = null; try { ttsMark(); } catch(e) {} }
 /* Les boutons de lecture (🔊 / 🔊 Réécouter) deviennent « ■ Arrêter » pendant que cette réplique est lue */
-const SQ = '<svg width="12" height="12" viewBox="0 0 10 10" aria-hidden="true" style="flex:none"><rect width="10" height="10" rx="1.5" fill="currentColor"/></svg>';
+const SQ = '<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" style="flex:none"><rect width="10" height="10" rx="1.5" fill="currentColor"/></svg>';
 function ttsMark(){
   document.querySelectorAll('[data-act=speak],[data-act=ttstest]').forEach(b => {
     if (b.dataset.l === undefined) {   // première fois : on fige la taille du bouton et on garde son libellé
@@ -3334,7 +3336,7 @@ function showRecovery(){
 }
 try { if (tryRestoreNav()) { render(); navScroll(); } else render(); } catch(e) { try { render(); } catch(e2) { showRecovery(); } }
 if (restoredFromBak) { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {} flashMsg('Données abîmées : la dernière sauvegarde automatique a été restaurée.'); }
-try { if (sessionStorage.getItem('repete.reopenSet')) { sessionStorage.removeItem('repete.reopenSet'); openSettings(); } } catch(e) {}
+try { if (sessionStorage.getItem('repete.reopenSet')) { sessionStorage.removeItem('repete.reopenSet'); S.shInstant = true; openSettings(); } } catch(e) {}
 </script>
 <script>
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
