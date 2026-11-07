@@ -2161,7 +2161,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 72;
+const APP_VER = 73;
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 function hlog(msg){
@@ -2285,23 +2285,28 @@ function dlJson(name, obj){
   document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 }
 const noteCount = n => Object.keys(n || {}).reduce((a, k) => a + Object.keys(n[k] || {}).length, 0);
+const profTag = () => ADMIN ? 'admin' : 'perso';
+const fileTag = () => (ADMIN ? '-admin' : '') + '-' + String(saved.season || '').replace(/[^0-9A-Za-z_-]/g, '');
+const profLabel = t => t === 'admin' ? 'du profil de test (admin)' : t === 'perso' ? 'du profil personnel' : '';
 function exportProg(){
   const o = {}; Object.keys(saved).forEach(k => { if (k !== 'userLib' && k !== 'notes' && k !== 'dayShift') o[k] = saved[k]; });
-  dlJson('progression-repete.json', { repete:'progression', v:APP_VER, date:today(), data:o });
+  dlJson('progression-repete' + fileTag() + '.json', { repete:'progression', profil:profTag(), saison:saved.season, v:APP_VER, date:today(), data:o });
 }
 function exportNotes(){
   if (!noteCount(saved.notes)) { alert('Aucune note à exporter.'); return; }
-  dlJson('notes-repete.json', { repete:'notes', v:APP_VER, date:today(), data:saved.notes });
+  dlJson('notes-repete' + fileTag() + '.json', { repete:'notes', profil:profTag(), saison:saved.season, v:APP_VER, date:today(), data:saved.notes });
 }
 function readJsonFile(f, kind, cb){
   f.text().then(txt => { let j = null; try { j = JSON.parse(txt); } catch(e) {}
     if (!j || j.repete !== kind || !isObj(j.data)) { alert('Ce fichier n’est pas un fichier « ' + (kind === 'notes' ? 'notes' : 'progression') + ' » de Répète.'); return; }
-    cb(j.data); }, () => alert('Fichier illisible.'));
+    if (j.profil && j.profil !== profTag()) { appConfirm('Ce fichier vient ' + profLabel(j.profil) + '. Tu es dans ' + (ADMIN ? 'le profil de test (admin)' : 'le profil personnel') + '. Import refusé pour éviter les mélanges.', 'OK', () => {}, false); return; }
+    if (j.saison && j.saison !== saved.season) { appConfirm('Ce fichier est de la saison « ' + j.saison + ' », ce profil est en saison « ' + saved.season + ' ». Import refusé pour éviter les mélanges.', 'OK', () => {}, false); return; }
+    cb(j.data, !j.profil); }, () => alert('Fichier illisible.'));
 }
 function importProg(f){
-  readJsonFile(f, 'progression', data => {
+  readJsonFile(f, 'progression', (data, old) => {
     const n = Object.keys(data.prog || {}).length + Object.keys(data.lines || {}).length;
-    if (!confirm('Remplacer la progression de ce téléphone par celle du fichier ?\n\nTes notes et tes textes ajoutés sont conservés. Une copie de l’état actuel est gardée en sauvegarde automatique.')) return;
+    if (!confirm((old ? 'Ancien fichier : son profil n’est pas indiqué.\n\n' : '') + 'Remplacer la progression de ce téléphone par celle du fichier ?\n\nTes notes et tes textes ajoutés sont conservés. Une copie de l’état actuel est gardée en sauvegarde automatique.')) return;
     try {
       const cur = localStorage.getItem(KEY); if (cur) { localStorage.setItem(BAK, cur); localStorage.setItem(BAK + '.t', String(Date.now())); }
       const nw = Object.assign({}, data, { userLib: saved.userLib, notes: saved.notes });
