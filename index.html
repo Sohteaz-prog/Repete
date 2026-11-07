@@ -2022,7 +2022,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 54;
+const APP_VER = 56;
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 function hlog(msg){
@@ -2036,7 +2036,7 @@ function hlog(msg){
 }
 const hlogLines = () => { try { return JSON.parse(localStorage.getItem(HLOG_KEY) || '[]'); } catch(e) { return []; } };
 const hst = () => { const st = history.state; return st ? st.k + '/' + (st.i == null ? '-' : st.i) : 'aucun'; };
-let baseIdx = 0, leaving = false;
+let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
 const TOP_DEPTH = 6;
 const curIdx = () => { const st = history.state; return st && st.k === 'top' && typeof st.i === 'number' ? st.i : baseIdx; };
 const uact = () => { try { return navigator.userActivation ? (navigator.userActivation.isActive ? 'actif' : navigator.userActivation.hasBeenActive ? 'ancien' : 'aucun') : '?'; } catch(x) { return '?'; } };
@@ -2045,6 +2045,8 @@ const uact = () => { try { return navigator.userActivation ? (navigator.userActi
    5 novembre : après un retour, aucun « popstate » n'arrivait et l'appli se fermait, avec des sentinelles créées au chargement. */
 function ensureTop(e){
   if (leaving || !e || e.isTrusted === false) return;
+  // seulement pendant une vraie interaction : un toucher qui fait défiler l'écran n'en est pas une (journal du 7 novembre)
+  try { if (navigator.userActivation && !navigator.userActivation.isActive) return; } catch(x) {}
   try {
     let n = TOP_DEPTH - (curIdx() - baseIdx), g = 8;
     if (n > 0) hlog('+' + n + ' sentinelle(s) depuis ' + hst() + ' (interaction ' + uact() + ')');
@@ -2067,6 +2069,37 @@ document.addEventListener('freeze', () => hlog('gel'));
     }
   } catch(e) {}
 })();
+/* Rafraîchir la page (ou la rouvrir dans le même onglet) ramène sur l'écran où on était : écran, scène, onglet et position.
+   Mémorisé par onglet (sessionStorage) : un lancement à froid de l'appli repart de l'accueil. */
+const NAV_KEY = 'repete.nav.' + KEY;
+let navPending = null, navY = 0;
+try { navPending = JSON.parse(sessionStorage.getItem(NAV_KEY) || 'null'); } catch(e) {}
+function navSave(){
+  if (navPending) return;                       // pas avant d'avoir restauré (ou renoncé à restaurer)
+  try {
+    const o = { v: S.view, t: S.tab, y: Math.round(window.scrollY) };
+    if (S.view === 'scene' && S.play && S.scene) { o.p = S.play.id; o.s = S.scene.id; }
+    sessionStorage.setItem(NAV_KEY, JSON.stringify(o));
+  } catch(e) {}
+}
+function tryRestoreNav(){
+  const n = navPending; if (!n) return false;
+  if (n.v === 'badges' || n.v === 'progress' || n.v === 'rank') S.view = n.v;
+  else if (n.v === 'scene') {
+    const pl = LIBRARY.find(p => p.id === n.p), sc = pl && pl.scenes.find(x => x.id === n.s);
+    if (!sc) return false;                      // texte pas encore chargé : on réessaie après le chargement des textes partagés
+    S.play = pl; S.scene = sc;
+    const m = saved.me[key()]; S.me = sc.characters.includes(m) ? m : null;
+    Object.assign(S, { view:'scene', noteK:null, tab:(n.t === 'reh' && S.me) ? 'reh' : 'text', mode:'all', textHide:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set() });
+  }
+  navPending = null; navY = n.y || 0;
+  return true;
+}
+function navScroll(){ if (navY) { const y = navY; navY = 0; requestAnimationFrame(() => window.scrollTo(0, y)); } }
+let navT = 0;
+window.addEventListener('scroll', () => { clearTimeout(navT); navT = setTimeout(navSave, 300); }, { passive: true });
+document.addEventListener('visibilitychange', () => { if (document.hidden) navSave(); });
+window.addEventListener('pagehide', navSave);
 const navDepth = () => !!(S.settings || S.view !== 'library' || S.started || document.querySelector('.rwl.on') || (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()));
 
 /* ===== Textes de la classe : fichier textes-classe.json placé à côté de index.html ===== */
@@ -2088,9 +2121,10 @@ async function loadShared(){
       const r = await fetch(name, { cache:'no-cache' });
       if (!r.ok) break;
       const j = await r.json();
-      if (mergeShared(j)) render();
+      if (mergeShared(j)) { tryRestoreNav(); render(); navScroll(); }
     } catch(e) { break; }
   }
+  if (navPending) { navPending = null; navSave(); }   // scène introuvable : on reste sur l'accueil
 }
 try { loadShared(); } catch(e) {}
 function exportTexts(){
@@ -2217,19 +2251,27 @@ function exitToast(){
 }
 window.addEventListener('popstate', () => {
   if (leaving) return;
+  if (jumping) { jumping = false; hlog('retour à l’entrée de départ'); return; }
   const egg = typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen();
   const deep = navDepth();
-  hlog('retour reçu état=' + hst() + ' écran=' + S.view + (S.settings ? '+réglages' : '') + (egg ? ' jeu' : '') + ' → ' + (egg ? 'ferme le jeu' : deep ? 'ferme l’écran' : Date.now() - exitAt < 2000 ? 'QUITTE' : 'message'));
+  const second = Date.now() - exitAt < 2000;
+  hlog('retour reçu état=' + hst() + ' écran=' + S.view + (S.settings ? '+réglages' : '') + (egg ? ' jeu' : '') + ' → ' + (egg ? 'ferme le jeu' : deep ? 'ferme l’écran' : second ? 'QUITTE' : 'message'));
   if (egg) { RepeteEgg.close(); return; }
   if (deep) { navBack(); return; }
-  if (Date.now() - exitAt < 2000) {   // 2e appui rapproché : on quitte (retour jusqu'avant l'entrée de départ)
+  if (second) {   // 2e appui rapproché (cas rare : il restait des sentinelles) : on quitte
     leaving = true;
     try { history.go(-(curIdx() - baseIdx + 1)); } catch(x) {}
     setTimeout(() => { try { window.close(); } catch(x) {} }, 400);
     setTimeout(() => { leaving = false; }, 1500);
     return;
   }
+  /* Accueil, 1er appui : message, puis retour immédiat à l'entrée de départ. Le 2e appui n'a alors plus rien devant lui
+     et quitte l'appli tout de suite (sinon il fallait traverser toutes les sentinelles : 3 appuis ou plus). */
   exitAt = Date.now(); exitToast();
+  const n = curIdx() - baseIdx;
+  if (n > 0) { jumping = true; try { history.go(-n); } catch(x) { jumping = false; } setTimeout(() => { jumping = false; }, 800); }
+  clearTimeout(rearmT);
+  rearmT = setTimeout(() => { try { if (curIdx() === baseIdx && !leaving) { hlog('message expiré : sentinelle remise'); history.pushState({ k: 'top', i: baseIdx + 1, a: baseIdx }, ''); } } catch(x) {} }, 2300);
 });
 function openSettings(){ if (S.settings) return; S.settings = true; renderSheet(); }
 function closeSettings(){ if (!S.settings) return; S.settings = false; renderSheet(); }
@@ -2296,6 +2338,7 @@ function render(){
   nb.forEach(x => celebrate('badge', { id:x.b.id, name:x.b.name, tier:x.tier, unique:!!x.b.unique, label:x.b.name + (x.b.unique ? '' : ' · ' + TIERS[x.tier - 1]) }));
   $('#app').innerHTML = (ADMIN ? admBar() : '') + (S.view === 'library' ? libView() : S.view === 'badges' ? badgesView() : S.view === 'progress' ? progressView() : S.view === 'rank' ? rankView() : S.view === 'import' ? importView() : sceneView());
   renderSheet();
+  navSave();
 }
 function progText(p, s){
   const n = countLines(s), pr = saved.prog[p.id + '/' + s.id];
@@ -2958,7 +3001,7 @@ document.addEventListener('keydown', e => {
 document.addEventListener('visibilitychange', () => { if (document.hidden) stopSpeech(); else { try { rankSync(); } catch(e) {} } });
 window.addEventListener('online', () => { try { rankSync(); } catch(e) {} });
 try { rankSync(); } catch(e) {}
-render();
+try { if (tryRestoreNav()) { render(); navScroll(); } else render(); } catch(e) { render(); }
 </script>
 <script>
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
