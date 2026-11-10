@@ -366,10 +366,11 @@ h2{font-size:19px;margin:0 0 2px}
 .mlist li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
 .mlist li span{display:inline-flex;align-items:center;gap:6px}.mlist li b{font-size:15px}
 .mlist .mh{display:block;border-top:0;padding:2px 0 2px 18px;font-size:12px;color:var(--mute)}
+.mlist li[hidden]{display:none}
 .mlist .ms{border-top:0;padding:4px 0 4px 18px;font-size:13px}
 .pips{display:inline-flex;gap:3px;margin-right:4px}.pips i{width:9px;height:9px;border-radius:50%;background:color-mix(in srgb,var(--ink) 15%,transparent)}.pips i.on{background:var(--st-known)}
 .mdet{margin:8px 0 2px;background:var(--bg);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--mute);cursor:default}.mdet b{color:var(--ink)}
-.mbar{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:8px 0;background:color-mix(in srgb,var(--ink) 12%,transparent)}
+.mbar{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:8px 0;background:color-mix(in srgb,var(--ink) 16%,transparent)}
 .mbar i{display:block;height:100%}.mbar .solid{background:var(--st-solid)}.mbar .known{background:var(--st-known)}.mbar .ko{background:var(--st-ko)}
 .dn[data-act]{cursor:pointer}
 .sub2p{font-size:13px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}.sub2 .chip.xs{flex:none}.scard .dnrow.b{margin:6px 0 2px}.scard .gorow{margin-top:8px}
@@ -378,7 +379,7 @@ h2{font-size:19px;margin:0 0 2px}
 .wage{margin-left:auto;font-size:12px;color:#B4560A;white-space:nowrap;display:inline-flex;align-items:center;gap:3px}
 .weak > summary{font-weight:600;font-size:13px;color:var(--ko);cursor:pointer;min-height:32px;display:flex;align-items:center}
 .dot{display:inline-block;width:11px;height:11px;border-radius:50%;flex:none;vertical-align:middle}
-.dot.new{border:1.5px solid var(--mute);background:transparent}
+.dot.new{border:1.5px solid color-mix(in srgb,var(--ink) 28%,transparent);background:color-mix(in srgb,var(--ink) 16%,transparent)}
 .dot.ko{background:var(--st-ko)}
 .dot.known{background:var(--st-known)}
 .dot.solid{background:var(--st-solid);box-shadow:0 0 0 1.5px var(--st-ring)}
@@ -2352,7 +2353,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 101, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 102, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
