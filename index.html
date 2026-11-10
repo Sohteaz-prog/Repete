@@ -357,6 +357,7 @@ button.tapk{animation:tapk .18s ease-out}
 .chips.tight.pk{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-top:6px}.chips.tight.pk::-webkit-scrollbar{display:none}.chips.tight.pk .chip{flex:none}
 .rmenu{margin:6px 0 2px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);box-shadow:0 6px 18px rgba(0,0,0,.08);max-width:240px}
 .rmenu button{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:44px;padding:0 14px;border:0;border-top:1px solid var(--line);background:var(--card);color:var(--ink);font:15px system-ui,sans-serif;text-align:left}
+.rmenu.wrm{margin:-4px 0 10px}.rmenu button.no{color:var(--mute)}
 .rmenu button:first-child{border-top:0}.rmenu button.on{font-weight:700;color:var(--accent-ink)}
 .mwin{position:relative;width:100%;max-width:360px;max-height:86vh;overflow:auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:16px 16px 10px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
 .mwin h3{margin:0 36px 2px 0;font-size:17px;display:flex;align-items:center;gap:8px}
@@ -2360,7 +2361,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 112, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 113, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -3258,8 +3259,10 @@ function topBar(extra){
 function sceneView(){
   if (isFocus()) return `<div class="focus">` + topBar(true) + ttsWarn() + (S.done ? doneView() : stepView()) + `</div>`;
   const sc = S.scene;
-  const picker = (S.me && !S.pick)
-    ? `<div class="whoc"><div class="grow"><span class="lbl" style="margin:0">Je joue</span><br><b>${esc(S.me)}</b></div><button class="ghost" data-act="pick">Changer</button></div>`
+  /* 2.02 (M28) : encadré « Je joue » inchangé ; « Changer » ouvre la petite liste comme dans Mes scènes */
+  const picker = S.me
+    ? `<div class="whoc"><div class="grow"><span class="lbl" style="margin:0">Je joue</span><br><b>${esc(S.me)}</b></div><button class="ghost" data-act="pick" aria-expanded="${!!S.pick}">Changer</button></div>`
+      + (S.pick ? `<div class="rmenu wrm" role="listbox" aria-label="Je joue">${sc.characters.map(c => `<button class="${S.me === c ? 'on' : ''}" role="option" aria-selected="${S.me === c}" data-act="me" data-c="${esc(c)}"><span>${esc(c)}</span>${S.me === c ? '<span aria-hidden="true">✓</span>' : ''}</button>`).join('')}<button class="no" role="option" aria-selected="false" data-act="me" data-c=""><span>Aucun</span></button></div>` : '')
     : `<div class="who"><div class="lbl">Je joue</div><div class="chips">
         ${sc.characters.map(c => `<button class="chip sm ${S.me===c?'on':''}" data-act="me" data-c="${esc(c)}">${esc(c)}</button>`).join('')}
         <button class="chip sm ${S.me===null?'on':''}" data-act="me" data-c="">Aucun</button>
@@ -3728,7 +3731,7 @@ document.addEventListener('click', e => {
     case 'setme': saved.me[b.dataset.play + '/' + b.dataset.scene] = b.dataset.c; S.pickK = null; persist(); render(); break;
     case 'back': stopSpeech(); S.view = 'library'; S.started = false; render(); window.scrollTo(0,0); break;
     case 'leave': stopSpeech(); S.started = false; render(); window.scrollTo(0,0); break;
-    case 'pick': S.pick = true; render(); break;
+    case 'pick': S.pick = !S.pick; render(); break;
     case 'me':
       S.me = b.dataset.c || null; S.pick = false; S.mode = (S.me ? S.mode : 'all'); S.revealed = new Set();
       S.started = false; S.steps = []; S.pos = 0; S.done = false; S.missed = new Set();
