@@ -2360,7 +2360,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 110, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 111, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -3566,7 +3566,7 @@ function grade(v){
 function primary(swipe){
   if (!isFocus() || S.done) return;
   const g = gradable(S.steps[S.pos]);
-  if (g && !S.stepRevealed) { S.stepRevealed = true; render(); return; }
+  if (g && !S.stepRevealed) { if (S.cards) stopSpeech(); S.stepRevealed = true; render(); return; }
   if (g) { if (!swipe) grade('ok'); return; }
   step(1);
 }
@@ -3624,6 +3624,7 @@ document.addEventListener('click', e => {
     case 'admquit': try { localStorage.setItem('repete.active', 'main'); } catch(e) {} location.reload(); break;
     case 'adm': { const op = b.dataset.op; let v = b.dataset.v !== undefined ? +b.dataset.v : 0;
       if (b.dataset.in) { const el = document.getElementById(b.dataset.in); if (!el || el.value === '') break; v = Math.max(0, +el.value); if (op === 'mastery') v = Math.min(100, v); }
+      if (op === 'bgreset') { appConfirm('Effacer tous les badges ?\n\nTous les badges et leurs compteurs du profil de test seront remis à zéro.', 'Effacer', () => { admOp('bgreset', 0); admFeedback('bgreset', 0); }, true); break; }
       if (op === 'wipe') { appConfirm('Effacer le profil de test ?\n\nToute la progression du mode admin sera effacée. Ta vraie progression n’est pas touchée.', 'Effacer', () => admOp('wipe', 0), true); break; }
       admOp(op, v); admFeedback(op, v, b.dataset.v); break; }
     case 'badgesopen': S.view = 'badges'; S.bsel = null; render(); window.scrollTo(0, 0); break;
@@ -3758,6 +3759,7 @@ document.addEventListener('click', e => {
     case 'redomiss': { const m = [...S.missed].sort((a, c) => a - c); if (!m.length) break; S.missed = new Set(); S.bilOpen = null; beginSteps(m, 0, false, new Set(m)); break; }
     case 'hint': S.hint = Math.min(2, (S.hint | 0) + 1); render(); break;
     case 'reveal-step': {
+      if (S.cards) stopSpeech();   /* 2.02 : retourner la carte coupe la voix */
       if (S.cards && !S.stepRevealed && animMode() === 'on') { S.stepRevealed = true; const fc = document.querySelector('.fcard'); if (fc) { fc.classList.add('flip'); setTimeout(render, 480); break; } }
       S.stepRevealed = true; render(); break; }
     case 'prev': step(-1); break;
