@@ -168,6 +168,7 @@ h2{font-size:19px;margin:0 0 2px}
 .fwrap{flex:1;display:flex;flex-direction:column;justify-content:center}
 .fcard{perspective:1000px;margin:10px 0 14px;cursor:pointer}
 .fface{position:relative}
+.cur{position:relative}.cur .who2{padding-right:38px}
 .fcard{-webkit-user-select:none;user-select:none}
 .fcard.flip{touch-action:pan-y;cursor:grab}
 .edge{position:fixed;top:0;bottom:0;width:5px;opacity:0;pointer-events:none;z-index:30}
@@ -348,6 +349,20 @@ h2{font-size:19px;margin:0 0 2px}
 .scx{position:absolute;top:2px;right:2px;min-width:40px;min-height:40px;padding:0;color:var(--mute);display:inline-flex;align-items:center;justify-content:center}
 .sub2{display:flex;align-items:center;gap:6px;margin-top:2px;white-space:nowrap;min-width:0}
 .chips.tight.pk{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-top:6px}.chips.tight.pk::-webkit-scrollbar{display:none}.chips.tight.pk .chip{flex:none}
+.rmenu{margin:6px 0 2px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);box-shadow:0 6px 18px rgba(0,0,0,.08);max-width:240px}
+.rmenu button{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:44px;padding:0 14px;border:0;border-top:1px solid var(--line);background:var(--card);color:var(--ink);font:15px system-ui,sans-serif;text-align:left}
+.rmenu button:first-child{border-top:0}.rmenu button.on{font-weight:700;color:var(--accent-ink)}
+.mwin{position:relative;width:100%;max-width:360px;max-height:86vh;overflow:auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:16px 16px 10px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.mwin h3{margin:0 36px 2px 0;font-size:17px;display:flex;align-items:center;gap:8px}
+.mwx{position:absolute;top:6px;right:6px;width:40px;height:40px;border:0;background:none;color:var(--mute);display:inline-flex;align-items:center;justify-content:center}
+.mwinfo{margin:8px 0 2px;padding:8px 10px;border-radius:10px;background:var(--bg);font-size:13px;color:var(--mute)}
+.mbig{display:flex;align-items:baseline;gap:8px;margin:10px 0 4px}.mbig b{font-size:28px}
+.mlist{list-style:none;margin:0;padding:0}
+.mlist li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.mlist li span{display:inline-flex;align-items:center;gap:6px}.mlist li b{font-size:15px}
+.mlist .mh{display:block;border-top:0;padding:2px 0 2px 18px;font-size:12px;color:var(--mute)}
+.mlist .ms{border-top:0;padding:4px 0 4px 18px;font-size:13px}
+.pips{display:inline-flex;gap:3px;margin-right:4px}.pips i{width:9px;height:9px;border-radius:50%;background:color-mix(in srgb,var(--ink) 15%,transparent)}.pips i.on{background:var(--st-known)}
 .mdet{margin:8px 0 2px;background:var(--bg);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--mute);cursor:default}.mdet b{color:var(--ink)}
 .mbar{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:8px 0;background:color-mix(in srgb,var(--ink) 12%,transparent)}
 .mbar i{display:block;height:100%}.mbar .solid{background:var(--st-solid)}.mbar .known{background:var(--st-known)}.mbar .ko{background:var(--st-ko)}
@@ -618,7 +633,9 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:18px}
 .pill{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 14px;border-radius:22px;border:1.5px solid var(--line);background:var(--card);font-weight:600;font-size:14px;text-align:left}
 .pill.done{background:#e1f1e7;border-color:#1f8a5a;color:#14573a}
 .bstrip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:10px}
-.bstrip .medal{width:84%;margin:0 auto 8px}
+.bstrip .bsc{display:flex;align-items:center;justify-content:center;min-width:0}
+.bstrip .medal{width:92%;margin:0 0 8px}
+.bstrip .bsc.u .medal{transform:scale(1.15)}
 /* Classement */
 .rkl{display:flex;flex-direction:column;gap:8px;margin:0 0 12px}
 .rkp{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
@@ -2330,7 +2347,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 97, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 98, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -2954,16 +2971,38 @@ function progData(){
   const pctExact = T ? P / (5 * T) * 100 : 0;
   return { list, T, SOL, KO, withMe, pct: Math.round(pctExact), pctExact, lv: levelInfo(pctExact) };
 }
-/* 2.02 : détail de la maîtrise (toucher l'anneau) */
-function masteryDetail(st){
-  const L = st.lines, c = st.counts, T = st.total || 1, td = today();
-  const b5 = L.filter(l => l.n >= 5 && l.st !== 'ko').length, b34 = L.filter(l => l.st !== 'ko' && l.n >= 3 && l.n <= 4).length, b12 = L.filter(l => l.st !== 'ko' && l.n >= 1 && l.n <= 2).length;
-  const todayN = L.filter(l => l.age === 0).length;
+/* 2.02 : détail de la maîtrise (M20-A) — fenêtre par-dessus, croix, fond et bouton retour la ferment */
+function openMastery(st, title){
+  const L = st.lines, c = st.counts, T = st.total || 1;
+  const kn = n => L.filter(l => l.st === 'known' && l.n === n).length, todayN = L.filter(l => l.age === 0).length;
   const w = n => (n / T * 100).toFixed(1) + '%';
-  return `<div class="mdet" data-act="noop"><b>Maîtrise ${st.pct} %</b> · ${st.total} réplique${st.total > 1 ? 's' : ''}
+  const pips = n => `<span class="pips">${[1, 2, 3, 4, 5].map(x => `<i class="${x <= n ? 'on' : ''}"></i>`).join('')}</span>`;
+  const old = document.getElementById('appcf'); if (old) old.remove();
+  const d = document.createElement('div'); d.id = 'appcf'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); d.setAttribute('aria-label', 'Détail de la maîtrise');
+  d.style.cssText = 'position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(10,8,6,.55)';
+  d.innerHTML = `<div class="mwin"><button type="button" class="mwx" data-cf="no" aria-label="Fermer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <h3>Maîtrise de la scène <button type="button" class="info mwi" aria-label="Comment ça marche ?" aria-expanded="false">i</button></h3>
+    <div class="mute small">${esc(title)}</div>
+    <div class="mwinfo" hidden>Une réplique devient solide après 5 jours de validation différents (« Je connais », un seul par jour). Un « À revoir » la fait reculer de 2 jours, une seule fois par jour. Avec un indice, elle n’avance pas.</div>
+    <div class="mbig"><b>${st.pct} %</b><span class="mute small">${st.total} réplique${st.total > 1 ? 's' : ''}</span></div>
     <div class="mbar"><i class="solid" style="width:${w(c.solid)}"></i><i class="known" style="width:${w(c.known)}"></i><i class="ko" style="width:${w(c.ko)}"></i></div>
-    <div>5/5 : ${b5} · 3–4/5 : ${b34} · 1–2/5 : ${b12} · à revoir : ${c.ko} · nouvelles : ${c.new}</div>
-    <div>Validées aujourd’hui : ${todayN}${st.stale ? ' · à rafraîchir : ' + st.stale : ''}</div></div>`;
+    <ul class="mlist">
+      <li><span><i class="dot solid"></i>Solides</span><b>${c.solid}</b></li>
+      <li><span><i class="dot known"></i>Connues</span><b>${c.known}</b></li>
+      <li class="mh">Jours validés sur les 5 nécessaires pour devenir solide :</li>
+      ${[4, 3, 2, 1].map(n => `<li class="ms"><span>${pips(n)}${n} jour${n > 1 ? 's' : ''} sur 5</span><b>${kn(n)}</b></li>`).join('')}
+      <li><span><i class="dot ko"></i>À revoir</span><b>${c.ko}</b></li>
+      <li><span><i class="dot new"></i>Nouvelles</span><b>${c.new}</b></li>
+      <li><span>${CLOCK} À rafraîchir</span><b>${st.stale}</b></li>
+      <li><span>✓ Validées aujourd’hui</span><b>${todayN}</b></li>
+    </ul></div>`;
+  const close = () => { d.remove(); };
+  d._cancel = close;
+  d.addEventListener('click', e => {
+    const inf = e.target.closest('.mwi'); if (inf) { const x = d.querySelector('.mwinfo'); x.hidden = !x.hidden; inf.setAttribute('aria-expanded', String(!x.hidden)); return; }
+    if (e.target.closest('[data-cf]') || e.target === d) close(); });
+  document.body.appendChild(d);
+  try { d.querySelector('.mwx').focus(); } catch(e) {}
 }
 function donut(st, k){
   const c = st.counts, tot = st.total || 1, C = 213.6, col = { solid:'var(--st-solid)', known:'var(--st-known)', ko:'var(--st-ko)', new:'color-mix(in srgb,var(--ink) 16%,transparent)' };
@@ -2973,7 +3012,7 @@ function donut(st, k){
   const it = (k, n, w) => `<span class="dli"><i class="dot ${k}"></i>${n} ${k === 'ko' ? w : w + (n > 1 ? 's' : '')}</span>`;
   const l1 = [['solid', c.solid, 'solide'], ['known', c.known, 'connue']].filter(x => x[1]).map(x => it(...x)).join('<span class="dsep">·</span>');
   const l2 = [['ko', c.ko, 'à revoir'], ['new', c.new, 'nouvelle']].filter(x => x[1]).map(x => it(...x)).join('<span class="dsep">·</span>');
-  return `<div class="dnrow b"><div class="dn" ${k ? `data-act="mdet" data-k="${esc(k)}" role="button" aria-label="Détail de la maîtrise" aria-expanded="${S.mDet === k}"` : ''}><svg width="64" height="64" viewBox="0 0 80 80" role="img" aria-label="Statut des répliques">${segs}</svg><div class="dnt"><b>${st.pct} %</b></div></div><div class="dnlg b">${l1 ? `<div>${l1}</div>` : ''}${l2 ? `<div>${l2}</div>` : ''}</div></div>`;
+  return `<div class="dnrow b"><div class="dn" ${k ? `data-act="mdet" data-k="${esc(k)}" role="button" aria-label="Détail de la maîtrise"` : ''}><svg width="64" height="64" viewBox="0 0 80 80" role="img" aria-label="Statut des répliques">${segs}</svg><div class="dnt"><b>${st.pct} %</b></div></div><div class="dnlg b">${l1 ? `<div>${l1}</div>` : ''}${l2 ? `<div>${l2}</div>` : ''}</div></div>`;
 }
 function mineView(){
   const D = progData(), list = D.list;
@@ -2990,10 +3029,10 @@ function mineView(){
     h += `<section class="card scard" data-act="open" ${at} role="link" aria-label="Ouvrir le texte de ${esc(s.title)}"><div class="sct1"><h2 class="one">${esc(s.title)}</h2>
         <button class="ghost scx" data-act="scremove" ${at} data-t="${esc(s.title)}" aria-label="Retirer de mes scènes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
       <div class="sub2"><span class="sub2p">${esc(p.title)}</span>${st ? `<span class="mute small">·</span><button class="chip xs" data-act="pickme" data-k="${esc(k)}" aria-expanded="${S.pickK === k}" aria-label="Personnage joué : ${esc(st.c)}. Changer">${esc(st.c)}${s.characters.length > 1 ? ' ⇅' : ''}</button>` : ''}</div>
-      ${st && S.pickK === k && s.characters.length > 1 ? `<div class="chips tight pk" role="group" aria-label="Je joue">${s.characters.map(c => `<button class="chip sm ${st.c === c ? 'on' : ''}" data-act="setme" ${at} data-c="${esc(c)}" aria-pressed="${st.c === c}">${esc(c)}</button>`).join('')}</div>` : ''}`;
+      ${st && S.pickK === k && s.characters.length > 1 ? `<div class="rmenu" role="listbox" aria-label="Je joue" data-act="noop">${s.characters.map(c => `<button class="${st.c === c ? 'on' : ''}" role="option" aria-selected="${st.c === c}" data-act="setme" ${at} data-c="${esc(c)}"><span>${esc(c)}</span>${st.c === c ? '<span aria-hidden="true">✓</span>' : ''}</button>`).join('')}</div>` : ''}`;
     if (!st) h += `<div class="lbl">Je joue</div><div class="chips">${s.characters.map(c => `<button class="chip sm" data-act="setme" ${at} data-c="${esc(c)}">${esc(c)}</button>`).join('')}</div><p class="hint" style="margin:10px 0 0">Choisis ton personnage pour voir ta progression.</p>`;
     else {
-      h += (st.total ? donut(st, k) + (S.mDet === k ? masteryDetail(st) : '') : `<p class="hint" style="margin:10px 0 0">${esc(st.c)} n’a aucune réplique dans cette scène.</p>`) +
+      h += (st.total ? donut(st, k) : `<p class="hint" style="margin:10px 0 0">${esc(st.c)} n’a aucune réplique dans cette scène.</p>`) +
         `
         ${st.total ? `<div class="gorow"><button class="btn go cardsb" data-act="open" data-go="1" data-cards="1" ${at}>${ICO_CARDS}<span style="margin-left:6px">Cartes</span></button><button class="btn pri go" data-act="open" data-go="1" ${at}>${PLAY}<span style="margin-left:6px">Répéter</span></button></div>` : ''}`;
       if (st.total) h += weakList(s, st, k);
@@ -3159,9 +3198,9 @@ function progressView(){
   }
   const got = BADGES.filter(b => bg[b.id]).length;
   h += `<section class="card bgcard" data-act="badgesopen"><button class="hdtog" data-act="badgesopen"><span class="lbl" style="margin:0">Mes badges · ${got} / ${BADGES.length}</span><span class="tg">Tout voir ›</span></button>
-    <div class="bstrip">${BADGES.map(b => medal(b, bg[b.id] || 0)).join('')}</div></section>
+    <div class="bstrip">${BADGES.map(b => `<span class="bsc ${b.unique ? 'u' : ''}">${medal(b, bg[b.id] || 0)}</span>`).join('')}</div></section>
     ${rankCard()}
-    <p class="mute small" style="margin:4px 4px 16px">Une réplique devient solide après 5 jours de validation différents. Un « À revoir » la fait reculer de 2 jours (une seule fois par jour).</p>`;
+`;
   return h;
 }
 function libView(){
@@ -3423,7 +3462,7 @@ function stepView(){
       <div class="small">${w.length} mot${w.length>1?'s':''}${S.hint ? ' · indice ' + S.hint + ' / 2' : ' · touche la carte pour la révéler'}</div>
       ${S.hint >= 2 ? '' : `<div class="row2"><button class="btn sm" data-act="hint">${S.hint ? 'Indice suivant' : 'Indice'}</button></div>`}</div>`;
   } else {
-    card = `<div class="cur ${mine?'me':''}"><div class="who2"><span class="num">${lineNo(si)}</span>${esc(it.c)}${mine?' · toi':''}${noteBtn(it, 'c' + si)}${!mine?`<button class="mini" data-act="${synth ? 'speak' : 'nosound'}" data-i="${si}">${SPK}<span style="margin-left:5px">Réécouter</span></button>`:''}</div>
+    card = `<div class="cur ${mine?'me':''}"><div class="who2"><span class="num">${lineNo(si)}</span>${esc(it.c)}${mine?' · toi':''}${noteBtn(it, 'c' + si)}</div>${!mine ? cardSpk(si) : ''}
       ${fmt(it.t)}${noteBox(it, 'c' + si)}${mine ? rehNote(si) : ''}</div>`;
   }
   const prevBtn = `<button class="btn sq" data-act="prev" ${S.pos===0?'disabled':''} aria-label="Réplique précédente">‹</button>`;
@@ -3638,7 +3677,8 @@ document.addEventListener('click', e => {
       if (!list.length) { render(); break; }
       S.missed = new Set(); beginSteps(list, 0, false, null, true); break; }
     case 'noop': break;
-    case 'mdet': S.mDet = S.mDet === b.dataset.k ? null : b.dataset.k; render(); break;
+    case 'mdet': { const k = b.dataset.k, cut = k.indexOf('/'), pl = LIBRARY.find(p => p.id === k.slice(0, cut)), sc = pl && pl.scenes.find(x => x.id === k.slice(cut + 1));
+      if (!pl || !sc) break; const st = stats(pl, sc); if (st) openMastery(st, sc.title + ' · ' + st.c); break; }
     case 'weaktog': S.weakK = S.weakK === b.dataset.k ? null : b.dataset.k; render(); break;
     case 'weaktab': S.weakTab = S.weakTab || {}; S.weakTab[b.dataset.k] = b.dataset.v; render(); break;
     case 'admbg': { const x = BADGES.find(y => y.id === b.dataset.b), t = +b.dataset.v; saved.bg = saved.bg || {}; saved.bgc = saved.bgc || {};
