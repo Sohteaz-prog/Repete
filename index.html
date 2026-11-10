@@ -102,6 +102,7 @@ h2{font-size:19px;margin:0 0 2px}
 .script p{margin:0}
 .line{border-left:4px solid transparent;padding:8px 10px 8px 12px;margin:2px 0;border-radius:10px}
 .line.me{background:var(--me-bg);border-left-color:var(--me-bd)}
+.script.nohl .line.me{background:transparent;border-left-color:transparent}
 .who2{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:700 12px system-ui,sans-serif;text-transform:uppercase;
   letter-spacing:.08em;color:var(--mute);margin-bottom:2px}
 .line.me .who2{color:var(--mute)}
@@ -308,6 +309,7 @@ h2{font-size:19px;margin:0 0 2px}
 .gck{width:22px;height:22px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);display:inline-flex;align-items:center;justify-content:center;flex:none;font-size:13px;font-weight:700;color:#fff}
 .gst.ok .gck{background:#3B8A2E;border-color:#3B8A2E}.gst.ok{color:var(--mute)}
 .cbleg{display:flex;gap:12px;margin-top:8px;font-size:13px;color:var(--mute);white-space:nowrap}.cbleg span{display:inline-flex;align-items:center;gap:5px}
+.btn.dgr{background:#C2403A;border-color:#C2403A;color:#fff}
 .btn.soft{background:var(--accent-bg);border-color:transparent;color:var(--accent-ink)}
 .iconb{display:inline-flex;align-items:center;justify-content:center;gap:6px}
 .gsb{width:100%;background:none;border:0;text-align:left;color:var(--ink);cursor:pointer;padding:7px 0;font:inherit;font-size:15px}
@@ -342,7 +344,8 @@ h2{font-size:19px;margin:0 0 2px}
 .wseg{margin:4px 0 6px}.wseg button{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:38px;font-size:13px}
 .card.scard{padding:10px 14px 8px}.scard .bar2{margin-bottom:2px}
 .sct1{display:flex;align-items:center;gap:4px}.sct1 h2{flex:1;min-width:0;margin:0}
-.scx{flex:none;min-width:36px;min-height:36px;padding:0;color:var(--mute);display:inline-flex;align-items:center;justify-content:center}
+.card.scard{position:relative}.sct1{padding-right:28px}
+.scx{position:absolute;top:2px;right:2px;min-width:40px;min-height:40px;padding:0;color:var(--mute);display:inline-flex;align-items:center;justify-content:center}
 .sub2{display:flex;align-items:center;gap:6px;margin-top:2px;white-space:nowrap;min-width:0}
 .chips.tight.pk{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-top:6px}.chips.tight.pk::-webkit-scrollbar{display:none}.chips.tight.pk .chip{flex:none}
 .mdet{margin:8px 0 2px;background:var(--bg);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--mute);cursor:default}.mdet b{color:var(--ink)}
@@ -372,7 +375,7 @@ h2{font-size:19px;margin:0 0 2px}
 .hdtog{display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0 0 2px;min-height:32px;text-align:left}
 .vhelp{font-size:14px;color:var(--mute)}.vhelp summary{cursor:pointer;color:var(--accent-ink);font-weight:600;min-height:36px;display:flex;align-items:center}.vhelp p{margin:6px 0}
 .hdtog .tg{font-size:13px;font-weight:700;color:var(--accent-ink)}
-.rkcard{cursor:pointer}
+.rkcard,.bgcard{cursor:pointer}
 .rkc{display:flex;align-items:center;gap:12px;margin:6px 0 8px}
 .rkpl{font-size:32px;font-weight:800;color:var(--accent-ink);line-height:1}.rkpl sup{font-size:14px}
 .rkv{display:flex;justify-content:space-between;padding:6px 8px;border-radius:8px;font-size:14px;color:var(--mute)}
@@ -614,8 +617,8 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:18px}
 .pills .pill{width:100%;border-radius:14px}
 .pill{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 14px;border-radius:22px;border:1.5px solid var(--line);background:var(--card);font-weight:600;font-size:14px;text-align:left}
 .pill.done{background:#e1f1e7;border-color:#1f8a5a;color:#14573a}
-.bstrip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;margin-top:10px}
-.bstrip .medal{width:100%;margin:0 0 8px}
+.bstrip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:10px}
+.bstrip .medal{width:84%;margin:0 auto 8px}
 /* Classement */
 .rkl{display:flex;flex-direction:column;gap:8px;margin:0 0 12px}
 .rkp{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
@@ -2327,7 +2330,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 95, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 97, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -2438,7 +2441,7 @@ function appConfirm(msg, okLabel, onOk, danger){
   const old = document.getElementById('appcf'); if (old) old.remove();
   const d = document.createElement('div'); d.id = 'appcf'; d.setAttribute('role', 'alertdialog'); d.setAttribute('aria-modal', 'true');
   d.style.cssText = 'position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(10,8,6,.55)';
-  d.innerHTML = '<div style="width:100%;max-width:340px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:20px 18px 16px;box-shadow:0 10px 30px rgba(0,0,0,.35)"><p style="margin:4px 0 18px;font-size:17px;line-height:1.4;font-weight:600;text-align:center;white-space:pre-line"></p><div style="display:flex;gap:10px"><button type="button" data-cf="no" class="btn" style="flex:1;min-height:48px">Annuler</button><button type="button" data-cf="ok" class="btn ' + (danger ? 'ko' : 'pri') + '" style="flex:1;min-height:48px;font-size:16px"></button></div></div>';
+  d.innerHTML = '<div style="width:100%;max-width:340px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:20px 18px 16px;box-shadow:0 10px 30px rgba(0,0,0,.35)"><p style="margin:4px 0 18px;font-size:17px;line-height:1.4;font-weight:600;text-align:center;white-space:pre-line"></p><div style="display:flex;gap:10px"><button type="button" data-cf="no" class="btn" style="flex:1;min-height:48px">Annuler</button><button type="button" data-cf="ok" class="btn ' + (danger ? 'dgr' : 'pri') + '" style="flex:1;min-height:48px;font-size:16px"></button></div></div>';
   d.querySelector('p').textContent = msg; d.querySelector('[data-cf=ok]').textContent = okLabel || 'OK';
   const close = () => { d.remove(); };
   d._cancel = close;
@@ -3155,10 +3158,10 @@ function progressView(){
       <p><b>Série.</b> Une journée compte quand tu as noté l’équivalent de 15 % de ton texte. Un jour d’absence est toléré, deux d’affilée cassent la série.</p></div>` : ''}</section>`;
   }
   const got = BADGES.filter(b => bg[b.id]).length;
-  h += `<section class="card"><button class="hdtog" data-act="badgesopen"><span class="lbl" style="margin:0">Mes badges · ${got} / ${BADGES.length}</span><span class="tg">Tout voir ›</span></button>
+  h += `<section class="card bgcard" data-act="badgesopen"><button class="hdtog" data-act="badgesopen"><span class="lbl" style="margin:0">Mes badges · ${got} / ${BADGES.length}</span><span class="tg">Tout voir ›</span></button>
     <div class="bstrip">${BADGES.map(b => medal(b, bg[b.id] || 0)).join('')}</div></section>
     ${rankCard()}
-    <p class="mute small" style="margin:4px 4px 16px">Une réplique devient solide après 5 jours de validation différents. Chaque « À revoir » la fait reculer de 2 jours.</p>`;
+    <p class="mute small" style="margin:4px 4px 16px">Une réplique devient solide après 5 jours de validation différents. Un « À revoir » la fait reculer de 2 jours (une seule fois par jour).</p>`;
   return h;
 }
 function libView(){
@@ -3278,13 +3281,14 @@ function textView(){
     </div>
     <label class="sw"><input type="checkbox" data-act="thide" ${S.textHide?'checked':''} ${S.me?'':'disabled'}> Cacher mes répliques</label>
     <label class="sw"><input type="checkbox" data-act="showprog" ${saved.showProg && S.me ? 'checked' : ''} ${S.me ? '' : 'disabled'}> Voir ma progression</label>
+    <label class="sw"><input type="checkbox" data-act="hlme" ${saved.noHl ? '' : 'checked'} ${S.me ? '' : 'disabled'}> Surligner mes répliques</label>
     ${S.stMap ? `<div class="pgl"><span><i class="dot new"></i>nouvelle</span><span><i class="dot ko"></i>à revoir</span><span><i class="dot known"></i>connue</span><span><i class="dot solid"></i>solide</span></div>` : ''}
     ${S.textHide && S.revealed.size ? `<div><button class="mini big" data-act="rehide">Recacher tout</button></div>` : ''}
     ${S.mode==='mine' ? `<label class="sw"><input type="checkbox" data-act="cue" ${S.cue?'checked':''}> Montrer la fin de la réplique qui précède</label>` : ''}
   </div>`;
   if (notesCount()) h += `<div style="margin:0 0 8px"><button class="nlb" data-act="nlist">${NOTES_IC}Notes · ${notesCount()}</button></div>`;
   if (!S.me) h += `<p class="hint">Choisis ton personnage ci-dessus pour surligner tes répliques.</p>`;
-  h += `<div class="script">`;
+  h += `<div class="script ${saved.noHl ? 'nohl' : ''}">`;
   let prev = -1;
   items.forEach((it, i) => {
     if (it.k === 'dir') { if (S.mode === 'all') h += `<p class="dir">${fmt(dirTxt(it.t))}</p>`; return; }
@@ -3713,6 +3717,7 @@ document.addEventListener('change', e => {
       persist(); t.value = '';
       appAlert((n ? n + ' scène(s) ajoutée(s).' : 'Rien de nouveau.') + (bad ? '\n' + bad + ' fichier(s) illisible(s) ignoré(s).' : ''), null, !!bad); render(); }); return; }
   if (a === 'showprog') { saved.showProg = t.checked; persist(); render(); }
+  else if (a === 'hlme') { saved.noHl = !t.checked; persist(); render(); }
   else if (a === 'thide') { S.textHide = t.checked; S.revealed = new Set(); render(); }
   else if (a === 'cue') { S.cue = t.checked; render(); }
   else if (a === 'boldck') { S.bold = t.checked; persist(); render(); }
@@ -3743,7 +3748,7 @@ document.addEventListener('touchend', e => {
 }, {passive:true});
 document.addEventListener('touchend', e => {
   if (!isFocus() || S.done) return;
-  if (S.cards && e.target.closest && e.target.closest('.fcard')) return;
+  if (S.cards) return;
   const t = e.changedTouches[0], dx = t.clientX - tx, dy = t.clientY - ty;
   if (Math.abs(dx) < 70 || Math.abs(dy) > 60 || Date.now() - tt > 600) return;
   if (dx < 0) primary(true); else step(-1);
