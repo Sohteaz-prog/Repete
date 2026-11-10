@@ -356,7 +356,8 @@ h2{font-size:19px;margin:0 0 2px}
 .rmenu button:first-child{border-top:0}.rmenu button.on{font-weight:700;color:var(--accent-ink)}
 .mwin{position:relative;width:100%;max-width:360px;max-height:86vh;overflow:auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:16px 16px 10px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
 .mwin h3{margin:0 36px 2px 0;font-size:17px;display:flex;align-items:center;gap:8px}
-.mwx{position:absolute;top:6px;right:6px;width:40px;height:40px;border:0;background:none;color:var(--mute);display:inline-flex;align-items:center;justify-content:center}
+.mwx{position:absolute;top:6px;right:6px;width:40px;height:40px;border:0;background:none;color:var(--mute);display:inline-flex;align-items:center;justify-content:center;padding:0;-webkit-tap-highlight-color:transparent}
+.mwx:focus{outline:none}.mwx:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .mwinfo{list-style:none;margin:6px 0 8px;padding:8px 10px;border-radius:10px;background:var(--bg);font-size:13px;color:var(--mute)}
 .mwinfo li{padding:3px 0}.mwinfo b{color:var(--ink);font-weight:600}
 .mwi{margin-left:auto;align-self:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--mute);font:italic 600 12px Georgia,serif;display:inline-flex;align-items:center;justify-content:center;padding:0}
@@ -379,7 +380,7 @@ h2{font-size:19px;margin:0 0 2px}
 .wage{margin-left:auto;font-size:12px;color:#B4560A;white-space:nowrap;display:inline-flex;align-items:center;gap:3px}
 .weak > summary{font-weight:600;font-size:13px;color:var(--ko);cursor:pointer;min-height:32px;display:flex;align-items:center}
 .dot{display:inline-block;width:11px;height:11px;border-radius:50%;flex:none;vertical-align:middle}
-.dot.new{border:1.5px solid color-mix(in srgb,var(--ink) 28%,transparent);background:color-mix(in srgb,var(--ink) 16%,transparent)}
+.dot.new{border:0;background:color-mix(in srgb,var(--ink) 16%,transparent)}
 .dot.ko{background:var(--st-ko)}
 .dot.known{background:var(--st-known)}
 .dot.solid{background:var(--st-solid);box-shadow:0 0 0 1.5px var(--st-ring)}
@@ -439,6 +440,8 @@ h2{font-size:19px;margin:0 0 2px}
 .admsec > .lbl:first-child{color:color-mix(in srgb,#7C5CFF 75%,var(--ink))}
 .admrow{display:grid;grid-template-columns:1fr 84px 52px;gap:8px;align-items:center;margin-bottom:8px;font-size:14px}
 .admgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.admsw{grid-column:1/3;position:relative;color:var(--mute)}.admsw svg{position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none}
+.admsel{-webkit-appearance:none;appearance:none;width:100%;min-height:44px;padding:0 38px 0 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:600 15px system-ui,sans-serif}.admsel:focus{outline:none}.admsel:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .hlog{margin:6px 0 8px;padding:8px;max-height:220px;overflow:auto;white-space:pre-wrap;word-break:break-word;font:11px/1.35 ui-monospace,Menlo,Consolas,monospace;background:var(--card);border:1.5px solid var(--line);border-radius:10px;color:var(--ink)}
 .admb{min-height:40px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font-weight:600;font-size:13px;padding:6px 8px}
 .admsec .flash{background:var(--accent-bg);border-color:var(--accent);transition:none}
@@ -589,14 +592,14 @@ h2{font-size:19px;margin:0 0 2px}
 @keyframes bdRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 }
 
-.rwl{--rbg:#f6efe0;--ink:#2a2016;--ink2:#7a6850;--accent:#c4670a;--lit:#e9962a;--wall:#2b2019;--gold:#eba73f;--gold-line:#6d4208;--spark:#d98a14;--edge:rgba(60,40,10,.18);--sil1:#76767c;--sil2:#3e3e43;--sil3:#8a8a91;--shadow:rgba(60,35,10,.35);--mtext:var(--mt-l)}
-:root[data-theme=dark] .rwl{--rbg:#171513;--ink:#f5ebd7;--ink2:#bfae91;--accent:#f0a23b;--lit:#ffc56b;--wall:#0e0c0a;--gold:#c8841f;--gold-line:#ffdca0;--spark:#ffd27d;--edge:rgba(255,230,180,.16);--sil1:#55555c;--sil2:#2b2b30;--sil3:#6c6c74;--shadow:rgba(0,0,0,.6)}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .rwl{--rbg:#171513;--ink:#f5ebd7;--ink2:#bfae91;--accent:#f0a23b;--lit:#ffc56b;--wall:#0e0c0a;--gold:#c8841f;--gold-line:#ffdca0;--spark:#ffd27d;--edge:rgba(255,230,180,.16);--sil1:#55555c;--sil2:#2b2b30;--sil3:#6c6c74;--shadow:rgba(0,0,0,.6)}}
+.rwl{--rbg:#faf7f2;--rbo:70%;--ink:#2a2016;--ink2:#7a6850;--accent:#c4670a;--lit:#e9962a;--wall:#2b2019;--gold:#eba73f;--gold-line:#6d4208;--spark:#d98a14;--edge:rgba(60,40,10,.18);--sil1:#76767c;--sil2:#3e3e43;--sil3:#8a8a91;--shadow:rgba(60,35,10,.35);--mtext:var(--mt-l)}
+:root[data-theme=dark] .rwl{--rbg:#171513;--rbo:70%;--ink:#f5ebd7;--ink2:#bfae91;--accent:#f0a23b;--lit:#ffc56b;--wall:#0e0c0a;--gold:#c8841f;--gold-line:#ffdca0;--spark:#ffd27d;--edge:rgba(255,230,180,.16);--sil1:#55555c;--sil2:#2b2b30;--sil3:#6c6c74;--shadow:rgba(0,0,0,.6)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .rwl{--rbg:#171513;--rbo:70%;--ink:#f5ebd7;--ink2:#bfae91;--accent:#f0a23b;--lit:#ffc56b;--wall:#0e0c0a;--gold:#c8841f;--gold-line:#ffdca0;--spark:#ffd27d;--edge:rgba(255,230,180,.16);--sil1:#55555c;--sil2:#2b2b30;--sil3:#6c6c74;--shadow:rgba(0,0,0,.6)}}
 .rwl [class*="t-"]{--mtext:var(--mt-l)}
 :root[data-theme=dark] .rwl [class*="t-"]{--mtext:var(--mt-d)}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]) .rwl [class*="t-"]{--mtext:var(--mt-d)}}
 /* fond uni, translucide, plein écran : laisse deviner la fenêtre ouverte derrière (teinte selon le thème) */
-.rwl{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--rbg) 80%,transparent);-webkit-backdrop-filter:blur(1.5px);backdrop-filter:blur(1.5px);-webkit-tap-highlight-color:transparent;opacity:0;transition:opacity .25s}
+.rwl{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--rbg) var(--rbo),transparent);-webkit-backdrop-filter:blur(1.5px);backdrop-filter:blur(1.5px);-webkit-tap-highlight-color:transparent;opacity:0;transition:opacity .25s}
 .rwl.on{opacity:1}
 .rwc{transform:translateY(calc(var(--dy,0px) * -1)) scale(var(--k,1));transform-origin:center}
 .rwl.rw-still *{animation:none!important}
@@ -2279,27 +2282,27 @@ function admPanel(){
         <button class="admb" data-act="adm" data-op="stale">Quelques « À rafraîchir »</button>
         <button class="admb" data-act="adm" data-op="rand" style="grid-column:1/3">Progression au hasard</button>
       </div>
-      <div class="lbl" style="margin:12px 0 6px">Badges (palier)</div>
-      ${BADGES.map(x => `<div class="admbt"><span>${esc(x.name)}</span><div class="seg sm">${(x.unique ? [0, 1] : [0, 1, 2, 3, 4, 5]).map(t => `<button class="${((saved.bg || {})[x.id] || 0) === t ? 'on' : ''}" data-act="admbg" data-b="${x.id}" data-v="${t}">${x.unique ? (t ? 'Oui' : 'Non') : t}</button>`).join('')}</div></div>`).join('')}`)}
-    ${sec('bg', 'Badges et animations', 'compteurs, tests d’animation', `
+      `)}
+    ${sec('badges', 'Badges', 'paliers, effacer', `
+      <div class="lbl" style="margin:0 0 6px">Palier de chaque badge</div>
+      ${BADGES.map(x => `<div class="admbt"><span>${esc(x.name)}</span><div class="seg sm">${(x.unique ? [0, 1] : [0, 1, 2, 3, 4, 5]).map(t => `<button class="${((saved.bg || {})[x.id] || 0) === t ? 'on' : ''}" data-act="admbg" data-b="${x.id}" data-v="${t}">${x.unique ? (t ? 'Oui' : 'Non') : t}</button>`).join('')}</div></div>`).join('')}
+      <button class="admb" style="width:100%;margin-top:10px" data-act="admcnt" aria-expanded="${!!S.admCnt}">Compteurs exacts ${S.admCnt ? '⌃' : '⌄'}</button>
+      ${S.admCnt ? `<div style="margin-top:6px">
       ${row('Série max (jours)', 'adm-bs', '0 – 60', 'bgstreak')}
       ${row('Jours d’objectif', 'adm-bo', '0 – 50', 'bgobj')}
       ${row('Scènes jouées', 'adm-bn', '0 – 150', 'bgscenes')}
-      ${row('Solides (% du texte)', 'adm-bp', '0 – 100', 'bgsolid')}
-      <div class="admgrid" style="margin-bottom:10px">
-        <button class="admb" data-act="adm" data-op="bgperfect">Scène parfaite</button>
-        <button class="admb" data-act="adm" data-op="bgready">Prêt pour le jour J</button>
-        <button class="admb dng" data-act="adm" data-op="bgreset" style="grid-column:1/3">Effacer tous les badges</button>
-      </div>
+      ${row('Solides (% du texte)', 'adm-bp', '0 – 100', 'bgsolid')}</div>` : ''}
+      <button class="admb dng" style="width:100%;margin-top:10px" data-act="adm" data-op="bgreset">Effacer tous les badges</button>`)}
+    ${sec('anim', 'Animations', 'tester les animations', `
       <div class="admgrid">
-        <div class="lbl" style="grid-column:1/3;margin:6px 0 0">Animations · titre</div>
-        <div class="seg sm" style="grid-column:1/3;flex-wrap:wrap">${TITLE_IDX.map((t, i) => `<button class="${(S.admT || 3) === i ? 'on' : ''}" data-act="admpick" data-k="admT" data-v="${i}">${esc(t)}</button>`).join('')}</div>
+        <div class="lbl" style="grid-column:1/3;margin:0">Titre</div>
+        <div class="admsw"><select class="admsel" data-act="admpicks" data-k="admT" aria-label="Titre à tester">${TITLE_IDX.map((t, i) => `<option value="${i}"${(S.admT ?? 3) === i ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></div>
         <div class="lbl" style="grid-column:1/3;margin:6px 0 0">Badge</div>
-        <div class="seg sm" style="grid-column:1/3;flex-wrap:wrap">${BADGES.map((x, i) => `<button class="${(S.admB || 0) === i ? 'on' : ''}" data-act="admpick" data-k="admB" data-v="${i}">${esc(x.name)}</button>`).join('')}</div>
+        <div class="admsw"><select class="admsel" data-act="admpicks" data-k="admB" aria-label="Badge à tester">${BADGES.map((x, i) => `<option value="${i}"${(S.admB || 0) === i ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}</select><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></div>
         <div class="lbl" style="grid-column:1/3;margin:6px 0 0">Palier${BADGES[S.admB || 0].unique ? ' (sans objet : badge unique)' : ''}</div>
         <div class="seg sm" style="grid-column:1/3">${TIERS.map((t, i) => `<button class="${(S.admTier || 3) === i + 1 ? 'on' : ''}" data-act="admpick" data-k="admTier" data-v="${i + 1}">${t}</button>`).join('')}</div>
-        <button class="admb" data-act="admanim" data-v="applause">Tester : scène terminée</button>
-        <button class="admb" data-act="admanim" data-v="title">Tester : nouveau titre</button>
+        <button class="admb" data-act="admanim" data-v="applause" style="grid-column:1/3">Tester : scène terminée</button>
+        <button class="admb" data-act="admanim" data-v="title" style="grid-column:1/3">Tester : nouveau titre</button>
         <button class="admb" data-act="admanim" data-v="badge" style="grid-column:1/3">Tester : badge obtenu</button>
         <button class="admb" data-act="admanim" data-v="allbadges">Enchaîner les 6 badges</button>
         <button class="admb" data-act="admanim" data-v="alltiers">Enchaîner les 5 paliers</button>
@@ -2353,7 +2356,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 102, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 109, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -3015,7 +3018,6 @@ function openMastery(st, title){
     const kn = e.target.closest('.mkn'); if (kn) { const op = kn.getAttribute('aria-expanded') !== 'true'; kn.setAttribute('aria-expanded', String(op)); d.querySelectorAll('.ms').forEach(x => { x.hidden = !op; }); return; }
     if (e.target.closest('[data-cf]') || e.target === d) close(); });
   document.body.appendChild(d);
-  try { d.querySelector('.mwx').focus(); } catch(e) {}
 }
 function donut(st, k){
   const c = st.counts, tot = st.total || 1, C = 213.6, col = { solid:'var(--st-solid)', known:'var(--st-known)', ko:'var(--st-ko)', new:'color-mix(in srgb,var(--ink) 16%,transparent)' };
@@ -3507,7 +3509,7 @@ function doneView(){
     return `<li><span class="bq"><b>${lineNo(i)}</b> · « ${esc(tail(items[i].t))} »</span><span class="bt2"><i class="dot ${f.st}"></i>${lab(f)}${same ? ' · inchangée' : ` → <i class="dot ${t.st}"></i>${t.st === 'ko' ? 'à revoir' : lab(t)}`}</span></li>`; };
   const row = (k, dot, label, arr) => arr.length ? `<div class="bsec ${S.bilOpen === k ? 'open' : ''}"><button class="bsh" data-act="bilsec" data-k="${k}" aria-expanded="${S.bilOpen === k}">${dot}<span>${label}</span><b>${arr.length}</b><svg class="gch" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>${S.bilOpen === k ? `<ul class="bls">${arr.map(tr).join('')}</ul>` : ''}</div>` : '';
   const body = row('solid', '<i class="dot solid"></i>', 'Devenues solides', solid) + row('up', '<i class="dot known"></i>', 'Ont progressé', up)
-    + row('hint', '<i class="dot new" style="border-style:dashed"></i>', 'Avec indice', hinted) + row('ko', '<i class="dot ko"></i>', 'À revoir', ko);
+    + row('hint', '<i class="dot new" style="border:1.5px dashed var(--mute);background:transparent"></i>', 'Avec indice', hinted) + row('ko', '<i class="dot ko"></i>', 'À revoir', ko);
   return `<div class="card"><h2>Scène terminée</h2>
     <p class="mute" style="margin:2px 0 6px">${mineTotal} réplique${mineTotal > 1 ? 's' : ''} · ${sansAide} sue${sansAide > 1 ? 's' : ''} sans aide</p>
     ${body || '<p class="mute">Aucune réplique notée pendant cette séance.</p>'}
@@ -3572,17 +3574,10 @@ document.addEventListener('click', e => {
   if (!b || b.tagName === 'INPUT' || b.tagName === 'SELECT') return;
   const a = b.dataset.act;
   if (a === 'noop') return;
-  /* Panneau admin : tous les boutons réagissent pareil (même vibration, même éclair de 150 ms, puis plus rien) */
+  /* Panneau admin : même vibration pour tous les boutons (l'éclair de surbrillance est retiré : l'animation au toucher suffit) */
   const admSec = b.closest('.admsec');
   if (a !== 'admtap' && !b.classList.contains('sh-back')) buzz(a === 'adm' || admSec ? 'ok' : 'tap');
-  if (admSec) {
-    const idx = Array.prototype.indexOf.call(admSec.querySelectorAll('.admb, .seg button'), b);
-    try { b.blur(); } catch(x) {}
-    if (idx >= 0) setTimeout(() => {
-      const el = document.querySelectorAll('.admsec .admb, .admsec .seg button')[idx];
-      if (el) { el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 150); }
-    }, 0);
-  }
+  if (admSec) { try { b.blur(); } catch(x) {} }
   switch (a) {
     case 'setanim': saved.anim = b.dataset.v; persist(); render(); break;
     case 'admpick': S[b.dataset.k] = +b.dataset.v; renderSheet(); break;
@@ -3698,6 +3693,7 @@ document.addEventListener('click', e => {
     case 'admbg': { const x = BADGES.find(y => y.id === b.dataset.b), t = +b.dataset.v; saved.bg = saved.bg || {}; saved.bgc = saved.bgc || {};
       saved.bg[x.id] = t; saved.bgc[x.id] = x.unique ? t : (t ? x.T[t - 1] : 0); persist(); renderSheet(); render(); admToast(x.name + ' : ' + (x.unique ? (t ? 'obtenu' : 'retiré') : 'palier ' + t)); break; }
     case 'admwarn': appAlert('Exemple de message d’erreur : ce fichier est illisible.', null, true); break;
+    case 'admcnt': S.admCnt = !S.admCnt; renderSheet(); break;
     case 'admsec': S.admSec = S.admSec === b.dataset.k ? null : b.dataset.k; renderSheet(); break;
     case 'guidelib': saved.libTab = 'all'; persist(); render(); window.scrollTo(0, 0); break;
     case 'guideme': { const k = (saved.mine || [])[0]; if (!k) { saved.libTab = 'all'; persist(); render(); break; }
@@ -3778,6 +3774,7 @@ document.addEventListener('change', e => {
       });
       persist(); t.value = '';
       appAlert((n ? n + ' scène(s) ajoutée(s).' : 'Rien de nouveau.') + (bad ? '\n' + bad + ' fichier(s) illisible(s) ignoré(s).' : ''), null, !!bad); render(); }); return; }
+  if (a === 'admpicks') { S[t.dataset.k] = +t.value; renderSheet(); return; }
   if (a === 'showprog') { saved.showProg = t.checked; persist(); render(); }
   else if (a === 'hlme') { saved.noHl = !t.checked; persist(); render(); }
   else if (a === 'thide') { S.textHide = t.checked; S.revealed = new Set(); render(); }
