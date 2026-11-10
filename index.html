@@ -242,7 +242,11 @@ h2{font-size:19px;margin:0 0 2px}
 .gorow{display:flex;gap:8px;margin-top:10px}
 .btn.go.cardsb{background:var(--card);border:1.5px solid var(--accent);color:var(--accent-ink)}
 .card.scard{cursor:pointer}
-.btn:active,.chip:active,.mdc:active,.la:active,.admb:active{transform:scale(.97);filter:brightness(.95)}
+button:not(:disabled):active{transform:scale(.97);filter:brightness(.95)}
+button{transition:transform .08s,filter .08s}
+/* 2.02 : animation au toucher rejouée après le clic, même si l'écran a été redessiné */
+@keyframes tapk{0%{transform:scale(.96);filter:brightness(.94)}100%{transform:none;filter:none}}
+button.tapk{animation:tapk .18s ease-out}
 .btn,.chip,.mdc,.la,.admb{transition:transform .08s,filter .08s}.gorow .btn.go{flex:1;padding:0 10px}.gorow .btn.go svg{width:20px;height:20px}
 .btn.go{display:inline-flex;align-items:center;justify-content:center}
 .nbub{display:flex;align-items:flex-start;gap:10px;margin-top:8px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 12px;font:13.5px/1.45 system-ui,sans-serif;text-transform:none;letter-spacing:0;color:var(--ink)}
@@ -2271,7 +2275,7 @@ function admPanel(){
   const sec = (k, t, sub, body) => `<div class="adms ${S.admSec === k ? 'open' : ''}"><button class="admsh" data-act="admsec" data-k="${k}" aria-expanded="${S.admSec === k}"><span><b>${t}</b><small>${sub}</small></span><svg class="gch" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>${S.admSec === k ? `<div class="admsb">${body}</div>` : ''}</div>`;
   return `<div class="admsec"><div class="lbl">Mode admin · profil de test · v${APP_LABEL}</div>
     <div class="mute small" style="margin-bottom:6px">Jour simulé : <b>${today()}</b>. Rien ici ne touche à ta vraie progression.</div>
-    ${sec('prog', 'Simuler la progression', 'maîtrise, niveau, série, à revoir', `
+    ${sec('prog', 'Simuler la progression', 'Maîtrise, niveau, série, à revoir', `
       ${row('Maîtrise globale (%)', 'adm-m', '0 – 100', 'mastery')}
       ${row('Niveau', 'adm-l', '0 – 50', 'level')}
       ${row('Série (jours, jusqu’à hier)', 'adm-s', '0 – 60', 'streak')}
@@ -2283,7 +2287,7 @@ function admPanel(){
         <button class="admb" data-act="adm" data-op="rand" style="grid-column:1/3">Progression au hasard</button>
       </div>
       `)}
-    ${sec('badges', 'Badges', 'paliers, effacer', `
+    ${sec('badges', 'Badges', 'Paliers, effacer', `
       <div class="lbl" style="margin:0 0 6px">Palier de chaque badge</div>
       ${BADGES.map(x => `<div class="admbt"><span>${esc(x.name)}</span><div class="seg sm">${(x.unique ? [0, 1] : [0, 1, 2, 3, 4, 5]).map(t => `<button class="${((saved.bg || {})[x.id] || 0) === t ? 'on' : ''}" data-act="admbg" data-b="${x.id}" data-v="${t}">${x.unique ? (t ? 'Oui' : 'Non') : t}</button>`).join('')}</div></div>`).join('')}
       <button class="admb" style="width:100%;margin-top:10px" data-act="admcnt" aria-expanded="${!!S.admCnt}">Compteurs exacts ${S.admCnt ? '⌃' : '⌄'}</button>
@@ -2293,7 +2297,7 @@ function admPanel(){
       ${row('Scènes jouées', 'adm-bn', '0 – 150', 'bgscenes')}
       ${row('Solides (% du texte)', 'adm-bp', '0 – 100', 'bgsolid')}</div>` : ''}
       <button class="admb dng" style="width:100%;margin-top:10px" data-act="adm" data-op="bgreset">Effacer tous les badges</button>`)}
-    ${sec('anim', 'Animations', 'tester les animations', `
+    ${sec('anim', 'Animations', 'Tester les animations', `
       <div class="admgrid">
         <div class="lbl" style="grid-column:1/3;margin:0">Titre</div>
         <div class="admsw"><select class="admsel" data-act="admpicks" data-k="admT" aria-label="Titre à tester">${TITLE_IDX.map((t, i) => `<option value="${i}"${(S.admT ?? 3) === i ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></div>
@@ -2307,7 +2311,7 @@ function admPanel(){
         <button class="admb" data-act="admanim" data-v="allbadges">Enchaîner les 6 badges</button>
         <button class="admb" data-act="admanim" data-v="alltiers">Enchaîner les 5 paliers</button>
       </div>`)}
-    ${sec('day', 'Date du jour', 'jour −1, +1, +7, remise à zéro', `
+    ${sec('day', 'Date du jour', 'Jour −1, +1, +7, remise à zéro', `
       <div class="admgrid">
         <button class="admb" data-act="adm" data-op="shift" data-v="-1">Jour −1</button>
         <button class="admb" data-act="adm" data-op="shift" data-v="1">Jour +1</button>
@@ -2315,10 +2319,10 @@ function admPanel(){
         <button class="admb" data-act="adm" data-op="shift" data-v="0">Jour réel</button>
         <button class="admb" data-act="adm" data-op="resetday" style="grid-column:1/3">Remettre aujourd’hui à zéro</button>
       </div>`)}
-    ${sec('guide', 'Guide de démarrage', 'rejouer le guide', `
+    ${sec('guide', 'Guide de démarrage', 'Rejouer le guide', `
       <div class="mute small" style="margin-bottom:8px">Vide « Mes scènes », les personnages choisis et la progression du profil de test (les badges restent), puis réaffiche le guide.</div>
       <button class="admb" style="width:100%" data-act="adm" data-op="guide">Rejouer le guide</button>`)}
-    ${sec('diag', 'Diagnostic', 'hors ligne, vibration, message d’erreur', `
+    ${sec('diag', 'Diagnostic', 'Hors ligne, vibration, message d’erreur', `
       <div class="admrow"><span>${offMsg || 'Mode hors ligne'}</span><button class="admb" data-act="chkoff">Vérifier</button></div>
       <button class="admb" style="width:100%;margin-top:8px" data-act="admwarn">Tester un message d’erreur</button>
       <button class="admb" style="width:100%;margin-top:8px" data-act="vibetest">Tester la vibration · réglage : ${esc((HAPTICS.find(h => h[0] === hapticMode()) || [0, '?'])[1])}</button>
@@ -2356,7 +2360,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 109, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 110, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -3567,6 +3571,14 @@ function primary(swipe){
   step(1);
 }
 
+/* 2.02 : animation au toucher pour tous les boutons ; si l'écran est redessiné par l'action, on la rejoue sur le bouton équivalent */
+function tapAnim(b){
+  const sel = 'button' + Object.keys(b.dataset).map(k => '[data-' + k.replace(/[A-Z]/g, m => '-' + m.toLowerCase()) + '="' + CSS.escape(b.dataset[k]) + '"]').join('');
+  requestAnimationFrame(() => { let el = b.isConnected ? b : null;
+    if (!el) { try { el = document.querySelector(sel); } catch(x) {} }
+    if (!el) return; el.classList.remove('tapk'); void el.offsetWidth; el.classList.add('tapk');
+    el.addEventListener('animationend', () => el.classList.remove('tapk'), { once:true }); });
+}
 document.addEventListener('click', e => {
   if (S.bsel === 'scenes' && e.target.closest && e.target.closest('.bov .bigart')) { try { RepeteEgg.tap(); } catch(x) {} }
   if (soundOn()) { try { RepeteSons.unlock(); } catch(x) {} }
@@ -3578,6 +3590,7 @@ document.addEventListener('click', e => {
   const admSec = b.closest('.admsec');
   if (a !== 'admtap' && !b.classList.contains('sh-back')) buzz(a === 'adm' || admSec ? 'ok' : 'tap');
   if (admSec) { try { b.blur(); } catch(x) {} }
+  if (b.tagName === 'BUTTON') tapAnim(b);
   switch (a) {
     case 'setanim': saved.anim = b.dataset.v; persist(); render(); break;
     case 'admpick': S[b.dataset.k] = +b.dataset.v; renderSheet(); break;
