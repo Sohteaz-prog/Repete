@@ -310,7 +310,9 @@ h2{font-size:19px;margin:0 0 2px}
 .gck{width:22px;height:22px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);display:inline-flex;align-items:center;justify-content:center;flex:none;font-size:13px;font-weight:700;color:#fff}
 .gst.ok .gck{background:#3B8A2E;border-color:#3B8A2E}.gst.ok{color:var(--mute)}
 .cbleg{display:flex;gap:12px;margin-top:8px;font-size:13px;color:var(--mute);white-space:nowrap}.cbleg span{display:inline-flex;align-items:center;gap:5px}
-.btn.dgr{background:#C2403A;border-color:#C2403A;color:#fff}
+.btn.dgr{background:#FFF5F5;border:2.5px solid #C2403A;color:#B1252B;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+:root[data-theme=dark] .btn.dgr{background:#3A2526;border-color:#E5484D;color:#F6A5A7}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .btn.dgr{background:#3A2526;border-color:#E5484D;color:#F6A5A7}}
 .btn.soft{background:var(--accent-bg);border-color:transparent;color:var(--accent-ink)}
 .iconb{display:inline-flex;align-items:center;justify-content:center;gap:6px}
 .gsb{width:100%;background:none;border:0;text-align:left;color:var(--ink);cursor:pointer;padding:7px 0;font:inherit;font-size:15px}
@@ -355,7 +357,10 @@ h2{font-size:19px;margin:0 0 2px}
 .mwin{position:relative;width:100%;max-width:360px;max-height:86vh;overflow:auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:16px 16px 10px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
 .mwin h3{margin:0 36px 2px 0;font-size:17px;display:flex;align-items:center;gap:8px}
 .mwx{position:absolute;top:6px;right:6px;width:40px;height:40px;border:0;background:none;color:var(--mute);display:inline-flex;align-items:center;justify-content:center}
-.mwinfo{margin:8px 0 2px;padding:8px 10px;border-radius:10px;background:var(--bg);font-size:13px;color:var(--mute)}
+.mwinfo{list-style:none;margin:6px 0 8px;padding:8px 10px;border-radius:10px;background:var(--bg);font-size:13px;color:var(--mute)}
+.mwinfo li{padding:3px 0}.mwinfo b{color:var(--ink);font-weight:600}
+.mwi{margin-left:auto;align-self:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--mute);font:italic 600 12px Georgia,serif;display:inline-flex;align-items:center;justify-content:center;padding:0}
+.mkn{cursor:pointer}.mkn .gch{color:var(--mute);transition:transform .15s}.mkn[aria-expanded=true] .gch{transform:rotate(180deg)}
 .mbig{display:flex;align-items:baseline;gap:8px;margin:10px 0 4px}.mbig b{font-size:28px}
 .mlist{list-style:none;margin:0;padding:0}
 .mlist li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
@@ -2347,7 +2352,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 98, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 101, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -2460,6 +2465,7 @@ function appConfirm(msg, okLabel, onOk, danger){
   d.style.cssText = 'position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(10,8,6,.55)';
   d.innerHTML = '<div style="width:100%;max-width:340px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:20px 18px 16px;box-shadow:0 10px 30px rgba(0,0,0,.35)"><p style="margin:4px 0 18px;font-size:17px;line-height:1.4;font-weight:600;text-align:center;white-space:pre-line"></p><div style="display:flex;gap:10px"><button type="button" data-cf="no" class="btn" style="flex:1;min-height:48px">Annuler</button><button type="button" data-cf="ok" class="btn ' + (danger ? 'dgr' : 'pri') + '" style="flex:1;min-height:48px;font-size:16px"></button></div></div>';
   d.querySelector('p').textContent = msg; d.querySelector('[data-cf=ok]').textContent = okLabel || 'OK';
+  if (danger) d.querySelector('[data-cf=ok]').insertAdjacentHTML('afterbegin', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>');
   const close = () => { d.remove(); };
   d._cancel = close;
   d.addEventListener('click', e => { const t = e.target.closest('[data-cf]'); if (t && t.dataset.cf === 'ok') { close(); onOk(); } else if (t || e.target === d) close(); });
@@ -2981,16 +2987,21 @@ function openMastery(st, title){
   const d = document.createElement('div'); d.id = 'appcf'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); d.setAttribute('aria-label', 'Détail de la maîtrise');
   d.style.cssText = 'position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(10,8,6,.55)';
   d.innerHTML = `<div class="mwin"><button type="button" class="mwx" data-cf="no" aria-label="Fermer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-    <h3>Maîtrise de la scène <button type="button" class="info mwi" aria-label="Comment ça marche ?" aria-expanded="false">i</button></h3>
+    <h3>Maîtrise de la scène</h3>
     <div class="mute small">${esc(title)}</div>
-    <div class="mwinfo" hidden>Une réplique devient solide après 5 jours de validation différents (« Je connais », un seul par jour). Un « À revoir » la fait reculer de 2 jours, une seule fois par jour. Avec un indice, elle n’avance pas.</div>
-    <div class="mbig"><b>${st.pct} %</b><span class="mute small">${st.total} réplique${st.total > 1 ? 's' : ''}</span></div>
+    <div class="mbig"><b>${st.pct} %</b><span class="mute small">${st.total} réplique${st.total > 1 ? 's' : ''}</span><button type="button" class="mwi" aria-label="Comment ça marche ?" aria-expanded="false">i</button></div>
+    <ul class="mwinfo" hidden>
+      <li><b>Je connais</b> : +1 jour (un seul par jour).</li>
+      <li><b>Solide</b> : 5 jours validés, sur des jours différents.</li>
+      <li><b>À revoir</b> : −2 jours, une seule fois par jour.</li>
+      <li><b>Avec un indice</b> : la réplique n’avance pas.</li>
+      <li><b>À rafraîchir</b> : pas validée depuis 7 jours.</li>
+    </ul>
     <div class="mbar"><i class="solid" style="width:${w(c.solid)}"></i><i class="known" style="width:${w(c.known)}"></i><i class="ko" style="width:${w(c.ko)}"></i></div>
     <ul class="mlist">
       <li><span><i class="dot solid"></i>Solides</span><b>${c.solid}</b></li>
-      <li><span><i class="dot known"></i>Connues</span><b>${c.known}</b></li>
-      <li class="mh">Jours validés sur les 5 nécessaires pour devenir solide :</li>
-      ${[4, 3, 2, 1].map(n => `<li class="ms"><span>${pips(n)}${n} jour${n > 1 ? 's' : ''} sur 5</span><b>${kn(n)}</b></li>`).join('')}
+      <li class="mkn" role="button" aria-expanded="false" tabindex="0"><span><i class="dot known"></i>Connues <svg class="gch" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span><b>${c.known}</b></li>
+      ${[4, 3, 2, 1].map(n => `<li class="ms" hidden><span>${pips(n)}${n} jour${n > 1 ? 's' : ''} sur 5</span><b>${kn(n)}</b></li>`).join('')}
       <li><span><i class="dot ko"></i>À revoir</span><b>${c.ko}</b></li>
       <li><span><i class="dot new"></i>Nouvelles</span><b>${c.new}</b></li>
       <li><span>${CLOCK} À rafraîchir</span><b>${st.stale}</b></li>
@@ -3000,6 +3011,7 @@ function openMastery(st, title){
   d._cancel = close;
   d.addEventListener('click', e => {
     const inf = e.target.closest('.mwi'); if (inf) { const x = d.querySelector('.mwinfo'); x.hidden = !x.hidden; inf.setAttribute('aria-expanded', String(!x.hidden)); return; }
+    const kn = e.target.closest('.mkn'); if (kn) { const op = kn.getAttribute('aria-expanded') !== 'true'; kn.setAttribute('aria-expanded', String(op)); d.querySelectorAll('.ms').forEach(x => { x.hidden = !op; }); return; }
     if (e.target.closest('[data-cf]') || e.target === d) close(); });
   document.body.appendChild(d);
   try { d.querySelector('.mwx').focus(); } catch(e) {}
@@ -3215,7 +3227,7 @@ function guideSteps(){
   const mine = saved.mine || [], meSet = mine.some(k => saved.me && saved.me[k]);
   const played = !!((saved.bgc && saved.bgc.scenes) || Object.values(saved.lines || {}).some(L => Object.keys(L || {}).length));
   const inst = isStandalone();
-  return [[inst, 'Installe l’appli sur ton téléphone', 'guideinst'], [mine.length > 0, 'Ajoute une scène depuis la Bibliothèque (étoile)'], [meSet, 'Choisis ton personnage'], [played, 'Fais ta première répétition']];
+  return [[inst, 'Installe l’appli sur ton téléphone', 'guideinst'], [mine.length > 0, 'Ajoute une scène depuis la Bibliothèque (étoile)', 'guidelib'], [meSet, 'Choisis ton personnage', 'guideme'], [played, 'Fais ta première répétition', 'guideplay']];
 }
 function guideCard(){
   if (saved.guideDone) return '';
@@ -3603,6 +3615,7 @@ document.addEventListener('click', e => {
     case 'admquit': try { localStorage.setItem('repete.active', 'main'); } catch(e) {} location.reload(); break;
     case 'adm': { const op = b.dataset.op; let v = b.dataset.v !== undefined ? +b.dataset.v : 0;
       if (b.dataset.in) { const el = document.getElementById(b.dataset.in); if (!el || el.value === '') break; v = Math.max(0, +el.value); if (op === 'mastery') v = Math.min(100, v); }
+      if (op === 'wipe') { appConfirm('Effacer le profil de test ?\n\nToute la progression du mode admin sera effacée. Ta vraie progression n’est pas touchée.', 'Effacer', () => admOp('wipe', 0), true); break; }
       admOp(op, v); admFeedback(op, v, b.dataset.v); break; }
     case 'badgesopen': S.view = 'badges'; S.bsel = null; render(); window.scrollTo(0, 0); break;
     case 'importopen': S.imp = S.imp || impNew(); S.imp.step = 1; S.view = 'import'; render(); window.scrollTo(0, 0); break;
@@ -3685,6 +3698,14 @@ document.addEventListener('click', e => {
       saved.bg[x.id] = t; saved.bgc[x.id] = x.unique ? t : (t ? x.T[t - 1] : 0); persist(); renderSheet(); render(); admToast(x.name + ' : ' + (x.unique ? (t ? 'obtenu' : 'retiré') : 'palier ' + t)); break; }
     case 'admwarn': appAlert('Exemple de message d’erreur : ce fichier est illisible.', null, true); break;
     case 'admsec': S.admSec = S.admSec === b.dataset.k ? null : b.dataset.k; renderSheet(); break;
+    case 'guidelib': saved.libTab = 'all'; persist(); render(); window.scrollTo(0, 0); break;
+    case 'guideme': { const k = (saved.mine || [])[0]; if (!k) { saved.libTab = 'all'; persist(); render(); break; }
+      saved.libTab = 'mine'; S.pickK = (saved.me && saved.me[k]) ? k : null; persist(); render(); window.scrollTo(0, 0); break; }
+    case 'guideplay': { const k = (saved.mine || []).find(x => saved.me && saved.me[x]) || (saved.mine || [])[0]; if (!k) { saved.libTab = 'all'; persist(); render(); break; }
+      const cut = k.indexOf('/'), pl = LIBRARY.find(p => p.id === k.slice(0, cut)), sc = pl && pl.scenes.find(x => x.id === k.slice(cut + 1)); if (!pl || !sc) break;
+      S.play = pl; S.scene = sc; S.me = saved.me[k] || null;
+      Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, tab: S.me ? 'reh' : 'text', rmode:'reh', mode:'all', textHide:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set()});
+      render(); window.scrollTo(0, 0); break; }
     case 'guideinst': openSettings(); S.setSec = 'data'; renderSheet(); break;
     case 'guideskip': saved.guideDone = true; persist(); render(); break;
     case 'libtab': saved.libTab = b.dataset.v; persist(); render(); window.scrollTo(0,0); break;
