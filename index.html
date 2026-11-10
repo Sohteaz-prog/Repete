@@ -44,6 +44,7 @@
 }
 :root[data-theme=dark]{--bg:#211e1a;--card:#2b2723;--ink:#efe9e0;--mute:#aaa195;--line:#3e3933;--accent:var(--ad0,#f5a300);--accent-ink:var(--ad1,#f5b335);--accent-bg:var(--ad2,#3a2d10);--on-accent:var(--ad3,#2a1a00);--ok:#6fcf9a;--ko:#f0907f;}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+.thsw *,.thsw *::before,.thsw *::after{transition:none!important}
 html,body{margin:0;background:var(--bg);color:var(--ink);
   font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 #app{max-width:640px;margin:0 auto;padding:12px 14px calc(24px + env(safe-area-inset-bottom));min-height:100vh}
@@ -61,7 +62,7 @@ h2{font-size:19px;margin:0 0 2px}
 .row .mute{font-size:13px}
 .tip{font-size:13px;color:var(--mute);margin-top:16px}
 
-.bar{display:flex;align-items:center;gap:8px;margin:2px 0 10px}
+.bar{display:flex;align-items:center;gap:8px;margin:8px 0 10px}
 .bt{font-weight:650;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ghost{background:none;border:0;padding:10px 6px;color:var(--accent-ink);font-weight:600;min-height:44px}
 .ghost.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;padding:6px 8px 6px 0;flex:none}
@@ -167,12 +168,14 @@ h2{font-size:19px;margin:0 0 2px}
 .fcard{perspective:1000px;margin:10px 0 14px;cursor:pointer}
 .fface{position:relative}
 .fcard:not(.flip) .fback,.fcard.flip .fface:not(.fback){pointer-events:none}
-.fspk{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;z-index:1}
+.fspk{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;z-index:1;padding:0}
+.fspk::before{content:'';position:absolute;inset:-8px}
+.fspk svg{width:15px;height:15px}
 .fback .fspk{background:color-mix(in srgb,var(--card) 60%,transparent)}
-.fk{padding-right:44px}
+.fk{padding-right:36px}
 .fin{display:grid;transition:transform .45s ease;transform-style:preserve-3d}
 .fcard.flip .fin{transform:rotateY(180deg)}
-.fface{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;min-height:220px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:18px 16px;display:flex;flex-direction:column}
+.fface{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;min-height:280px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:18px 16px;display:flex;flex-direction:column}
 .fback{transform:rotateY(180deg);background:var(--accent-bg);border-color:var(--accent)}
 .fk{font:700 12px system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
 .fback .fk{color:var(--accent-ink)}
@@ -220,8 +223,8 @@ h2{font-size:19px;margin:0 0 2px}
 .who2 .mini{min-height:24px;height:24px;padding:0 6px;border-radius:7px;font-size:11.5px;font-weight:400;display:inline-flex;align-items:center}
 .nb.has{background:var(--card);border-color:var(--line);color:var(--mute);font-weight:600;height:28px;padding:0 8px}
 .line[data-act=lineopen]{cursor:pointer}
-.lacts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-family:system-ui,sans-serif}
-.la{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:600 13px system-ui,sans-serif}
+.lacts{display:flex;flex-wrap:nowrap;gap:6px;margin-top:8px;font-family:system-ui,sans-serif}
+.la{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:1 1 auto;min-width:0;white-space:nowrap;min-height:40px;padding:0 8px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:600 13px system-ui,sans-serif}
 .la svg{width:16px;height:16px}
 .txl{color:var(--accent-ink);font-weight:600}
 .txb{flex:none;font-size:15px;padding:6px 4px;min-height:36px}
@@ -295,6 +298,10 @@ h2{font-size:19px;margin:0 0 2px}
 .gst{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:15px}
 .gck{width:22px;height:22px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);display:inline-flex;align-items:center;justify-content:center;flex:none;font-size:13px;font-weight:700;color:#fff}
 .gst.ok .gck{background:#3B8A2E;border-color:#3B8A2E}.gst.ok{color:var(--mute)}
+.cbleg{display:flex;gap:12px;margin-top:8px;font-size:13px;color:var(--mute);white-space:nowrap}.cbleg span{display:inline-flex;align-items:center;gap:5px}
+.btn.soft{background:var(--accent-bg);border-color:transparent;color:var(--accent-ink)}
+.iconb{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.gsb{width:100%;background:none;border:0;text-align:left;color:var(--ink);cursor:pointer;padding:7px 0;font:inherit;font-size:15px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .plh{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:0;text-align:left;color:inherit;cursor:pointer}
 .plh > span{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.plh h2{margin:0}
@@ -324,7 +331,12 @@ h2{font-size:19px;margin:0 0 2px}
 .wsum{display:flex;align-items:center;gap:6px;width:100%;min-height:32px;background:none;border:0;padding:0;text-align:left;font-weight:600;font-size:13px;color:var(--ink);cursor:pointer}
 .wsum .wch{color:var(--mute);transition:transform .15s}.weak.open .wsum .wch{transform:rotate(180deg)}
 .wseg{margin:4px 0 6px}.wseg button{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:38px;font-size:13px}
-.card.scard{padding:10px 14px 8px}.scard .bar2{margin-bottom:2px}.scard .dnrow.b{margin:6px 0 2px}.scard .gorow{margin-top:8px}
+.card.scard{padding:10px 14px 8px}.scard .bar2{margin-bottom:2px}
+.sct1{display:flex;align-items:center;gap:4px}.sct1 h2{flex:1;min-width:0;margin:0}
+.scx{flex:none;min-width:36px;min-height:36px;padding:0;color:var(--mute);display:inline-flex;align-items:center;justify-content:center}
+.sub2{display:flex;align-items:center;gap:6px;margin-top:2px;white-space:nowrap;min-width:0}
+.sub2p{font-size:13px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}.sub2 .chip.xs{flex:none}.scard .dnrow.b{margin:6px 0 2px}.scard .gorow{margin-top:8px}
+.wcards{width:100%;margin:8px 0 4px}.wcards svg{width:18px;height:18px}
 .wage{margin-left:auto;font-size:12px;color:#B4560A;white-space:nowrap;display:inline-flex;align-items:center;gap:3px}
 .weak > summary{font-weight:600;font-size:13px;color:var(--ko);cursor:pointer;min-height:32px;display:flex;align-items:center}
 .dot{display:inline-block;width:11px;height:11px;border-radius:50%;flex:none;vertical-align:middle}
@@ -345,6 +357,7 @@ h2{font-size:19px;margin:0 0 2px}
 .hdtog{display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0 0 2px;min-height:32px;text-align:left}
 .vhelp{font-size:14px;color:var(--mute)}.vhelp summary{cursor:pointer;color:var(--accent-ink);font-weight:600;min-height:36px;display:flex;align-items:center}.vhelp p{margin:6px 0}
 .hdtog .tg{font-size:13px;font-weight:700;color:var(--accent-ink)}
+.rkcard{cursor:pointer}
 .rkc{display:flex;align-items:center;gap:12px;margin:6px 0 8px}
 .rkpl{font-size:32px;font-weight:800;color:var(--accent-ink);line-height:1}.rkpl sup{font-size:14px}
 .rkv{display:flex;justify-content:space-between;padding:6px 8px;border-radius:8px;font-size:14px;color:var(--mute)}
@@ -382,7 +395,8 @@ h2{font-size:19px;margin:0 0 2px}
 .admask input,.admrow input{min-height:40px;font-size:16px;padding:6px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);width:100%}
 .admbar{position:sticky;top:0;z-index:6;display:flex;justify-content:space-between;align-items:center;gap:8px;margin:-4px -4px 10px;padding:6px 10px;border-radius:10px;background:#3b3b46;color:#fff;font-size:12px}
 .admbar button{background:rgba(255,255,255,.18);border:0;color:#fff;border-radius:8px;padding:6px 10px;font-weight:700;min-height:32px}
-.admsec{margin-top:22px;padding-top:14px;border-top:1.5px dashed var(--line)}
+.admsec{margin-top:22px;padding:12px 12px 14px;border:1.5px dashed color-mix(in srgb,#7C5CFF 55%,var(--line));border-radius:14px;background:color-mix(in srgb,#7C5CFF 7%,var(--card))}
+.admsec > .lbl:first-child{color:color-mix(in srgb,#7C5CFF 75%,var(--ink))}
 .admrow{display:grid;grid-template-columns:1fr 84px 52px;gap:8px;align-items:center;margin-bottom:8px;font-size:14px}
 .admgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
 .hlog{margin:6px 0 8px;padding:8px;max-height:220px;overflow:auto;white-space:pre-wrap;word-break:break-word;font:11px/1.35 ui-monospace,Menlo,Consolas,monospace;background:var(--card);border:1.5px solid var(--line);border-radius:10px;color:var(--ink)}
@@ -1869,6 +1883,7 @@ const mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)')
 const isDark = () => saved.theme === 'dark' || ((saved.theme || 'auto') === 'auto' && !!(mq && mq.matches));
 function applyTheme(){
   const root = document.documentElement, t = saved.theme || 'auto';
+  root.classList.add('thsw'); requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('thsw')));
   if (t === 'auto') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', t);
   /* 2.01 : les deux jeux de couleurs sont posés ; c'est le CSS (clair / sombre) qui choisit, pour ne jamais mélanger les deux */
   const c = COLORS.find(x => x.id === saved.color) || COLORS[0];
@@ -1966,7 +1981,7 @@ function sheetInner(){
       <div class="script sh-prev"><p class="dir" style="margin:10px 0 0">${fmt(dirTxt('Elle le dévisage, scandalisée.'))}</p></div>
       <div class="lbl">Daltonisme</div>
       <div class="seg sm">${CB_MODES.map(([id, n]) => `<button class="${(saved.cb || '') === id ? 'on' : ''}" data-act="setcb" data-v="${id}">${n}</button>`).join('')}</div>
-      <div class="mute small" style="margin-top:6px">${saved.cb ? 'Couleurs adaptées et formes en plus : losange = à revoir, rond = connue, étoile = solide.' : 'Change les couleurs des niveaux et ajoute des formes pour les distinguer.'}</div>`)}
+      <div class="cbleg"><span><i class="dot ko"></i>À revoir</span><span><i class="dot known"></i>Connue</span><span><i class="dot solid"></i>Solide</span><span><i class="dot new"></i>Nouvelle</span></div>`)}
       ${secBlock('anim', 'sparkles', 'Animations', nm(ANIM_MODES, animMode()) + ' · Vibration ' + nm(HAPTICS, hapticMode()).toLowerCase(), `
       <div class="lbl">Animations</div>
       <div class="seg sm">${ANIM_MODES.map(([id, n]) => `<button class="${animMode() === id ? 'on' : ''}" data-act="setanim" data-v="${id}">${n}</button>`).join('')}</div>
@@ -1979,6 +1994,7 @@ function sheetInner(){
       <div class="lbl">Date objectif</div>
       <input type="date" class="dateinp" data-act="goaldate" value="${saved.goalDate}" aria-label="Date objectif">`)}
       ${secBlock('data', 'database', 'Données', 'Sauvegarde · Installation', `
+      ${installBlock()}
       <div class="lbl">Sauvegarde</div>
       <div class="mute small" style="margin:-4px 0 8px">Garde tes données en lieu sûr, ou passe-les d’un téléphone à l’autre. Les fichiers restent chez toi.</div>
       <button class="btn sm" style="width:100%;margin-bottom:8px" data-act="expall">Tout sauvegarder</button>
@@ -1986,8 +2002,7 @@ function sheetInner(){
       <div class="mute small" style="margin:4px 0 6px">Ou un seul élément :</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" style="flex:1 1 140px" data-act="expprog">Exporter ma progression</button><button class="btn sm" style="flex:1 1 140px" data-act="expnotes">Exporter mes notes</button></div>
       <div class="mute small" style="margin-top:12px">Importer une progression</div><input type="file" accept=".json,application/json" data-act="impprog">
-      <div class="mute small" style="margin-top:10px">Importer des notes</div><input type="file" accept=".json,application/json" data-act="impnotes">
-      ${installBlock()}`)}
+      <div class="mute small" style="margin-top:10px">Importer des notes</div><input type="file" accept=".json,application/json" data-act="impnotes">`)}
       ${updateBlock()}
       ${ADMIN ? admPanel() : `<div class="admtap" data-act="admtap">Répète · v${APP_LABEL}</div>${S.admAsk ? `<div class="admask"><input id="admcode" type="password" inputmode="numeric" autocomplete="off" placeholder="Code" aria-label="Code"><button class="ghost" data-act="admgo">OK</button></div>${S.admErr ? '<div class="mute small">Code incorrect.</div>' : ''}` : ''}`}`;
 }
@@ -2136,7 +2151,7 @@ function admToast(msg){
 function admFeedback(op, v, raw){
   const M = { mastery:'Maîtrise réglée à ' + v + ' % (niveau ' + lvlOf(v) + ')', level:'Niveau réglé à ' + Math.min(50, v | 0),
     streak:'Série de ' + v + ' jour' + (v > 1 ? 's' : '') + ' jusqu’à hier', lit:'Série validée pour aujourd’hui', objdone:'Objectif du jour atteint',
-    ko:'Quelques répliques passées en « À revoir »', stale:'Répliques passées en « À rafraîchir »', resetday:'Aujourd’hui remis à zéro', guide:'Guide réaffiché (profil de test vidé)',
+    ko:'Quelques répliques passées en « À revoir »', stale:'Quelques répliques passées en « À rafraîchir »', rand:'Progression mélangée au hasard', resetday:'Aujourd’hui remis à zéro', guide:'Guide réaffiché (profil de test vidé)',
     bgstreak:'Série max : ' + v, bgobj:'Jours d’objectif : ' + v, bgscenes:'Scènes jouées : ' + v, bgsolid:'Solides : ' + v + ' %', bgperfect:'Scène parfaite débloquée', bgready:'Prêt pour le jour J débloqué', bgreset:'Badges effacés',
     shift: saved.dayShift ? 'Jour simulé : ' + today() : 'Retour au jour réel : ' + today() };
   if (op === 'wipe') return;
@@ -2166,7 +2181,12 @@ function admOp(op, v){
   } else if (op === 'level') { saved.levelMax = Math.max(0, Math.min(50, v | 0)); }
   else if (op === 'ko') { admPrepare(); admLines().forEach((x, j) => { if (j % 5 === 0) { const m = saved.lines[mKey(x.p, x.s, x.c)] = saved.lines[mKey(x.p, x.s, x.c)] || {}; m[x.i] = { n:0, ok:null, ko:true, g:null }; } }); }
   else if (op === 'stale') { admPrepare(); const old = new Date(dayNum(day) * 86400000 - 8 * 86400000).toISOString().slice(0, 10);
-    admLines().forEach(x => { const r = (saved.lines[mKey(x.p, x.s, x.c)] || {})[x.i]; if (r && !r.ko && r.n >= 1) r.ok = old; }); }
+    admLines().forEach((x, j) => { const r = (saved.lines[mKey(x.p, x.s, x.c)] || {})[x.i]; if (r && !r.ko && r.n >= 1 && j % 3 === 0) r.ok = old; }); }
+  else if (op === 'rand') { admPrepare();
+    admLines().forEach(x => { const m = saved.lines[mKey(x.p, x.s, x.c)] = saved.lines[mKey(x.p, x.s, x.c)] || {}, q = Math.random(), back = n => new Date((dayNum(day) - n) * 86400000).toISOString().slice(0, 10);
+      m[x.i] = q < .25 ? { n:0, ok:null, ko:false, g:null } : q < .4 ? { n:1 + Math.floor(Math.random() * 2), ok:null, ko:true, g:null }
+        : q < .55 ? { n:1 + Math.floor(Math.random() * 4), ok:back(8 + Math.floor(Math.random() * 6)), ko:false, g:null }
+        : q < .8 ? { n:1 + Math.floor(Math.random() * 4), ok:back(Math.floor(Math.random() * 3)), ko:false, g:null } : { n:5, ok:back(Math.floor(Math.random() * 3)), ko:false, g:null }; }); }
   else if (op === 'streak') {
     saved.hist = saved.hist || {}; Object.keys(saved.hist).forEach(d => { if (d !== day) delete saved.hist[d]; });
     for (let i = 1; i <= v; i++) { const d = new Date((dayNum(day) - i) * 86400000).toISOString().slice(0, 10); saved.hist[d] = { done:[], streak:true, obj:null, base:{} }; }
@@ -2214,7 +2234,8 @@ function admPanel(){
         <button class="admb" data-act="adm" data-op="lit">Valider la série aujourd’hui</button>
         <button class="admb" data-act="adm" data-op="objdone">Objectif du jour atteint</button>
         <button class="admb" data-act="adm" data-op="ko">Quelques « À revoir »</button>
-        <button class="admb" data-act="adm" data-op="stale">Tout « À rafraîchir »</button>
+        <button class="admb" data-act="adm" data-op="stale">Quelques « À rafraîchir »</button>
+        <button class="admb" data-act="adm" data-op="rand" style="grid-column:1/3">Progression au hasard (un peu de chaque statut)</button>
       </div>`)}
     ${sec('bg', 'Badges et animations', 'compteurs, tests d’animation', `
       ${row('Série max (jours)', 'adm-bs', '0 – 60', 'bgstreak')}
@@ -2250,14 +2271,11 @@ function admPanel(){
     ${sec('guide', 'Guide de démarrage', 'rejouer le guide', `
       <div class="mute small" style="margin-bottom:8px">Vide « Mes scènes », les personnages choisis et la progression du profil de test (les badges restent), puis réaffiche le guide.</div>
       <button class="admb" style="width:100%" data-act="adm" data-op="guide">Rejouer le guide</button>`)}
-    ${sec('diag', 'Diagnostic', 'hors ligne, vibration, journal', `
+    ${sec('diag', 'Diagnostic', 'hors ligne, vibration, message d’erreur', `
       <div class="admrow"><span>${offMsg || 'Mode hors ligne'}</span><button class="admb" data-act="chkoff">Vérifier</button></div>
       <button class="admb" style="width:100%;margin-top:8px" data-act="admwarn">Tester un message d’erreur</button>
       <button class="admb" style="width:100%;margin-top:8px" data-act="vibetest">Tester la vibration · réglage : ${esc((HAPTICS.find(h => h[0] === hapticMode()) || [0, '?'])[1])}</button>
-      <div class="lbl" style="margin-top:14px">Journal du bouton retour</div>
-      <pre class="hlog" id="hlog">${esc(hlogLines().join('\n') || '(vide)')}</pre>
-      <div class="admgrid"><button class="admb" data-act="hlogrefresh">Actualiser</button><button class="admb" data-act="hlogcopy">Copier</button>
-        <button class="admb dng" data-act="hlogclear" style="grid-column:1/3">Effacer le journal</button></div>`)}
+`)}
     <button class="admb dng" style="margin-top:12px;width:100%" data-act="adm" data-op="wipe">Effacer le profil de test</button>
     <button class="admb" style="margin-top:8px;width:100%" data-act="admquit">Quitter le mode admin</button></div>`;
 }
@@ -2291,10 +2309,11 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 93, APP_LABEL = '2.01'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 94, APP_LABEL = '2.01'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
-function hlog(msg){
+try { localStorage.removeItem('repete.hlog'); } catch(e) {}
+function hlog(msg){ return;
   if (!ADMIN) return;
   try {
     const a = JSON.parse(localStorage.getItem(HLOG_KEY) || '[]'), t = new Date(), p = n => String(n).padStart(2, '0');
@@ -2440,7 +2459,7 @@ function exportNotes(){
 /* 2.01 : sauvegarde complète (tout le profil actif) en un seul fichier */
 function exportAll(){
   const o = JSON.parse(JSON.stringify(saved)); delete o.dayShift;
-  dlJson('repete-complet' + fileTag() + '.json', { repete:'complet', profil:profTag(), saison:saved.season, v:APP_VER, date:today(), data:o });
+  dlJson('sauvegarde-complete-repete' + fileTag() + '.json', { repete:'complet', profil:profTag(), saison:saved.season, v:APP_VER, date:today(), data:o });
 }
 function importAll(f){
   readJsonFile(f, 'complet', data => {
@@ -2721,7 +2740,7 @@ function speak(i){
 }
 function stopSpeech(){ ttsId++; try { synth && synth.cancel(); } catch(e){} S.speakI = null; try { ttsMark(); } catch(e) {} }
 /* Les boutons de lecture (haut-parleur / Réécouter) deviennent « ■ Arrêter » pendant que cette réplique est lue */
-const SQ = '<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" style="flex:none"><rect width="10" height="10" rx="1.5" fill="currentColor"/></svg>';
+const SQ = '<svg width="9" height="9" viewBox="0 0 10 10" aria-hidden="true" style="flex:none"><rect width="10" height="10" rx="1.5" fill="currentColor"/></svg>';
 function ttsMark(){
   document.querySelectorAll('[data-act=speak],[data-act=ttstest]').forEach(b => {
     if (b.dataset.l === undefined) {   // première fois : on fige la taille du bouton et on garde son libellé
@@ -2859,7 +2878,8 @@ function weakList(s, st, k){
   const list = tab === 'ko' ? ko : stl;
   return `<div class="weak ${open ? 'open' : ''}"><button class="wsum" data-act="weaktog" data-k="${esc(k)}" aria-expanded="${open}">Répliques à travailler (${ko.length + stl.length})<span class="wch">▾</span></button>
     ${open ? `<div class="seg sm wseg">${ko.length ? `<button class="${tab === 'ko' ? 'on' : ''}" data-act="weaktab" data-k="${esc(k)}" data-v="ko">À revoir (${ko.length})</button>` : ''}${stl.length ? `<button class="${tab === 'stale' ? 'on' : ''}" data-act="weaktab" data-k="${esc(k)}" data-v="stale">${CLOCK} À rafraîchir (${stl.length})</button>` : ''}</div>
-      ${list.map(row).join('') || '<div class="mute small" style="padding:6px 2px">Rien ici.</div>'}` : ''}</div>`;
+      ${list.map(row).join('') || '<div class="mute small" style="padding:6px 2px">Rien ici.</div>'}
+      ${list.length ? `<button class="btn sm soft iconb wcards" data-act="weakcards" data-k="${esc(k)}" data-v="${tab}">${ICO_CARDS}<span>Réviser ${list.length > 1 ? 'ces ' + list.length + ' répliques' : 'cette réplique'} en cartes</span></button>` : ''}` : ''}</div>`;
 }
 const sceneRow = (p, s) => {
   const on = isMine(p, s), me = saved.me[keyOf(p, s)];
@@ -2934,15 +2954,15 @@ function mineView(){
     <small>${t ? '<span class="fli" style="' + fliMargin(t.streak.n) + '">' + flameSvg(t.streak.n, 30) + '</span>' + t.streak.n + ' j · <span role="img" aria-label="Objectif du jour">' + ico('target', 15) + '</span> ' + Math.min(t.objDone, t.objNeed) + ' / ' + t.objNeed + ' · ' : ''}<span role="img" aria-label="Date objectif">${ico('cal', 15)}</span> ${dl > 0 ? 'J-' + dl : dl === 0 ? 'Jour J' : 'Date passée'}</small></span><span class="ch">›</span></button>`;
   list.forEach(([p, s]) => {
     const st = stats(p, s), at = `data-play="${p.id}" data-scene="${s.id}"`, k = keyOf(p, s);
-    h += `<section class="card scard"><div class="bar2"><div class="sct"><h2 class="one">${esc(s.title)}</h2><div class="mute small sub2">${esc(p.title)}${st ? ` · <button class="chip xs" data-act="pickme" data-k="${esc(k)}" aria-expanded="${S.pickK === k}" aria-label="Personnage joué : ${esc(st.c)}. Changer">${esc(st.c)}${s.characters.length > 1 ? ' ⇅' : ''}</button>` : ''}</div></div>
+    h += `<section class="card scard"><div class="sct1"><h2 class="one">${esc(s.title)}</h2>
         <button class="ghost txb" data-act="open" ${at}>Texte ›</button>
-        <button class="ghost dotsb" data-act="scmenu" data-k="${esc(k)}" aria-label="Plus d’options" aria-expanded="${S.menuK === k}">⋯</button></div>
-      ${S.menuK === k ? `<div class="scm"><button class="btn sm ko" data-act="togglemine" ${at}>Retirer de mes scènes</button></div>` : ''}`;
+        <button class="ghost scx" data-act="scremove" ${at} data-t="${esc(s.title)}" aria-label="Retirer de mes scènes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="sub2"><span class="sub2p">${esc(p.title)}</span>${st ? `<span class="mute small">·</span><button class="chip xs" data-act="pickme" data-k="${esc(k)}" aria-expanded="${S.pickK === k}" aria-label="Personnage joué : ${esc(st.c)}. Changer">${esc(st.c)}${s.characters.length > 1 ? ' ⇅' : ''}</button>` : ''}</div>
+      ${st && S.pickK === k && s.characters.length > 1 ? `<div class="chips tight pk" role="group" aria-label="Je joue">${s.characters.map(c => `<button class="chip sm ${st.c === c ? 'on' : ''}" data-act="setme" ${at} data-c="${esc(c)}" aria-pressed="${st.c === c}">${esc(c)}</button>`).join('')}</div>` : ''}`;
     if (!st) h += `<div class="lbl">Je joue</div><div class="chips">${s.characters.map(c => `<button class="chip sm" data-act="setme" ${at} data-c="${esc(c)}">${esc(c)}</button>`).join('')}</div><p class="hint" style="margin:10px 0 0">Choisis ton personnage pour voir ta progression.</p>`;
     else {
       h += (st.total ? donut(st) : `<p class="hint" style="margin:10px 0 0">${esc(st.c)} n’a aucune réplique dans cette scène.</p>`) +
         `
-        ${S.pickK === k && s.characters.length > 1 ? `<div class="chips tight pk" role="group" aria-label="Je joue">${s.characters.map(c => `<button class="chip sm ${st.c === c ? 'on' : ''}" data-act="setme" ${at} data-c="${esc(c)}" aria-pressed="${st.c === c}">${esc(c)}</button>`).join('')}</div>` : ''}
         ${st.total ? `<div class="gorow"><button class="btn go" data-act="open" data-go="1" data-cards="1" ${at}>${ICO_CARDS}<span style="margin-left:6px">Cartes</span></button><button class="btn pri go" data-act="open" data-go="1" ${at}>${PLAY}<span style="margin-left:6px">Répéter</span></button></div>` : ''}`;
       if (st.total) h += weakList(s, st, k);
     }
@@ -3033,7 +3053,7 @@ function rankRow(p, i){
     </button>
     <div class="rkd"><p class="rkb">Badges obtenus (${n})</p>
       ${got.length ? `<div class="bstrip">${got.map(z => medal(z[0], z[1])).join('')}</div>` : '<div class="mute small">Aucun badge pour l’instant.</div>'}
-      <div class="rkst"><span><b>${p.answered | 0}</b> répliques répondues</span><span>Série : <b>${st}</b> j</span></div></div></div>`;
+      <div class="rkst"><span><b>${(p.answered | 0) > 100000 ? '?' : (p.answered | 0)}</b> répliques répondues</span><span>Série : <b>${st}</b> j</span></div></div></div>`;
 }
 /* 2.01 : ordre du classement = niveau, puis maîtrise globale, puis badges, puis série */
 const rankM = p => (typeof p.mastery === 'number' && isFinite(p.mastery)) ? p.mastery : -1;
@@ -3044,9 +3064,9 @@ function rankCard(){
   const msg = ADMIN ? 'Profil de test : le classement est désactivé.'
     : !r.on ? 'Pour voir ta place, inscris-toi au classement : touche « Voir », puis « Participer ».'
     : !c || !c.players || !c.players.length ? 'Ouvre le classement pour charger ta place.' : '';
-  if (msg) return `<section class="card">${head}<div class="mute small" style="margin-top:4px">${msg}</div></section>`;
+  if (msg) return `<section class="card rkcard" data-act="rankopen">${head}<div class="mute small" style="margin-top:4px">${msg}</div></section>`;
   const L = rankSort(c.players), i = L.findIndex(p => p.you);
-  if (i < 0) return `<section class="card">${head}<div class="mute small" style="margin-top:4px">Ta ligne apparaîtra au prochain envoi.</div></section>`;
+  if (i < 0) return `<section class="card rkcard" data-act="rankopen">${head}<div class="mute small" style="margin-top:4px">Ta ligne apparaîtra au prochain envoi.</div></section>`;
   const me = L[i], up = L[i - 1];
   let gap = 'En tête du classement';
   if (up) { const dl = (up.level | 0) - (me.level | 0), dm = rankM(up) - rankM(me);
@@ -3054,7 +3074,7 @@ function rankCard(){
       : dm > 0 && rankM(me) >= 0 ? Math.max(0.1, Math.round(dm * 10) / 10).toString().replace('.', ',') + ' % de maîtrise derrière ' + esc(up.pseudo)
       : 'Juste derrière ' + esc(up.pseudo); }
   const nb = [L[i - 1], me, L[i + 1]].filter(Boolean);
-  return `<section class="card">${head}
+  return `<section class="card rkcard" data-act="rankopen">${head}
     <div class="rkc"><div class="rkpl">${i + 1}<sup>${i === 0 ? 'er' : 'e'}</sup></div><div><div>sur ${L.length} participant${L.length > 1 ? 's' : ''}</div><div class="mute small">${gap}</div></div></div>
     ${nb.map(p => `<div class="rkv ${p.you ? 'you' : ''}"><span>${L.indexOf(p) + 1}. ${esc(p.pseudo)}</span><span>Niv. ${p.level | 0}</span></div>`).join('')}</section>`;
 }
@@ -3063,7 +3083,8 @@ function rankView(){
   let h = `<div class="bhead"><button class="ghost back" data-act="rankback" aria-label="Retour">${BACK}</button><h2>Classement</h2><button class="ghost" data-act="rankrefresh">Actualiser</button></div>
     <p class="mute small" style="margin:-4px 2px 12px">${esc(saved.profile)}</p>`;
   if (ADMIN) return h + '<section class="card"><p class="mute">Profil de test : le classement est désactivé (rien n’est envoyé).</p></section>';
-  const info = `<div class="infobox" style="margin-top:10px"><p><b>Qu’est-ce qui est envoyé ?</b> Seuls ton pseudo et tes chiffres de progression : niveau, série, badges et nombre de répliques répondues. Aucun texte, aucun nom.</p>
+  const info = `<div class="infobox" style="margin-top:10px"><p><b>Qu’est-ce qui est envoyé ?</b> Seuls ton pseudo et tes chiffres de progression : niveau, maîtrise globale, série, badges et nombre de répliques répondues. Aucun texte, aucun nom.</p>
+      <p>Ordre : niveau, puis maîtrise, puis badges, puis série. Un pseudo ne peut être utilisé que par une seule personne.</p>
       <p>Tu peux voir le classement sans participer. Tu peux te retirer à tout moment : ta ligne est alors supprimée.</p></div>`;
   /* 2.01 : participation compacte (M6) — bouton « Participer », pseudo en texte, champ seulement au toucher */
   const ib = `<button class="info" data-act="inforank" aria-label="Quelles données sont envoyées ?" aria-expanded="${S.infoRank ? 'true' : 'false'}">i</button>`;
@@ -3072,9 +3093,9 @@ function rankView(){
       <div style="display:flex;gap:8px"><input id="rankpin" type="text" maxlength="10" value="${esc(r.pseudo || '')}" placeholder="Ton pseudo" autocomplete="off" aria-label="Pseudo" style="flex:1"><button class="btn pri sm" data-act="rankok">Valider</button></div>
       ${S.rankPErr ? '<div class="warnbox" style="margin:8px 0 0">Écris un pseudo d’abord.</div>' : ''}
       <button class="ghost" data-act="rankcancel" style="padding-left:0">Annuler</button></div>`;
-  if (!r.on) h += `<section class="card rkpart"><div class="tline"><b style="flex:1">Rejoindre le classement</b>${ib}</div>${S.infoRank ? info : ''}
+  if (!r.on && !r.pseudo) h += `<section class="card rkpart"><div class="tline"><b style="flex:1">Rejoindre le classement</b>${ib}</div>${S.infoRank ? info : ''}
       ${S.rankEdit ? editor : `<div class="mute small" style="margin:4px 0 10px">Tu peux le consulter sans participer.</div><button class="btn pri" style="width:100%" data-act="rankjoin">Participer</button>`}</section>`;
-  else h += `<section class="card rkpart"><div class="tline"><label class="sw" style="flex:1"><input type="checkbox" data-act="rankon" checked> Je participe</label>${ib}</div>${S.infoRank ? info : ''}
+  else h += `<section class="card rkpart"><div class="tline"><label class="sw" style="flex:1"><input type="checkbox" data-act="rankon" ${r.on ? 'checked' : ''}> Je participe</label>${ib}</div>${S.infoRank ? info : ''}
       ${S.rankEdit ? editor : `<button class="rkps" data-act="rankedit"><span class="mute small">Ton pseudo</span><b>${esc(r.pseudo || '—')} <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></b></button>`}
       ${err ? `<div class="warnbox" style="margin:8px 0 0">${err}</div>` : ''}</section>`;
   const list = c ? rankSort(c.players) : [];
@@ -3122,14 +3143,15 @@ function libView(){
 function guideSteps(){
   const mine = saved.mine || [], meSet = mine.some(k => saved.me && saved.me[k]);
   const played = !!((saved.bgc && saved.bgc.scenes) || Object.values(saved.lines || {}).some(L => Object.keys(L || {}).length));
-  return [[mine.length > 0, 'Ajoute une scène depuis la Bibliothèque (étoile)'], [meSet, 'Choisis ton personnage'], [played, 'Fais ta première répétition']];
+  const inst = isStandalone();
+  return [[inst, 'Installe l’appli sur ton téléphone', 'guideinst'], [mine.length > 0, 'Ajoute une scène depuis la Bibliothèque (étoile)'], [meSet, 'Choisis ton personnage'], [played, 'Fais ta première répétition']];
 }
 function guideCard(){
   if (saved.guideDone) return '';
   const st = guideSteps();
-  if (st.every(x => x[0])) { saved.guideDone = true; persist(); return ''; }
+  if (st.slice(1).every(x => x[0])) { saved.guideDone = true; persist(); return ''; }
   return `<section class="card guide"><div class="gh"><b>Bien démarrer</b><button class="ghost" data-act="guideskip">Passer</button></div>
-    ${st.map(([ok, t]) => `<div class="gst ${ok ? 'ok' : ''}"><span class="gck" aria-hidden="true">${ok ? '✓' : ''}</span><span>${t}</span><span class="sr">${ok ? ' (fait)' : ''}</span></div>`).join('')}</section>`;
+    ${st.map(([ok, t, act]) => act && !ok ? `<button class="gst gsb" data-act="${act}"><span class="gck" aria-hidden="true"></span><span>${t} <span class="txl">›</span></span></button>` : `<div class="gst ${ok ? 'ok' : ''}"><span class="gck" aria-hidden="true">${ok ? '✓' : ''}</span><span>${t}</span><span class="sr">${ok ? ' (fait)' : ''}</span></div>`).join('')}</section>`;
 }
 
 const ttsWarn = () => !synth
@@ -3189,7 +3211,7 @@ function renderNotes(){
       <p class="nt">Note · réplique ${lineNo(e.i)}</p><p class="ns">${esc(it.c)} : ${esc(snip)}</p>
       <textarea id="ntext" data-act="ntext" maxlength="300" placeholder="Écris ta note" aria-label="Texte de la note">${esc(e.x || '')}</textarea>
       ${e.err ? '<p class="nerr">Écris ta note.</p>' : ''}
-      <div class="nbtns">${noteOf(e.i) ? '<button class="btn sm ko" data-act="ndel" data-i="' + e.i + '">Supprimer</button>' : ''}<span class="sp"></span><button class="btn sm" data-act="nclose">Annuler</button><button class="btn sm pri" data-act="nsave">Enregistrer</button></div></div>`;
+      <div class="nbtns">${noteOf(e.i) ? '<button class="btn sm ko" data-act="ndel" data-i="' + e.i + '">Supprimer</button>' : ''}<span class="sp"></span><button class="btn sm" data-act="nclose">Annuler</button><button class="btn sm soft" data-act="nsave">Enregistrer</button></div></div>`;
   } else {
     const all = Object.keys(sceneNotes()).map(Number).sort((a, b) => a - b);
     const list = all;
@@ -3208,7 +3230,7 @@ function lineHtml(it, i, mine){
   const acts = open ? `<div class="lacts">
       <button class="la" data-act="${synth ? 'speak' : 'nosound'}" data-i="${i}">${SPK}<span>Écouter</span></button>
       ${S.me ? `<button class="la" data-act="from" data-i="${i}">${PLAY}<span>Répéter d’ici</span></button>` : ''}
-      <button class="la" data-act="nedit" data-i="${i}">${FICHE}<span>${hasN ? 'Modifier la note' : 'Ajouter une note'}</span></button></div>` : '';
+      <button class="la" data-act="nedit" data-i="${i}">${FICHE}<span>${hasN ? 'Note' : 'Note +'}</span></button></div>` : '';
   const ps = mine && S.stMap ? S.stMap[i] : null;
   return `<div class="line ${mine?'me':''} ${ps ? 'ps ' + ps.st : ''} ${open ? 'open' : ''}" data-line="${i}" data-act="lineopen" data-i="${i}">
     <div class="who2"><span class="num">${lineNo(i)}</span>${esc(it.c)}${ps && ps.stale ? '<span class="stg">À rafraîchir</span>' : ''}${noteBtn(it, 'l' + i)}${noteEditBtn(i)}</div>
@@ -3225,7 +3247,7 @@ function textView(){
       <button class="${S.mode==='all'?'on':''}" data-act="mode" data-v="all">Tout le texte</button>
       <button class="${S.mode==='mine'?'on':''}" data-act="mode" data-v="mine" ${S.me?'':'disabled'}>Mes répliques</button>
     </div>
-    <label class="sw"><input type="checkbox" data-act="thide" ${S.textHide?'checked':''} ${S.me?'':'disabled'}> Cacher mes répliques (toucher pour révéler)</label>
+    <label class="sw"><input type="checkbox" data-act="thide" ${S.textHide?'checked':''} ${S.me?'':'disabled'}> Cacher mes répliques</label>
     <label class="sw"><input type="checkbox" data-act="showprog" ${saved.showProg && S.me ? 'checked' : ''} ${S.me ? '' : 'disabled'}> Voir ma progression</label>
     ${S.stMap ? `<div class="pgl"><span><i class="dot new"></i>nouvelle</span><span><i class="dot ko"></i>à revoir</span><span><i class="dot known"></i>connue</span><span><i class="dot solid"></i>solide</span></div>` : ''}
     ${S.textHide && S.revealed.size ? `<div><button class="mini big" data-act="rehide">Recacher tout</button></div>` : ''}
@@ -3268,15 +3290,16 @@ function introView(){
       <button class="mdc ${S.rmode !== 'cards' ? 'on' : ''}" data-act="rmode" data-v="reh" role="radio" aria-checked="${S.rmode !== 'cards'}">${ICO_LIST}<span><b>Répétition</b><small>Toute la scène, dans l’ordre</small></span></button>
       <button class="mdc ${S.rmode === 'cards' ? 'on' : ''}" data-act="rmode" data-v="cards" role="radio" aria-checked="${S.rmode === 'cards'}">${ICO_CARDS}<span><b>Cartes</b><small>Façon flashcards</small></span></button>
     </div>
-    ${S.rmode === 'cards' ? `<label class="sw"><input type="checkbox" data-act="cardsko" ${S.cardsKo ? 'checked' : ''}> Seulement les « à revoir »</label>` : ''}
-    <label class="sw"><input type="checkbox" data-act="rehnotes" ${saved.rehNotes ? 'checked' : ''}> Afficher mes notes</label>
-    ${synth ? `<label class="sw"><input type="checkbox" data-act="audio" ${S.audio?'checked':''}> Lire les autres répliques à voix haute</label>
-      ${S.audio ? `${voiceOpts ? `<label class="f">Voix<select data-act="voice">${voiceOpts}</select></label>` : ''}
+    ${S.rmode === 'cards' ? `<label class="sw"><input type="checkbox" data-act="cardsko" ${co().ko ? 'checked' : ''}> Uniquement les « à revoir »</label>
+    <label class="sw"><input type="checkbox" data-act="cnotes" ${co().notes ? 'checked' : ''}> Afficher mes notes</label>`
+    : `<label class="sw"><input type="checkbox" data-act="rehnotes" ${saved.rehNotes ? 'checked' : ''}> Afficher mes notes</label>`}
+    ${synth ? (S.rmode === 'cards' ? `<label class="sw"><input type="checkbox" data-act="caudio" ${co().audio ? 'checked' : ''}> Lire la réplique d’avant à voix haute</label>` : `<label class="sw"><input type="checkbox" data-act="audio" ${S.audio?'checked':''}> Lire les autres répliques à voix haute</label>`) + `
+      ${(S.rmode === 'cards' ? co().audio : S.audio) ? `${voiceOpts ? `<label class="f">Voix<select data-act="voice">${voiceOpts}</select></label>` : ''}
       <div class="lbl" style="margin-top:6px">Vitesse de lecture · <span id="rateval">${S.rate.toFixed(1)}</span>×</div>
       <input type="range" class="rng" min="1" max="2" step="0.1" value="${S.rate}" data-act="rate" aria-label="Vitesse de lecture" style="--p:${Math.round((S.rate - 1) * 100)}%">
       <div class="rngs"><span>1× normale</span><span>2× rapide</span></div>` : ''}`
       : `<div class="warnbox">La lecture vocale n’est pas disponible dans ce navigateur ou cette application. Ouvre le lien dans Chrome (menu ⋮ → « Ouvrir dans le navigateur ») pour l’essayer. Le reste de l’application fonctionne normalement.</div>`}
-    ${synth && S.audio ? `<div class="row2" style="align-items:center"><button class="btn sm" data-act="ttstest" style="flex:0 0 auto;padding:0 14px;display:inline-flex;align-items:center;gap:6px">${SPK}<span>Tester la voix</span></button><span class="mute small">${VOICES.length ? VOICES.length + ' voix française' + (VOICES.length>1?'s':'') + ' détectée' + (VOICES.length>1?'s':'') : 'aucune voix française détectée'}</span></div>
+    ${synth && (S.rmode === 'cards' ? co().audio : S.audio) ? `<div class="row2" style="align-items:center"><button class="btn sm" data-act="ttstest" style="flex:0 0 auto;padding:0 14px;display:inline-flex;align-items:center;gap:6px">${SPK}<span>Tester la voix</span></button><span class="mute small">${VOICES.length ? VOICES.length + ' voix française' + (VOICES.length>1?'s':'') + ' détectée' + (VOICES.length>1?'s':'') : 'aucune voix française détectée'}</span></div>
       ${VOICES.length ? '' : `<details class="vhelp"><summary>Comment installer une voix française ?</summary>
         <p><b>Android :</b> Paramètres → cherche « Synthèse vocale » (souvent dans Accessibilité ou Gestion générale) → moteur Google → Langue : Français (France ou Belgique) → télécharge la voix. Puis ferme et rouvre Répète.</p>
         <p><b>iPhone :</b> Réglages → Accessibilité → Contenu énoncé → Voix → Français → télécharge une voix. Puis ferme et rouvre Répète.</p></details>`}${ttsWarn()}` : ''}
@@ -3306,8 +3329,9 @@ function myCount(){
 }
 /* note personnelle affichée sous ma réplique dévoilée (interrupteur « Afficher mes notes » de l'écran de départ) */
 const FICHE = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;margin-top:1px"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6"/><path d="M9 17h6"/></svg>';
+const co = () => (saved.cardOpt = saved.cardOpt || { audio:true, notes:false, ko:false });
 function rehNote(si){
-  if (!saved.rehNotes) return '';
+  if (!(S.cards ? co().notes : saved.rehNotes)) return '';
   const n = sceneNotes()[si]; if (!n || !n.x) return '';
   return `<div class="unote">${FICHE}<span>${esc(n.x)}</span></div>`;
 }
@@ -3388,7 +3412,7 @@ function doneView(){
     <p class="mute" style="margin:2px 0 6px">${mineTotal} réplique${mineTotal > 1 ? 's' : ''} · ${sansAide} sue${sansAide > 1 ? 's' : ''} sans aide</p>
     ${body || '<p class="mute">Aucune réplique notée pendant cette séance.</p>'}
     ${miss.length ? `<div class="row2"><button class="btn pri" data-act="redomiss">Refaire ${miss.length > 1 ? 'les ' + miss.length + ' à revoir' : 'celle à revoir'}</button></div>` : ''}
-    <div class="row2"><button class="btn ${miss.length ? '' : 'pri'}" data-act="start">Recommencer</button><button class="btn" data-act="totext">Retour au texte</button></div></div>`;
+    <div class="row2"><button class="btn sm soft iconb" data-act="start"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Recommencer</span></button><button class="btn sm" data-act="totext">Retour au texte</button></div></div>`;
 }
 
 /* ============ ACTIONS ============ */
@@ -3398,7 +3422,7 @@ function beginSteps(steps, pos, all, focus, cards){
   render(); window.scrollTo(0,0); autoSpeak();
 }
 function autoSpeak(){
-  if (!S.audio || !synth || !S.started || S.done) return;
+  if (!(S.cards ? co().audio : S.audio) || !synth || !S.started || S.done) return;
   const it = S.scene.items[S.steps[S.pos]];
   if (S.cards) { const si = S.steps[S.pos]; for (let j = si - 1; j >= 0; j--) if (S.scene.items[j].k === 'l') { speak(j); break; } return; }
   if (it && it.c !== S.me) speak(S.steps[S.pos]);
@@ -3423,7 +3447,9 @@ function grade(v){
   r0.g = day;
   /* 2.01 : une erreur fait reculer de 2 jalons (au lieu de tout remettre à zéro).
      Avec indice : la réplique ne recule pas et ne progresse pas (sauf nouvelle → 1/5) ; elle perd « à revoir » et « à rafraîchir ». */
-  if (v === 'ko') { r0.n = Math.max(0, (r0.n | 0) - 2); r0.ko = true; r0.ok = null; }
+  /* un seul recul de 2 jalons par jour et par réplique ; une réussite le même jour la remet « connue » sans la faire avancer */
+  if (v === 'ko') { if (r0.kd !== day) { r0.n = Math.max(0, (r0.n | 0) - 2); r0.kd = day; } r0.ko = true; r0.ok = null; }
+  else if (r0.kd === day) { r0.ko = false; if (!(r0.n > 0)) r0.n = 1; r0.ok = day; if (S.hint && (S.rehHide || S.cards)) S.hinted.add(si); }
   else if (S.hint && (S.rehHide || S.cards)) { r0.ko = false; if (!(r0.n > 0)) r0.n = 1; r0.ok = day; S.hinted.add(si); }
   else { r0.ko = false; if (r0.ok !== day) { r0.n = Math.min(5, r0.n + 1); r0.ok = day; } }
   S.trans = S.trans || {}; S.trans[si] = { from: (S.trans[si] && S.trans[si].from) || before, to: stOf(r0) };
@@ -3551,10 +3577,22 @@ document.addEventListener('click', e => {
       if (!v) { S.rankPErr = true; render(); break; }
       const r = rk(); r.pseudo = v; r.on = true; r.del = false; rankId(); rankErr = ''; S.rankEdit = false; S.rankPErr = false; persist(); render();
       rankSend(true).then(() => { if (rankErr === 'taken' || rankErr === 'blocked') { S.rankEdit = true; } rankLoad(); }); break; }
+    case 'scremove': { const pl = b.dataset.play, sc = b.dataset.scene, t = b.dataset.t;
+      appConfirm('Retirer « ' + t + ' » de Mes scènes ?\n\nTa progression est conservée : tu pourras la remettre depuis la Bibliothèque.', 'Retirer', () => { const k = pl + '/' + sc; saved.mine = (saved.mine || []).filter(x => x !== k); persist(); render(); }, true); break; }
+    case 'weakcards': {
+      const k = b.dataset.k, cut = k.indexOf('/'), pl = LIBRARY.find(p => p.id === k.slice(0, cut)), sc = pl && pl.scenes.find(x => x.id === k.slice(cut + 1));
+      if (!pl || !sc) break;
+      S.play = pl; S.scene = sc; S.me = saved.me[k];
+      Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, tab:'reh', rmode:'cards', mode:'all', textHide:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set()});
+      saved.last = { play:pl.id, scene:sc.id }; persist(); window.scrollTo(0,0);
+      const st = stats(pl, sc), list = (st ? st.att : []).filter(a => b.dataset.v === 'ko' ? a.st === 'ko' : (a.stale && a.st !== 'ko')).map(a => a.i).sort((x, y) => x - y);
+      if (!list.length) { render(); break; }
+      S.missed = new Set(); beginSteps(list, 0, false, null, true); break; }
     case 'weaktog': S.weakK = S.weakK === b.dataset.k ? null : b.dataset.k; render(); break;
     case 'weaktab': S.weakTab = S.weakTab || {}; S.weakTab[b.dataset.k] = b.dataset.v; render(); break;
     case 'admwarn': appAlert('Exemple de message d’erreur : ce fichier est illisible.', null, true); break;
     case 'admsec': S.admSec = S.admSec === b.dataset.k ? null : b.dataset.k; renderSheet(); break;
+    case 'guideinst': openSettings(); S.setSec = 'data'; renderSheet(); break;
     case 'guideskip': saved.guideDone = true; persist(); render(); break;
     case 'libtab': saved.libTab = b.dataset.v; persist(); render(); window.scrollTo(0,0); break;
     case 'togglemine': {
@@ -3584,9 +3622,9 @@ document.addEventListener('click', e => {
     case 'startcards': {
       const items = S.scene.items, mine = items.map((it, i) => i).filter(i => items[i].k === 'l' && items[i].c === S.me);
       let list = mine;
-      if (S.cardsKo) { const st = stats(S.play, S.scene), ko = new Set(st ? st.lines.filter(l => l.st === 'ko').map(l => l.i) : []); list = mine.filter(i => ko.has(i));
+      if (co().ko) { const st = stats(S.play, S.scene), ko = new Set(st ? st.lines.filter(l => l.st === 'ko').map(l => l.i) : []); list = mine.filter(i => ko.has(i));
         if (!list.length) { appAlert('Aucune réplique « à revoir » dans cette scène.'); break; } }
-      S.missed = new Set(); beginSteps(list, 0, !S.cardsKo, null, true); break; }
+      S.missed = new Set(); beginSteps(list, 0, !co().ko, null, true); break; }
     case 'resume': {
       const p = saved.prog[key()];
       S.missed = new Set((p && p.missed) || []);
@@ -3632,7 +3670,9 @@ document.addEventListener('change', e => {
   else if (a === 'soundck') { saved.sound = t.checked ? 'on' : 'off'; persist(); render(); if (t.checked) rwSound(() => { RepeteSons.unlock(); RepeteSons.badge('or'); }); }
   else if (a === 'audio') { S.audio = t.checked; persist(); render(); }
   else if (a === 'rehnotes') { saved.rehNotes = t.checked; persist(); }
-  else if (a === 'cardsko') { S.cardsKo = t.checked; }
+  else if (a === 'cardsko') { co().ko = t.checked; persist(); }
+  else if (a === 'cnotes') { co().notes = t.checked; persist(); }
+  else if (a === 'caudio') { co().audio = t.checked; persist(); render(); }
   else if (a === 'voice') { S.voice = t.value; persist(); }
   else if (a === 'goaldate') { if (t.value) { saved.goalDate = t.value; persist(); render(); } }
   else if (a === 'rate') { S.rate = parseFloat(t.value); persist(); render(); }
@@ -3641,6 +3681,17 @@ document.addEventListener('change', e => {
 /* gestes : glisser vers la gauche = suivante, vers la droite = précédente */
 let tx = 0, ty = 0, tt = 0;
 document.addEventListener('touchstart', e => { const t = e.changedTouches[0]; tx = t.clientX; ty = t.clientY; tt = Date.now(); }, {passive:true});
+/* 2.01 : glisser horizontalement pour changer d'onglet (Mes scènes ↔ Bibliothèque, Texte ↔ Répéter) */
+let tsx = 0, tsy = 0, tst = 0, tsOk = false;
+document.addEventListener('touchstart', e => { const t = e.touches[0]; tsx = t.clientX; tsy = t.clientY; tst = Date.now();
+  tsOk = !e.target.closest('input,textarea,select,.rng,.sh-wrap,.rwl,#appcf,.eg,.fcard'); }, {passive:true});
+document.addEventListener('touchend', e => {
+  if (!tsOk || isFocus() || S.settings || document.getElementById('appcf')) return;
+  const t = e.changedTouches[0], dx = t.clientX - tsx, dy = t.clientY - tsy;
+  if (Math.abs(dx) < 70 || Math.abs(dy) > 50 || Date.now() - tst > 600) return;
+  if (S.view === 'library') { const v = dx < 0 ? 'all' : 'mine'; if ((saved.libTab || 'mine') !== v) { saved.libTab = v; persist(); render(); window.scrollTo(0, 0); } }
+  else if (S.view === 'scene' && !S.started) { const v = dx < 0 ? 'reh' : 'text'; if (S.tab !== v) { stopSpeech(); S.tab = v; render(); } }
+}, {passive:true});
 document.addEventListener('touchend', e => {
   if (!isFocus() || S.done) return;
   const t = e.changedTouches[0], dx = t.clientX - tx, dy = t.clientY - ty;
