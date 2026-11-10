@@ -2360,7 +2360,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 111, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 112, APP_LABEL = '2.02'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -3566,7 +3566,7 @@ function grade(v){
 function primary(swipe){
   if (!isFocus() || S.done) return;
   const g = gradable(S.steps[S.pos]);
-  if (g && !S.stepRevealed) { if (S.cards) stopSpeech(); S.stepRevealed = true; render(); return; }
+  if (g && !S.stepRevealed) { S.stepRevealed = true; render(); if (S.cards) requestAnimationFrame(() => setTimeout(stopSpeech, 60)); return; }
   if (g) { if (!swipe) grade('ok'); return; }
   step(1);
 }
@@ -3759,9 +3759,10 @@ document.addEventListener('click', e => {
     case 'redomiss': { const m = [...S.missed].sort((a, c) => a - c); if (!m.length) break; S.missed = new Set(); S.bilOpen = null; beginSteps(m, 0, false, new Set(m)); break; }
     case 'hint': S.hint = Math.min(2, (S.hint | 0) + 1); render(); break;
     case 'reveal-step': {
-      if (S.cards) stopSpeech();   /* 2.02 : retourner la carte coupe la voix */
-      if (S.cards && !S.stepRevealed && animMode() === 'on') { S.stepRevealed = true; const fc = document.querySelector('.fcard'); if (fc) { fc.classList.add('flip'); setTimeout(render, 480); break; } }
-      S.stepRevealed = true; render(); break; }
+      /* 2.02 : retourner la carte coupe la voix — après le début du retournement (l'arrêt de la voix peut bloquer un instant le téléphone) */
+      const hush = () => { if (S.cards) requestAnimationFrame(() => setTimeout(stopSpeech, 60)); };
+      if (S.cards && !S.stepRevealed && animMode() === 'on') { S.stepRevealed = true; const fc = document.querySelector('.fcard'); if (fc) { fc.classList.add('flip'); hush(); setTimeout(render, 480); break; } }
+      S.stepRevealed = true; render(); hush(); break; }
     case 'prev': step(-1); break;
     case 'next': step(1); break;
     case 'grade': grade(b.dataset.v); break;
