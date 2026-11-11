@@ -1,0 +1,162 @@
+[
+ {
+  "id": "u1794424971396",
+  "title": "Télévision, mon amour",
+  "author": "Jean Legeay",
+  "note": "Ajouté par moi",
+  "mine": true,
+  "season": "2027-01",
+  "scenes": [
+   {
+    "id": "u17944249713960",
+    "title": "Téléshopping",
+    "characters": [
+     "La présentatrice",
+     "L'invité"
+    ],
+    "roles": {},
+    "items": [
+     {
+      "k": "dir",
+      "t": "Parodie d’émission de télé-achat. Les deux personnages parleront sur un ton familier et amical, en souriant presque constamment."
+     },
+     {
+      "k": "l",
+      "c": "La présentatrice",
+      "t": "Mesdames et messieurs, bonjour… Et bienvenue sur le plateau de votre émission de télé-achat… Pour commencer, une gamme de produits nouveaux absolument formidables… Serge, vous venez spécialement de Lausanne pour nous les présenter…"
+     },
+     {
+      "k": "l",
+      "c": "L'invité",
+      "t": "Tout à fait, Catherine…"
+     },
+     {
+      "k": "l",
+      "c": "La présentatrice",
+      "t": "Il s’agit d’une gamme de produits cinquième âge… Le cinquième âge, cette période de la vie qui commence après la mort… Et c’est vrai que jusqu’à maintenant il n’y avait pratiquement rien sur le marché pour cette période de l’existence… Résultat, ça nous est tous arrivé, un beau jour on se retrouve allongé dans son cercueil dans des conditions d’inconfort assez incroyables à notre époque moderne… Ça, Serge, avec votre trousseau…"
+     },
+     {
+      "k": "l",
+      "c": "L'invité",
+      "t": "C’est fini…"
+     },
+     {
+      "k": "l",
+      "c": "La présentatrice",
+      "t": "Car vous avez conçu toute une série de produits que vous avez réunis dans un trousseau, la star des trousseaux cinquième âge… Mais vous allez nous montrer, Serge… Et vous allez nous expliquer en même temps pourquoi ce trousseau est tellement formidable…"
+     },
+     {
+      "k": "l",
+      "c": "L'invité",
+      "t": "(devant lui se trouve une trousse de laquelle il va sortir tous les objets dont il parle) Oui… Un premier gros problème qu’on a dans un cercueil, toutes les expériences scientifiques qu’on a pu faire le prouvent, on perd la notion du temps…"
+     },
+     {
+      "k": "l",
+      "c": "La présentatrice",
+      "t": "C’est vrai, on s’est tous heurtés à ce problème-là…"
+     },
+     {
+      "k": "l",
+      "c": "L'invité",
+      "t": "Nous avons donc conçu ce réveil à aiguilles lumineuses avec calendrier perpétuel…"
+     },
+     {
+      "k": "l",
+      "c": "La présentatrice",
+      "t": "Avec bien sûr une horlogerie qualité suisse…"
+     },
+     {
+      "k": "l",
+      "c": "L'invité",
+      "t": "Absolument… En plus, ce qui est très pratique, vous avez un bouton « fuseau horaire » qui vous permet à tout moment de savoir l’heure qu’il est dans les cimetières de New York ou de Hong Kong…"
+     },
+     {
+      "k": "l",
+      "c": "La présentatrice",
+      "t": "Et ça, c’est vraiment un plus… Autre source d’inconfort dans un cercueil, les insectes… On a tous connu ça aussi, on est tranquillement allongé dans son petit chez-soi et tout d’un coup, hop, des fourmis dans les trous de nez, c’est très désagréable… Ça aussi, Serge, avec votre trousseau…"
+     },
+     {
+      "k": "l",
+      "c": "L'invité",
+      "t": "C’est fini… Nous avons prévu une bombe antiparasite spécial cimetière qui anéantit tous les insectes et parasites que l’on peut rencontrer dans ce genre d’endroit… D’une grande facilité d’utilisation pour les gauchers aussi bien que pour les droitiers… (Il se contente de changer sa bombe de main.) Un petit coup de vaporisateur tous les mois et vous êtes tranquille…"
+     },
+     {
+      "k": "l",
+      "c": "La présentatrice",
+      "t": "Il faut préciser également que c’est un vaporisateur qui n’attaque pas la couche d’ozone…"
+     },
+     {
+      "k": "l",
+      "c": "L'invité",
+      "t": "Tout à fait… Il est garanti sans action sur l’environnement…"
+     },
+     {
+      "k": "l",
+      "c": "La présentatrice",
+      "t": "Autre problème dont peu de défunts osent parler, les odeurs corporelles… On connaît tous le problème… Avec le temps qui passe, on ne garde pas toujours la fraîcheur corporelle qu’on souhaiterait… Là aussi, Serge, vous avez prévu la parade…"
+     },
+     {
+      "k": "l",
+      "c": "L'invité",
+      "t": "Tout à fait, Catherine… C’est un produit de conception complètement nouvelle, un stick anti-mauvaises odeurs qui diffuse pendant trente ans, durée garantie, au choix une odeur de lavande ou de pin des Landes…"
+     },
+     {
+      "k": "l",
+      "c": "La présentatrice",
+      "t": "En plus il est rechargeable…"
+     },
+     {
+      "k": "l",
+      "c": "L'invité",
+      "t": "Oui… Au bout de trente ans il suffit de changer la cartouche…"
+     },
+     {
+      "k": "l",
+      "c": "La présentatrice",
+      "t": "Et ça, c’est vraiment un plus… (L’invité sort de la trousse une main gratteuse.) Alors ça c’est quoi, Serge, expliquez-nous…"
+     },
+     {
+      "k": "l",
+      "c": "L'invité",
+      "t": "Ça, Catherine, c’est une main gratteuse… Un problème qu’ont souvent les personnes du cinquième âge, c’est une certaine raideur des membres et du tronc… En cas de démangeaison des membres inférieurs, ça peut être très gênant… Cette main gratteuse vous permettra de vous gratter où vous voulez, quel que soit votre degré de raideur… (Il fait une démonstration.)"
+     },
+     {
+      "k": "l",
+      "c": "La présentatrice",
+      "t": "Et cela sans effort, d’une façon beaucoup plus facile, grâce à une ergonomie soigneusement étudiée…"
+     },
+     {
+      "k": "l",
+      "c": "L'invité",
+      "t": "Tout à fait…"
+     },
+     {
+      "k": "l",
+      "c": "La présentatrice",
+      "t": "C’est vraiment merveilleux… Vous avez réellement pensé à tout… Vous avez même pensé à la sécurité…"
+     },
+     {
+      "k": "l",
+      "c": "L'invité",
+      "t": "Oui, tout à fait… (Il sort un boîtier.) Ce système de sécurité muni d’un code d’accès vous permettra de dormir sur vos deux oreilles… Ce boîtier de commande compact réunissant clavier avec digicode, commande d’ouverture du cercueil et témoin lumineux de fermeture vous donnera un contrôle absolu de l’accès à votre petit chez-vous…"
+     },
+     {
+      "k": "l",
+      "c": "La présentatrice",
+      "t": "C’est vraiment un trousseau de fabrication suisse, un trousseau qui vous offrira pour cette période de la vie parfois difficile qu’est le cinquième âge, un vrai plaisir et un vrai bonheur… Merci, Serge…"
+     },
+     {
+      "k": "l",
+      "c": "L'invité",
+      "t": "Merci à vous, Catherine…"
+     },
+     {
+      "k": "l",
+      "c": "La présentatrice",
+      "t": "Une dernière précision… Le prix, très raisonnable pour un produit de cette qualité… Nous vous proposons cette star des trousseaux cinquième âge pour quarante-deux mille cinq cents euros, soit pour une durée moyenne d’utilisation estimée de cent ans, quatre cent vingt-cinq euros par an, à peine plus d’un euro par jour, même pas le prix d’un paquet de cigarettes… C’est vraiment très très raisonnable… Et maintenant, toujours pour le cinquième âge, c’est presque une émission spéciale, nous allons passer à la présentation d’un produit ludique conçu par la société Macchabex… Effet comique garanti pour ceux qui aiment rire… Il s’agit d’un squelette monté sur ressort qui dès qu’on s’approche de la tombe, grâce à un ingénieux système laser, saute en l’air et crie « Coucou » !"
+     }
+    ]
+   }
+  ]
+ }
+]
