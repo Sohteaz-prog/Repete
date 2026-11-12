@@ -759,6 +759,44 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(-
 .rp:not([class*="t-"]){filter:brightness(2.4) saturate(.4) contrast(.75)}
 :root[data-theme=dark] .rp:not([class*="t-"]){filter:brightness(1.6) saturate(.4) contrast(.75)}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]) .rp:not([class*="t-"]){filter:brightness(1.6) saturate(.4) contrast(.75)}}
+
+/* ===== 2.04 ===== */
+/* 76 / 75 : écran de répétition et de cartes à la hauteur exacte de l'écran */
+#app.fv{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+#app.fv>.focus{flex:1;min-height:0}
+#app.fvx{height:100vh;height:100dvh;overflow:hidden}
+#app.fv .admbar{position:static;flex:none}
+html.nopull,html.nopull body{overscroll-behavior-y:none}
+#app.fvx .thr{min-height:0;overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 48px);mask-image:linear-gradient(transparent,#000 48px);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.thr .dir.old{opacity:.55}
+.bub .stk{display:grid}.bub .stk>*{grid-area:1/1}
+.bub.todo .rl{visibility:hidden}
+.bub.todo .ov{display:flex;flex-direction:column;justify-content:center}
+.bub.enter,.thr .dir.enter{animation:bubin .38s cubic-bezier(.2,.8,.2,1)}
+@keyframes bubin{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+.bub.rvl .btxt{animation:bubfade .3s}
+@keyframes bubfade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.bub.enter,.thr .dir.enter,.bub.rvl .btxt{animation:none}}
+/* 77 : cartes — titre plus petit, recto plus discret ; carte un peu remontée ; « Terminer ici » */
+.fk{font-size:var(--fs-11)}
+.fface:not(.fback) .fk{color:var(--mute);opacity:.75;font-weight:600}
+.focus .fwrap{padding-bottom:40px}
+.arow .btn.sq{flex:0 0 54px}
+.arow .btn{min-width:0;padding-left:8px;padding-right:8px}.arow .btn span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:340px){.focus .arow .btn{font-size:var(--fs-14)}.focus .arow .btn.sq{flex-basis:46px}.fwrap~.actions .arow .btn[data-act=hint] svg{display:none}}
+.fwrap~.actions .arow .btn[data-act=hint]{flex:1.25}
+/* 78 (M51-C) : bande « Précédente | Suivante » */
+.nband{align-items:stretch;gap:0;padding-left:0;padding-right:0}
+.nband .nbh{flex:1;display:flex;align-items:flex-end;justify-content:center;gap:6px;background:none;border:0;padding:0;color:inherit;font:inherit;min-height:0}
+.nband .nbp{opacity:.8}
+.nband .nup{display:inline-flex;transform:rotate(180deg)}
+.nband .nsep{flex:none;width:1.5px;height:18px;align-self:flex-end;margin-bottom:1px;background:var(--line);border-radius:1px}
+/* 80 (M52) : « ⋯ » dans le coin de la note */
+.nbub.nb2{position:relative;padding-right:34px}
+.nbub .nmore{position:absolute;top:2px;right:2px;width:36px;height:32px;border:0;background:none;padding:0;color:var(--mute);font:700 18px/1 system-ui,sans-serif;letter-spacing:1px;display:flex;align-items:center;justify-content:center}
+.nbub .nmenu{position:absolute;right:6px;top:34px;z-index:5;min-width:160px;display:flex;flex-direction:column;padding:4px;background:var(--card);border:1.5px solid var(--line);border-radius:var(--r-12);box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.nbub .nmenu button{display:flex;align-items:center;gap:8px;min-height:42px;padding:0 12px;border:0;background:none;border-radius:var(--r-8);font:600 14px system-ui,sans-serif;color:var(--ink);text-align:left}
+.nbub .nmenu button.dg{color:color-mix(in srgb,var(--st-ko) 70%,var(--ink))}
 </style>
 </head>
 <body>
@@ -1988,7 +2026,8 @@ function persist(){
 }
 function saveProg(){
   if (!S.stepsAll || !S.scene) return;
-  saved.prog[key()] = { me:S.me, pos:S.pos, missed:[...S.missed], done:S.done };
+  /* 2.04 : les cartes ne remplacent plus la position de la répétition (« Reprendre ») */
+  if (!S.cards) saved.prog[key()] = { me:S.me, pos:S.pos, missed:[...S.missed], done:S.done };
   saved.last = { play:S.play.id, scene:S.scene.id };
   persist();
 }
@@ -2231,9 +2270,11 @@ function badgeVals(){
 function checkBadges(){
   const v = badgeVals(); saved.bgc = saved.bgc || {}; saved.bg = saved.bg || {};
   const g = saved.bgc, fresh = [];
-  ['streak', 'obj', 'solid'].forEach(k => { g[k] = Math.max(g[k] || 0, v[k]); });
-  if (v.perfect) g.perfect = 1; if (v.ready) g.ready = 1;
-  BADGES.forEach(b => {
+  /* 2.04 : en mode admin, un badge réglé à la main reste fixe (la progression du profil de test ne le change plus) */
+  const fix = (ADMIN && saved.bgFix) || {};
+  ['streak', 'obj', 'solid'].forEach(k => { if (!fix[k]) g[k] = Math.max(g[k] || 0, v[k]); });
+  if (v.perfect && !fix.perfect) g.perfect = 1; if (v.ready && !fix.ready) g.ready = 1;
+  BADGES.forEach(b => { if (fix[b.id]) return;
     const cur = b.unique ? (g[b.id] ? 1 : 0) : b.T.filter(t => (g[b.id] || 0) >= t - 1e-9).length;
     if (cur > (saved.bg[b.id] || 0)) { saved.bg[b.id] = cur; fresh.push({ b, tier: cur }); }
   });
@@ -2285,7 +2326,7 @@ function admFeedback(op, v, raw){
   const M = { mastery:'Maîtrise réglée à ' + v + ' % (niveau ' + lvlOf(v) + ')', level:'Niveau réglé à ' + Math.min(50, v | 0),
     streak:'Série de ' + v + ' jour' + (v > 1 ? 's' : '') + ' jusqu’à hier', lit:'Série validée pour aujourd’hui', objdone:'Objectif du jour atteint',
     ko:'Quelques répliques passées en « À revoir »', stale:'Quelques répliques passées en « À rafraîchir »', rand:'Progression mélangée au hasard', resetday:'Aujourd’hui remis à zéro', guide:'Guide réaffiché (profil de test vidé)',
-    bgstreak:'Série max : ' + v, bgobj:'Jours d’objectif : ' + v, bgscenes:'Scènes jouées : ' + v, bgsolid:'Solides : ' + v + ' %', bgperfect:'Scène parfaite débloquée', bgready:'Prêt pour le jour J débloqué', bgreset:'Badges effacés',
+    bgstreak:'Série max : ' + v, bgobj:'Jours d’objectif : ' + v, bgscenes:'Scènes jouées : ' + v, bgsolid:'Solides : ' + v + ' %', bgperfect:'Scène parfaite débloquée', bgready:'Prêt pour le jour J débloqué', bgreset:'Badges effacés', progreset:'Progression remise à zéro',
     shift: saved.dayShift ? 'Jour simulé : ' + today() : 'Retour au jour réel : ' + today() };
   if (op === 'wipe') return;
   admToast(M[op] || 'Fait');
@@ -2329,10 +2370,11 @@ function admOp(op, v){
   else if (op === 'guide') { saved.mine = []; saved.me = {}; saved.lines = {}; saved.prog = {}; if (saved.bgc) { saved.bgc.scenes = 0; saved.bgc.acc = {}; } saved.guideDone = false; saved.libTab = 'all'; }
   else if (op === 'resetday') { if (saved.hist) delete saved.hist[day]; Object.keys(saved.lines).forEach(k => Object.values(saved.lines[k]).forEach(r => { if (r.g === day) r.g = null; })); }
   else if (op === 'shift') { saved.dayShift = v === 0 ? 0 : (saved.dayShift || 0) + v; }
-  else if (op === 'bgstreak' || op === 'bgobj' || op === 'bgscenes' || op === 'bgsolid') { saved.bgc = saved.bgc || {}; saved.bgc[{ bgstreak:'streak', bgobj:'obj', bgscenes:'scenes', bgsolid:'solid' }[op]] = v; }
+  else if (op === 'bgstreak' || op === 'bgobj' || op === 'bgscenes' || op === 'bgsolid') { const id = { bgstreak:'streak', bgobj:'obj', bgscenes:'scenes', bgsolid:'solid' }[op]; saved.bgc = saved.bgc || {}; saved.bgc[id] = v; const bd = BADGES.find(x => x.id === id); saved.bg = saved.bg || {}; saved.bg[id] = bd.T.filter(t => v >= t - 1e-9).length; saved.bgFix = saved.bgFix || {}; saved.bgFix[id] = true; }
   else if (op === 'bgperfect') { saved.bgc = saved.bgc || {}; saved.bgc.perfect = 1; }
   else if (op === 'bgready') { saved.bgc = saved.bgc || {}; saved.bgc.ready = 1; }
-  else if (op === 'bgreset') { saved.bg = {}; saved.bgc = {}; }
+  else if (op === 'bgreset') { saved.bg = {}; saved.bgc = {}; saved.bgFix = {}; BADGES.forEach(b => { saved.bgFix[b.id] = true; }); }
+  else if (op === 'progreset') { saved.lines = {}; saved.prog = {}; saved.hist = {}; saved.bg = {}; saved.bgc = {}; saved.bgFix = {}; saved.levelMax = 0; }
   else if (op === 'wipe') { try { localStorage.removeItem('repete.admin'); sessionStorage.setItem('admToast', 'Profil de test effacé'); } catch(e) {} location.reload(); return; }
   persist(); render();
 }
@@ -2370,9 +2412,11 @@ function admPanel(){
         <button class="admb" data-act="adm" data-op="stale">Quelques « À rafraîchir »</button>
         <button class="admb" data-act="adm" data-op="rand" style="grid-column:1/3">Progression au hasard</button>
       </div>
+      <button class="admb dng" style="width:100%;margin-top:10px" data-act="adm" data-op="progreset">Réinitialiser la progression</button>
       `)}
     ${sec('badges', 'Badges', 'Paliers, effacer', `
       <div class="lbl" style="margin:0 0 6px">Palier de chaque badge</div>
+      <div class="mute small" style="margin:-2px 0 8px">Un palier choisi ici reste fixe : la progression du profil de test ne le change plus.</div>
       ${BADGES.map(x => `<div class="admbt"><span>${esc(x.name)}</span><div class="seg sm">${(x.unique ? [0, 1] : [0, 1, 2, 3, 4, 5]).map(t => `<button class="${((saved.bg || {})[x.id] || 0) === t ? 'on' : ''}" data-act="admbg" data-b="${x.id}" data-v="${t}">${x.unique ? (t ? 'Oui' : 'Non') : t}</button>`).join('')}</div></div>`).join('')}
       <button class="admb" style="width:100%;margin-top:10px" data-act="admcnt" aria-expanded="${!!S.admCnt}">Compteurs exacts ${S.admCnt ? '⌃' : '⌄'}</button>
       ${S.admCnt ? `<div style="margin-top:6px">
@@ -2444,7 +2488,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 114, APP_LABEL = '2.03'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 115, APP_LABEL = '2.04'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -2523,7 +2567,7 @@ let navT = 0;
 window.addEventListener('scroll', () => { clearTimeout(navT); navT = setTimeout(navSave, 300); }, { passive: true });
 document.addEventListener('visibilitychange', () => { if (document.hidden) navSave(); });
 window.addEventListener('pagehide', navSave);
-const navDepth = () => !!(document.getElementById('appcf') || S.settings || S.nEdit || S.nList || S.nView != null || S.view !== 'library' || S.started || document.querySelector('.rwl.on') || (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()));
+const navDepth = () => !!(document.getElementById('appcf') || S.settings || S.pick || S.pickK || S.dpan || S.nMenu != null || S.nEdit || S.nList || S.nView != null || S.view !== 'library' || S.started || document.querySelector('.rwl.on') || (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()));
 
 /* ===== Textes de la classe : fichier textes-classe.json placé à côté de index.html ===== */
 function mergeShared(arr){
@@ -2747,6 +2791,13 @@ function navBack(){
   const cf = document.getElementById('appcf'); if (cf) { cf._cancel(); return; }
   const rw = document.querySelector('.rwl.on');
   if (rw) { if (rw._close) rw._close(); else rw.click(); return; }
+  /* 2.04 : le retour referme d'abord les petites listes et menus ouverts */
+  if (!S.settings) {
+    if (S.nMenu != null) { S.nMenu = null; render(); return; }
+    if (S.pick) { S.pick = false; render(); return; }
+    if (S.pickK) { S.pickK = null; render(); return; }
+    if (S.dpan) { S.dpan = false; render(); return; }
+  }
   if (S.nEdit || S.nList) { S.nEdit = null; S.nList = false; render(); return; }
   if (S.nView != null) {
     const q = '.nb[data-i="' + S.nView + '"]', e = document.querySelector(q), t0 = e ? e.getBoundingClientRect().top : null;
@@ -2895,6 +2946,8 @@ function render(){
   try { ensureDay(); } catch(e) {}
   let nb = []; try { nb = checkBadges(); } catch(e) {}
   nb.forEach(x => celebrate('badge', { id:x.b.id, name:x.b.name, tier:x.tier, unique:!!x.b.unique, label:x.b.name + (x.b.unique ? '' : ' · ' + TIERS[x.tier - 1]) }));
+  /* 2.04 : écran de répétition à hauteur fixe (le fil défile à l'intérieur), cartes ajustées à l'écran */
+  { const fv = isFocus() && !S.done, app = $('#app'); app.classList.toggle('fv', fv); app.classList.toggle('fvx', fv && !S.cards); document.documentElement.classList.toggle('nopull', fv); }
   $('#app').innerHTML = (ADMIN ? admBar() : '') + (S.view === 'library' ? libView() : S.view === 'badges' ? badgesView() : S.view === 'progress' ? progressView() : S.view === 'rank' ? rankView() : S.view === 'import' ? importView() : sceneView());
   renderSheet();
   renderNotes();
@@ -3380,8 +3433,11 @@ function noteEditBtn(i){
 }
 function noteBubble(i){
   const n = noteOf(i); if (!n || !noteOpen(i)) return '';
-  return `<div class="nbub"><div>${n.x ? esc(n.x).replace(/\n/g, '<br>') : '<i style="color:var(--mute)">Note sans texte</i>'}</div>
-    <div class="nact"><button data-act="nedit" data-i="${i}" aria-label="Modifier la note"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button><button class="dg" data-act="ndel" data-i="${i}" aria-label="Supprimer la note"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div>`;
+  /* 2.04 (M52) : « ⋯ » sans cadre dans le coin, qui ouvre Modifier / Supprimer */
+  const mo = S.nMenu === i;
+  return `<div class="nbub nb2"><div>${n.x ? esc(n.x).replace(/\n/g, '<br>') : '<i style="color:var(--mute)">Note sans texte</i>'}</div>
+    <button class="nmore" data-act="nmenu" data-i="${i}" aria-label="Options de la note" aria-expanded="${mo}">⋯</button>
+    ${mo ? `<div class="nmenu" role="menu"><button role="menuitem" data-act="nedit" data-i="${i}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Modifier</button><button role="menuitem" class="dg" data-act="ndel" data-i="${i}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Supprimer</button></div>` : ''}</div>`;
 }
 function renderNotes(){
   let el = document.getElementById('nsheet');
@@ -3435,11 +3491,11 @@ function textView(){
       <button class="${S.mode==='mine'?'on':''}" data-act="mode" data-v="mine" ${S.me?'':'disabled'}>Mes répliques</button>
     </div><button class="ib dpb ${S.dpan ? 'act' : ''}" data-act="dpan" aria-expanded="${!!S.dpan}" aria-label="Affichage">${IC_SLIDERS}</button></div>
     ${S.dpan ? `<div class="dpan">
+    <label class="sw"><input type="checkbox" data-act="hlme" ${saved.noHl ? '' : 'checked'} ${S.me ? '' : 'disabled'}> Surligner mes répliques</label>
     <label class="sw"><input type="checkbox" data-act="thide" ${S.textHide?'checked':''} ${S.me?'':'disabled'}> Cacher mes répliques</label>
     <label class="sw"><input type="checkbox" data-act="showprog" ${saved.showProg && S.me ? 'checked' : ''} ${S.me ? '' : 'disabled'}> Voir ma progression</label>
-    <label class="sw"><input type="checkbox" data-act="hlme" ${saved.noHl ? '' : 'checked'} ${S.me ? '' : 'disabled'}> Surligner mes répliques</label>
-    <label class="sw"><input type="checkbox" data-act="follow" ${saved.follow ? 'checked' : ''}> Suivre la lecture</label>
     <label class="sw"><input type="checkbox" data-act="notesopen" ${saved.notesOpen ? 'checked' : ''}> Afficher mes notes</label>
+    <label class="sw"><input type="checkbox" data-act="follow" ${saved.follow ? 'checked' : ''}> Suivre la lecture</label>
     ${S.mode==='mine' ? `<label class="sw"><input type="checkbox" data-act="cue" ${S.cue?'checked':''}> Montrer la fin de la réplique qui précède</label>` : ''}
     </div>` : ''}
     ${S.stMap ? `<div class="pgl"><span><i class="dot new"></i>nouvelle</span><span><i class="dot ko"></i>à revoir</span><span><i class="dot known"></i>connue</span><span><i class="dot solid"></i>solide</span></div>` : ''}
@@ -3460,7 +3516,7 @@ function textView(){
     prev = i;
   });
   /* 2.03 (L6, M48-A) : bande « Suivante » pleine largeur quand le suivi de lecture est actif */
-  return h + `</div>` + (saved.follow ? `<button class="nband" data-act="trknext" aria-label="Réplique suivante">${IC_DOWN}<span>Suivante</span></button>` : '');
+  return h + `</div>` + (saved.follow ? `<div class="nband"><button class="nbh nbp" data-act="trkprev" aria-label="Réplique précédente"><span class="nup">${IC_DOWN}</span><span>Précédente</span></button><i class="nsep" aria-hidden="true"></i><button class="nbh" data-act="trknext" aria-label="Réplique suivante">${IC_DOWN}<span>Suivante</span></button></div>` : '');
 }
 /* 2.03 (L6) : suivi de lecture — repère gardé par scène, 1re réplique par défaut */
 const trkLines = () => { const out = []; S.scene.items.forEach((it, i) => { if (it.k === 'l' && (S.mode !== 'mine' || it.c === S.me)) out.push(i); }); return out; };
@@ -3579,10 +3635,10 @@ function cardView(){
   </div></div>`;
   const prevBtn = `<button class="btn sq" data-act="prev" ${S.pos === 0 ? 'disabled' : ''} aria-label="Carte précédente">‹</button>`;
   const actions = rev ? prevBtn + `<button class="btn ko" data-act="grade" data-v="ko">À revoir</button><button class="btn ok" data-act="grade" data-v="ok">Je connais</button>`
-    : prevBtn + (S.hint >= 2 ? '' : `<button class="btn" data-act="hint">${S.hint ? 'Indice suivant' : 'Indice'}</button>`) + `<button class="btn pri" data-act="reveal-step">Retourner</button>`;
+    : prevBtn + (S.hint >= 2 ? '' : `<button class="btn" data-act="hint">${IC_BULB}<span>${S.hint ? 'Indice suivant' : 'Indice'}</span></button>`) + `<button class="btn pri" data-act="reveal-step">Retourner</button>`;
   return `<div class="prog"><i style="width:${Math.round(S.pos / n * 100)}%"></i></div>
     <div class="pcount fpc"><span>Carte ${S.pos + 1} / ${n}</span>${pRight()}</div>
-    <div class="fwrap" data-act="cardflip">${card}</div><div class="actions">${actions}</div>${rev ? '<div class="edge l" id="edgeL"></div><div class="edge r" id="edgeR"></div>' : ''}`;
+    <div class="fwrap" data-act="cardflip">${card}</div><div class="actions acol"><div class="arow">${actions}</div><button class="endb" data-act="endhere">${IC_FLAG}<span>Terminer ici</span></button></div>${rev ? '<div class="edge l" id="edgeL"></div><div class="edge r" id="edgeR"></div>' : ''}`;
 }
 /* 2.03 (M36) : haut-parleur sur la ligne du compteur ; en Cartes il commande « Lecture à voix haute » des cartes */
 const audioOn = () => S.cards ? co().audio : S.audio;
@@ -3607,7 +3663,9 @@ function stepView(){
   /* 2.03 (M39-A) : la scène en fil de bulles — les autres à gauche, mes répliques à droite ; la réplique à dire = bulle « À toi… » */
   const items = S.scene.items, si = S.steps[S.pos], it = items[si];
   const mine = it.c === S.me;
-  const prevs = []; for (let j = si-1; j >= 0 && prevs.length < 3; j--) if (items[j].k==='l') prevs.unshift(j);
+  /* 2.04 (M49) : tout le fil récent reste affiché ; les plus anciennes sortent par le haut de l'écran */
+  const prevs = []; for (let j = si-1; j >= 0 && prevs.length < 14; j--) if (items[j].k==='l') prevs.unshift(j);
+  const ef = S.enterFrom != null && Date.now() - (S.enterAt || 0) < 300 ? S.enterFrom : null; const en = j => ef != null && j > ef ? ' enter' : '';
   const from = prevs.length ? prevs[0] : si;
   const hide = gradable(si) && !S.stepRevealed;
   const pct = Math.round(S.pos / S.steps.length * 100);
@@ -3615,18 +3673,20 @@ function stepView(){
   let thr = '';
   for (let j = from; j < si; j++) {
     const x = items[j];
-    if (x.k === 'dir') { thr += `<p class="dir">${fmt(dirTxt(x.t))}</p>`; continue; }
+    if (x.k === 'dir') { thr += `<p class="dir${j < prevs[prevs.length - 1] ? ' old' : ''}${en(j)}">${fmt(dirTxt(x.t))}</p>`; continue; }
     const old = j !== prevs[prevs.length - 1];
-    thr += `<div class="bub ${x.c === S.me ? 'mine' : 'oth'}${old ? ' old' : ''}">${who(j)}<div class="btxt">${fmt(x.t)}</div></div>`;
+    thr += `<div class="bub ${x.c === S.me ? 'mine' : 'oth'}${old ? ' old' : ''}${en(j)}">${who(j)}<div class="btxt">${fmt(x.t)}</div></div>`;
   }
   if (hide) {
     const w = words(it.t);
-    thr += `<div class="bub todo now" data-act="reveal-step" role="button" tabindex="0">${who(si)}
+    /* 2.04 (M49) : la bulle a déjà la taille de la réplique (texte présent mais invisible sous « À toi… ») */
+    thr += `<div class="bub todo now${en(si)}" data-act="reveal-step" role="button" tabindex="0">${who(si)}<div class="stk"><div class="btxt rl" aria-hidden="true">${fmt(it.t)}</div><div class="ov">
       <div class="q">À toi…</div>
       ${S.hint ? `<div class="hintl">${esc(hintText(it.t, S.hint))}</div>` : ''}
-      <div class="s">${w.length} mot${w.length>1?'s':''}${S.hint ? ' · indice ' + S.hint + ' / 2' : ' · touche « Révéler » quand tu l’as dite'}</div></div>`;
+      <div class="s">${w.length} mot${w.length>1?'s':''}${S.hint ? ' · indice ' + S.hint + ' / 2' : ' · touche « Révéler » quand tu l’as dite'}</div></div></div></div>`;
   } else {
-    thr += `<div class="bub ${mine ? 'mine' : 'oth'} now">${who(si, noteBtn(it, 'c' + si))}${!mine ? cardSpk(si) : ''}<div class="btxt">${fmt(it.t)}</div>${noteBox(it, 'c' + si)}${mine ? rehNote(si) : ''}</div>`;
+    const rb = S.revBox && S.revBox.si === si ? S.revBox : null;
+    thr += `<div class="bub ${mine ? 'mine' : 'oth'} now${rb ? ' rvl' : en(si)}"${rb ? ` style="min-height:${rb.h}px;min-width:${rb.w}px"` : ''}>${who(si, noteBtn(it, 'c' + si))}${!mine ? cardSpk(si) : ''}<div class="btxt">${fmt(it.t)}</div>${noteBox(it, 'c' + si)}${mine ? rehNote(si) : ''}</div>`;
   }
   let actions;
   if (hide) actions = (S.hint >= 2 ? '' : `<button class="btn" data-act="hint">${IC_BULB}<span>${S.hint ? 'Indice suivant' : 'Indice'}</span></button>`) + `<button class="btn pri" data-act="reveal-step">${IC_EYE}<span>Révéler</span></button>`;
@@ -3655,9 +3715,9 @@ function doneView(){
   const row = (k, dot, label, arr) => arr.length ? `<div class="bsec ${S.bilOpen === k ? 'open' : ''}"><button class="bsh" data-act="bilsec" data-k="${k}" aria-expanded="${S.bilOpen === k}">${dot}<span>${label}</span><b>${arr.length}</b><svg class="gch" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>${S.bilOpen === k ? `<ul class="bls">${arr.map(tr).join('')}</ul>` : ''}</div>` : '';
   const body = row('solid', '<i class="dot solid"></i>', 'Devenues solides', solid) + row('up', '<i class="dot known"></i>', 'Ont progressé', up)
     + row('hint', '<i class="dot new" style="border:1.5px dashed var(--mute);background:transparent"></i>', 'Avec indice', hinted) + row('ko', '<i class="dot ko"></i>', 'À revoir', ko);
-  const early = !!S.early, pr = early && saved.prog[key()], canRes = early && pr && pr.me === S.me && !pr.done;
-  return `<div class="card"><h2>${early ? 'Répétition arrêtée ici' : 'Scène terminée'}</h2>
-    <p class="mute" style="margin:2px 0 6px">${early ? ids.length + ' / ' + mineTotal + ' réplique' + (mineTotal > 1 ? 's' : '') + ' répondue' + (ids.length > 1 ? 's' : '') : mineTotal + ' réplique' + (mineTotal > 1 ? 's' : '')} · ${sansAide} sue${sansAide > 1 ? 's' : ''} sans aide</p>
+  const early = !!S.early, pr = early && !S.cards && saved.prog[key()], canRes = early && pr && pr.me === S.me && !pr.done;
+  return `<div class="card"><h2>${early ? (S.cards ? 'Cartes arrêtées ici' : 'Répétition arrêtée ici') : 'Scène terminée'}</h2>
+    <p class="mute" style="margin:2px 0 6px">${early ? ids.length + ' / ' + mineTotal + ' réplique' + (mineTotal > 1 ? 's' : '') + ' répondue' + (ids.length > 1 ? 's' : '') : mineTotal + ' réplique' + (mineTotal > 1 ? 's' : '')}<br>${sansAide} trouvée${sansAide > 1 ? 's' : ''} sans aide</p>
     ${body || '<p class="mute">Aucune réplique notée pendant cette séance.</p>'}
     ${canRes ? `<div class="row2"><button class="btn" data-act="resume">Reprendre (${pr.pos + 1}/${countLines(S.scene)})</button></div>` : ''}
     ${miss.length ? `<div class="row2"><button class="btn pri" data-act="redomiss">Refaire ${miss.length > 1 ? 'les ' + miss.length + ' à revoir' : 'celle à revoir'}</button></div>` : ''}
@@ -3666,7 +3726,7 @@ function doneView(){
 
 /* ============ ACTIONS ============ */
 function beginSteps(steps, pos, all, focus, cards){
-  S.cards = !!cards; S.early = false; S.hinted = new Set(); S.trans = {}; S.focus = focus || null; S.steps = steps; S.pos = pos || 0; S.stepsAll = all !== false; S.started = true; S.done = false; S.stepRevealed = false; S.hint = false;
+  S.cards = !!cards; S.early = false; S.bilOpen = null; S.revBox = null; S.enterFrom = null; S.hinted = new Set(); S.trans = {}; S.focus = focus || null; S.steps = steps; S.pos = pos || 0; S.stepsAll = all !== false; S.started = true; S.done = false; S.stepRevealed = false; S.hint = false;
   S.tab = 'reh'; saveProg();
   render(); window.scrollTo(0,0); keepNow(); autoSpeak();
 }
@@ -3681,6 +3741,7 @@ function step(d){
   const n = S.pos + d;
   if (n < 0) return;
   if (n >= S.steps.length) { if (S.stepsAll && S.me && !S.done) { S.done = true; celebrate('applause', { scene:S.scene.title }); } S.done = true; saveProg(); render(); window.scrollTo(0,0); return; }
+  S.enterFrom = d > 0 ? S.steps[S.pos] : null; S.enterAt = Date.now(); S.revBox = null;
   S.pos = n; S.stepRevealed = false; S.hint = false; saveProg();
   render(); window.scrollTo(0,0); keepNow(); autoSpeak();
 }
@@ -3712,10 +3773,12 @@ function grade(v){
   persist();
   step(1);
 }
+/* 2.04 : mémorise la taille de la bulle « À toi… » pour que la réplique révélée ne la fasse pas sauter */
+function keepTodoBox(){ const t = !S.cards && document.querySelector('.bub.todo'); S.revBox = t ? { si:S.steps[S.pos], h:t.offsetHeight, w:t.offsetWidth } : null; }
 function primary(swipe){
   if (!isFocus() || S.done) return;
   const g = gradable(S.steps[S.pos]);
-  if (g && !S.stepRevealed) { S.stepRevealed = true; render(); if (S.cards) requestAnimationFrame(() => setTimeout(stopSpeech, 60)); return; }
+  if (g && !S.stepRevealed) { keepTodoBox(); S.stepRevealed = true; render(); if (S.cards) requestAnimationFrame(() => setTimeout(stopSpeech, 60)); return; }
   if (g) { if (!swipe) grade('ok'); return; }
   step(1);
 }
@@ -3731,6 +3794,7 @@ function tapAnim(b){
 document.addEventListener('click', e => {
   if (S.bsel === 'scenes' && e.target.closest && e.target.closest('.bov .bigart')) { try { RepeteEgg.tap(); } catch(x) {} }
   if (soundOn()) { try { RepeteSons.unlock(); } catch(x) {} }
+  if (S.nMenu != null && !(e.target.closest && e.target.closest('.nmenu,.nmore'))) { S.nMenu = null; render(); if (!e.target.closest('[data-act]')) return; }
   const b = e.target.closest('[data-act]');
   if (!b || b.tagName === 'INPUT' || b.tagName === 'SELECT') return;
   const a = b.dataset.act;
@@ -3774,6 +3838,7 @@ document.addEventListener('click', e => {
     case 'adm': { const op = b.dataset.op; let v = b.dataset.v !== undefined ? +b.dataset.v : 0;
       if (b.dataset.in) { const el = document.getElementById(b.dataset.in); if (!el || el.value === '') break; v = Math.max(0, +el.value); if (op === 'mastery') v = Math.min(100, v); }
       if (op === 'bgreset') { appConfirm('Effacer tous les badges ?\n\nTous les badges et leurs compteurs du profil de test seront remis à zéro.', 'Effacer', () => { admOp('bgreset', 0); admFeedback('bgreset', 0); }, true); break; }
+      if (op === 'progreset') { appConfirm('Réinitialiser la progression ?\n\nRépliques, séries, objectifs et badges du profil de test repartent de zéro. Tes notes, tes textes et tes réglages sont gardés. Ta vraie progression n’est pas touchée.', 'Réinitialiser', () => { admOp('progreset', 0); admFeedback('progreset', 0); }, true); break; }
       if (op === 'wipe') { appConfirm('Effacer le profil de test ?\n\nToute la progression du mode admin sera effacée. Ta vraie progression n’est pas touchée.', 'Effacer', () => admOp('wipe', 0), true); break; }
       admOp(op, v); admFeedback(op, v, b.dataset.v); break; }
     case 'badgesopen': S.view = 'badges'; S.bsel = null; render(); window.scrollTo(0, 0); break;
@@ -3815,19 +3880,22 @@ document.addEventListener('click', e => {
     case 'dpan': S.dpan = !S.dpan; render(); break;
     case 'infosave': S.infoSave = !S.infoSave; renderSheet(); break;
     case 'dfold': S.dFold = !S.dFold; renderSheet(); break;
+    case 'trkprev': { const L = trkLines(), c = trkOf(), k = L.indexOf(c); if (k <= 0) break;
+      saved.trk = saved.trk || {}; saved.trk[key()] = L[k - 1]; persist(); render(); trkScroll(true); break; }
     case 'trknext': { const L = trkLines(), c = trkOf(), k = L.indexOf(c); if (k < 0 || k >= L.length - 1) break;
       saved.trk = saved.trk || {}; saved.trk[key()] = L[k + 1]; persist(); render(); trkScroll(true); break; }
     case 'nview': { const i = +b.dataset.i;
       if (saved.notesOpen) { S.nClosed = S.nClosed || new Set(); if (S.nClosed.has(i)) S.nClosed.delete(i); else S.nClosed.add(i); }
       else S.nView = S.nView === i ? null : i; render(); break; }
-    case 'nedit': { const i = +b.dataset.i, n = noteOf(i); S.nEdit = { i, x: n ? n.x : '' }; S.nView = null; render(); break; }
+    case 'nmenu': { const i = +b.dataset.i; S.nMenu = S.nMenu === i ? null : i; render(); break; }
+    case 'nedit': { S.nMenu = null; const i = +b.dataset.i, n = noteOf(i); S.nEdit = { i, x: n ? n.x : '' }; S.nView = null; render(); break; }
     case 'nsave': if (S.nEdit) {
       const ta = document.getElementById('ntext'); if (ta) S.nEdit.x = ta.value;
       if (!(S.nEdit.x || '').trim()) { S.nEdit.err = true; renderNotes(); break; }
       const k = key(); (saved.notes[k] = saved.notes[k] || {})[S.nEdit.i] = { x: S.nEdit.x.trim() };
       S.nView = S.nEdit.i; S.nEdit = null; persist(); render();
     } break;
-    case 'ndel': { const k = key(), i = +b.dataset.i; appConfirm('Supprimer cette note ?', 'Supprimer', () => { if (saved.notes[k]) { delete saved.notes[k][i]; if (!Object.keys(saved.notes[k]).length) delete saved.notes[k]; } S.nEdit = null; S.nView = null; persist(); render(); }, true); break; }
+    case 'ndel': { S.nMenu = null; const k = key(), i = +b.dataset.i; appConfirm('Supprimer cette note ?', 'Supprimer', () => { if (saved.notes[k]) { delete saved.notes[k][i]; if (!Object.keys(saved.notes[k]).length) delete saved.notes[k]; } S.nEdit = null; S.nView = null; persist(); render(); }, true); break; }
     case 'nclose': S.nEdit = null; S.nList = false; render(); break;
     case 'nlist': S.nList = true; S.nView = null; render(); break;
     case 'ngo': { const i = +b.dataset.i; S.nList = false; S.mode = 'all'; S.nView = noteOf(i) ? i : null; render();
@@ -3861,7 +3929,7 @@ document.addEventListener('click', e => {
     case 'weaktog': S.weakK = S.weakK === b.dataset.k ? null : b.dataset.k; render(); break;
     case 'weaktab': S.weakTab = S.weakTab || {}; S.weakTab[b.dataset.k] = b.dataset.v; render(); break;
     case 'admbg': { const x = BADGES.find(y => y.id === b.dataset.b), t = +b.dataset.v; saved.bg = saved.bg || {}; saved.bgc = saved.bgc || {};
-      saved.bg[x.id] = t; saved.bgc[x.id] = x.unique ? t : (t ? x.T[t - 1] : 0); persist(); renderSheet(); render(); admToast(x.name + ' : ' + (x.unique ? (t ? 'obtenu' : 'retiré') : 'palier ' + t)); break; }
+      saved.bg[x.id] = t; saved.bgc[x.id] = x.unique ? t : (t ? x.T[t - 1] : 0); saved.bgFix = saved.bgFix || {}; saved.bgFix[x.id] = true; persist(); renderSheet(); render(); admToast(x.name + ' : ' + (x.unique ? (t ? 'obtenu' : 'retiré') : 'palier ' + t)); break; }
     case 'admwarn': appAlert('Exemple de message d’erreur : ce fichier est illisible.', null, true); break;
     case 'admcnt': S.admCnt = !S.admCnt; renderSheet(); break;
     case 'admsec': S.admSec = S.admSec === b.dataset.k ? null : b.dataset.k; renderSheet(); break;
@@ -3926,12 +3994,12 @@ document.addEventListener('click', e => {
       /* 2.02 : retourner la carte coupe la voix — après le début du retournement (l'arrêt de la voix peut bloquer un instant le téléphone) */
       const hush = () => { if (S.cards) requestAnimationFrame(() => setTimeout(stopSpeech, 60)); };
       if (S.cards && !S.stepRevealed && animMode() === 'on') { S.stepRevealed = true; const fc = document.querySelector('.fcard'); if (fc) { fc.classList.add('flip'); hush(); setTimeout(render, 480); break; } }
-      S.stepRevealed = true; render(); hush(); break; }
+      keepTodoBox(); S.stepRevealed = true; render(); hush(); break; }
     case 'prev': step(-1); break;
     case 'next': step(1); break;
     /* 2.03 (L4) : « Terminer ici » — bilan des répliques faites, la position est gardée pour « Reprendre » */
     case 'endhere': stopSpeech(); S.early = true; S.done = true;
-      if (S.stepsAll && S.scene) { saved.prog[key()] = { me:S.me, pos:S.pos, missed:[...S.missed], done:false }; saved.last = { play:S.play.id, scene:S.scene.id }; }
+      if (S.stepsAll && S.scene && !S.cards) { saved.prog[key()] = { me:S.me, pos:S.pos, missed:[...S.missed], done:false }; saved.last = { play:S.play.id, scene:S.scene.id }; }
       persist(); render(); window.scrollTo(0,0); break;
     case 'grade': grade(b.dataset.v); break;
   }
@@ -3963,7 +4031,7 @@ document.addEventListener('change', e => {
   else if (a === 'hlme') { saved.noHl = !t.checked; persist(); render(); }
   else if (a === 'thide') { S.textHide = t.checked; S.revealed = new Set(); render(); }
   else if (a === 'cue') { S.cue = t.checked; render(); }
-  else if (a === 'follow') { saved.follow = t.checked; persist(); render(); if (t.checked) trkScroll(true); }
+  else if (a === 'follow') { saved.follow = t.checked; if (t.checked) S.dpan = false; persist(); render(); if (t.checked) trkScroll(true); }   /* 2.04 : le panneau se ferme quand on active le suivi */
   else if (a === 'notesopen') { saved.notesOpen = t.checked; S.nClosed = new Set(); S.nView = null; persist(); render(); }
   else if (a === 'boldck') { S.bold = t.checked; persist(); render(); }
   else if (a === 'soundck') { saved.sound = t.checked ? 'on' : 'off'; persist(); render(); if (t.checked) rwSound(() => { RepeteSons.unlock(); RepeteSons.badge('or'); }); }
@@ -3995,9 +4063,18 @@ document.addEventListener('touchend', e => {
   if (!isFocus() || S.done) return;
   if (S.cards) return;
   const t = e.changedTouches[0], dx = t.clientX - tx, dy = t.clientY - ty;
+  const th = document.querySelector('.thr'); if (th) { th.style.transition = ''; th.style.transform = ''; }
+  /* 2.04 (M49) : glisser vers le bas = réplique précédente ; vers la gauche = suivante (inchangé) */
+  if (dy > 70 && Math.abs(dx) < 60 && Date.now() - tt < 800) { step(-1); return; }
   if (Math.abs(dx) < 70 || Math.abs(dy) > 60 || Date.now() - tt > 600) return;
-  if (dx < 0) primary(true); else step(-1);
+  if (dx < 0) primary(true);
 }, {passive:true});
+document.addEventListener('touchmove', e => {
+  if (!isFocus() || S.done || S.cards) return;
+  const t = e.changedTouches[0], dx = t.clientX - tx, dy = t.clientY - ty, th = document.querySelector('.thr'); if (!th) return;
+  if (dy > 0 && dy > Math.abs(dx)) { th.style.transition = 'none'; th.style.transform = 'translateY(' + Math.round(Math.min(dy, 90) * .6) + 'px)'; }
+}, {passive:true});
+document.addEventListener('touchcancel', () => { const th = document.querySelector('.thr'); if (th) { th.style.transition = ''; th.style.transform = ''; } }, {passive:true});
 /* clavier */
 document.addEventListener('keydown', e => {
   if (!isFocus() || S.done || e.target.closest('input,select,textarea')) return;
