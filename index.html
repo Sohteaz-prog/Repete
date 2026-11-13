@@ -249,7 +249,8 @@ button:not(:disabled):active{transform:scale(.97);filter:brightness(.95)}
 button{transition:transform .08s,filter .08s}
 /* 2.02 : animation au toucher rejouée après le clic, même si l'écran a été redessiné */
 @keyframes tapk{0%{transform:scale(.96);filter:brightness(.94)}100%{transform:none;filter:none}}
-button.tapk{animation:tapk .18s ease-out}
+button.tapk,.fpv.tapk{animation:tapk .18s ease-out}
+.fpv:active{transform:scale(.97);filter:brightness(.95)}
 .btn,.chip,.mdc,.la,.admb{transition:transform .08s,filter .08s}.gorow .btn.go{flex:1;padding:0 10px}.gorow .btn.go svg{width:20px;height:20px}
 .btn.go{display:inline-flex;align-items:center;justify-content:center}
 .nbub{display:flex;align-items:flex-start;gap:10px;margin-top:8px;border:1px solid var(--line);background:var(--card);border-radius:var(--r-12);padding:10px 12px;font:13.5px/1.45 system-ui,sans-serif;text-transform:none;letter-spacing:0;color:var(--ink)}
@@ -2522,6 +2523,9 @@ function admPanel(){
 }
 let sheetTimer = 0;
 let dblT = null;
+/* 2.03 : même animation au toucher pour les boutons d'import (champ invisible posé dessus) */
+document.addEventListener('pointerdown', e => { const f = e.target.closest && e.target.closest('.fpv'); if (!f) return;
+  f.classList.remove('tapk'); void f.offsetWidth; f.classList.add('tapk'); f.addEventListener('animationend', () => f.classList.remove('tapk'), { once:true }); }, true);
 /* 2.03 · essai 4 : mesure du temps d'ouverture du sélecteur de fichiers (admin › Diagnostic) */
 const fpLog = []; let fpT = null;
 document.addEventListener('pointerdown', e => { const r = e.target.closest && e.target.closest('.fpt'); if (!r) return; fpT = { k: r.dataset.k, t: performance.now() }; }, true);
@@ -2558,7 +2562,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 119, APP_LABEL = '2.03 · essai 6'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 120, APP_LABEL = '2.03'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}

@@ -24,7 +24,7 @@ L'appli s'ouvre alors en plein écran avec son icône et fonctionne hors ligne a
 
 ## Mettre à jour
 
-Remplacer `index.html` et `sw.js` sur GitHub, puis attendre la coche verte du déploiement (onglet « Actions »). Le numéro du cache dans `sw.js` change à chaque version (`repete-v120` devient `repete-v121`, etc.) : c'est ce qui fait récupérer la nouvelle version aux téléphones. Depuis la 2.03, l'appli s'ouvre toujours tout de suite avec la version gardée sur le téléphone et télécharge la nouvelle en arrière-plan : il faut donc fermer complètement l'appli et la rouvrir **deux fois** (ou toucher « Vérifier » en bas des Réglages). Le numéro de version de l'appli (« v2.03 · essai 6 ») s'affiche en petit en bas des Réglages.
+Remplacer `index.html` et `sw.js` sur GitHub, puis attendre la coche verte du déploiement (onglet « Actions »). Le numéro du cache dans `sw.js` change à chaque version (`repete-v121` devient `repete-v122`, etc.) : c'est ce qui fait récupérer la nouvelle version aux téléphones. Depuis la 2.03, l'appli s'ouvre toujours tout de suite avec la version gardée sur le téléphone et télécharge la nouvelle en arrière-plan : il faut donc fermer complètement l'appli et la rouvrir **deux fois** (ou toucher « Vérifier » en bas des Réglages). Le numéro de version de l'appli (« v2.03 ») s'affiche en petit en bas des Réglages.
 
 ## Principes
 
