@@ -859,6 +859,88 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(-
 /* 155 : le doigt touche directement le champ du téléphone, posé invisible sur le bouton (ouverture plus rapide) */
 .fpv{position:relative;overflow:hidden;cursor:pointer}
 .fpv .fpvi{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0;margin:0;padding:0;border:0}
+
+/* ===== 2.04 ===== */
+/* 171 (M68 / M71 B) */
+.nbtns .btn.soft.svb{border:1.5px solid var(--accent)}
+.btn.del{flex:0 0 auto;background:none;border:0;color:color-mix(in srgb,var(--st-ko) 75%,var(--ink));display:inline-flex;align-items:center;gap:6px;padding:0 6px;font-weight:600}
+/* minuteur : icône */
+.hd-r{display:flex;align-items:center;gap:8px}
+.ib.tm-ic{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.tm-ic .tm-dot{display:none;position:absolute;top:7px;right:7px;width:9px;height:9px;border-radius:50%;background:var(--accent);border:2px solid var(--card)}
+.tm-ic.tma .tm-dot{display:block}
+/* barre « entre-deux » (Minuteur-M32 B), collée en haut */
+.tm-slot{position:sticky;top:0;z-index:20;margin:0 -14px;padding:0 14px;background:var(--bg)}
+.tm-slot:empty,.tm-slot:has(> .tm-bar[hidden]){display:none}
+.tm-bar{padding:4px 0 6px;cursor:pointer;-webkit-user-select:none;user-select:none}
+.tm-bar[hidden]{display:none}
+.tm-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;min-height:28px}
+.tm-rd{font:700 10.5px/1.2 system-ui,sans-serif;letter-spacing:.03em;color:var(--mute);white-space:nowrap}
+.tm-tt{font:700 15px/1 system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.tm-pb{justify-self:end;width:48px;height:44px;margin:-8px -8px -8px 0;border:0;background:none;padding:0;display:grid;place-items:center;color:var(--ink)}
+.tm-pbi{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center}
+.tm-pg{height:3px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:2px}
+.tm-pg i{display:block;height:100%;background:var(--ink);border-radius:3px;transition:width .25s linear}
+.tm-bar.end .tm-tt,.tm-bar.end .tm-rd{color:var(--st-ko)}.tm-bar.end .tm-pg i{background:var(--st-ko)}
+.tm-bar.wait .tm-pg i{background:var(--mute)}
+/* grand minuteur plein écran (Minuteur-M30, M31) */
+.tm-sh{position:fixed;inset:0;z-index:70;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);transition:transform .25s ease}
+.tm-sh[hidden]{display:none}
+.tm-hd{display:flex;align-items:center;gap:8px;padding:14px 12px 4px 18px}
+.tm-hd h2{flex:1;margin:0;font-size:var(--fs-18)}
+.tm-sb{flex:1;overflow-y:auto;padding:4px 18px 12px;touch-action:pan-y}
+.tm-stp{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-12);padding:5px 5px 5px 14px;min-height:54px;margin-bottom:8px}
+.tm-stp .tm-n{flex:1;font-weight:600}
+.tm-stp .tm-v{font:700 16px system-ui,sans-serif;font-variant-numeric:tabular-nums;min-width:76px;text-align:center}
+.tm-stp button{width:44px;height:44px;border-radius:11px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:700 22px/1 system-ui,sans-serif;padding:0}
+.tm-sw{background:var(--card);border:1px solid var(--line);border-radius:var(--r-12);padding:6px 14px;min-height:50px;margin-bottom:8px;font-weight:600}
+.tm-test{width:100%;min-height:48px;margin-top:4px}
+.tm-ft{padding:10px 18px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--bg);display:grid;grid-template-columns:1fr;gap:8px}
+.tm-ft.tm-g2{grid-template-columns:1fr 1fr}
+.tm-ft .btn{display:flex;align-items:center;justify-content:center;gap:8px}
+.tm-ft .btn svg{flex:none}
+.tm-full{grid-column:1/-1}
+.tm-rsb{display:flex;flex-direction:column;justify-content:center;padding-bottom:28px}
+.tm-ring{position:relative;width:min(86%,290px);aspect-ratio:1;margin:0 auto}
+.tm-ring > svg{width:100%;height:100%;transform:rotate(-90deg)}
+.tm-ring circle{fill:none;stroke-width:6.5;stroke-linecap:butt}
+.tm-ring .tm-bg{stroke:var(--line)}
+.tm-ring .tm-fg{stroke:var(--ink);transition:stroke-dashoffset .25s linear,stroke .3s}
+.tm-ring.end .tm-fg{stroke:var(--st-ko)}.tm-ring.wait .tm-fg{stroke:var(--mute)}
+.tm-rc{position:absolute;inset:13%;border:0;border-radius:50%;background:none;color:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0}
+.tm-rc:active{background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.tm-big{font:700 60px/1 system-ui,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.tm-ring.paused .tm-big{opacity:.45}
+.tm-ring.end .tm-big{color:var(--st-ko)}
+.tm-cap{font-size:12.5px;color:var(--mute);font-weight:700;margin-top:4px;text-transform:uppercase;letter-spacing:.06em;min-height:15px}
+.tm-pi{margin-top:6px;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;color:var(--mute)}
+.tm-seg{display:flex;gap:6px;max-width:240px;width:100%;margin:22px auto 0}
+.tm-seg i{flex:1;height:5px;border-radius:6px;background:var(--line);position:relative;overflow:hidden}
+.tm-seg b{position:absolute;inset:0;width:0;background:var(--mute);opacity:.6}
+.tm-stop{position:relative;overflow:hidden;min-height:58px;background:var(--st-ko);border-color:var(--st-ko);color:#fff;font-size:17px;box-shadow:0 2px 0 rgba(0,0,0,.18);transition:background .15s}
+.tm-stop.arm{background:color-mix(in srgb,var(--st-ko) 55%,#000);border-color:transparent}
+.tm-stop .tm-sq{width:15px;height:15px;background:#fff;border-radius:3px;display:block}
+.tm-stop .tm-cdb{position:absolute;left:0;bottom:0;height:5px;background:#fff;opacity:.85}
+/* alerte « halo doux » (Minuteur-M33) */
+.tm-al{position:fixed;inset:0;z-index:350;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(20,16,12,.5);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.tm-al[hidden]{display:none}
+.tm-al::before{content:"";position:absolute;inset:0;pointer-events:none}
+.tm-al.fl::before{animation:tmglow 1.2s ease-in-out infinite}
+@keyframes tmglow{0%,100%{box-shadow:inset 0 0 18px 4px color-mix(in srgb,var(--st-ko) 35%,transparent)}50%{box-shadow:inset 0 0 70px 26px color-mix(in srgb,var(--st-ko) 95%,transparent)}}
+.tm-cd{position:relative;z-index:1;background:var(--card);color:var(--ink);border-radius:22px;padding:22px 18px 16px;width:100%;max-width:360px;box-shadow:0 10px 40px rgba(0,0,0,.35);display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.tm-bell{width:60px;height:60px;border-radius:50%;background:var(--bg);display:grid;place-items:center;color:var(--st-ko);animation:tmshake .5s infinite}
+@keyframes tmshake{0%,100%{transform:rotate(0)}25%{transform:rotate(-12deg)}75%{transform:rotate(12deg)}}
+.tm-cd h3{margin:2px 0 0;font-size:22px}.tm-cd p{margin:0 0 8px;color:var(--mute);font-size:15px}
+.tm-abt{display:flex;flex-direction:column;gap:8px;width:100%}
+.tm-abt .btn{width:100%;white-space:normal;line-height:1.25;padding:8px 14px}
+/* préavis : halo jaune qui pulse 2 fois */
+.tm-pre{position:fixed;inset:0;z-index:349;pointer-events:none;opacity:0;box-shadow:inset 0 0 70px 26px rgba(245,190,0,.95)}
+.tm-pre.go{animation:tmpre 1.8s ease-out}
+@keyframes tmpre{0%{opacity:0}15%{opacity:1}40%{opacity:.3}60%{opacity:1}100%{opacity:0}}
+/* message « Minuteur arrêté », en haut */
+.tm-toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top));transform:translate(-50%,-16px);opacity:0;transition:.25s;z-index:9998;display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:12px;font:600 14.5px system-ui,sans-serif;white-space:nowrap;pointer-events:none}
+.tm-toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){.tm-al.fl::before{animation:none;box-shadow:inset 0 0 40px 14px color-mix(in srgb,var(--st-ko) 80%,transparent)}.tm-bell{animation:none}.tm-pre.go{animation:none}}
 </style>
 </head>
 <body>
@@ -2513,6 +2595,14 @@ function admPanel(){
     ${sec('guide', 'Guide de démarrage', 'Rejouer le guide', `
       <div class="mute small" style="margin-bottom:8px">Vide « Mes scènes », les personnages choisis et la progression du profil de test (les badges restent), puis réaffiche le guide.</div>
       <button class="admb" style="width:100%" data-act="adm" data-op="guide">Rejouer le guide</button>`)}
+    ${sec('tmr', 'Minuteur', 'Vitesse, étapes, alarme', `
+      <div class="lbl" style="margin:4px 0 6px">Vitesse</div>
+      <div class="seg sm">${[[1, 'Normale'], [5, '×5'], [20, '×20']].map(([v, n]) => `<button class="${(tmClk.spd || 1) === v ? 'on' : ''}" data-act="tmspd" data-v="${v}">${n}</button>`).join('')}</div>
+      <div class="mute small" style="margin:6px 0 10px">×5 : un passage de 20 min dure 4 min (préavis d’1 min = 12 s). ×20 : 1 min (préavis = 3 s).</div>
+      <div class="lbl" style="margin:4px 0 6px">Aller directement à…</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${[['run', 'Passage en cours'], ['prewarn', '5 s avant le préavis'], ['lastmin', 'Dernière minute'], ['end10', '10 s avant la fin'], ['alarm', 'Fin de passage'], ['pause', 'Pause entre passages']].map(([v, n]) => `<button class="admb" data-act="tmjump" data-v="${v}">${n}</button>`).join('')}<button class="admb" style="grid-column:1/3" data-act="tmjump" data-v="done">Dernier passage terminé</button></div>
+      <button class="admb" style="width:100%;margin-top:10px" data-act="tmtest">Tester l’alarme</button>
+`)}
     ${sec('diag', 'Diagnostic', 'Hors ligne, vibration, message d’erreur', `
       <div class="admrow"><span>${offMsg || 'Mode hors ligne'}</span><button class="admb" data-act="chkoff">Vérifier</button></div>
       <button class="admb" style="width:100%;margin-top:8px" data-act="admwarn">Tester un message d’erreur</button>
@@ -2562,7 +2652,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 120, APP_LABEL = '2.03'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 121, APP_LABEL = '2.04 · essai 1'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -2641,7 +2731,7 @@ let navT = 0;
 window.addEventListener('scroll', () => { clearTimeout(navT); navT = setTimeout(navSave, 300); }, { passive: true });
 document.addEventListener('visibilitychange', () => { if (document.hidden) navSave(); });
 window.addEventListener('pagehide', navSave);
-const navDepth = () => !!(document.getElementById('appcf') || S.settings || S.pick || S.pickK || S.dpan || S.nMenu != null || S.nEdit || S.nList || S.nView != null || S.view !== 'library' || S.started || document.querySelector('.rwl.on') || (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()));
+const navDepth = () => !!(document.getElementById('appcf') || (typeof tmOpen !== 'undefined' && tmOpen) || S.settings || S.pick || S.pickK || S.dpan || S.nMenu != null || S.nEdit || S.nList || S.nView != null || S.view !== 'library' || S.started || document.querySelector('.rwl.on') || (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()));
 
 /* ===== Textes de la classe : fichier textes-classe.json placé à côté de index.html ===== */
 function mergeShared(arr){
@@ -2669,13 +2759,13 @@ async function loadShared(){
 }
 try { loadShared(); } catch(e) {}
 /* Fenêtre de confirmation de l'appli (remplace celle du système) */
-function appConfirm(msg, okLabel, onOk, danger){
+function appConfirm(msg, okLabel, onOk, danger, noIcon){
   const old = document.getElementById('appcf'); if (old) old.remove();
   const d = document.createElement('div'); d.id = 'appcf'; d.setAttribute('role', 'alertdialog'); d.setAttribute('aria-modal', 'true');
   d.style.cssText = 'position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(10,8,6,.55)';
   d.innerHTML = '<div style="width:100%;max-width:340px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:20px 18px 16px;box-shadow:0 10px 30px rgba(0,0,0,.35)"><p style="margin:4px 0 18px;font-size:17px;line-height:1.4;font-weight:600;text-align:center;white-space:pre-line"></p><div style="display:flex;gap:10px"><button type="button" data-cf="no" class="btn" style="flex:1;min-height:48px">Annuler</button><button type="button" data-cf="ok" class="btn ' + (danger ? 'dgr' : 'pri') + '" style="flex:1;min-height:48px;font-size:16px"></button></div></div>';
   d.querySelector('p').textContent = msg; d.querySelector('[data-cf=ok]').textContent = okLabel || 'OK';
-  if (danger) d.querySelector('[data-cf=ok]').insertAdjacentHTML('afterbegin', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>');
+  if (danger && !noIcon) d.querySelector('[data-cf=ok]').insertAdjacentHTML('afterbegin', '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>');
   const close = () => { d.remove(); };
   d._cancel = close;
   d.addEventListener('click', e => { const t = e.target.closest('[data-cf]'); if (t && t.dataset.cf === 'ok') { close(); onOk(); } else if (t || e.target === d) close(); });
@@ -2857,12 +2947,13 @@ function importView(){
   }
   const mine = []; saved.userLib.forEach(p => p.scenes.forEach(sc => mine.push([p, sc])));
   if (mine.length && I.step === 1) h += `<section class="card"><div class="lbl">Mes textes ajoutés</div>` + mine.map(([p, sc]) =>
-    `<div style="display:flex;align-items:center;gap:8px;margin:6px 0"><span style="flex:1">${esc(p.title)} · ${esc(sc.title)}</span><button class="btn sm ko" data-act="importdel" data-play="${p.id}" data-scene="${sc.id}">Supprimer</button></div>`).join('') + `<button class="btn sm" style="width:100%;margin-top:8px" data-act="exporttexts">Exporter mes textes (fichier à partager)</button><p class="mute small">Pour les mettre dans l’application de la classe : envoie le fichier <b>textes-classe.json</b> sur GitHub, à côté de index.html.</p></section>`;
+    `<div style="display:flex;align-items:center;gap:8px;margin:6px 0"><span style="flex:1">${esc(p.title)} · ${esc(sc.title)}</span><button class="btn sm del" data-act="importdel" data-play="${p.id}" data-scene="${sc.id}">${IC_TRASH}Supprimer</button></div>`).join('') + `<button class="btn sm" style="width:100%;margin-top:8px" data-act="exporttexts">Exporter mes textes (fichier à partager)</button><p class="mute small">Pour les mettre dans l’application de la classe : envoie le fichier <b>textes-classe.json</b> sur GitHub, à côté de index.html.</p></section>`;
   if (I.step === 1) h += `<section class="card"><div class="lbl">Importer un fichier de textes</div><p class="mute small">Si on t’a envoyé un ou plusieurs fichiers <b>textes-classe</b> (.json), choisis-les ici ; tu peux en sélectionner plusieurs d’un coup.</p><span class="btn sm dbt dout fpv" role="button">${IC_UL}<span>Importer un fichier de textes</span><input type="file" accept=".json,application/json" multiple data-act="importfile" class="fpvi"></span></section>`;
   return h;
 }
 function navBack(){
   const cf = document.getElementById('appcf'); if (cf) { cf._cancel(); return; }
+  if (tmOpen) { tmCloseSheet(); return; }   /* 2.04 : le retour ferme d'abord le grand minuteur */
   const rw = document.querySelector('.rwl.on');
   if (rw) { if (rw._close) rw._close(); else rw.click(); return; }
   /* 2.04 : le retour referme d'abord les petites listes et menus ouverts */
@@ -3024,6 +3115,8 @@ function render(){
   { const fv = isFocus() && !S.done, app = $('#app'); app.classList.toggle('fv', fv); app.classList.toggle('fvx', fv && !S.cards); }
   /* 2.03 (essai 3) : le suivi de lecture ne se garde pas quand on quitte la lecture */
   if (S.follow && !(S.view === 'scene' && S.tab === 'text' && !isFocus())) S.follow = false;
+  /* 2.04 : ouvrir Répéter arrête le minuteur (filet de sécurité si on y arrive autrement que par l'onglet) */
+  if (typeof TMS !== 'undefined' && TMS && S.view === 'scene' && S.tab === 'reh') { tmStop(); tmToast(); }
   $('#app').innerHTML = (ADMIN ? admBar() : '') + (S.view === 'library' ? libView() : S.view === 'badges' ? badgesView() : S.view === 'progress' ? progressView() : S.view === 'rank' ? rankView() : S.view === 'import' ? importView() : sceneView());
   renderSheet();
   renderNotes();
@@ -3032,6 +3125,7 @@ function render(){
   try { wakeSync(); } catch(e) {}
   try { bindCardSwipe(); } catch(e) {}
   try { keepNow(); } catch(e) {}
+  try { tmDock(); } catch(e) {}
   if (animHold.length && !animHolding()) { const h = animHold.splice(0); h.forEach(x => celebrate(x.kind, x.data)); }
 }
 /* 2.03 : en Répétition, la bulle en cours reste visible au-dessus des boutons */
@@ -3043,7 +3137,7 @@ function keepNow(){
 }
 /* 2.01 : l'écran reste allumé pendant la répétition (si le téléphone le permet). */
 let wakeLk = null, wakeAsk = false;
-const wakeWant = () => (isFocus() && !S.done) || (S.view === 'scene' && S.tab === 'text' && !S.settings);   /* 2.03 : aussi sur l'onglet Texte */
+const wakeWant = () => (isFocus() && !S.done) || (S.view === 'scene' && S.tab === 'text' && !S.settings) || (typeof TMS !== 'undefined' && !!TMS);   /* 2.04 : aussi tant que le minuteur tourne */   /* 2.03 : aussi sur l'onglet Texte */
 function wakeSync(){
   const want = wakeWant() && !document.hidden;
   if (!('wakeLock' in navigator)) return;
@@ -3448,7 +3542,7 @@ function progressView(){
 }
 function libView(){
   const tab = saved.libTab;
-  let h = `<div class="hd"><h1>Répète</h1>${gearBtn()}</div>
+  let h = `<div class="hd"><h1>Répète</h1><span class="hd-r">${tmIco()}${gearBtn()}</span></div><div id="tmslot" class="tm-slot"></div>
     <div class="tabs" style="margin-top:12px"><button class="${tab === 'mine' ? 'on' : ''}" data-act="libtab" data-v="mine">Mes scènes</button>
     <button class="${tab === 'all' ? 'on' : ''}" data-act="libtab" data-v="all">Bibliothèque</button></div>`;
   return h + guideCard() + (tab === 'mine' ? mineView() : allView());
@@ -3473,9 +3567,10 @@ const ttsWarn = () => !synth
   : (S.audio && (S.tts.status === 'silent' || S.tts.status === 'err'))
   ? `<div class="warnbox">Aucun son détecté${S.tts.msg ? ' (' + esc(S.tts.msg) + ')' : ''}. Vérifie le volume « média » du téléphone. Si rien ne change, ouvre cette page dans ton navigateur (Chrome) : la lecture vocale est parfois bloquée dans l’application.</div>` : '';
 function topBar(extra){
+  const tx = !extra && S.tab === 'text';   /* 2.04 : minuteur dans l'onglet Texte seulement (pas dans Répéter) */
   return `<div class="bar"><button class="ghost back" data-act="${extra ? 'leave' : 'back'}" aria-label="Retour">${BACK}</button>
     <div class="bt">${esc(S.scene.title)}</div>
-    ${gearBtn()}</div>`;
+    ${tx ? tmIco() : ''}${gearBtn()}</div>${tx ? '<div id="tmslot" class="tm-slot"></div>' : ''}`;
 }
 function sceneView(){
   if (isFocus()) return `<div class="focus">` + topBar(true) + ttsWarn() + (S.done ? doneView() : stepView()) + `</div>`;
@@ -3513,7 +3608,7 @@ function noteBubble(i){
   const mo = S.nMenu === i;
   return `<div class="nbub nb2"><div>${n.x ? esc(n.x).replace(/\n/g, '<br>') : '<i style="color:var(--mute)">Note sans texte</i>'}</div>
     <button class="nmore" data-act="nmenu" data-i="${i}" aria-label="Options de la note" aria-expanded="${mo}"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
-    ${mo ? `<div class="nmenu" role="menu"><button role="menuitem" data-act="nedit" data-i="${i}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Modifier</button><button role="menuitem" class="dg" data-act="ndel" data-i="${i}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Supprimer</button></div>` : ''}</div>`;
+    ${mo ? `<div class="nmenu" role="menu"><button role="menuitem" data-act="nedit" data-i="${i}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Modifier</button><button role="menuitem" class="dg" data-act="ndel" data-i="${i}">${IC_TRASH}Supprimer</button></div>` : ''}</div>`;
 }
 function renderNotes(){
   let el = document.getElementById('nsheet');
@@ -3529,7 +3624,7 @@ function renderNotes(){
       <p class="nt">Note · réplique ${lineNo(e.i)}</p><p class="ns">${esc(it.c)} : ${esc(snip)}</p>
       <textarea id="ntext" data-act="ntext" maxlength="300" placeholder="Écris ta note" aria-label="Texte de la note">${esc(e.x || '')}</textarea>
       ${e.err ? '<p class="nerr">Écris ta note.</p>' : ''}
-      <div class="nbtns">${noteOf(e.i) ? '<button class="btn sm ko" data-act="ndel" data-i="' + e.i + '">Supprimer</button>' : ''}<span class="sp"></span><button class="btn sm" data-act="nclose">Annuler</button><button class="btn sm soft" data-act="nsave">Enregistrer</button></div></div>`;
+      <div class="nbtns">${noteOf(e.i) ? '<button class="btn sm del" data-act="ndel" data-i="' + e.i + '">' + IC_TRASH + 'Supprimer</button>' : ''}<span class="sp"></span><button class="btn sm" data-act="nclose">Annuler</button><button class="btn sm soft svb" data-act="nsave">Enregistrer</button></div></div>`;
   } else {
     const all = Object.keys(sceneNotes()).map(Number).sort((a, b) => a - b);
     const list = all;
@@ -3599,8 +3694,9 @@ const trkLines = () => { const out = []; S.scene.items.forEach((it, i) => { if (
 function trkOf(){ saved.trk = saved.trk || {}; const L = trkLines(), v = saved.trk[key()]; return L.includes(v) ? v : (L[0] ?? -1); }
 function trkScroll(smooth){
   const el = document.querySelector('.script .line.trk'), band = document.querySelector('.nband'); if (!el) return;
-  const avail = innerHeight - (band ? band.getBoundingClientRect().height : 0), r = el.getBoundingClientRect();
-  const want = r.height > avail * 2 / 3 ? 12 : avail / 3 - r.height / 2;
+  const slot = document.getElementById('tmslot'), tb = slot && TMS ? slot.getBoundingClientRect().height : 0;   /* 2.04 (M69) */
+  const avail = innerHeight - (band ? band.getBoundingClientRect().height : 0) - tb, r = el.getBoundingClientRect();
+  const want = tb + (r.height > avail * 2 / 3 ? 12 : avail / 3 - r.height / 2);
   window.scrollTo({ top: Math.max(0, window.scrollY + r.top - want), behavior: smooth ? 'smooth' : 'auto' });
 }
 
@@ -3720,6 +3816,7 @@ function pSpk(){
 const notesOn = () => !!(S.cards ? co().notes : saved.rehNotes);
 const pNote = () => `<button class="ib pnt${notesOn() ? '' : ' off'}" data-act="notestoggle" aria-label="Notes ${notesOn() ? 'affichées' : 'cachées'}" aria-pressed="${notesOn()}">${FICHE}</button>`;
 const pRight = () => { const fl = S.rehHide || S.cards; return `<span class="pcr pcr3${fl ? ' pcrf' : ''}">${S.missed.size ? `<span>${S.missed.size} à revoir</span>` : ''}<span class="pwrap"><span class="pgrp">${pNote()}${pSpk()}</span>${fl ? `<span class="pgrp"><button class="ib pfl" data-act="endhere" aria-label="Terminer ici">${IC_FLAG}</button></span>` : ''}</span></span>`; };
+const IC_TRASH = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>';
 const IC_FLIP = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg>';
 const IC_SLIDERS = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>';
 const IC_DOWN = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
@@ -4071,7 +4168,11 @@ document.addEventListener('click', e => {
       S.me = b.dataset.c || null; S.pick = false; S.mode = (S.me ? S.mode : 'all'); S.revealed = new Set();
       S.started = false; S.steps = []; S.pos = 0; S.done = false; S.missed = new Set();
       saved.me[key()] = S.me; persist(); render(); break;
-    case 'tab': stopSpeech(); S.tab = b.dataset.v; render(); break;
+    case 'tab': { const v = b.dataset.v; const go = () => { stopSpeech(); S.tab = v; render(); }; if (v === 'reh') tmGuard(go); else go(); break; }
+    case 'tmspd': tmSetSpeed(+b.dataset.v); renderSheet(); break;
+    case 'tmjump': tmUnlock(); tmAdmJump(b.dataset.v); break;
+    case 'tmtest': tmUnlock(); tmBeep(3); break;
+    case 'tmopen': tmUnlock(); tmOpenSheet(); break;
     case 'mode': S.mode = b.dataset.v; render(); break;
     case 'reveal': S.revealed.add(+b.dataset.i); render(); break;
     case 'rehide': S.revealed = new Set(); render(); break;
@@ -4082,7 +4183,7 @@ document.addEventListener('click', e => {
     case 'fpdyn': { const f = document.createElement('input'); f.type = 'file'; f.accept = '.json,application/json'; f.click(); break; }
     case 'notestoggle': if (S.cards) co().notes = !co().notes; else saved.rehNotes = !saved.rehNotes; persist(); render(); break;
     case 'audiotoggle': if (S.cards) co().audio = !co().audio; else S.audio = !S.audio; persist(); if (!audioOn()) stopSpeech(); else autoSpeak(); render(); break;
-    case 'from': { const all = allSteps(); S.missed = new Set(); beginSteps(all, Math.max(0, all.indexOf(+b.dataset.i)), true); break; }
+    case 'from': { const i = +b.dataset.i; tmGuard(() => { const all = allSteps(); S.missed = new Set(); beginSteps(all, Math.max(0, all.indexOf(i)), true); }); break; }
     case 'start': S.missed = new Set(); beginSteps(allSteps(), 0, true); break;
     case 'rmode': S.rmode = b.dataset.v === 'cards' ? 'cards' : 'reh'; render(); break;
     case 'cresume': {
@@ -4173,13 +4274,13 @@ document.addEventListener('touchstart', e => { const t = e.changedTouches[0]; tx
 /* 2.01 : glisser horizontalement pour changer d'onglet (Mes scènes ↔ Bibliothèque, Texte ↔ Répéter) */
 let tsx = 0, tsy = 0, tst = 0, tsOk = false;
 document.addEventListener('touchstart', e => { const t = e.touches[0]; tsx = t.clientX; tsy = t.clientY; tst = Date.now();
-  tsOk = !e.target.closest('input,textarea,select,.rng,.sh-wrap,.rwl,#appcf,.eg,.fcard'); }, {passive:true});
+  tsOk = !e.target.closest('input,textarea,select,.rng,.sh-wrap,.rwl,#appcf,.eg,.fcard,#tm,#tmsheet,#tmalarm'); }, {passive:true});
 document.addEventListener('touchend', e => {
   if (!tsOk || isFocus() || S.settings || document.getElementById('appcf')) return;
   const t = e.changedTouches[0], dx = t.clientX - tsx, dy = t.clientY - tsy;
   if (Math.abs(dx) < 70 || Math.abs(dy) > 50 || Date.now() - tst > 600) return;
   if (S.view === 'library') { const v = dx < 0 ? 'all' : 'mine'; if ((saved.libTab || 'mine') !== v) { saved.libTab = v; persist(); render(); window.scrollTo(0, 0); } }
-  else if (S.view === 'scene' && !S.started) { const v = dx < 0 ? 'reh' : 'text'; if (S.tab !== v) { stopSpeech(); S.tab = v; render(); } }
+  else if (S.view === 'scene' && !S.started) { const v = dx < 0 ? 'reh' : 'text'; if (S.tab !== v) { const go = () => { stopSpeech(); S.tab = v; render(); }; if (v === 'reh') tmGuard(go); else go(); } }
 }, {passive:true});
 document.addEventListener('touchend', e => {
   if (!isFocus() || S.done) return;
@@ -4198,6 +4299,211 @@ document.addEventListener('keydown', e => {
 document.addEventListener('visibilitychange', () => { if (document.hidden) stopSpeech(); else { try { rankSync(); } catch(e) {} } });
 window.addEventListener('online', () => { try { rankSync(); } catch(e) {} });
 try { rankSync(); } catch(e) {}
+/* ===================== 2.04 : MINUTEUR DE RÉPÉTITION (claude/minuteur-integration.md + minuteur-2.04-decisions.md) =====================
+   Éléments persistants hors de #app (#tm, #tmsheet, #tmalarm, #tmpre) : render() ne les détruit jamais.
+   Temps calculé à partir d'horloges (fin de passage), jamais en comptant des ticks. Horloge « virtuelle » pour la vitesse du mode admin. */
+const TM_DURS = [1, 2, 3, 5, 10, 15, 20, 25, 30, 40, 45, 50, 60], TM_PAUSES = [0, 30, 60, 120, 300], TM_WARNS = [0, 30, 60, 120];
+const TM_ICO = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4l2.5 1.5M9.5 3h5M12 3v3"/></svg>';
+const TM_OFF = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M9.5 3h5M12 3v3M4 4l16 16"/></svg>';
+const TM_PA = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>';
+const TM_PL = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+const TM_BELL = '<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 003.4 0"/></svg>';
+function tmCfg(){ saved.timer = Object.assign({ dur:20, passages:4, pause:0, warn:60, sound:true, vib:true, flash:true }, isObj(saved.timer) ? saved.timer : {}); return saved.timer; }
+var TMS = null, tmClk = { v: Date.now(), r: Date.now(), spd: 1 }, tmOpen = false, tmArm = 0, tmActx = null, tmRingIv = null, tmShKey = '', tmAlKey = '';
+const tmNow = () => tmClk.v + (Date.now() - tmClk.r) * tmClk.spd;
+const tmActive = () => !!TMS;
+function tmSave(){ saved.tmRun = TMS ? { s: TMS, c: tmClk } : null; persist(); }
+function tmSetSpeed(s){ tmClk = { v: tmNow(), r: Date.now(), spd: s }; tmSave(); }
+/* restaurer après un rechargement (l'heure de fin est connue : le temps affiché reste juste) */
+try { const r = saved.tmRun; if (r && isObj(r.s) && r.s.ph) { TMS = r.s; tmClk = isObj(r.c) ? r.c : tmClk; if (!ADMIN) tmClk = { v: tmNow(), r: Date.now(), spd: 1 }; TMS.quiet = true; } } catch(e) { TMS = null; }
+/* --- sons, vibration (Web Audio : pas de fichier, fonctionne hors connexion) --- */
+function tmUnlock(){ try { tmActx = tmActx || new (window.AudioContext || window.webkitAudioContext)(); if (tmActx.state === 'suspended') tmActx.resume(); } catch(e) {} }
+function tmBeep(n){
+  const c = tmCfg();
+  if (c.sound && tmActx) { for (let i = 0; i < (n || 3); i++) { try { const o = tmActx.createOscillator(), g = tmActx.createGain(); o.type = 'sine'; o.frequency.value = i % 2 ? 740 : 880; o.connect(g); g.connect(tmActx.destination);
+    const t = tmActx.currentTime + i * .28; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.35, t + .02); g.gain.linearRampToValueAtTime(0, t + .22); o.start(t); o.stop(t + .25); } catch(e) {} } }
+  if (c.vib && navigator.vibrate) { try { navigator.vibrate(n > 1 ? [400, 150, 400, 150, 700] : [300]); } catch(e) {} }
+}
+function tmRing(){ tmStopRing(); tmBeep(3); let k = 0; tmRingIv = setInterval(() => { if (++k > 8) { tmStopRing(); return; } tmBeep(3); }, 2200); }
+function tmStopRing(){ if (tmRingIv) { clearInterval(tmRingIv); tmRingIv = null; } try { if (navigator.vibrate) navigator.vibrate(0); } catch(e) {} }
+/* --- états --- */
+function tmStart(p, remMs){
+  const c = tmCfg(), rem = remMs != null ? remMs : c.dur * 60000;
+  TMS = { ph:'run', p, end: tmNow() + rem, w: c.warn > 0 && rem <= c.warn * 1000 };
+  tmStopRing(); tmSave(); tmPaint(); try { wakeSync(); } catch(e) {}
+}
+function tmEndPassage(at){
+  const c = tmCfg(), p = TMS.p, late = (tmNow() - at) / (tmClk.spd || 1);
+  TMS = p >= c.passages - 1 ? { ph:'done', p, since: at } : { ph:'alarm', p, since: at, pend: c.pause > 0 ? at + c.pause * 1000 : null };
+  if (late < 30000) tmRing();   /* rechargé longtemps après la fin : alerte affichée sans faire sonner */
+  tmSave();
+}
+function tmToggle(){
+  if (!TMS) return; const ph = TMS.ph;
+  if (ph === 'run') TMS = { ph:'paused', p: TMS.p, rem: Math.max(0, TMS.end - tmNow()), w: TMS.w };
+  else if (ph === 'paused') TMS = { ph:'run', p: TMS.p, end: tmNow() + TMS.rem, w: TMS.w };
+  else if (ph === 'alarm' || ph === 'break' || ph === 'wait') { tmStart(TMS.p + 1); return; }
+  tmSave(); tmPaint();
+}
+function tmSilence(){ tmStopRing(); if (!TMS) return; if (TMS.ph === 'done') { tmStop(); return; }
+  TMS = tmCfg().pause > 0 && TMS.pend ? { ph:'break', p: TMS.p, pend: TMS.pend } : { ph:'wait', p: TMS.p, since: TMS.since || tmNow() }; tmSave(); tmPaint(); }
+function tmPrev(){ if (TMS) tmStart(Math.max(0, TMS.p - 1)); }
+function tmNext(){ if (!TMS) return; if (TMS.p < tmCfg().passages - 1) tmStart(TMS.p + 1); else { TMS = { ph:'done', p: TMS.p, since: tmNow() }; tmRing(); tmSave(); tmPaint(); } }
+function tmStop(){ TMS = null; tmArm = 0; tmStopRing(); tmSave(); tmShKey = ''; tmPaint(); try { wakeSync(); } catch(e) {} }
+function tmToast(){ let t = document.getElementById('tmtoast'); if (!t) return; t.classList.remove('on'); void t.offsetWidth; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 3000); }
+/* ouvrir Répéter arrête le minuteur (décision 166 : aussi en glissant) */
+function tmGuard(go){ if (!tmActive()) { go(); return; }
+  appConfirm('Ouvrir Répéter arrête le minuteur. Continuer ?', 'Continuer', () => { tmStop(); tmToast(); go(); }, true, true); }
+function tmTick(){
+  if (!TMS) return; const c = tmCfg(), now = tmNow();
+  if (TMS.ph === 'run') {
+    const rem = TMS.end - now;
+    if (!TMS.w && c.warn > 0 && rem <= c.warn * 1000) { TMS.w = true; if (!TMS.quiet) tmPre(); tmSave(); }
+    if (rem <= 0) tmEndPassage(TMS.end);
+  } else if (TMS.ph === 'alarm' && TMS.pend && now >= TMS.pend) tmStart(TMS.p + 1);
+  else if (TMS.ph === 'break' && now >= TMS.pend) { tmBeep(1); tmStart(TMS.p + 1); }
+  if (TMS) TMS.quiet = false;
+  tmPaint();
+}
+/* --- affichage --- */
+const tmFmt = ms => { let s = Math.max(0, Math.ceil(ms / 1000)); const m = Math.floor(s / 60); s %= 60; return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s; };
+function tmState(){
+  const c = tmCfg(), now = tmNow(), ph = TMS.ph, p = TMS.p, N = c.passages;
+  const rem = ph === 'run' ? TMS.end - now : ph === 'paused' ? TMS.rem : (ph === 'break' || (ph === 'alarm' && TMS.pend)) ? TMS.pend - now : 0;
+  const over = (ph === 'wait' || ph === 'done' || (ph === 'alarm' && !TMS.pend)) ? now - TMS.since : 0;
+  const brk = ph === 'break' || (ph === 'alarm' && !!TMS.pend), wt = ph === 'wait' || ph === 'done' || (ph === 'alarm' && !TMS.pend);
+  const tot = brk ? c.pause * 1000 : c.dur * 60000;
+  const wf = (ph === 'run' || ph === 'paused') && c.warn > 0 && rem <= c.warn * 1000 ? Math.max(0, Math.min(1, 1 - rem / (c.warn * 1000))) : -1;
+  const mode = ph === 'alarm' || ph === 'done' ? 'end' : ph === 'wait' || ph === 'break' ? 'wait' : wf >= 0 ? 'warn' : '';
+  const time = wt ? (over > 0 ? '+' : '') + tmFmt(over) : tmFmt(rem);
+  const cur = wt || brk ? 1 : Math.max(0, Math.min(1, 1 - rem / tot));
+  const wcol = wf >= 0 ? `color-mix(in srgb, var(--st-ko) ${Math.round(wf * 100)}%, var(--accent))` : mode === 'end' ? 'var(--st-ko)' : '';
+  return { c, ph, p, N, rem, over, brk, wt, tot, mode, time, cur, wcol };
+}
+var TME = null;   /* éléments du minuteur, gardés en mémoire (render() peut détacher la barre de la page) */
+function tmBuild(){
+  if (TME) return;
+  const bar = document.createElement('div'); bar.id = 'tm'; bar.className = 'tm-bar'; bar.hidden = true;
+  bar.innerHTML = '<div class="tm-row"><span class="tm-rd"></span><span class="tm-tt"></span><button type="button" class="tm-pb" aria-label="Pause"><span class="tm-pbi"></span></button></div><div class="tm-pg"><i></i></div>';
+  bar.addEventListener('click', e => { tmUnlock(); if (e.target.closest('.tm-pb')) { tmToggle(); return; } tmOpenSheet(); });
+  const sh = document.createElement('div'); sh.id = 'tmsheet'; sh.className = 'tm-sh'; sh.hidden = true; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-label', 'Minuteur');
+  sh.addEventListener('click', tmSheetClick);
+  const al = document.createElement('div'); al.id = 'tmalarm'; al.className = 'tm-al'; al.hidden = true; al.setAttribute('role', 'alertdialog');
+  al.addEventListener('click', e => { const b = e.target.closest('[data-tma]'); if (!b) return; tmUnlock(); if (b.dataset.tma === 'next') { tmStart(TMS.p + 1); } else tmSilence(); });
+  const pre = document.createElement('div'); pre.id = 'tmpre'; pre.className = 'tm-pre';
+  const to = document.createElement('div'); to.id = 'tmtoast'; to.className = 'tm-toast'; to.setAttribute('role', 'status'); to.innerHTML = TM_OFF + '<span>Minuteur arrêté</span>';
+  [bar, sh, al, pre, to].forEach(x => document.body.appendChild(x));
+  TME = { bar, sh, al };
+  /* glisser vers le bas ferme le grand minuteur (seulement si son contenu est en haut) ; un glissement ne déclenche pas le bouton dessous */
+  let y0 = null, dy = 0, drag = false;
+  sh.addEventListener('pointerdown', e => { const sb = e.target.closest('.tm-sb'); if (sb && sb.scrollTop > 0) return; if (e.target.closest('.tm-stp button')) return; y0 = e.clientY; dy = 0; });
+  window.addEventListener('pointermove', e => { if (y0 === null) return; dy = Math.max(0, e.clientY - y0); if (dy > 6) { sh.style.transition = 'none'; sh.style.transform = 'translateY(' + dy + 'px)'; } });
+  window.addEventListener('pointerup', () => { if (y0 === null) return; y0 = null; drag = dy > 6; sh.style.transition = ''; sh.style.transform = ''; if (dy > 90) tmCloseSheet(); });
+  sh.addEventListener('click', e => { if (drag) { drag = false; e.stopPropagation(); e.preventDefault(); } }, true);
+  document.addEventListener('pointerdown', () => { if (TMS || tmOpen) tmUnlock(); }, true);
+}
+function tmOpenSheet(){ tmBuild(); tmOpen = true; tmShKey = ''; tmPaint(); try { navSave(); } catch(e) {} }
+function tmCloseSheet(){ tmOpen = false; tmArm = 0; tmPaint(); }
+/* barre collée en haut : placée dans #tmslot (Texte, Mes scènes, Bibliothèque) */
+function tmDock(){ tmBuild(); tmPaint(); }
+const tmIco = () => `<button class="ib tm-ic${TMS ? ' tma' : ''}" data-act="tmopen" aria-label="Minuteur">${TM_ICO}<span class="tm-dot" aria-hidden="true"></span></button>`;
+function tmPaint(){
+  if (!TME) return;
+  document.querySelectorAll('.tm-ic').forEach(b => b.classList.toggle('tma', !!TMS));
+  const { bar, sh, al } = TME;
+  { const slot = document.getElementById('tmslot');   /* la barre se place (ou se retire) sans attendre un render() */
+    if (slot && TMS) { if (bar.parentNode !== slot) slot.appendChild(bar); bar.hidden = false; }
+    else { bar.hidden = true; if (bar.parentNode !== document.body) document.body.appendChild(bar); } }
+  if (TMS) {
+    const st = tmState(), ph = st.ph;
+    bar.className = 'tm-bar' + (st.mode ? ' ' + st.mode : '');
+    bar.querySelector('.tm-rd').textContent = ph === 'break' ? 'PAUSE' : ph === 'wait' ? 'PASSAGE ' + (st.p + 2) + ' PRÊT' : ph === 'alarm' ? 'FIN PASSAGE ' + (st.p + 1) : ph === 'done' ? 'TERMINÉ' : 'PASSAGE ' + (st.p + 1) + '/' + st.N;
+    const tt = bar.querySelector('.tm-tt'); tt.textContent = st.time; tt.style.color = st.wcol;
+    const pg = bar.querySelector('.tm-pg i'); pg.style.width = Math.min(100, (ph === 'wait' || ph === 'done' || (ph === 'alarm' && !TMS.pend)) ? 100 : 100 * (st.brk ? 1 - st.rem / st.tot : st.cur)) + '%'; pg.style.background = st.wcol;
+    const pb = bar.querySelector('.tm-pb'); pb.style.visibility = ph === 'alarm' || ph === 'done' ? 'hidden' : 'visible';
+    const run = ph === 'run'; if (pb._run !== run) { pb._run = run; pb.querySelector('.tm-pbi').innerHTML = run ? TM_PA : TM_PL; pb.setAttribute('aria-label', run ? 'Pause' : 'Reprendre'); }
+  }
+  /* grand minuteur */
+  sh.hidden = !tmOpen;
+  if (tmOpen) { if (!TMS) { const k = 'set' + JSON.stringify(tmCfg()); if (tmShKey !== k) { tmShKey = k; sh.innerHTML = tmSetupHTML(); } } else tmRunUI(sh); }
+  /* alerte de fin de passage (Minuteur-M33, halo doux) */
+  const alarm = TMS && (TMS.ph === 'alarm' || TMS.ph === 'done');
+  al.hidden = !alarm;
+  if (!alarm) tmAlKey = '';
+  else {
+    const c = tmCfg(), d = TMS.ph === 'done', k = TMS.ph + TMS.p + c.pause + c.flash;
+    if (tmAlKey !== k) { tmAlKey = k;
+      const nextL = 'Démarrer le passage ' + (TMS.p + 2) + (c.pause > 0 ? ' maintenant' : '');
+      al.className = 'tm-al' + (c.flash ? ' fl' : '');
+      al.innerHTML = `<div class="tm-cd"><div class="tm-bell">${TM_BELL}</div><h3>${d ? 'Temps écoulé' : 'Passage ' + (TMS.p + 1) + ' terminé'}</h3>
+        <p>${d ? c.passages + ' passage' + (c.passages > 1 ? 's' : '') + ' · ' + (c.passages * c.dur) + ' min' : c.pause > 0 ? 'Prochain passage dans <b class="tm-acd"></b>' : 'Au suivant !'}</p>
+        <div class="tm-abt">${d ? '' : `<button type="button" class="btn pri" data-tma="next">${nextL}</button>`}<button type="button" class="btn" data-tma="stop">${d ? 'Fermer' : 'Couper l’alarme'}</button></div></div>`; }
+    const cd = al.querySelector('.tm-acd'); if (cd && TMS.pend) cd.textContent = tmFmt(TMS.pend - tmNow());
+  }
+}
+function tmPre(){ if (!tmCfg().flash) return; const e = document.getElementById('tmpre'); if (!e) return; e.classList.remove('go'); void e.offsetWidth; e.classList.add('go'); }
+function tmLab(k, v){ return k === 'dur' ? v + ' min' : k === 'passages' ? String(v) : v ? (v < 60 ? v + ' s' : (v / 60) + ' min') : (k === 'pause' ? 'Manuelle' : 'Non'); }
+function tmSetupHTML(){
+  const c = tmCfg(), vibOk = !!navigator.vibrate;
+  const stp = (k, n) => `<div class="tm-stp"><span class="tm-n">${n}</span><button type="button" data-tmd="${k}" data-n="-1" aria-label="${n} : moins">−</button><span class="tm-v">${tmLab(k, c[k])}</span><button type="button" data-tmd="${k}" data-n="1" aria-label="${n} : plus">+</button></div>`;
+  const sw = (k, n, dis) => `<label class="sw tm-sw"><input type="checkbox" data-tms="${k}" ${c[k] && !dis ? 'checked' : ''} ${dis ? 'disabled' : ''}> ${n}</label>`;
+  return `<div class="tm-hd"><h2>Minuteur</h2><button type="button" class="ib" data-tmx="close" aria-label="Fermer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="tm-sb"><div class="lbl" style="margin-top:6px">Temps</div>${stp('dur', 'Durée')}${stp('passages', 'Passages')}${stp('pause', 'Pause')}${stp('warn', 'Préavis')}
+    <div class="lbl" style="margin-top:14px">Alertes</div>${sw('sound', 'Alarme sonore')}${sw('vib', 'Vibration', !vibOk)}${sw('flash', 'Clignotement')}
+    <button type="button" class="btn tm-test" data-tmx="test">Tester l’alarme</button></div>
+    <div class="tm-ft"><button type="button" class="btn pri tm-full" data-tmx="go">${TM_PL} Démarrer · ${c.passages} × ${c.dur} min</button></div>`;
+}
+function tmRunUI(sh){
+  const st = tmState(), N = st.N, ar = tmArm > Date.now();
+  if (tmShKey !== 'run' + N) { tmShKey = 'run' + N;
+    sh.innerHTML = `<div class="tm-hd"><h2 class="tm-ti"></h2><button type="button" class="ib" data-tmx="close" aria-label="Réduire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
+      <div class="tm-sb tm-rsb"><div class="tm-ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="tm-bg" cx="50" cy="50" r="46"/><circle class="tm-fg" cx="50" cy="50" r="46" stroke-dasharray="289.03" stroke-dashoffset="289.03"/></svg>
+        <button type="button" class="tm-rc" data-tmx="toggle" aria-label="Pause ou reprise"><span class="tm-big"></span><span class="tm-cap"></span><span class="tm-pi"></span></button></div>
+        <div class="tm-seg">${Array.from({ length: N }, (_, i) => `<i><b data-tseg="${i}"></b></i>`).join('')}</div></div>
+      <div class="tm-ft tm-g2"><button type="button" class="btn" data-tmx="prev"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M18 5l-9 7 9 7zM5 5h2v14H5z"/></svg>Précédent</button><button type="button" class="btn" data-tmx="next">Suivant<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M6 5l9 7-9 7zM17 5h2v14h-2z"/></svg></button><button type="button" class="btn tm-stop tm-full" data-tmx="stop"></button></div>`; }
+  const ph = st.ph;
+  sh.querySelector('.tm-ti').textContent = st.brk ? 'Pause · passage ' + (st.p + 2) + ' ensuite' : st.wt ? 'Passage ' + (st.p + 1) + ' terminé' : 'Passage ' + (st.p + 1) + ' sur ' + N;
+  const ring = sh.querySelector('.tm-ring'); ring.className = 'tm-ring ' + st.mode + (ph === 'paused' ? ' paused' : '');
+  const fg = sh.querySelector('.tm-fg'); fg.style.strokeDashoffset = 289.03 * (1 - st.cur); fg.style.stroke = st.wcol;
+  const big = sh.querySelector('.tm-big'); big.textContent = st.time; big.style.color = st.wcol;
+  sh.querySelector('.tm-cap').textContent = st.wt ? 'toucher pour continuer' : st.brk ? 'prochain passage dans' : ph === 'paused' ? 'en pause' : '';
+  const pi = sh.querySelector('.tm-pi'), run = ph === 'run'; if (pi._run !== run) { pi._run = run; pi.innerHTML = run ? TM_PA : TM_PL; }
+  sh.querySelectorAll('[data-tseg]').forEach(b => { const j = +b.dataset.tseg; b.style.width = (j < st.p ? 100 : j === st.p ? 100 * st.cur : 0) + '%'; });
+  const rs = sh.querySelector('.tm-stop'); const k = String(ar);
+  if (rs._k !== k) { rs._k = k; rs.classList.toggle('arm', ar); rs.innerHTML = ar ? 'Confirmer l’arrêt<span class="tm-cdb"></span>' : '<i class="tm-sq"></i>Arrêter le minuteur'; }
+  if (ar) { const cdb = rs.querySelector('.tm-cdb'); if (cdb) cdb.style.width = Math.max(0, (tmArm - Date.now()) / 30) + '%'; } else if (tmArm) tmArm = 0;
+}
+function tmSheetClick(e){
+  tmUnlock();
+  const d = e.target.closest('[data-tmd]'), x = e.target.closest('[data-tmx]');
+  if (d && !TMS) { const c = tmCfg(), k = d.dataset.tmd, n = +d.dataset.n, L = k === 'dur' ? TM_DURS : k === 'pause' ? TM_PAUSES : k === 'warn' ? TM_WARNS : [1,2,3,4,5,6,7,8,9,10];
+    c[k] = L[Math.min(L.length - 1, Math.max(0, L.indexOf(c[k]) + n))]; persist(); tmPaint(); return; }
+  if (!x) return; const a = x.dataset.tmx;
+  if (a === 'close') tmCloseSheet();
+  else if (a === 'go') { tmUnlock(); tmStart(0); }
+  else if (a === 'test') tmBeep(3);
+  else if (a === 'toggle') tmToggle();
+  else if (a === 'prev') tmPrev();
+  else if (a === 'next') tmNext();
+  else if (a === 'stop') { if (tmArm > Date.now()) { tmStop(); } else { tmArm = Date.now() + 3000; tmPaint(); } }
+}
+document.addEventListener('change', e => { const t = e.target; if (!t.matches || !t.matches('[data-tms]')) return; tmCfg()[t.dataset.tms] = t.checked; persist(); tmShKey = ''; });
+/* admin › Minuteur (M70) : vitesse et étapes pour tester */
+function tmAdmJump(v){
+  const c = tmCfg(), N = c.passages, s = tmClk.spd || 1, now = tmNow(), p = Math.min(1, N - 1);
+  closeSettings();
+  if (v === 'run') tmStart(p, c.dur * 60000 * 0.6);
+  else if (v === 'prewarn') tmStart(p, ((c.warn || 60) * 1000) + 5000 * s);
+  else if (v === 'lastmin') tmStart(p, 60000);
+  else if (v === 'end10') tmStart(p, 10000 * s);
+  else if (v === 'alarm') { TMS = { ph:'run', p: Math.min(p, Math.max(0, N - 2)), end: now }; tmEndPassage(now); }
+  else if (v === 'pause') { TMS = c.pause > 0 ? { ph:'break', p: Math.min(p, Math.max(0, N - 2)), pend: now + c.pause * 1000 } : { ph:'wait', p: Math.min(p, Math.max(0, N - 2)), since: now }; tmSave(); }
+  else if (v === 'done') { TMS = { ph:'run', p: N - 1, end: now }; tmEndPassage(now); }
+  if (v !== 'alarm' && v !== 'done') { tmOpen = true; tmShKey = ''; }
+  tmPaint(); render();
+}
+setInterval(() => { try { tmTick(); } catch(e) {} }, 250);
+
 function showRecovery(){
   const d = document.getElementById('app') || document.body;
   let hasBak = false; try { const b = JSON.parse(localStorage.getItem(BAK) || 'null'); hasBak = isObj(b); } catch(e) {}
