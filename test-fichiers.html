@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Répète — test du sélecteur de fichiers</title>
+<style>body{font-family:system-ui,sans-serif;margin:0;padding:16px;background:#FAF7F2;color:#1F1B16}h1{font-size:18px}p{font-size:14px;color:#6A6157;line-height:1.45}
+.v{border:1px solid #E6DFD3;background:#fff;border-radius:12px;padding:12px;margin:10px 0}.v b{display:block;margin-bottom:8px;font-size:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:12px;border:1.5px solid #F5A300;background:transparent;color:#9A5A00;font:700 15px system-ui,sans-serif}
+.r{font-size:13px;margin-top:6px;color:#0E5F3B;font-weight:600}#log{font:12px ui-monospace,monospace;white-space:pre-wrap;background:#fff;border:1px solid #E6DFD3;border-radius:12px;padding:10px;margin-top:12px}</style></head><body>
+<h1>Test : vitesse d’ouverture du sélecteur de fichiers</h1>
+<p>Touche chaque bouton, puis <b>annule</b> le sélecteur (retour). Le temps entre ton toucher et l’ouverture du sélecteur s’affiche sous le bouton. Fais chaque test 2 ou 3 fois, puis envoie-moi une capture du bas de la page.</p>
+<div class="v"><b>1 · Comme en 2.02 : le champ natif visible</b><input type="file" accept=".json,application/json" data-k="1"><div class="r" id="r1"></div></div>
+<div class="v"><b>2 · Comme à l’essai 2 : étiquette + champ caché</b><label class="btn">Restaurer<input type="file" accept=".json,application/json" data-k="2" hidden></label><div class="r" id="r2"></div></div>
+<div class="v"><b>3 · Comme à l’essai 3 : bouton qui ouvre le champ caché</b><button class="btn" data-for="3">Restaurer</button><input type="file" accept=".json,application/json" data-k="3" hidden><div class="r" id="r3"></div></div>
+<div class="v"><b>4 · Bouton + champ caché, sans filtre .json</b><button class="btn" data-for="4">Restaurer</button><input type="file" data-k="4" hidden><div class="r" id="r4"></div></div>
+<div class="v"><b>5 · Bouton + champ caché, filtre .json seulement (sans « application/json »)</b><button class="btn" data-for="5">Restaurer</button><input type="file" accept=".json" data-k="5" hidden><div class="r" id="r5"></div></div>
+<div class="v"><b>6 · Comme 3, avec l’ajout d’historique de l’appli juste avant</b><button class="btn" data-for="6" data-push="1">Restaurer</button><input type="file" accept=".json,application/json" data-k="6" hidden><div class="r" id="r6"></div></div>
+<div id="log">Journal :</div>
+<script>
+let t0 = 0, k = null, waiting = false;
+const log = m => { document.getElementById('log').textContent += '\n' + m; };
+document.addEventListener('pointerdown', e => { const el = e.target.closest('[data-for],[data-k],label'); if (!el) return;
+  k = el.dataset.for || el.dataset.k || (el.querySelector('input') && el.querySelector('input').dataset.k); t0 = performance.now(); waiting = true; }, true);
+document.addEventListener('click', e => { const b = e.target.closest('[data-for]'); if (!b) return;
+  if (b.dataset.push) { for (let i = 0; i < 3; i++) history.pushState({ t: i }, ''); }
+  document.querySelector(`input[data-k="${b.dataset.for}"]`).click(); });
+const hit = how => { if (!waiting) return; waiting = false; const ms = Math.round(performance.now() - t0);
+  const r = document.getElementById('r' + k); if (r) r.textContent += (r.textContent ? ' · ' : '') + ms + ' ms';
+  log('test ' + k + ' : ' + ms + ' ms (' + how + ')'); };
+document.addEventListener('visibilitychange', () => { if (document.hidden) hit('page cachée'); });
+window.addEventListener('blur', () => hit('fenêtre quittée'));
+document.querySelectorAll('input[type=file]').forEach(i => i.addEventListener('cancel', () => hit('annulé (sans détection plus tôt)')));
+</script></body></html>
