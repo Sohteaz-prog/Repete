@@ -853,6 +853,11 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(-
 /* 145 : champ invisible posé sur le bouton (test) */
 .fpov{position:relative;display:inline-flex}
 .fpov input[type=file]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
+
+/* ===== 2.03 · essai 6 ===== */
+/* 155 : le doigt touche directement le champ du téléphone, posé invisible sur le bouton (ouverture plus rapide) */
+.fpv{position:relative;overflow:hidden;cursor:pointer}
+.fpv .fpvi{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0;margin:0;padding:0;border:0}
 </style>
 </head>
 <body>
@@ -2228,10 +2233,10 @@ function sheetInner(){
       <div class="lrow"><div class="lbl" style="margin:0">Sauvegarde</div><button class="mi" data-act="infosave" aria-expanded="${!!S.infoSave}" aria-label="À quoi sert la sauvegarde ?">i</button></div>
       ${S.infoSave ? `<div class="infobox dinf"><p>Garde tes données en lieu sûr, ou passe-les d’un téléphone à l’autre. Les fichiers restent chez toi.</p><p><b>Tout sauvegarder</b> : progression, notes, textes ajoutés et réglages dans un seul fichier.</p></div>` : ''}
       <button class="btn sm soft dbt" data-act="expall">${IC_DL}<span>Tout sauvegarder</span></button>
-      <button type="button" class="btn sm dbt dout" data-act="pickf" data-f="impall">${IC_UL}<span>Tout restaurer</span></button><input type="file" accept=".json,application/json" data-act="impall" hidden>
+      <span class="btn sm dbt dout fpv" role="button">${IC_UL}<span>Tout restaurer</span><input type="file" accept=".json,application/json" data-act="impall" class="fpvi"></span>
       <button class="dfold" data-act="dfold" aria-expanded="${!!S.dFold}">Un seul élément<svg class="dch" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
-      ${S.dFold ? `<div class="dit"><b>Progression</b><button class="dsq" data-act="expprog" aria-label="Exporter ma progression">${IC_DL}</button><button type="button" class="dsq" aria-label="Importer une progression" data-act="pickf" data-f="impprog">${IC_UL}</button><input type="file" accept=".json,application/json" data-act="impprog" hidden></div>
-      <div class="dit"><b>Notes</b><button class="dsq" data-act="expnotes" aria-label="Exporter mes notes">${IC_DL}</button><button type="button" class="dsq" aria-label="Importer des notes" data-act="pickf" data-f="impnotes">${IC_UL}</button><input type="file" accept=".json,application/json" data-act="impnotes" hidden></div>` : ''}`)}
+      ${S.dFold ? `<div class="dit"><b>Progression</b><button class="dsq" data-act="expprog" aria-label="Exporter ma progression">${IC_DL}</button><span class="dsq fpv" aria-label="Importer une progression" role="button">${IC_UL}<input type="file" accept=".json,application/json" data-act="impprog" class="fpvi"></span></div>
+      <div class="dit"><b>Notes</b><button class="dsq" data-act="expnotes" aria-label="Exporter mes notes">${IC_DL}</button><span class="dsq fpv" aria-label="Importer des notes" role="button">${IC_UL}<input type="file" accept=".json,application/json" data-act="impnotes" class="fpvi"></span></div>` : ''}`)}
       ${updateBlock()}
       ${ADMIN ? admPanel() : `<div class="admtap" data-act="admtap">Répète · v${APP_LABEL}</div>${S.admAsk ? `<div class="admask"><input id="admcode" type="password" inputmode="numeric" autocomplete="off" placeholder="Code" aria-label="Code"><button class="ghost" data-act="admgo">OK</button></div>${S.admErr ? '<div class="mute small">Code incorrect.</div>' : ''}` : ''}`}`;
 }
@@ -2510,14 +2515,6 @@ function admPanel(){
     ${sec('diag', 'Diagnostic', 'Hors ligne, vibration, message d’erreur', `
       <div class="admrow"><span>${offMsg || 'Mode hors ligne'}</span><button class="admb" data-act="chkoff">Vérifier</button></div>
       <button class="admb" style="width:100%;margin-top:8px" data-act="admwarn">Tester un message d’erreur</button>
-      <div class="lbl" style="margin:14px 0 6px">Test du sélecteur de fichiers</div>
-      <div class="mute small" style="margin-bottom:6px">Touche chaque essai puis annule le sélecteur ; le temps d’ouverture s’affiche.</div>
-      <div class="fpt" data-k="1"><span>1 · Champ natif (2.02)</span><input type="file" accept=".json,application/json" data-act="fpt"></div>
-      <div class="fpt" data-k="2"><span>2 · Bouton actuel</span><button class="admb" data-act="fpo" data-k="2">Ouvrir</button><input type="file" accept=".json,application/json" data-act="fpt" data-k="2" hidden></div>
-      <div class="fpt" data-k="3"><span>3 · Champ invisible posé sur le bouton</span><span class="fpov"><span class="admb">Ouvrir</span><input type="file" accept=".json,application/json" data-act="fpt" aria-label="Ouvrir"></span></div>
-      <div class="fpt" data-k="4"><span>4 · Champ créé au toucher</span><button class="admb" data-act="fpdyn">Ouvrir</button></div>
-      <div class="fpt" data-k="5"><span>5 · Bouton, filtre « application/json »</span><button class="admb" data-act="fpo" data-k="5">Ouvrir</button><input type="file" accept="application/json" data-act="fpt" data-k="5" hidden></div>
-      <div class="mute small" id="fpres" style="white-space:pre-wrap;margin-top:6px">${esc(fpLog.join('\n'))}</div>
       <button class="admb" style="width:100%;margin-top:8px" data-act="vibetest">Tester la vibration · réglage : ${esc((HAPTICS.find(h => h[0] === hapticMode()) || [0, '?'])[1])}</button>
 `)}
     <button class="admb dng" style="margin-top:12px;width:100%" data-act="adm" data-op="wipe">Effacer le profil de test</button>
@@ -2561,7 +2558,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 118, APP_LABEL = '2.03 · essai 5'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 119, APP_LABEL = '2.03 · essai 6'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -2857,7 +2854,7 @@ function importView(){
   const mine = []; saved.userLib.forEach(p => p.scenes.forEach(sc => mine.push([p, sc])));
   if (mine.length && I.step === 1) h += `<section class="card"><div class="lbl">Mes textes ajoutés</div>` + mine.map(([p, sc]) =>
     `<div style="display:flex;align-items:center;gap:8px;margin:6px 0"><span style="flex:1">${esc(p.title)} · ${esc(sc.title)}</span><button class="btn sm ko" data-act="importdel" data-play="${p.id}" data-scene="${sc.id}">Supprimer</button></div>`).join('') + `<button class="btn sm" style="width:100%;margin-top:8px" data-act="exporttexts">Exporter mes textes (fichier à partager)</button><p class="mute small">Pour les mettre dans l’application de la classe : envoie le fichier <b>textes-classe.json</b> sur GitHub, à côté de index.html.</p></section>`;
-  if (I.step === 1) h += `<section class="card"><div class="lbl">Importer un fichier de textes</div><p class="mute small">Si on t’a envoyé un ou plusieurs fichiers <b>textes-classe</b> (.json), choisis-les ici ; tu peux en sélectionner plusieurs d’un coup.</p><button type="button" class="btn sm dbt dout" data-act="pickf" data-f="importfile">${IC_UL}<span>Importer un fichier de textes</span></button><input type="file" accept=".json,application/json" multiple data-act="importfile" hidden></section>`;
+  if (I.step === 1) h += `<section class="card"><div class="lbl">Importer un fichier de textes</div><p class="mute small">Si on t’a envoyé un ou plusieurs fichiers <b>textes-classe</b> (.json), choisis-les ici ; tu peux en sélectionner plusieurs d’un coup.</p><span class="btn sm dbt dout fpv" role="button">${IC_UL}<span>Importer un fichier de textes</span><input type="file" accept=".json,application/json" multiple data-act="importfile" class="fpvi"></span></section>`;
   return h;
 }
 function navBack(){
@@ -3981,11 +3978,11 @@ document.addEventListener('click', e => {
     case 'settheme': saved.theme = b.dataset.v; applyTheme(); persist(); render(); break;
     case 'setcolor': saved.color = b.dataset.v; applyTheme(); persist(); render(); break;
     case 'lineopen': { const i = +b.dataset.i;
-      /* 2.03 · essai 5 : en mode suivi, double toucher = suivre cette réplique ; simple toucher = actions (après 0,3 s) */
-      if (S.follow) {
-        if (dblT && dblT.i === i && Date.now() - dblT.t < 320) { clearTimeout(dblT.h); dblT = null; saved.trk = saved.trk || {}; saved.trk[key()] = i; S.lineOpen = null; persist(); buzz('ok'); render(); trkScroll(true); break; }
-        if (dblT) clearTimeout(dblT.h);
-        dblT = { i, t: Date.now(), h: setTimeout(() => { dblT = null; if (window.getSelection && String(window.getSelection()).length) return; S.lineOpen = S.lineOpen === i ? null : i; render(); }, 320) };
+      /* 2.03 · essai 6 : en mode suivi, la réplique suivie ouvre ses actions tout de suite ;
+         une autre réplique ne réagit qu'au double toucher (elle devient suivie), sans délai ni actions */
+      if (S.follow && trkOf() !== i) {
+        if (dblT && dblT.i === i && Date.now() - dblT.t < 350) { dblT = null; saved.trk = saved.trk || {}; saved.trk[key()] = i; S.lineOpen = null; persist(); buzz('ok'); render(); trkScroll(true); }
+        else dblT = { i, t: Date.now() };
         break;
       } if (window.getSelection && String(window.getSelection()).length) break; S.lineOpen = S.lineOpen === i ? null : i; render(); break; }
     case 'dpan': S.dpan = !S.dpan; render(); break;
