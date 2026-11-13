@@ -766,8 +766,7 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(-
 #app.fv>.focus{flex:1;min-height:0}
 #app.fvx{height:100vh;height:100dvh;overflow:hidden}
 #app.fv .admbar{position:static;flex:none}
-html.nopull,html.nopull body{overscroll-behavior-y:none}
-#app.fvx .thr{min-height:0;overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 48px);mask-image:linear-gradient(transparent,#000 48px);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+#app.fvx .thr{min-height:0;overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 24px);mask-image:linear-gradient(transparent,#000 24px)}
 .thr .dir.old{opacity:.55}
 .bub .stk{display:grid}.bub .stk>*{grid-area:1/1}
 .bub.todo .rl{visibility:hidden}
@@ -783,8 +782,8 @@ html.nopull,html.nopull body{overscroll-behavior-y:none}
 .focus .fwrap{padding-bottom:40px}
 .arow .btn.sq{flex:0 0 54px}
 .arow .btn{min-width:0;padding-left:8px;padding-right:8px}.arow .btn span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-@media (max-width:340px){.focus .arow .btn{font-size:var(--fs-14)}.focus .arow .btn.sq{flex-basis:46px}.fwrap~.actions .arow .btn[data-act=hint] svg{display:none}}
-.fwrap~.actions .arow .btn[data-act=hint]{flex:1.25}
+@media (max-width:340px){.focus .arow .btn{font-size:var(--fs-14)}.focus .arow .btn.sq{flex-basis:46px}.fwrap~.actions .arow .btn.hnx svg{display:none}}
+.fwrap~.actions .arow .btn[data-act=hint]{flex:.82}.fwrap~.actions .arow .btn[data-act=reveal-step]{flex:1.18}
 /* 78 (M51-C) : bande « Précédente | Suivante » */
 .nband{align-items:stretch;gap:0;padding-left:0;padding-right:0}
 .nband .nbh{flex:1;display:flex;align-items:flex-end;justify-content:center;gap:6px;background:none;border:0;padding:0;color:inherit;font:inherit;min-height:0}
@@ -797,6 +796,30 @@ html.nopull,html.nopull body{overscroll-behavior-y:none}
 .nbub .nmenu{position:absolute;right:6px;top:34px;z-index:5;min-width:160px;display:flex;flex-direction:column;padding:4px;background:var(--card);border:1.5px solid var(--line);border-radius:var(--r-12);box-shadow:0 6px 18px rgba(0,0,0,.18)}
 .nbub .nmenu button{display:flex;align-items:center;gap:8px;min-height:42px;padding:0 12px;border:0;background:none;border-radius:var(--r-8);font:600 14px system-ui,sans-serif;color:var(--ink);text-align:left}
 .nbub .nmenu button.dg{color:color-mix(in srgb,var(--st-ko) 70%,var(--ink))}
+
+/* ===== 2.03 · essai 3 ===== */
+#app.fv{padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+.thr .tnw{animation:bubfade .42s}
+/* M61-G1 : haut-parleur | drapeau dans une seule pastille, coin haut droit */
+.pcr.pcr2{padding-right:80px}
+.pgrp{position:absolute;z-index:3;right:0;top:2px;display:inline-flex;border:1.5px solid var(--line);border-radius:var(--r-10);background:var(--card);overflow:hidden}
+.pgrp .ib,.pgrp .ib.pspk{position:relative;top:auto;right:auto;width:36px;height:29px;min-width:36px;min-height:29px;padding:0;border:0;border-radius:0;background:none;box-shadow:none;display:inline-flex;align-items:center;justify-content:center}
+.pgrp .ib::after{inset:-6px 0}
+.pgrp .pfl{border-left:1.5px solid var(--line);color:var(--accent-ink)}
+.pgrp .pfl svg{width:16px;height:16px}
+/* M64-3 : « ⋮ » sans pastille en haut à droite, menu sous le doigt */
+.nbub > div:first-child{padding-top:0}
+.nbub.nb2{padding-right:30px}
+.nbub .nmore{top:6px;right:4px;width:24px;height:26px;opacity:.7}
+.nbub .nmenu{top:30px;right:4px;min-width:150px;padding:4px;border-width:1px;box-shadow:0 8px 22px rgba(0,0,0,.16)}
+.nbub .nmenu button{min-height:40px;font-size:var(--fs-14);gap:10px}
+/* M56 : tableau des paliers (admin) */
+.fwrap~.actions .arow .btn.hnx{flex:1}   /* « Indice suivant » : même largeur que « Retourner » pour ne pas être coupé */
+.bgtab{margin:0 0 10px;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-12);background:var(--card)}
+.bgtab table{border-collapse:collapse;width:100%;font-size:var(--fs-12)}
+.bgtab th{font-weight:600;font-size:var(--fs-11);color:var(--mute);text-align:center;padding:2px 3px}
+.bgtab td{text-align:center;padding:3px;white-space:nowrap}
+.bgtab td:first-child{text-align:left;font-weight:600;padding-left:0}
 </style>
 </head>
 <body>
@@ -2028,6 +2051,7 @@ function saveProg(){
   if (!S.stepsAll || !S.scene) return;
   /* 2.04 : les cartes ne remplacent plus la position de la répétition (« Reprendre ») */
   if (!S.cards) saved.prog[key()] = { me:S.me, pos:S.pos, missed:[...S.missed], done:S.done };
+  else { saved.cprog = saved.cprog || {}; saved.cprog[key()] = { me:S.me, pos:S.pos, missed:[...S.missed], done:S.done }; }   /* 2.03 : position des cartes à part */
   saved.last = { play:S.play.id, scene:S.scene.id };
   persist();
 }
@@ -2171,10 +2195,10 @@ function sheetInner(){
       <div class="lrow"><div class="lbl" style="margin:0">Sauvegarde</div><button class="mi" data-act="infosave" aria-expanded="${!!S.infoSave}" aria-label="À quoi sert la sauvegarde ?">i</button></div>
       ${S.infoSave ? `<div class="infobox dinf"><p>Garde tes données en lieu sûr, ou passe-les d’un téléphone à l’autre. Les fichiers restent chez toi.</p><p><b>Tout sauvegarder</b> : progression, notes, textes ajoutés et réglages dans un seul fichier.</p></div>` : ''}
       <button class="btn sm soft dbt" data-act="expall">${IC_DL}<span>Tout sauvegarder</span></button>
-      <label class="btn sm dbt dout">${IC_UL}<span>Tout restaurer</span><input type="file" accept=".json,application/json" data-act="impall" hidden></label>
+      <button type="button" class="btn sm dbt dout" data-act="pickf" data-f="impall">${IC_UL}<span>Tout restaurer</span></button><input type="file" accept=".json,application/json" data-act="impall" hidden>
       <button class="dfold" data-act="dfold" aria-expanded="${!!S.dFold}">Un seul élément<svg class="dch" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
-      ${S.dFold ? `<div class="dit"><b>Progression</b><button class="dsq" data-act="expprog" aria-label="Exporter ma progression">${IC_DL}</button><label class="dsq" aria-label="Importer une progression">${IC_UL}<input type="file" accept=".json,application/json" data-act="impprog" hidden></label></div>
-      <div class="dit"><b>Notes</b><button class="dsq" data-act="expnotes" aria-label="Exporter mes notes">${IC_DL}</button><label class="dsq" aria-label="Importer des notes">${IC_UL}<input type="file" accept=".json,application/json" data-act="impnotes" hidden></label></div>` : ''}`)}
+      ${S.dFold ? `<div class="dit"><b>Progression</b><button class="dsq" data-act="expprog" aria-label="Exporter ma progression">${IC_DL}</button><button type="button" class="dsq" aria-label="Importer une progression" data-act="pickf" data-f="impprog">${IC_UL}</button><input type="file" accept=".json,application/json" data-act="impprog" hidden></div>
+      <div class="dit"><b>Notes</b><button class="dsq" data-act="expnotes" aria-label="Exporter mes notes">${IC_DL}</button><button type="button" class="dsq" aria-label="Importer des notes" data-act="pickf" data-f="impnotes">${IC_UL}</button><input type="file" accept=".json,application/json" data-act="impnotes" hidden></div>` : ''}`)}
       ${updateBlock()}
       ${ADMIN ? admPanel() : `<div class="admtap" data-act="admtap">Répète · v${APP_LABEL}</div>${S.admAsk ? `<div class="admask"><input id="admcode" type="password" inputmode="numeric" autocomplete="off" placeholder="Code" aria-label="Code"><button class="ghost" data-act="admgo">OK</button></div>${S.admErr ? '<div class="mute small">Code incorrect.</div>' : ''}` : ''}`}`;
 }
@@ -2415,8 +2439,8 @@ function admPanel(){
       <button class="admb dng" style="width:100%;margin-top:10px" data-act="adm" data-op="progreset">Réinitialiser la progression</button>
       `)}
     ${sec('badges', 'Badges', 'Paliers, effacer', `
-      <div class="lbl" style="margin:0 0 6px">Palier de chaque badge</div>
-      <div class="mute small" style="margin:-2px 0 8px">Un palier choisi ici reste fixe : la progression du profil de test ne le change plus.</div>
+      <div class="lbl" style="margin:0 0 6px;display:flex;align-items:center;gap:6px">Palier de chaque badge <button class="mi" data-act="bginfo" aria-expanded="${!!S.bgInfo}" aria-label="Seuils des paliers">i</button></div>
+      ${S.bgInfo ? `<div class="bgtab"><table><tr><td></td>${TIERS.map((t, k) => `<th>${k + 1}<br>${t}</th>`).join('')}</tr>${BADGES.filter(x => !x.unique).map(x => `<tr><td>${({ streak:'Série', obj:'Objectif', scenes:'Scènes', solid:'Solides' })[x.id] || esc(x.name)}</td>${x.T.map(t => `<td>${t}${x.id === 'solid' ? ' %' : ''}</td>`).join('')}</tr>`).join('')}</table></div>` : ''}
       ${BADGES.map(x => `<div class="admbt"><span>${esc(x.name)}</span><div class="seg sm">${(x.unique ? [0, 1] : [0, 1, 2, 3, 4, 5]).map(t => `<button class="${((saved.bg || {})[x.id] || 0) === t ? 'on' : ''}" data-act="admbg" data-b="${x.id}" data-v="${t}">${x.unique ? (t ? 'Oui' : 'Non') : t}</button>`).join('')}</div></div>`).join('')}
       <button class="admb" style="width:100%;margin-top:10px" data-act="admcnt" aria-expanded="${!!S.admCnt}">Compteurs exacts ${S.admCnt ? '⌃' : '⌄'}</button>
       ${S.admCnt ? `<div style="margin-top:6px">
@@ -2488,7 +2512,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 115, APP_LABEL = '2.04'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 116, APP_LABEL = '2.03 · essai 3'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -2784,7 +2808,7 @@ function importView(){
   const mine = []; saved.userLib.forEach(p => p.scenes.forEach(sc => mine.push([p, sc])));
   if (mine.length && I.step === 1) h += `<section class="card"><div class="lbl">Mes textes ajoutés</div>` + mine.map(([p, sc]) =>
     `<div style="display:flex;align-items:center;gap:8px;margin:6px 0"><span style="flex:1">${esc(p.title)} · ${esc(sc.title)}</span><button class="btn sm ko" data-act="importdel" data-play="${p.id}" data-scene="${sc.id}">Supprimer</button></div>`).join('') + `<button class="btn sm" style="width:100%;margin-top:8px" data-act="exporttexts">Exporter mes textes (fichier à partager)</button><p class="mute small">Pour les mettre dans l’application de la classe : envoie le fichier <b>textes-classe.json</b> sur GitHub, à côté de index.html.</p></section>`;
-  if (I.step === 1) h += `<section class="card"><div class="lbl">Importer un fichier de textes</div><p class="mute small">Si on t’a envoyé un ou plusieurs fichiers <b>textes-classe</b> (.json), choisis-les ici ; tu peux en sélectionner plusieurs d’un coup.</p><label class="btn sm dbt dout">${IC_UL}<span>Importer un fichier de textes</span><input type="file" accept=".json,application/json" multiple data-act="importfile" hidden></label></section>`;
+  if (I.step === 1) h += `<section class="card"><div class="lbl">Importer un fichier de textes</div><p class="mute small">Si on t’a envoyé un ou plusieurs fichiers <b>textes-classe</b> (.json), choisis-les ici ; tu peux en sélectionner plusieurs d’un coup.</p><button type="button" class="btn sm dbt dout" data-act="pickf" data-f="importfile">${IC_UL}<span>Importer un fichier de textes</span></button><input type="file" accept=".json,application/json" multiple data-act="importfile" hidden></section>`;
   return h;
 }
 function navBack(){
@@ -2810,7 +2834,7 @@ function navBack(){
   if (S.view === 'badges') { S.view = 'progress'; render(); window.scrollTo(0, 0); return; }
   if (S.view === 'rank') { S.view = 'progress'; render(); window.scrollTo(0, 0); return; }
   if (S.view === 'progress' || S.view === 'import') { S.view = 'library'; render(); window.scrollTo(0, 0); return; }
-  if (S.view === 'scene') { stopSpeech(); if (S.started) S.started = false; else S.view = 'library'; render(); window.scrollTo(0, 0); }
+  if (S.view === 'scene') { if (canEndHere()) { endHere(); return; } stopSpeech(); if (S.started) S.started = false; else S.view = 'library'; render(); window.scrollTo(0, 0); }
 }
 /* Quitter l'appli : à l'accueil, un premier « retour » affiche un message, un second dans les 2 s quitte vraiment. */
 let exitAt = 0, exitTimer = null;
@@ -2947,7 +2971,9 @@ function render(){
   let nb = []; try { nb = checkBadges(); } catch(e) {}
   nb.forEach(x => celebrate('badge', { id:x.b.id, name:x.b.name, tier:x.tier, unique:!!x.b.unique, label:x.b.name + (x.b.unique ? '' : ' · ' + TIERS[x.tier - 1]) }));
   /* 2.04 : écran de répétition à hauteur fixe (le fil défile à l'intérieur), cartes ajustées à l'écran */
-  { const fv = isFocus() && !S.done, app = $('#app'); app.classList.toggle('fv', fv); app.classList.toggle('fvx', fv && !S.cards); document.documentElement.classList.toggle('nopull', fv); }
+  { const fv = isFocus() && !S.done, app = $('#app'); app.classList.toggle('fv', fv); app.classList.toggle('fvx', fv && !S.cards); }
+  /* 2.03 (essai 3) : le suivi de lecture ne se garde pas quand on quitte la lecture */
+  if (S.follow && !(S.view === 'scene' && S.tab === 'text' && !isFocus())) S.follow = false;
   $('#app').innerHTML = (ADMIN ? admBar() : '') + (S.view === 'library' ? libView() : S.view === 'badges' ? badgesView() : S.view === 'progress' ? progressView() : S.view === 'rank' ? rankView() : S.view === 'import' ? importView() : sceneView());
   renderSheet();
   renderNotes();
@@ -3436,7 +3462,7 @@ function noteBubble(i){
   /* 2.04 (M52) : « ⋯ » sans cadre dans le coin, qui ouvre Modifier / Supprimer */
   const mo = S.nMenu === i;
   return `<div class="nbub nb2"><div>${n.x ? esc(n.x).replace(/\n/g, '<br>') : '<i style="color:var(--mute)">Note sans texte</i>'}</div>
-    <button class="nmore" data-act="nmenu" data-i="${i}" aria-label="Options de la note" aria-expanded="${mo}">⋯</button>
+    <button class="nmore" data-act="nmenu" data-i="${i}" aria-label="Options de la note" aria-expanded="${mo}"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
     ${mo ? `<div class="nmenu" role="menu"><button role="menuitem" data-act="nedit" data-i="${i}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Modifier</button><button role="menuitem" class="dg" data-act="ndel" data-i="${i}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Supprimer</button></div>` : ''}</div>`;
 }
 function renderNotes(){
@@ -3474,7 +3500,7 @@ function lineHtml(it, i, mine){
       ${S.me ? `<button class="la" data-act="from" data-i="${i}">${PLAY}<span>Répéter d’ici</span></button>` : ''}
       <button class="la" data-act="nedit" data-i="${i}">${FICHE}<span>${hasN ? 'Note' : 'Ajouter une note'}</span></button></div>` : '';
   const ps = mine && S.stMap ? S.stMap[i] : null;
-  return `<div class="line ${mine?'me':''} ${ps ? 'ps ' + ps.st : ''} ${open ? 'open' : ''} ${saved.follow && trkOf() === i ? 'trk' : ''}" data-line="${i}" data-act="lineopen" data-i="${i}">
+  return `<div class="line ${mine?'me':''} ${ps ? 'ps ' + ps.st : ''} ${open ? 'open' : ''} ${S.follow && trkOf() === i ? 'trk' : ''}" data-line="${i}" data-act="lineopen" data-i="${i}">
     <div class="who2"><span class="num">${lineNo(i)}</span>${esc(it.c)}${ps && ps.stale ? '<span class="stg">À rafraîchir</span>' : ''}${noteBtn(it, 'l' + i)}${noteEditBtn(i)}</div>
     ${hidden ? `<button class="mask" data-act="reveal" data-i="${i}">Toucher pour révéler · ${wc} mot${wc>1?'s':''}</button>` : `<p>${fmt(it.t)}</p>`}
     ${hidden ? '' : noteBox(it, 'l' + i)}${noteBubble(i)}${acts}
@@ -3495,7 +3521,7 @@ function textView(){
     <label class="sw"><input type="checkbox" data-act="thide" ${S.textHide?'checked':''} ${S.me?'':'disabled'}> Cacher mes répliques</label>
     <label class="sw"><input type="checkbox" data-act="showprog" ${saved.showProg && S.me ? 'checked' : ''} ${S.me ? '' : 'disabled'}> Voir ma progression</label>
     <label class="sw"><input type="checkbox" data-act="notesopen" ${saved.notesOpen ? 'checked' : ''}> Afficher mes notes</label>
-    <label class="sw"><input type="checkbox" data-act="follow" ${saved.follow ? 'checked' : ''}> Suivre la lecture</label>
+    <label class="sw"><input type="checkbox" data-act="follow" ${S.follow ? 'checked' : ''}> Suivre la lecture</label>
     ${S.mode==='mine' ? `<label class="sw"><input type="checkbox" data-act="cue" ${S.cue?'checked':''}> Montrer la fin de la réplique qui précède</label>` : ''}
     </div>` : ''}
     ${S.stMap ? `<div class="pgl"><span><i class="dot new"></i>nouvelle</span><span><i class="dot ko"></i>à revoir</span><span><i class="dot known"></i>connue</span><span><i class="dot solid"></i>solide</span></div>` : ''}
@@ -3503,7 +3529,7 @@ function textView(){
   </div>`;
   if (notesCount()) h += `<div style="margin:0 0 8px"><button class="nlb" data-act="nlist">${NOTES_IC}Notes · ${notesCount()}</button></div>`;
   if (!S.me) h += `<p class="hint">Choisis ton personnage ci-dessus pour surligner tes répliques.</p>`;
-  h += `<div class="script ${saved.noHl ? 'nohl' : ''} ${saved.follow ? 'follow' : ''}">`;
+  h += `<div class="script ${saved.noHl ? 'nohl' : ''} ${S.follow ? 'follow' : ''}">`;
   let prev = -1;
   items.forEach((it, i) => {
     if (it.k === 'dir') { if (S.mode === 'all') h += `<p class="dir">${fmt(dirTxt(it.t))}</p>`; return; }
@@ -3516,7 +3542,7 @@ function textView(){
     prev = i;
   });
   /* 2.03 (L6, M48-A) : bande « Suivante » pleine largeur quand le suivi de lecture est actif */
-  return h + `</div>` + (saved.follow ? `<div class="nband"><button class="nbh nbp" data-act="trkprev" aria-label="Réplique précédente"><span class="nup">${IC_DOWN}</span><span>Précédente</span></button><i class="nsep" aria-hidden="true"></i><button class="nbh" data-act="trknext" aria-label="Réplique suivante">${IC_DOWN}<span>Suivante</span></button></div>` : '');
+  return h + `</div>` + (S.follow ? `<div class="nband"><button class="nbh nbp" data-act="trkprev" aria-label="Réplique précédente"><span class="nup">${IC_DOWN}</span><span>Précédente</span></button><i class="nsep" aria-hidden="true"></i><button class="nbh" data-act="trknext" aria-label="Réplique suivante">${IC_DOWN}<span>Suivante</span></button></div>` : '');
 }
 /* 2.03 (L6) : suivi de lecture — repère gardé par scène, 1re réplique par défaut */
 const trkLines = () => { const out = []; S.scene.items.forEach((it, i) => { if (it.k === 'l' && (S.mode !== 'mine' || it.c === S.me)) out.push(i); }); return out; };
@@ -3529,7 +3555,7 @@ function trkScroll(smooth){
 }
 let trkPress = null, trkSup = 0;
 document.addEventListener('pointerdown', e => {
-  const ln = saved.follow && e.target.closest && e.target.closest('.script.follow .line'); if (!ln || e.target.closest('button')) return;
+  const ln = S.follow && e.target.closest && e.target.closest('.script.follow .line'); if (!ln || e.target.closest('button')) return;
   const x = e.clientX, y = e.clientY, i = +ln.dataset.i;
   clearTimeout(trkPress && trkPress.t);
   trkPress = { x, y, t: setTimeout(() => { trkPress = null; saved.trk = saved.trk || {}; saved.trk[key()] = i; trkSup = Date.now(); persist(); buzz('ok'); render(); trkScroll(true); }, 550) };
@@ -3548,6 +3574,7 @@ function introView(){
   const mine = S.scene.items.filter(i => i.k==='l' && i.c===S.me).length;
   const pr = saved.prog[key()];
   const canResume = pr && pr.me === S.me && !pr.done && pr.pos > 0;
+  const cpr = (saved.cprog || {})[key()], canCRes = !co().ko && cpr && cpr.me === S.me && !cpr.done && cpr.pos > 0;
   const voiceOpts = VOICES.length
     ? `<option value="">Voix par défaut</option>` + VOICES.map(v => `<option value="${esc(v.name)}" ${S.voice===v.name?'selected':''}>${esc(v.name)} (${esc(v.lang)})</option>`).join('')
     : '';
@@ -3570,10 +3597,10 @@ function introView(){
       ${VOICES.length ? '' : `<details class="vhelp"><summary>Comment installer une voix française ?</summary>
         <p><b>Android :</b> Paramètres → cherche « Synthèse vocale » (souvent dans Accessibilité ou Gestion générale) → moteur Google → Langue : Français (France ou Belgique) → télécharge la voix. Puis ferme et rouvre Répète.</p>
         <p><b>iPhone :</b> Réglages → Accessibilité → Contenu énoncé → Voix → Français → télécharge une voix. Puis ferme et rouvre Répète.</p></details>`}${ttsWarn()}` : ''}
-    <div class="mute small">Astuce : glisse vers la gauche pour passer à la suivante.</div>
     <div class="row2">
       ${canResume && S.rmode !== 'cards' ? `<button class="btn" data-act="resume">Reprendre (${pr.pos+1}/${countLines(S.scene)})</button>` : ''}
-      ${S.rmode === 'cards' ? `<button class="btn pri" data-act="startcards">Lancer les cartes</button>` : `<button class="btn pri" data-act="start">${canResume ? 'Depuis le début' : 'Lancer la répétition'}</button>`}
+      ${canCRes && S.rmode === 'cards' ? `<button class="btn" data-act="cresume">Reprendre (${cpr.pos+1}/${cardList().length})</button>` : ''}
+      ${S.rmode === 'cards' ? `<button class="btn pri" data-act="startcards">${canCRes ? 'Depuis le début' : 'Lancer les cartes'}</button>` : `<button class="btn pri" data-act="start">${canResume ? 'Depuis le début' : 'Lancer la répétition'}</button>`}
     </div>
   </div>`;
 }
@@ -3630,15 +3657,15 @@ function cardView(){
   const card = `<div class="fcard ${rev ? 'flip' : ''}" role="button" tabindex="0" aria-label="${rev ? 'Revoir la réplique d’avant' : 'Retourner la carte'}"><div class="fin">
     <div class="fface">${pj >= 0 ? cardSpk(pj) : ''}${front}${dirs.map(d => `<p class="dir" style="margin:10px 0 0">${fmt(dirTxt(d))}</p>`).join('')}
       ${S.hint ? `<div class="hintl">${esc(hintText(it.t, S.hint))}</div>` : ''}
-      <div class="fh">${w.length} mot${w.length > 1 ? 's' : ''}${S.hint ? ' · indice ' + S.hint + ' / 2' : ''} · dis ta réplique, puis touche la carte</div></div>
+</div>
     <div class="fface fback">${cardSpk(si)}<div class="fk">Ta réplique · ${esc(it.c)}</div><div class="ft">${fmt(it.t)}</div>${rehNote(si)}</div>
   </div></div>`;
-  const prevBtn = `<button class="btn sq" data-act="prev" ${S.pos === 0 ? 'disabled' : ''} aria-label="Carte précédente">‹</button>`;
-  const actions = rev ? prevBtn + `<button class="btn ko" data-act="grade" data-v="ko">À revoir</button><button class="btn ok" data-act="grade" data-v="ok">Je connais</button>`
-    : prevBtn + (S.hint >= 2 ? '' : `<button class="btn" data-act="hint">${IC_BULB}<span>${S.hint ? 'Indice suivant' : 'Indice'}</span></button>`) + `<button class="btn pri" data-act="reveal-step">Retourner</button>`;
+  /* 2.03 (M54-A) : plus de bouton ‹ (il permettait de changer la note de la carte d'avant) ; icônes comme en Répétition */
+  const actions = rev ? `<button class="btn ko" data-act="grade" data-v="ko">${IC_X}<span>À revoir</span></button><button class="btn ok" data-act="grade" data-v="ok">${IC_OK}<span>Je connais</span></button>`
+    : (S.hint >= 2 ? '' : `<button class="btn${S.hint ? ' hnx' : ''}" data-act="hint">${IC_BULB}<span>${S.hint ? 'Indice suivant' : 'Indice'}</span></button>`) + `<button class="btn pri" data-act="reveal-step">${IC_FLIP}<span>Retourner</span></button>`;
   return `<div class="prog"><i style="width:${Math.round(S.pos / n * 100)}%"></i></div>
     <div class="pcount fpc"><span>Carte ${S.pos + 1} / ${n}</span>${pRight()}</div>
-    <div class="fwrap" data-act="cardflip">${card}</div><div class="actions acol"><div class="arow">${actions}</div><button class="endb" data-act="endhere">${IC_FLAG}<span>Terminer ici</span></button></div>${rev ? '<div class="edge l" id="edgeL"></div><div class="edge r" id="edgeR"></div>' : ''}`;
+    <div class="fwrap" data-act="cardflip">${card}</div><div class="actions acol"><div class="arow">${actions}</div></div>${rev ? '<div class="edge l" id="edgeL"></div><div class="edge r" id="edgeR"></div>' : ''}`;
 }
 /* 2.03 (M36) : haut-parleur sur la ligne du compteur ; en Cartes il commande « Lecture à voix haute » des cartes */
 const audioOn = () => S.cards ? co().audio : S.audio;
@@ -3647,7 +3674,9 @@ function pSpk(){
   const on = audioOn();
   return `<button class="ib pspk" data-act="audiotoggle" aria-label="Lecture à voix haute ${on ? 'activée' : 'coupée'}">${on ? SPK : MUTE}</button>`;
 }
-const pRight = () => `<span class="pcr">${S.missed.size ? `<span>${S.missed.size} à revoir</span>` : ''}${pSpk()}</span>`;
+/* 2.03 (M61-G1) : haut-parleur à gauche, drapeau « Terminer ici » à droite, dans une seule pastille */
+const pRight = () => { const fl = S.rehHide || S.cards; return `<span class="pcr${fl ? ' pcr2' : ''}">${S.missed.size ? `<span>${S.missed.size} à revoir</span>` : ''}${fl ? `<span class="pgrp">${pSpk()}<button class="ib pfl" data-act="endhere" aria-label="Terminer ici">${IC_FLAG}</button></span>` : pSpk()}</span>`; };
+const IC_FLIP = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg>';
 const IC_SLIDERS = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>';
 const IC_DOWN = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
 const IC_DL = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>';
@@ -3665,7 +3694,6 @@ function stepView(){
   const mine = it.c === S.me;
   /* 2.04 (M49) : tout le fil récent reste affiché ; les plus anciennes sortent par le haut de l'écran */
   const prevs = []; for (let j = si-1; j >= 0 && prevs.length < 14; j--) if (items[j].k==='l') prevs.unshift(j);
-  const ef = S.enterFrom != null && Date.now() - (S.enterAt || 0) < 300 ? S.enterFrom : null; const en = j => ef != null && j > ef ? ' enter' : '';
   const from = prevs.length ? prevs[0] : si;
   const hide = gradable(si) && !S.stepRevealed;
   const pct = Math.round(S.pos / S.steps.length * 100);
@@ -3673,20 +3701,18 @@ function stepView(){
   let thr = '';
   for (let j = from; j < si; j++) {
     const x = items[j];
-    if (x.k === 'dir') { thr += `<p class="dir${j < prevs[prevs.length - 1] ? ' old' : ''}${en(j)}">${fmt(dirTxt(x.t))}</p>`; continue; }
+    if (x.k === 'dir') { thr += `<p class="dir${j < prevs[prevs.length - 1] ? ' old' : ''}" data-i="${j}">${fmt(dirTxt(x.t))}</p>`; continue; }
     const old = j !== prevs[prevs.length - 1];
-    thr += `<div class="bub ${x.c === S.me ? 'mine' : 'oth'}${old ? ' old' : ''}${en(j)}">${who(j)}<div class="btxt">${fmt(x.t)}</div></div>`;
+    thr += `<div class="bub ${x.c === S.me ? 'mine' : 'oth'}${old ? ' old' : ''}" data-i="${j}">${who(j)}<div class="btxt">${fmt(x.t)}</div></div>`;
   }
   if (hide) {
-    const w = words(it.t);
-    /* 2.04 (M49) : la bulle a déjà la taille de la réplique (texte présent mais invisible sous « À toi… ») */
-    thr += `<div class="bub todo now${en(si)}" data-act="reveal-step" role="button" tabindex="0">${who(si)}<div class="stk"><div class="btxt rl" aria-hidden="true">${fmt(it.t)}</div><div class="ov">
+    /* 2.03 (M49 / M53) : la bulle a déjà la taille de la réplique ; plus de remarque sous « À toi… » */
+    thr += `<div class="bub todo now" data-i="${si}" data-act="reveal-step" role="button" tabindex="0">${who(si)}<div class="stk"><div class="btxt rl" aria-hidden="true">${fmt(it.t)}</div><div class="ov">
       <div class="q">À toi…</div>
-      ${S.hint ? `<div class="hintl">${esc(hintText(it.t, S.hint))}</div>` : ''}
-      <div class="s">${w.length} mot${w.length>1?'s':''}${S.hint ? ' · indice ' + S.hint + ' / 2' : ' · touche « Révéler » quand tu l’as dite'}</div></div></div></div>`;
+      ${S.hint ? `<div class="hintl">${esc(hintText(it.t, S.hint))}</div>` : ''}</div></div></div>`;
   } else {
     const rb = S.revBox && S.revBox.si === si ? S.revBox : null;
-    thr += `<div class="bub ${mine ? 'mine' : 'oth'} now${rb ? ' rvl' : en(si)}"${rb ? ` style="min-height:${rb.h}px;min-width:${rb.w}px"` : ''}>${who(si, noteBtn(it, 'c' + si))}${!mine ? cardSpk(si) : ''}<div class="btxt">${fmt(it.t)}</div>${noteBox(it, 'c' + si)}${mine ? rehNote(si) : ''}</div>`;
+    thr += `<div class="bub ${mine ? 'mine' : 'oth'} now${rb ? ' rvl' : ''}" data-i="${si}"${rb ? ` style="min-height:${rb.h}px;min-width:${rb.w}px"` : ''}>${who(si, noteBtn(it, 'c' + si))}${!mine ? cardSpk(si) : ''}<div class="btxt">${fmt(it.t)}</div>${noteBox(it, 'c' + si)}${mine ? rehNote(si) : ''}</div>`;
   }
   let actions;
   if (hide) actions = (S.hint >= 2 ? '' : `<button class="btn" data-act="hint">${IC_BULB}<span>${S.hint ? 'Indice suivant' : 'Indice'}</span></button>`) + `<button class="btn pri" data-act="reveal-step">${IC_EYE}<span>Révéler</span></button>`;
@@ -3695,7 +3721,7 @@ function stepView(){
   return `<div class="prog"><i style="width:${pct}%"></i></div>
     <div class="pcount fpc"><span>${myCount()}</span>${pRight()}</div>
     <div class="thr">${thr}</div>
-    <div class="actions acol"><div class="arow">${actions}</div><button class="endb" data-act="endhere">${IC_FLAG}<span>Terminer ici</span></button></div>`;
+    <div class="actions acol"><div class="arow">${actions}</div></div>`;
 }
 function doneView(){
   const items = S.scene.items, miss = [...S.missed].sort((a,b)=>a-b);
@@ -3713,18 +3739,21 @@ function doneView(){
   const tr = i => { const f = T[i].from, t = T[i].to, same = f.st === t.st && f.n === t.n;
     return `<li><span class="bq"><b>${lineNo(i)}</b> · « ${esc(tail(items[i].t))} »</span><span class="bt2"><i class="dot ${f.st}"></i>${lab(f)}${same ? ' · inchangée' : ` → <i class="dot ${t.st}"></i>${t.st === 'ko' ? 'à revoir' : lab(t)}`}</span></li>`; };
   const row = (k, dot, label, arr) => arr.length ? `<div class="bsec ${S.bilOpen === k ? 'open' : ''}"><button class="bsh" data-act="bilsec" data-k="${k}" aria-expanded="${S.bilOpen === k}">${dot}<span>${label}</span><b>${arr.length}</b><svg class="gch" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>${S.bilOpen === k ? `<ul class="bls">${arr.map(tr).join('')}</ul>` : ''}</div>` : '';
-  const body = row('solid', '<i class="dot solid"></i>', 'Devenues solides', solid) + row('up', '<i class="dot known"></i>', 'Ont progressé', up)
-    + row('hint', '<i class="dot new" style="border:1.5px dashed var(--mute);background:transparent"></i>', 'Avec indice', hinted) + row('ko', '<i class="dot ko"></i>', 'À revoir', ko);
-  const early = !!S.early, pr = early && !S.cards && saved.prog[key()], canRes = early && pr && pr.me === S.me && !pr.done;
+  /* 2.03 (M54-R1) : « Avec indice » en haut, « À revoir » juste au-dessus de « Refaire » */
+  const body = row('hint', '<i class="dot new" style="border:1.5px dashed var(--mute);background:transparent"></i>', 'Avec indice', hinted)
+    + row('solid', '<i class="dot solid"></i>', 'Devenues solides', solid) + row('up', '<i class="dot known"></i>', 'Ont progressé', up) + row('ko', '<i class="dot ko"></i>', 'À revoir', ko);
+  const early = !!S.early, pr = early && (S.cards ? (saved.cprog || {})[key()] : saved.prog[key()]), canRes = early && pr && pr.me === S.me && !pr.done;
+  const resTot = S.cards ? cardList().length : countLines(S.scene);
   return `<div class="card"><h2>${early ? (S.cards ? 'Cartes arrêtées ici' : 'Répétition arrêtée ici') : 'Scène terminée'}</h2>
-    <p class="mute" style="margin:2px 0 6px">${early ? ids.length + ' / ' + mineTotal + ' réplique' + (mineTotal > 1 ? 's' : '') + ' répondue' + (ids.length > 1 ? 's' : '') : mineTotal + ' réplique' + (mineTotal > 1 ? 's' : '')}<br>${sansAide} trouvée${sansAide > 1 ? 's' : ''} sans aide</p>
+    <p class="mute" style="margin:2px 0 6px">${early ? ids.length + ' / ' + mineTotal + ' réplique' + (mineTotal > 1 ? 's' : '') + ' répondue' + (ids.length > 1 ? 's' : '') : mineTotal + ' réplique' + (mineTotal > 1 ? 's' : '')}<br>${sansAide} trouvée${sansAide > 1 ? 's' : ''} sans indice</p>
     ${body || '<p class="mute">Aucune réplique notée pendant cette séance.</p>'}
-    ${canRes ? `<div class="row2"><button class="btn" data-act="resume">Reprendre (${pr.pos + 1}/${countLines(S.scene)})</button></div>` : ''}
+    ${canRes ? `<div class="row2"><button class="btn" data-act="${S.cards ? 'cresume' : 'resume'}">Reprendre (${pr.pos + 1}/${resTot})</button></div>` : ''}
     ${miss.length ? `<div class="row2"><button class="btn pri" data-act="redomiss">Refaire ${miss.length > 1 ? 'les ' + miss.length + ' à revoir' : 'celle à revoir'}</button></div>` : ''}
-    <div class="row2"><button class="btn sm soft iconb" data-act="start"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Recommencer</span></button><button class="btn sm" data-act="totext">Retour au texte</button></div></div>`;
+    <div class="row2"><button class="btn sm soft iconb" data-act="${S.cards ? 'startcards' : 'start'}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Recommencer</span></button><button class="btn sm" data-act="totext">Retour au texte</button></div></div>`;
 }
 
 /* ============ ACTIONS ============ */
+const cardList = () => { const items = S.scene.items; return items.map((it, i) => i).filter(i => items[i].k === 'l' && items[i].c === S.me); };
 function beginSteps(steps, pos, all, focus, cards){
   S.cards = !!cards; S.early = false; S.bilOpen = null; S.revBox = null; S.enterFrom = null; S.hinted = new Set(); S.trans = {}; S.focus = focus || null; S.steps = steps; S.pos = pos || 0; S.stepsAll = all !== false; S.started = true; S.done = false; S.stepRevealed = false; S.hint = false;
   S.tab = 'reh'; saveProg();
@@ -3736,14 +3765,44 @@ function autoSpeak(){
   if (S.cards) { const si = S.steps[S.pos]; for (let j = si - 1; j >= 0; j--) if (S.scene.items[j].k === 'l') { speak(j); break; } return; }
   if (it && it.c !== S.me) speak(S.steps[S.pos]);
 }
+/* 2.03 (M53) : quand une réplique arrive, tout le fil glisse vers le haut d'un bloc */
+/* 2.03 (M61) : « Terminer ici » — drapeau, flèche ‹ du haut et retour du téléphone */
+const canEndHere = () => isFocus() && S.started && !S.done && (S.rehHide || S.cards);
+function endHere(){
+  stopSpeech(); S.early = true; S.done = true;
+  if (S.stepsAll && S.scene) {
+    const pr = { me:S.me, pos:S.pos, missed:[...S.missed], done:false };
+    if (S.cards) { saved.cprog = saved.cprog || {}; saved.cprog[key()] = pr; } else saved.prog[key()] = pr;
+    saved.last = { play:S.play.id, scene:S.scene.id };
+  }
+  persist(); render(); window.scrollTo(0,0);
+}
+function flipStart(){
+  if (S.cards || !isFocus() || S.done) return null;
+  const el = document.querySelector('.thr .now'); if (!el) return null;
+  return { i: el.dataset.i, top: el.getBoundingClientRect().top };
+}
+function flipEnd(f){
+  if (!f || S.cards || S.done) return;
+  const th = document.querySelector('.thr'), el = th && th.querySelector(`[data-i="${f.i}"]`); if (!el) return;
+  const dy = f.top - el.getBoundingClientRect().top; if (Math.abs(dy) < 2) return;
+  const kids = [...th.children], fresh = kids.filter(k => +k.dataset.i > +f.i);
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  kids.forEach(k => { k.style.transition = 'none'; k.style.transform = `translateY(${dy}px)`; });
+  fresh.forEach(k => k.classList.add('tnw'));
+  void th.offsetHeight;
+  kids.forEach(k => { k.style.transition = 'transform .42s cubic-bezier(.25,.8,.25,1)'; k.style.transform = ''; });
+  setTimeout(() => kids.forEach(k => { k.style.transition = ''; }), 460);
+}
 function step(d){
   stopSpeech();
+  const fl = d > 0 ? flipStart() : null;
   const n = S.pos + d;
   if (n < 0) return;
   if (n >= S.steps.length) { if (S.stepsAll && S.me && !S.done) { S.done = true; celebrate('applause', { scene:S.scene.title }); } S.done = true; saveProg(); render(); window.scrollTo(0,0); return; }
-  S.enterFrom = d > 0 ? S.steps[S.pos] : null; S.enterAt = Date.now(); S.revBox = null;
+  S.revBox = null;
   S.pos = n; S.stepRevealed = false; S.hint = false; saveProg();
-  render(); window.scrollTo(0,0); keepNow(); autoSpeak();
+  render(); window.scrollTo(0,0); keepNow(); flipEnd(fl); autoSpeak();
 }
 const stOf = r => !r ? { st:'new', n:0 } : { st: r.ko ? 'ko' : r.n >= 5 ? 'solid' : r.n >= 1 ? 'known' : 'new', n: Math.min(5, r.n | 0) };
 function grade(v){
@@ -3887,6 +3946,8 @@ document.addEventListener('click', e => {
     case 'nview': { const i = +b.dataset.i;
       if (saved.notesOpen) { S.nClosed = S.nClosed || new Set(); if (S.nClosed.has(i)) S.nClosed.delete(i); else S.nClosed.add(i); }
       else S.nView = S.nView === i ? null : i; render(); break; }
+    case 'pickf': { const f = document.querySelector(`input[type=file][data-act="${b.dataset.f}"]`); if (f) f.click(); break; }   /* 2.03 : ouverture directe, comme en 2.02 */
+    case 'bginfo': S.bgInfo = !S.bgInfo; renderSheet(); break;
     case 'nmenu': { const i = +b.dataset.i; S.nMenu = S.nMenu === i ? null : i; render(); break; }
     case 'nedit': { S.nMenu = null; const i = +b.dataset.i, n = noteOf(i); S.nEdit = { i, x: n ? n.x : '' }; S.nView = null; render(); break; }
     case 'nsave': if (S.nEdit) {
@@ -3951,7 +4012,7 @@ document.addEventListener('click', e => {
     case 'pickme': if (S.pickK !== b.dataset.k) S.pickK = b.dataset.k; else S.pickK = null; render(); break;
     case 'setme': saved.me[b.dataset.play + '/' + b.dataset.scene] = b.dataset.c; S.pickK = null; persist(); render(); break;
     case 'back': stopSpeech(); S.view = 'library'; S.started = false; render(); window.scrollTo(0,0); break;
-    case 'leave': stopSpeech(); S.started = false; render(); window.scrollTo(0,0); break;
+    case 'leave': if (canEndHere()) { endHere(); break; } stopSpeech(); S.started = false; render(); window.scrollTo(0,0); break;   /* 2.03 (M61-G5) : pendant l'exercice, ‹ mène au récap */
     case 'pick': S.pick = !S.pick; render(); break;
     case 'me':
       S.me = b.dataset.c || null; S.pick = false; S.mode = (S.me ? S.mode : 'all'); S.revealed = new Set();
@@ -3968,8 +4029,12 @@ document.addEventListener('click', e => {
     case 'from': { const all = allSteps(); S.missed = new Set(); beginSteps(all, Math.max(0, all.indexOf(+b.dataset.i)), true); break; }
     case 'start': S.missed = new Set(); beginSteps(allSteps(), 0, true); break;
     case 'rmode': S.rmode = b.dataset.v === 'cards' ? 'cards' : 'reh'; render(); break;
+    case 'cresume': {
+      const p = (saved.cprog || {})[key()], L = cardList();
+      S.missed = new Set((p && p.missed) || []);
+      beginSteps(L, Math.min(p ? p.pos : 0, L.length - 1), true, null, true); break; }
     case 'startcards': {
-      const items = S.scene.items, mine = items.map((it, i) => i).filter(i => items[i].k === 'l' && items[i].c === S.me);
+      const items = S.scene.items, mine = cardList();
       let list = mine;
       if (co().ko) { const st = stats(S.play, S.scene), ko = new Set(st ? st.lines.filter(l => l.st === 'ko').map(l => l.i) : []); list = mine.filter(i => ko.has(i));
         if (!list.length) { appAlert('Aucune réplique « à revoir » dans cette scène.'); break; } }
@@ -3980,7 +4045,7 @@ document.addEventListener('click', e => {
       beginSteps(allSteps(), Math.min(p ? p.pos : 0, countLines(S.scene) - 1), true); break; }
     case 'totext': stopSpeech(); S.started = false; S.tab = 'text'; render(); window.scrollTo(0,0); break;
     case 'bilsec': S.bilOpen = S.bilOpen === b.dataset.k ? null : b.dataset.k; render(); break;
-    case 'redomiss': { const m = [...S.missed].sort((a, c) => a - c); if (!m.length) break; S.missed = new Set(); S.bilOpen = null; beginSteps(m, 0, false, new Set(m)); break; }
+    case 'redomiss': { const m = [...S.missed].sort((a, c) => a - c); if (!m.length) break; S.missed = new Set(); S.bilOpen = null; beginSteps(m, 0, false, new Set(m), S.cards); break; }
     case 'hint': S.hint = Math.min(2, (S.hint | 0) + 1); render(); break;
     case 'cardflip': {
       if (!S.cards || S.done || Date.now() - cardSwiped < 450) break;
@@ -3998,9 +4063,7 @@ document.addEventListener('click', e => {
     case 'prev': step(-1); break;
     case 'next': step(1); break;
     /* 2.03 (L4) : « Terminer ici » — bilan des répliques faites, la position est gardée pour « Reprendre » */
-    case 'endhere': stopSpeech(); S.early = true; S.done = true;
-      if (S.stepsAll && S.scene && !S.cards) { saved.prog[key()] = { me:S.me, pos:S.pos, missed:[...S.missed], done:false }; saved.last = { play:S.play.id, scene:S.scene.id }; }
-      persist(); render(); window.scrollTo(0,0); break;
+    case 'endhere': endHere(); break;
     case 'grade': grade(b.dataset.v); break;
   }
 });
@@ -4031,7 +4094,7 @@ document.addEventListener('change', e => {
   else if (a === 'hlme') { saved.noHl = !t.checked; persist(); render(); }
   else if (a === 'thide') { S.textHide = t.checked; S.revealed = new Set(); render(); }
   else if (a === 'cue') { S.cue = t.checked; render(); }
-  else if (a === 'follow') { saved.follow = t.checked; if (t.checked) S.dpan = false; persist(); render(); if (t.checked) trkScroll(true); }   /* 2.04 : le panneau se ferme quand on active le suivi */
+  else if (a === 'follow') { S.follow = t.checked; if (t.checked) { S.dpan = false; if (saved.trk) { delete saved.trk[key()]; persist(); } } render(); if (t.checked) trkScroll(true); }   /* 2.03 : pas gardé ; repart de la 1re réplique */   /* 2.04 : le panneau se ferme quand on active le suivi */
   else if (a === 'notesopen') { saved.notesOpen = t.checked; S.nClosed = new Set(); S.nView = null; persist(); render(); }
   else if (a === 'boldck') { S.bold = t.checked; persist(); render(); }
   else if (a === 'soundck') { saved.sound = t.checked ? 'on' : 'off'; persist(); render(); if (t.checked) rwSound(() => { RepeteSons.unlock(); RepeteSons.badge('or'); }); }
@@ -4062,25 +4125,13 @@ document.addEventListener('touchend', e => {
 document.addEventListener('touchend', e => {
   if (!isFocus() || S.done) return;
   if (S.cards) return;
-  const t = e.changedTouches[0], dx = t.clientX - tx, dy = t.clientY - ty;
-  const th = document.querySelector('.thr'); if (th) { th.style.transition = ''; th.style.transform = ''; }
-  /* 2.04 (M49) : glisser vers le bas = réplique précédente ; vers la gauche = suivante (inchangé) */
-  if (dy > 70 && Math.abs(dx) < 60 && Date.now() - tt < 800) { step(-1); return; }
-  if (Math.abs(dx) < 70 || Math.abs(dy) > 60 || Date.now() - tt > 600) return;
-  if (dx < 0) primary(true);
+  /* 2.03 (essai 3) : plus aucun glissement en Répétition (ni retour, ni suivante) — seulement les boutons */
 }, {passive:true});
-document.addEventListener('touchmove', e => {
-  if (!isFocus() || S.done || S.cards) return;
-  const t = e.changedTouches[0], dx = t.clientX - tx, dy = t.clientY - ty, th = document.querySelector('.thr'); if (!th) return;
-  if (dy > 0 && dy > Math.abs(dx)) { th.style.transition = 'none'; th.style.transform = 'translateY(' + Math.round(Math.min(dy, 90) * .6) + 'px)'; }
-}, {passive:true});
-document.addEventListener('touchcancel', () => { const th = document.querySelector('.thr'); if (th) { th.style.transition = ''; th.style.transform = ''; } }, {passive:true});
 /* clavier */
 document.addEventListener('keydown', e => {
   if (!isFocus() || S.done || e.target.closest('input,select,textarea')) return;
   const onBtn = !!e.target.closest('button,[role=button]');
   if (e.key === 'ArrowRight' || ((e.key === ' ' || e.key === 'Enter') && !onBtn)) { e.preventDefault(); primary(false); }
-  else if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
   else if (e.key === 'r' || e.key === 'R') { const si = S.steps[S.pos]; if (S.scene.items[si].c !== S.me) speak(si); }
   else if ((e.key === 'i' || e.key === 'I') && (S.hint | 0) < 2) { S.hint = (S.hint | 0) + 1; render(); }
   else if ((e.key === 'x' || e.key === 'X') && S.stepRevealed && gradable(S.steps[S.pos])) grade('ko');
