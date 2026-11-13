@@ -940,7 +940,30 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(-
 /* message « Minuteur arrêté », en haut */
 .tm-toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top));transform:translate(-50%,-16px);opacity:0;transition:.25s;z-index:9998;display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:12px;font:600 14.5px system-ui,sans-serif;white-space:nowrap;pointer-events:none}
 .tm-toast.on{opacity:1;transform:translate(-50%,0)}
-@media (prefers-reduced-motion:reduce){.tm-al.fl::before{animation:none;box-shadow:inset 0 0 40px 14px color-mix(in srgb,var(--st-ko) 80%,transparent)}.tm-bell{animation:none}.tm-pre.go{animation:none}}
+@media (prefers-reduced-motion:reduce){.tm-al.fl::before{animation:none;box-shadow:inset 0 0 40px 14px color-mix(in srgb,var(--st-ko) 80%,transparent)}.tm-bell{animation:none}}
+
+/* ===== 2.04 · essai 2 ===== */
+/* 175 / 181 : grand minuteur ouvert → la page derrière ne défile plus, pas de rechargement en glissant */
+html.tmlock,html.tmlock body{overflow:hidden;overscroll-behavior:none}
+.tm-sh,.tm-sb{overscroll-behavior:contain}
+.tm-hd,.tm-ring,.tm-sb.tm-rsb,.tm-ft{touch-action:none}
+/* 178 (M79 H1) : cadran et cercle à la couleur du thème, espace entre les deux ; chiffres et bouton nets */
+.tm-ring .tm-fg{stroke:var(--accent)}
+.tm-rc{inset:10%;background:color-mix(in srgb,var(--accent) 12%,var(--card))}
+.tm-rc:active{background:color-mix(in srgb,var(--accent) 20%,var(--card))}
+.tm-pi{background:var(--card);color:var(--ink);border-color:var(--line)}
+/* 182 (M72 A) : flèche de retour plus proche du titre */
+.bar{gap:4px}
+.bar .ghost.back{min-width:34px;margin-left:-4px;padding-right:0}
+/* 184 (M74 A) : bouton pause de la barre en carré arrondi */
+.tm-pbi{border-radius:8px;width:30px;height:28px}
+/* 188 (M75) : halo vert, une seule pulsation, quand le minuteur repart après une pause */
+.tm-go{box-shadow:inset 0 0 70px 26px rgba(60,190,110,.9)}
+.tm-go.go{animation:tmgo 1s ease-out}
+@keyframes tmgo{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+/* animations réduites : les halos jaune et vert restent affichés, fixes, pendant 1 s */
+@media (prefers-reduced-motion:reduce){.tm-pre.go,.tm-go.go{animation:tmfix 1s steps(1,end)}}
+@keyframes tmfix{0%{opacity:1}100%{opacity:0}}
 </style>
 </head>
 <body>
@@ -2652,7 +2675,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 121, APP_LABEL = '2.04 · essai 1'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 122, APP_LABEL = '2.04 · essai 2'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -4329,6 +4352,7 @@ function tmStopRing(){ if (tmRingIv) { clearInterval(tmRingIv); tmRingIv = null;
 /* --- états --- */
 function tmStart(p, remMs){
   const c = tmCfg(), rem = remMs != null ? remMs : c.dur * 60000;
+  if (TMS && /^(alarm|break|wait)$/.test(TMS.ph) && c.flash) { const g = document.getElementById('tmgo'); if (g) { g.classList.remove('go'); void g.offsetWidth; g.classList.add('go'); } }   /* 2.04 essai 2 (M75) */
   TMS = { ph:'run', p, end: tmNow() + rem, w: c.warn > 0 && rem <= c.warn * 1000 };
   tmStopRing(); tmSave(); tmPaint(); try { wakeSync(); } catch(e) {}
 }
@@ -4377,7 +4401,7 @@ function tmState(){
   const mode = ph === 'alarm' || ph === 'done' ? 'end' : ph === 'wait' || ph === 'break' ? 'wait' : wf >= 0 ? 'warn' : '';
   const time = wt ? (over > 0 ? '+' : '') + tmFmt(over) : tmFmt(rem);
   const cur = wt || brk ? 1 : Math.max(0, Math.min(1, 1 - rem / tot));
-  const wcol = wf >= 0 ? `color-mix(in srgb, var(--st-ko) ${Math.round(wf * 100)}%, var(--accent))` : mode === 'end' ? 'var(--st-ko)' : '';
+  const wcol = wf >= 0 ? `color-mix(in srgb, var(--st-ko) ${Math.round(wf * 100)}%, #F5BE00)`   /* 2.04 essai 2 : le préavis part toujours du jaune, quel que soit le thème */ : mode === 'end' ? 'var(--st-ko)' : '';
   return { c, ph, p, N, rem, over, brk, wt, tot, mode, time, cur, wcol };
 }
 var TME = null;   /* éléments du minuteur, gardés en mémoire (render() peut détacher la barre de la page) */
@@ -4391,19 +4415,21 @@ function tmBuild(){
   const al = document.createElement('div'); al.id = 'tmalarm'; al.className = 'tm-al'; al.hidden = true; al.setAttribute('role', 'alertdialog');
   al.addEventListener('click', e => { const b = e.target.closest('[data-tma]'); if (!b) return; tmUnlock(); if (b.dataset.tma === 'next') { tmStart(TMS.p + 1); } else tmSilence(); });
   const pre = document.createElement('div'); pre.id = 'tmpre'; pre.className = 'tm-pre';
+  const go = document.createElement('div'); go.id = 'tmgo'; go.className = 'tm-pre tm-go';
   const to = document.createElement('div'); to.id = 'tmtoast'; to.className = 'tm-toast'; to.setAttribute('role', 'status'); to.innerHTML = TM_OFF + '<span>Minuteur arrêté</span>';
-  [bar, sh, al, pre, to].forEach(x => document.body.appendChild(x));
+  [bar, sh, al, pre, go, to].forEach(x => document.body.appendChild(x));
   TME = { bar, sh, al };
   /* glisser vers le bas ferme le grand minuteur (seulement si son contenu est en haut) ; un glissement ne déclenche pas le bouton dessous */
   let y0 = null, dy = 0, drag = false;
   sh.addEventListener('pointerdown', e => { const sb = e.target.closest('.tm-sb'); if (sb && sb.scrollTop > 0) return; if (e.target.closest('.tm-stp button')) return; y0 = e.clientY; dy = 0; });
   window.addEventListener('pointermove', e => { if (y0 === null) return; dy = Math.max(0, e.clientY - y0); if (dy > 6) { sh.style.transition = 'none'; sh.style.transform = 'translateY(' + dy + 'px)'; } });
+  window.addEventListener('pointercancel', () => { if (y0 === null) return; y0 = null; sh.style.transition = ''; sh.style.transform = ''; });
   window.addEventListener('pointerup', () => { if (y0 === null) return; y0 = null; drag = dy > 6; sh.style.transition = ''; sh.style.transform = ''; if (dy > 90) tmCloseSheet(); });
   sh.addEventListener('click', e => { if (drag) { drag = false; e.stopPropagation(); e.preventDefault(); } }, true);
   document.addEventListener('pointerdown', () => { if (TMS || tmOpen) tmUnlock(); }, true);
 }
-function tmOpenSheet(){ tmBuild(); tmOpen = true; tmShKey = ''; tmPaint(); try { navSave(); } catch(e) {} }
-function tmCloseSheet(){ tmOpen = false; tmArm = 0; tmPaint(); }
+function tmOpenSheet(){ tmBuild(); tmOpen = true; document.documentElement.classList.add('tmlock'); tmShKey = ''; tmPaint(); try { navSave(); } catch(e) {} }
+function tmCloseSheet(){ tmOpen = false; document.documentElement.classList.remove('tmlock'); tmArm = 0; tmPaint(); }
 /* barre collée en haut : placée dans #tmslot (Texte, Mes scènes, Bibliothèque) */
 function tmDock(){ tmBuild(); tmPaint(); }
 const tmIco = () => `<button class="ib tm-ic${TMS ? ' tma' : ''}" data-act="tmopen" aria-label="Minuteur">${TM_ICO}<span class="tm-dot" aria-hidden="true"></span></button>`;
@@ -4424,7 +4450,7 @@ function tmPaint(){
     const run = ph === 'run'; if (pb._run !== run) { pb._run = run; pb.querySelector('.tm-pbi').innerHTML = run ? TM_PA : TM_PL; pb.setAttribute('aria-label', run ? 'Pause' : 'Reprendre'); }
   }
   /* grand minuteur */
-  sh.hidden = !tmOpen;
+  sh.hidden = !tmOpen; document.documentElement.classList.toggle('tmlock', tmOpen);
   if (tmOpen) { if (!TMS) { const k = 'set' + JSON.stringify(tmCfg()); if (tmShKey !== k) { tmShKey = k; sh.innerHTML = tmSetupHTML(); } } else tmRunUI(sh); }
   /* alerte de fin de passage (Minuteur-M33, halo doux) */
   const alarm = TMS && (TMS.ph === 'alarm' || TMS.ph === 'done');
@@ -4493,9 +4519,9 @@ function tmAdmJump(v){
   const c = tmCfg(), N = c.passages, s = tmClk.spd || 1, now = tmNow(), p = Math.min(1, N - 1);
   closeSettings();
   if (v === 'run') tmStart(p, c.dur * 60000 * 0.6);
-  else if (v === 'prewarn') tmStart(p, ((c.warn || 60) * 1000) + 5000 * s);
+  else if (v === 'prewarn') tmStart(p, ((c.warn || 60) * 1000) + 5000);
   else if (v === 'lastmin') tmStart(p, 60000);
-  else if (v === 'end10') tmStart(p, 10000 * s);
+  else if (v === 'end10') tmStart(p, 10000);
   else if (v === 'alarm') { TMS = { ph:'run', p: Math.min(p, Math.max(0, N - 2)), end: now }; tmEndPassage(now); }
   else if (v === 'pause') { TMS = c.pause > 0 ? { ph:'break', p: Math.min(p, Math.max(0, N - 2)), pend: now + c.pause * 1000 } : { ph:'wait', p: Math.min(p, Math.max(0, N - 2)), since: now }; tmSave(); }
   else if (v === 'done') { TMS = { ph:'run', p: N - 1, end: now }; tmEndPassage(now); }
