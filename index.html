@@ -782,7 +782,7 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(-
 .focus .fwrap{padding-bottom:40px}
 .arow .btn.sq{flex:0 0 54px}
 .arow .btn{min-width:0;padding-left:8px;padding-right:8px}.arow .btn span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-@media (max-width:340px){.focus .arow .btn{font-size:var(--fs-14)}.focus .arow .btn.sq{flex-basis:46px}.fwrap~.actions .arow .btn.hnx svg{display:none}}
+@media (max-width:340px){.focus .arow .btn{font-size:var(--fs-14)}.focus .arow .btn.sq{flex-basis:46px}.focus .arow .btn.hnx svg{display:none}}
 .fwrap~.actions .arow .btn[data-act=hint]{flex:.82}.fwrap~.actions .arow .btn[data-act=reveal-step]{flex:1.18}
 /* 78 (M51-C) : bande « Précédente | Suivante » */
 .nband{align-items:stretch;gap:0;padding-left:0;padding-right:0}
@@ -820,6 +820,25 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(-
 .bgtab th{font-weight:600;font-size:var(--fs-11);color:var(--mute);text-align:center;padding:2px 3px}
 .bgtab td{text-align:center;padding:3px;white-space:nowrap}
 .bgtab td:first-child{text-align:left;font-weight:600;padding-left:0}
+
+/* ===== 2.03 · essai 4 ===== */
+/* M65-A : [notes | haut-parleur] + [drapeau] ; icônes à la même teinte, grisées quand coupées */
+.pcr.pcr3{padding-right:82px}
+.pcr.pcr3.pcrf{padding-right:126px}
+.pwrap{position:absolute;z-index:3;right:0;top:2px;display:flex;gap:6px}
+.pwrap .pgrp{position:static}
+.pgrp .pspk{border-left:1.5px solid var(--line)}
+.pgrp .pnt,.pgrp .pspk{color:var(--ink)}
+.pgrp .pnt.off,.pgrp .pspk.off,.pgrp .pspk[data-act=nosound]{color:var(--mute);opacity:.75}
+.pgrp .pnt{position:relative}
+.pgrp .pnt.off::before{content:"";position:absolute;left:10px;right:10px;top:50%;height:1.8px;background:currentColor;transform:rotate(-45deg);border-radius:2px}
+.pgrp .pnt svg{width:16px;height:16px;margin:0!important}
+.pgrp .pfl{border-left:0}
+/* 122 : mêmes largeurs qu'en Cartes */
+.focus .arow .btn[data-act=hint]{flex:.82}.focus .arow .btn.pri[data-act=reveal-step]{flex:1.18}.focus .arow .btn.hnx,.focus .arow:has(.hnx) .btn.pri{flex:1}
+/* admin : test du sélecteur */
+.fpt{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0;font-size:var(--fs-13)}
+.fpt input[type=file]:not([hidden]){max-width:170px;font-size:var(--fs-12)}
 </style>
 </head>
 <body>
@@ -2424,7 +2443,7 @@ function admPanel(){
   /* 2.01 : menu admin rangé en sections repliables */
   const sec = (k, t, sub, body) => `<div class="adms ${S.admSec === k ? 'open' : ''}"><button class="admsh" data-act="admsec" data-k="${k}" aria-expanded="${S.admSec === k}"><span><b>${t}</b><small>${sub}</small></span><svg class="gch" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>${S.admSec === k ? `<div class="admsb">${body}</div>` : ''}</div>`;
   return `<div class="admsec"><div class="lbl">Mode admin · profil de test · v${APP_LABEL}</div>
-    <div class="mute small" style="margin-bottom:6px">Jour simulé : <b>${today()}</b>. Rien ici ne touche à ta vraie progression.</div>
+    <div class="mute small" style="margin-bottom:6px">Jour simulé : <b>${today()}</b>.</div>
     ${sec('prog', 'Simuler la progression', 'Maîtrise, niveau, série, à revoir', `
       ${row('Maîtrise globale (%)', 'adm-m', '0 – 100', 'mastery')}
       ${row('Niveau', 'adm-l', '0 – 50', 'level')}
@@ -2477,12 +2496,27 @@ function admPanel(){
     ${sec('diag', 'Diagnostic', 'Hors ligne, vibration, message d’erreur', `
       <div class="admrow"><span>${offMsg || 'Mode hors ligne'}</span><button class="admb" data-act="chkoff">Vérifier</button></div>
       <button class="admb" style="width:100%;margin-top:8px" data-act="admwarn">Tester un message d’erreur</button>
+      <div class="lbl" style="margin:14px 0 6px">Test du sélecteur de fichiers</div>
+      <div class="mute small" style="margin-bottom:6px">Touche chaque essai puis annule le sélecteur ; le temps d’ouverture s’affiche.</div>
+      <div class="fpt"><span>1 · Champ natif (2.02)</span><input type="file" accept=".json,application/json" data-act="fpt" data-k="1"></div>
+      <div class="fpt"><span>2 · Étiquette (essai 2)</span><label class="admb">Ouvrir<input type="file" accept=".json,application/json" data-act="fpt" data-k="2" hidden></label></div>
+      <div class="fpt"><span>3 · Bouton (essai 3)</span><button class="admb" data-act="fpo" data-k="3">Ouvrir</button><input type="file" accept=".json,application/json" data-act="fpt" data-k="3" hidden></div>
+      <div class="fpt"><span>4 · Bouton, sans filtre</span><button class="admb" data-act="fpo" data-k="4">Ouvrir</button><input type="file" data-act="fpt" data-k="4" hidden></div>
+      <div class="fpt"><span>5 · Bouton, filtre .json seul</span><button class="admb" data-act="fpo" data-k="5">Ouvrir</button><input type="file" accept=".json" data-act="fpt" data-k="5" hidden></div>
+      <div class="mute small" id="fpres" style="white-space:pre-wrap;margin-top:6px">${esc(fpLog.join('\n'))}</div>
       <button class="admb" style="width:100%;margin-top:8px" data-act="vibetest">Tester la vibration · réglage : ${esc((HAPTICS.find(h => h[0] === hapticMode()) || [0, '?'])[1])}</button>
 `)}
     <button class="admb dng" style="margin-top:12px;width:100%" data-act="adm" data-op="wipe">Effacer le profil de test</button>
     <button class="admb" style="margin-top:8px;width:100%" data-act="admquit">Quitter le mode admin</button></div>`;
 }
 let sheetTimer = 0;
+/* 2.03 · essai 4 : mesure du temps d'ouverture du sélecteur de fichiers (admin › Diagnostic) */
+const fpLog = []; let fpT = null;
+document.addEventListener('pointerdown', e => { const r = e.target.closest && e.target.closest('.fpt'); if (!r) return; const i = r.querySelector('input[data-k]'); fpT = { k: i && i.dataset.k, t: performance.now() }; }, true);
+const fpHit = how => { if (!fpT) return; const ms = Math.round(performance.now() - fpT.t), k = fpT.k; fpT = null;
+  fpLog.push('Essai ' + k + ' : ' + ms + ' ms (' + how + ')'); if (fpLog.length > 15) fpLog.shift(); const el = document.getElementById('fpres'); if (el) el.textContent = fpLog.join('\n'); };
+document.addEventListener('visibilitychange', () => { if (document.hidden) fpHit('page cachée'); });
+window.addEventListener('blur', () => fpHit('fenêtre quittée'));
 function renderSheet(){
   const el = $('#sheet'); if (!el) return;
   const wrap = el.querySelector('.sh-wrap');
@@ -2512,7 +2546,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 116, APP_LABEL = '2.03 · essai 3'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 117, APP_LABEL = '2.03 · essai 4'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -3553,15 +3587,6 @@ function trkScroll(smooth){
   const want = r.height > avail * 2 / 3 ? 12 : avail / 3 - r.height / 2;
   window.scrollTo({ top: Math.max(0, window.scrollY + r.top - want), behavior: smooth ? 'smooth' : 'auto' });
 }
-let trkPress = null, trkSup = 0;
-document.addEventListener('pointerdown', e => {
-  const ln = S.follow && e.target.closest && e.target.closest('.script.follow .line'); if (!ln || e.target.closest('button')) return;
-  const x = e.clientX, y = e.clientY, i = +ln.dataset.i;
-  clearTimeout(trkPress && trkPress.t);
-  trkPress = { x, y, t: setTimeout(() => { trkPress = null; saved.trk = saved.trk || {}; saved.trk[key()] = i; trkSup = Date.now(); persist(); buzz('ok'); render(); trkScroll(true); }, 550) };
-});
-document.addEventListener('pointermove', e => { if (trkPress && Math.hypot(e.clientX - trkPress.x, e.clientY - trkPress.y) > 10) { clearTimeout(trkPress.t); trkPress = null; } });
-['pointerup', 'pointercancel'].forEach(t => document.addEventListener(t, () => { if (trkPress) { clearTimeout(trkPress.t); trkPress = null; } }));
 
 /* --- onglet Répéter --- */
 const gradable = si => { const it = S.scene.items[si]; return it.k === 'l' && it.c === S.me && (S.rehHide || S.cards) && (!S.focus || S.focus.has(si)); };
@@ -3672,10 +3697,13 @@ const audioOn = () => S.cards ? co().audio : S.audio;
 function pSpk(){
   if (!synth) return `<button class="ib pspk" data-act="nosound" aria-label="Lecture vocale indisponible">${MUTE}</button>`;
   const on = audioOn();
-  return `<button class="ib pspk" data-act="audiotoggle" aria-label="Lecture à voix haute ${on ? 'activée' : 'coupée'}">${on ? SPK : MUTE}</button>`;
+  return `<button class="ib pspk${on ? '' : ' off'}" data-act="audiotoggle" aria-label="Lecture à voix haute ${on ? 'activée' : 'coupée'}">${on ? SPK : MUTE}</button>`;
 }
 /* 2.03 (M61-G1) : haut-parleur à gauche, drapeau « Terminer ici » à droite, dans une seule pastille */
-const pRight = () => { const fl = S.rehHide || S.cards; return `<span class="pcr${fl ? ' pcr2' : ''}">${S.missed.size ? `<span>${S.missed.size} à revoir</span>` : ''}${fl ? `<span class="pgrp">${pSpk()}<button class="ib pfl" data-act="endhere" aria-label="Terminer ici">${IC_FLAG}</button></span>` : pSpk()}</span>`; };
+/* 2.03 · essai 4 (M65-A) : [notes | haut-parleur] dans une pastille, drapeau dans une pastille à part */
+const notesOn = () => !!(S.cards ? co().notes : saved.rehNotes);
+const pNote = () => `<button class="ib pnt${notesOn() ? '' : ' off'}" data-act="notestoggle" aria-label="Notes ${notesOn() ? 'affichées' : 'cachées'}" aria-pressed="${notesOn()}">${FICHE}</button>`;
+const pRight = () => { const fl = S.rehHide || S.cards; return `<span class="pcr pcr3${fl ? ' pcrf' : ''}">${S.missed.size ? `<span>${S.missed.size} à revoir</span>` : ''}<span class="pwrap"><span class="pgrp">${pNote()}${pSpk()}</span>${fl ? `<span class="pgrp"><button class="ib pfl" data-act="endhere" aria-label="Terminer ici">${IC_FLAG}</button></span>` : ''}</span></span>`; };
 const IC_FLIP = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg>';
 const IC_SLIDERS = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>';
 const IC_DOWN = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
@@ -3715,12 +3743,12 @@ function stepView(){
     thr += `<div class="bub ${mine ? 'mine' : 'oth'} now${rb ? ' rvl' : ''}" data-i="${si}"${rb ? ` style="min-height:${rb.h}px;min-width:${rb.w}px"` : ''}>${who(si, noteBtn(it, 'c' + si))}${!mine ? cardSpk(si) : ''}<div class="btxt">${fmt(it.t)}</div>${noteBox(it, 'c' + si)}${mine ? rehNote(si) : ''}</div>`;
   }
   let actions;
-  if (hide) actions = (S.hint >= 2 ? '' : `<button class="btn" data-act="hint">${IC_BULB}<span>${S.hint ? 'Indice suivant' : 'Indice'}</span></button>`) + `<button class="btn pri" data-act="reveal-step">${IC_EYE}<span>Révéler</span></button>`;
+  if (hide) actions = (S.hint >= 2 ? '' : `<button class="btn${S.hint ? ' hnx' : ''}" data-act="hint">${IC_BULB}<span>${S.hint ? 'Indice suivant' : 'Indice'}</span></button>`) + `<button class="btn pri" data-act="reveal-step">${IC_EYE}<span>Révéler</span></button>`;
   else if (gradable(si)) actions = `<button class="btn ko" data-act="grade" data-v="ko">${IC_X}<span>À revoir</span></button><button class="btn ok" data-act="grade" data-v="ok">${IC_OK}<span>Je connais</span></button>`;
   else actions = `<button class="btn pri" data-act="next">Suivant ›</button>`;
   return `<div class="prog"><i style="width:${pct}%"></i></div>
     <div class="pcount fpc"><span>${myCount()}</span>${pRight()}</div>
-    <div class="thr">${thr}</div>
+    <div class="thr" data-act="thrtap">${thr}</div>
     <div class="actions acol"><div class="arow">${actions}</div></div>`;
 }
 function doneView(){
@@ -3935,7 +3963,8 @@ document.addEventListener('click', e => {
     case 'setfs': S.fs = +b.dataset.v; applyFs(); persist(); render(); break;
     case 'settheme': saved.theme = b.dataset.v; applyTheme(); persist(); render(); break;
     case 'setcolor': saved.color = b.dataset.v; applyTheme(); persist(); render(); break;
-    case 'lineopen': { const i = +b.dataset.i; if (Date.now() - trkSup < 800) break; if (window.getSelection && String(window.getSelection()).length) break; S.lineOpen = S.lineOpen === i ? null : i; render(); break; }
+    case 'lineopen': { const i = +b.dataset.i;
+      if (S.follow && trkOf() !== i) { saved.trk = saved.trk || {}; saved.trk[key()] = i; S.lineOpen = null; persist(); render(); trkScroll(true); break; }   /* 2.03 · essai 4 (128 b) */ if (window.getSelection && String(window.getSelection()).length) break; S.lineOpen = S.lineOpen === i ? null : i; render(); break; }
     case 'dpan': S.dpan = !S.dpan; render(); break;
     case 'infosave': S.infoSave = !S.infoSave; renderSheet(); break;
     case 'dfold': S.dFold = !S.dFold; renderSheet(); break;
@@ -4025,6 +4054,8 @@ document.addEventListener('click', e => {
     case 'speak': if (S.speakI === +b.dataset.i) stopSpeech(); else speak(+b.dataset.i); break;
     case 'nosound': S.tts = { status:'unsupported' }; render(); break;
     case 'ttstest': if (S.speakI === 't') stopSpeech(); else say('Bonjour, ceci est un test de la voix.', 1, 't'); break;
+    case 'fpo': { const f = document.querySelector(`input[data-act=fpt][data-k="${b.dataset.k}"]`); if (f) f.click(); break; }
+    case 'notestoggle': if (S.cards) co().notes = !co().notes; else saved.rehNotes = !saved.rehNotes; persist(); render(); break;
     case 'audiotoggle': if (S.cards) co().audio = !co().audio; else S.audio = !S.audio; persist(); if (!audioOn()) stopSpeech(); else autoSpeak(); render(); break;
     case 'from': { const all = allSteps(); S.missed = new Set(); beginSteps(all, Math.max(0, all.indexOf(+b.dataset.i)), true); break; }
     case 'start': S.missed = new Set(); beginSteps(allSteps(), 0, true); break;
@@ -4060,6 +4091,9 @@ document.addEventListener('click', e => {
       const hush = () => { if (S.cards) requestAnimationFrame(() => setTimeout(stopSpeech, 60)); };
       if (S.cards && !S.stepRevealed && animMode() === 'on') { S.stepRevealed = true; const fc = document.querySelector('.fcard'); if (fc) { fc.classList.add('flip'); hush(); setTimeout(render, 480); break; } }
       keepTodoBox(); S.stepRevealed = true; render(); hush(); break; }
+    case 'thrtap': { const si = S.steps[S.pos];   /* 2.03 · essai 4 : toucher le fil = Révéler (ma réplique cachée) ou Suivant (réplique d'un autre) ; rien quand il faut noter */
+      if (gradable(si)) { if (!S.stepRevealed) { keepTodoBox(); S.stepRevealed = true; render(); } }
+      else step(1); break; }
     case 'prev': step(-1); break;
     case 'next': step(1); break;
     /* 2.03 (L4) : « Terminer ici » — bilan des répliques faites, la position est gardée pour « Reprendre » */
