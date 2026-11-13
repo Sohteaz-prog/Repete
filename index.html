@@ -839,6 +839,20 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(-
 /* admin : test du sélecteur */
 .fpt{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0;font-size:var(--fs-13)}
 .fpt input[type=file]:not([hidden]){max-width:170px;font-size:var(--fs-12)}
+
+/* ===== 2.03 · essai 5 ===== */
+/* 135 (M66-1) : pastille du drapeau carrée, drapeau recentré */
+.pgrp .pfl{width:29px;min-width:29px}
+.pgrp .pfl svg{transform:translateX(1px)}
+/* 136 (M66-3 A) : contour de « Recommencer » */
+.row2 .btn.soft.rcm{border:1.5px solid var(--accent)}
+/* 141 (M67-2) : décompte des indices, taille fixe */
+.focus .arow .btn.hbt{flex:.82}
+.focus .arow .btn.hbt:disabled{opacity:.45}
+.arow .btn .hcnt{flex:none;width:18px;height:18px;border-radius:50%;border:1.2px solid var(--line);color:var(--mute);font:700 10.5px/1 system-ui,sans-serif;font-style:normal;display:inline-flex;align-items:center;justify-content:center;padding:0;margin-left:1px;box-sizing:border-box}
+/* 145 : champ invisible posé sur le bouton (test) */
+.fpov{position:relative;display:inline-flex}
+.fpov input[type=file]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
 </style>
 </head>
 <body>
@@ -2498,11 +2512,11 @@ function admPanel(){
       <button class="admb" style="width:100%;margin-top:8px" data-act="admwarn">Tester un message d’erreur</button>
       <div class="lbl" style="margin:14px 0 6px">Test du sélecteur de fichiers</div>
       <div class="mute small" style="margin-bottom:6px">Touche chaque essai puis annule le sélecteur ; le temps d’ouverture s’affiche.</div>
-      <div class="fpt"><span>1 · Champ natif (2.02)</span><input type="file" accept=".json,application/json" data-act="fpt" data-k="1"></div>
-      <div class="fpt"><span>2 · Étiquette (essai 2)</span><label class="admb">Ouvrir<input type="file" accept=".json,application/json" data-act="fpt" data-k="2" hidden></label></div>
-      <div class="fpt"><span>3 · Bouton (essai 3)</span><button class="admb" data-act="fpo" data-k="3">Ouvrir</button><input type="file" accept=".json,application/json" data-act="fpt" data-k="3" hidden></div>
-      <div class="fpt"><span>4 · Bouton, sans filtre</span><button class="admb" data-act="fpo" data-k="4">Ouvrir</button><input type="file" data-act="fpt" data-k="4" hidden></div>
-      <div class="fpt"><span>5 · Bouton, filtre .json seul</span><button class="admb" data-act="fpo" data-k="5">Ouvrir</button><input type="file" accept=".json" data-act="fpt" data-k="5" hidden></div>
+      <div class="fpt" data-k="1"><span>1 · Champ natif (2.02)</span><input type="file" accept=".json,application/json" data-act="fpt"></div>
+      <div class="fpt" data-k="2"><span>2 · Bouton actuel</span><button class="admb" data-act="fpo" data-k="2">Ouvrir</button><input type="file" accept=".json,application/json" data-act="fpt" data-k="2" hidden></div>
+      <div class="fpt" data-k="3"><span>3 · Champ invisible posé sur le bouton</span><span class="fpov"><span class="admb">Ouvrir</span><input type="file" accept=".json,application/json" data-act="fpt" aria-label="Ouvrir"></span></div>
+      <div class="fpt" data-k="4"><span>4 · Champ créé au toucher</span><button class="admb" data-act="fpdyn">Ouvrir</button></div>
+      <div class="fpt" data-k="5"><span>5 · Bouton, filtre « application/json »</span><button class="admb" data-act="fpo" data-k="5">Ouvrir</button><input type="file" accept="application/json" data-act="fpt" data-k="5" hidden></div>
       <div class="mute small" id="fpres" style="white-space:pre-wrap;margin-top:6px">${esc(fpLog.join('\n'))}</div>
       <button class="admb" style="width:100%;margin-top:8px" data-act="vibetest">Tester la vibration · réglage : ${esc((HAPTICS.find(h => h[0] === hapticMode()) || [0, '?'])[1])}</button>
 `)}
@@ -2510,9 +2524,10 @@ function admPanel(){
     <button class="admb" style="margin-top:8px;width:100%" data-act="admquit">Quitter le mode admin</button></div>`;
 }
 let sheetTimer = 0;
+let dblT = null;
 /* 2.03 · essai 4 : mesure du temps d'ouverture du sélecteur de fichiers (admin › Diagnostic) */
 const fpLog = []; let fpT = null;
-document.addEventListener('pointerdown', e => { const r = e.target.closest && e.target.closest('.fpt'); if (!r) return; const i = r.querySelector('input[data-k]'); fpT = { k: i && i.dataset.k, t: performance.now() }; }, true);
+document.addEventListener('pointerdown', e => { const r = e.target.closest && e.target.closest('.fpt'); if (!r) return; fpT = { k: r.dataset.k, t: performance.now() }; }, true);
 const fpHit = how => { if (!fpT) return; const ms = Math.round(performance.now() - fpT.t), k = fpT.k; fpT = null;
   fpLog.push('Essai ' + k + ' : ' + ms + ' ms (' + how + ')'); if (fpLog.length > 15) fpLog.shift(); const el = document.getElementById('fpres'); if (el) el.textContent = fpLog.join('\n'); };
 document.addEventListener('visibilitychange', () => { if (document.hidden) fpHit('page cachée'); });
@@ -2546,7 +2561,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 117, APP_LABEL = '2.03 · essai 4'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 118, APP_LABEL = '2.03 · essai 5'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -3687,7 +3702,7 @@ function cardView(){
   </div></div>`;
   /* 2.03 (M54-A) : plus de bouton ‹ (il permettait de changer la note de la carte d'avant) ; icônes comme en Répétition */
   const actions = rev ? `<button class="btn ko" data-act="grade" data-v="ko">${IC_X}<span>À revoir</span></button><button class="btn ok" data-act="grade" data-v="ok">${IC_OK}<span>Je connais</span></button>`
-    : (S.hint >= 2 ? '' : `<button class="btn${S.hint ? ' hnx' : ''}" data-act="hint">${IC_BULB}<span>${S.hint ? 'Indice suivant' : 'Indice'}</span></button>`) + `<button class="btn pri" data-act="reveal-step">${IC_FLIP}<span>Retourner</span></button>`;
+    : hintBtn() + `<button class="btn pri" data-act="reveal-step">${IC_FLIP}<span>Retourner</span></button>`;
   return `<div class="prog"><i style="width:${Math.round(S.pos / n * 100)}%"></i></div>
     <div class="pcount fpc"><span>Carte ${S.pos + 1} / ${n}</span>${pRight()}</div>
     <div class="fwrap" data-act="cardflip">${card}</div><div class="actions acol"><div class="arow">${actions}</div></div>${rev ? '<div class="edge l" id="edgeL"></div><div class="edge r" id="edgeR"></div>' : ''}`;
@@ -3743,7 +3758,7 @@ function stepView(){
     thr += `<div class="bub ${mine ? 'mine' : 'oth'} now${rb ? ' rvl' : ''}" data-i="${si}"${rb ? ` style="min-height:${rb.h}px;min-width:${rb.w}px"` : ''}>${who(si, noteBtn(it, 'c' + si))}${!mine ? cardSpk(si) : ''}<div class="btxt">${fmt(it.t)}</div>${noteBox(it, 'c' + si)}${mine ? rehNote(si) : ''}</div>`;
   }
   let actions;
-  if (hide) actions = (S.hint >= 2 ? '' : `<button class="btn${S.hint ? ' hnx' : ''}" data-act="hint">${IC_BULB}<span>${S.hint ? 'Indice suivant' : 'Indice'}</span></button>`) + `<button class="btn pri" data-act="reveal-step">${IC_EYE}<span>Révéler</span></button>`;
+  if (hide) actions = hintBtn() + `<button class="btn pri" data-act="reveal-step">${IC_EYE}<span>Révéler</span></button>`;
   else if (gradable(si)) actions = `<button class="btn ko" data-act="grade" data-v="ko">${IC_X}<span>À revoir</span></button><button class="btn ok" data-act="grade" data-v="ok">${IC_OK}<span>Je connais</span></button>`;
   else actions = `<button class="btn pri" data-act="next">Suivant ›</button>`;
   return `<div class="prog"><i style="width:${pct}%"></i></div>
@@ -3777,7 +3792,7 @@ function doneView(){
     ${body || '<p class="mute">Aucune réplique notée pendant cette séance.</p>'}
     ${canRes ? `<div class="row2"><button class="btn" data-act="${S.cards ? 'cresume' : 'resume'}">Reprendre (${pr.pos + 1}/${resTot})</button></div>` : ''}
     ${miss.length ? `<div class="row2"><button class="btn pri" data-act="redomiss">Refaire ${miss.length > 1 ? 'les ' + miss.length + ' à revoir' : 'celle à revoir'}</button></div>` : ''}
-    <div class="row2"><button class="btn sm soft iconb" data-act="${S.cards ? 'startcards' : 'start'}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Recommencer</span></button><button class="btn sm" data-act="totext">Retour au texte</button></div></div>`;
+    <div class="row2"><button class="btn sm soft iconb rcm" data-act="${S.cards ? 'startcards' : 'start'}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Recommencer</span></button><button class="btn sm" data-act="totext">Retour au texte</button></div></div>`;
 }
 
 /* ============ ACTIONS ============ */
@@ -3861,6 +3876,8 @@ function grade(v){
   step(1);
 }
 /* 2.04 : mémorise la taille de la bulle « À toi… » pour que la réplique révélée ne la fasse pas sauter */
+/* 2.03 · essai 5 (M67-2) : « Indice » garde sa taille ; petit rond = indices restants (2 · 1 · 0), grisé à 0 */
+const hintBtn = () => { const left = 2 - (S.hint | 0); return `<button class="btn hbt" data-act="hint" ${left <= 0 ? 'disabled' : ''} aria-label="Indice, ${left} restant${left > 1 ? 's' : ''}">${IC_BULB}<span>Indice</span><i class="hcnt" aria-hidden="true">${left}</i></button>`; };
 function keepTodoBox(){ const t = !S.cards && document.querySelector('.bub.todo'); S.revBox = t ? { si:S.steps[S.pos], h:t.offsetHeight, w:t.offsetWidth } : null; }
 function primary(swipe){
   if (!isFocus() || S.done) return;
@@ -3964,7 +3981,13 @@ document.addEventListener('click', e => {
     case 'settheme': saved.theme = b.dataset.v; applyTheme(); persist(); render(); break;
     case 'setcolor': saved.color = b.dataset.v; applyTheme(); persist(); render(); break;
     case 'lineopen': { const i = +b.dataset.i;
-      if (S.follow && trkOf() !== i) { saved.trk = saved.trk || {}; saved.trk[key()] = i; S.lineOpen = null; persist(); render(); trkScroll(true); break; }   /* 2.03 · essai 4 (128 b) */ if (window.getSelection && String(window.getSelection()).length) break; S.lineOpen = S.lineOpen === i ? null : i; render(); break; }
+      /* 2.03 · essai 5 : en mode suivi, double toucher = suivre cette réplique ; simple toucher = actions (après 0,3 s) */
+      if (S.follow) {
+        if (dblT && dblT.i === i && Date.now() - dblT.t < 320) { clearTimeout(dblT.h); dblT = null; saved.trk = saved.trk || {}; saved.trk[key()] = i; S.lineOpen = null; persist(); buzz('ok'); render(); trkScroll(true); break; }
+        if (dblT) clearTimeout(dblT.h);
+        dblT = { i, t: Date.now(), h: setTimeout(() => { dblT = null; if (window.getSelection && String(window.getSelection()).length) return; S.lineOpen = S.lineOpen === i ? null : i; render(); }, 320) };
+        break;
+      } if (window.getSelection && String(window.getSelection()).length) break; S.lineOpen = S.lineOpen === i ? null : i; render(); break; }
     case 'dpan': S.dpan = !S.dpan; render(); break;
     case 'infosave': S.infoSave = !S.infoSave; renderSheet(); break;
     case 'dfold': S.dFold = !S.dFold; renderSheet(); break;
@@ -4055,6 +4078,7 @@ document.addEventListener('click', e => {
     case 'nosound': S.tts = { status:'unsupported' }; render(); break;
     case 'ttstest': if (S.speakI === 't') stopSpeech(); else say('Bonjour, ceci est un test de la voix.', 1, 't'); break;
     case 'fpo': { const f = document.querySelector(`input[data-act=fpt][data-k="${b.dataset.k}"]`); if (f) f.click(); break; }
+    case 'fpdyn': { const f = document.createElement('input'); f.type = 'file'; f.accept = '.json,application/json'; f.click(); break; }
     case 'notestoggle': if (S.cards) co().notes = !co().notes; else saved.rehNotes = !saved.rehNotes; persist(); render(); break;
     case 'audiotoggle': if (S.cards) co().audio = !co().audio; else S.audio = !S.audio; persist(); if (!audioOn()) stopSpeech(); else autoSpeak(); render(); break;
     case 'from': { const all = allSteps(); S.missed = new Set(); beginSteps(all, Math.max(0, all.indexOf(+b.dataset.i)), true); break; }
