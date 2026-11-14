@@ -2710,7 +2710,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 127, APP_LABEL = '2.04'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 128, APP_LABEL = '2.05 · essai 1'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -2911,14 +2911,43 @@ function exportTexts(){
   document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 }
 /* ===== Ajouter mon texte ===== */
-const NM = "[A-ZÀ-ÖØ-Þa-zà-öø-ÿ][A-ZÀ-ÖØ-Þa-zà-öø-ÿ'’]*(?: [A-ZÀ-ÖØ-Þa-zà-öø-ÿ'’]+){0,3}";
-const RE_DASH = new RegExp("^(" + NM + ")\\s*(?:\\(([^)]*)\\)|,\\s*([^—–:.]{1,60}?))?\\s*[.:]?\\s*[—–-]\\s*(.*)$");
-const RE_UP = /^([A-ZÀ-Þ][A-ZÀ-Þ'’ ]{1,38}?)\s*(?:\(([^)]*)\))?\s*[.:]\s*(.*)$/;
+/* 2.05 : noms de personnages plus généraux : chiffres (sauf en premier), chiffres romains, traits d'union, apostrophes,
+   abréviations avec un point (M. DUPONT), jusqu'à 5 mots. Les anciennes formes restent reconnues. */
+const NM_ABBR = ['M', 'MM', 'MME', 'MMES', 'MLLE', 'MLLES', 'MR', 'MRS', 'MS', 'DR', 'PR', 'ME', 'MGR', 'ST', 'STE', 'SR'];
+const nmBuild = (L, ab) => { const w = '[' + L + '](?:[' + L + "'’]|-(?=[" + L + ']))*';   /* mot : lettres, apostrophes, trait d'union collé entre deux lettres */
+  const t = '(?:(?:' + ab.join('|') + ')\\.\\s?)?' + w;   /* « M. » devant un mot */
+  return t + '(?: +(?:' + t + '|\\d{1,3}))*'; };   /* mots suivants : aussi un nombre (jamais en premier) ; le nombre de mots est vérifié ensuite */
+const NM_ANY = nmBuild('A-ZÀ-ÖØ-Þa-zà-öø-ÿ', NM_ABBR.concat(NM_ABBR.map(a => a.charAt(0) + a.slice(1).toLowerCase())));
+const NM_UP = nmBuild('A-ZÀ-ÖØ-Þ', NM_ABBR);
+const RE_DASH = new RegExp('^(' + NM_ANY + ')\\s*(?:\\(([^)]*)\\)|,\\s*([^—–:.]{1,60}?))?(\\s*[.:]\\s*[—–-]|\\s+[—–]|\\s+-(?=\\s))\\s*(.*)$');
+const RE_UP2 = new RegExp('^(' + NM_UP + ')\\s*(?:\\(([^)]*)\\))?\\s*[.:]\\s*(.*)$');
+const RE_UPONLY2 = new RegExp('^(' + NM_UP + ')\\s*$');
+const RE_UP = /^([A-ZÀ-Þ][A-ZÀ-Þ'’ ]{1,38}?)\s*(?:\(([^)]*)\))?\s*[.:]\s*(.*)$/;   /* anciennes formes, en dernier recours */
 const RE_UPONLY = /^([A-ZÀ-Þ][A-ZÀ-Þ'’ ]{1,38})\s*$/;
+const RE_ENDW = /^(?:FIN|RIDEAU|NOIR|Fin|Rideau|Noir)\s*[.!…]*$/;   /* seuls sur une ligne : didascalies */
+const RE_ROMAN = /^(?=[IVX])X{0,3}(?:IX|IV|V?I{0,3})$/;
+function nmOk(name, sep){
+  const words = name.trim().split(/ +/), up = name === name.toUpperCase(), bare = !/[.:]/.test(sep);
+  if (words.length > 5) return false;
+  if (!up && bare && words.length > 4) return false;   /* comme avant : 4 mots au plus pour un nom en minuscules suivi d'un simple tiret */
+  if (sep.trim() === '-' && !up && !words.every(w => /^[A-ZÀ-ÖØ-Þ\d]/.test(w))) return false;   /* « Il faut partir - vite. » reste une phrase */
+  return true;
+}
 function normName(n){
   n = n.replace(/’/g, "'").replace(/\s+/g, ' ').trim();
-  if (n === n.toUpperCase()) n = n.charAt(0) + n.slice(1).toLowerCase();
-  return n;
+  if (n !== n.toUpperCase()) return n;   /* pas tout en majuscules : écrit tel quel (« pH », « Jean-Pierre ») */
+  const ws = n.split(' ');
+  if (ws.length === 1 && /^[A-ZÀ-ÖØ-Þ]{1,2}$/.test(n)) return n;   /* sigle court : MC, PH */
+  const cap = w => w.toLowerCase().replace(/(^|-)([a-zà-öø-ÿ])/g, (x, a, b) => a + b.toUpperCase());   /* majuscule au début et après un trait d'union */
+  let after = false;
+  return ws.map((w, i) => {
+    let r;
+    if (/^\d+$/.test(w) || (i > 0 && RE_ROMAN.test(w))) r = w;   /* chiffres et chiffres romains tels quels */
+    else if (i === 0 || after) r = cap(w);
+    else r = w.toLowerCase();
+    after = NM_ABBR.includes(w.replace(/\.$/, ''));   /* « M. DUPONT » → « M. Dupont », « MME MARTIN » → « Mme Martin » */
+    return r;
+  }).join(' ');
 }
 function parseScript(raw){
   let src = String(raw).replace(/\r/g, '');
@@ -2936,8 +2965,11 @@ function parseScript(raw){
     const em = l.match(/^\*([^*]+)\*$/);
     if (em) { flush(); items.push({ k:'dir', t:em[1].trim() }); return; }
     l = l.replace(/\*\*?([^*]+)\*\*?/g, '$1');
+    if (RE_ENDW.test(l)) { flush(); items.push({ k:'dir', t:l }); return; }   /* FIN, RIDEAU, NOIR */
     let m, name = null, aside = '', txt = '';
-    if ((m = l.match(RE_DASH))) { name = m[1]; aside = m[2] || m[3] || ''; txt = m[4]; }
+    if ((m = l.match(RE_DASH)) && nmOk(m[1], m[4])) { name = m[1]; aside = m[2] || m[3] || ''; txt = m[5]; }
+    else if ((m = l.match(RE_UP2)) && nmOk(m[1], ':')) { name = m[1]; aside = m[2] || ''; txt = m[3]; }
+    else if ((m = l.match(RE_UPONLY2)) && nmOk(m[1], ':')) { name = m[1]; txt = ''; }
     else if ((m = l.match(RE_UP))) { name = m[1]; aside = m[2] || ''; txt = m[3]; }
     else if ((m = l.match(RE_UPONLY))) { name = m[1]; txt = ''; }
     if (name) {
