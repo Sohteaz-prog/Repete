@@ -2700,7 +2700,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 124, APP_LABEL = '2.04 · essai 4'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 125, APP_LABEL = '2.04 · essai 5'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -4445,6 +4445,8 @@ function tmBuild(){
   const go = document.createElement('div'); go.id = 'tmgo'; go.className = 'tm-pre tm-go';
   const to = document.createElement('div'); to.id = 'tmtoast'; to.className = 'tm-toast'; to.setAttribute('role', 'status'); to.innerHTML = TM_OFF + '<span>Minuteur arrêté</span>';
   [bar, sh, al, pre, go, to].forEach(x => document.body.appendChild(x));
+  /* 228 (essai 5) : une fois le halo joué, on retire « go » ; sinon changer le réglage Animations le rejouait */
+  [pre, go].forEach(x => x.addEventListener('animationend', () => x.classList.remove('go')));
   TME = { bar, sh, al };
   /* glisser vers le bas ferme le grand minuteur ; 2.04 essai 3 (M81-1 B) : aussi depuis la liste des réglages quand elle est tout en haut
      (au doigt : touchmove non passif, la page ne défile pas) ; vers le haut, la liste défile ; un glissement ne déclenche pas le bouton dessous */
@@ -4453,8 +4455,9 @@ function tmBuild(){
   const dn = y => { y0 = y; dy = 0; lock = false; };
   const mv = (y, e) => { if (y0 === null) return; const d = y - y0;
     if (!lock && d < -6) { y0 = null; return; }
-    dy = Math.max(0, d); if (dy > 6) { lock = true; if (e && e.cancelable) e.preventDefault(); sh.style.transition = 'none'; sh.style.transform = 'translateY(' + dy + 'px)'; } };
-  const up = () => { if (y0 === null) return; y0 = null; drag = dy > 6; if (dy > 120) tmCloseSheet(true);   /* 214 : 120 px (essai 4) */ else { sh.style.transition = ''; sh.style.transform = ''; } };
+    if (d > 0 && e && e.cancelable) e.preventDefault();   /* 225 (essai 5) : dès le premier mouvement vers le bas, sinon le navigateur prend le geste pour faire défiler la liste */
+    dy = Math.max(0, d); if (dy > 6) { lock = true; sh.style.transition = 'none'; sh.style.transform = 'translateY(' + dy + 'px)'; } };
+  const up = () => { if (y0 === null) return; y0 = null; drag = dy > 6; if (dy > 160) tmCloseSheet(true);   /* 214 / 225 : 160 px (essai 5) */ else { sh.style.transition = ''; sh.style.transform = ''; } };
   const cancel = () => { if (y0 === null) return; y0 = null; sh.style.transition = ''; sh.style.transform = ''; };
   sh.addEventListener('touchstart', e => { if (e.touches.length !== 1 || !canGo(e.target)) { y0 = null; return; } dn(e.touches[0].clientY); }, { passive: true });
   sh.addEventListener('touchmove', e => { if (e.touches.length === 1) mv(e.touches[0].clientY, e); }, { passive: false });
@@ -4469,7 +4472,7 @@ function tmOpenSheet(){ tmBuild(); tmOpen = true; document.documentElement.class
 function tmCloseSheet(anim){
   const sh = TME && TME.sh;
   /* 2.04 essai 3 (M81-1 B) : la fiche finit de descendre (glissement, flèche « Réduire ») ; la croix des réglages ferme d'un coup */
-  if (anim && sh && !sh.hidden && animMode() === 'on') {
+  if (anim && sh && !sh.hidden) {   /* 228 (essai 5) : la fiche glisse quel que soit le réglage Animations */
     if (tmClosing) return; tmClosing = true;
     sh.style.transition = 'transform .25s ease'; sh.style.transform = 'translateY(100%)';
     setTimeout(() => { tmClosing = false; tmCloseSheet(false); }, 250); return; }
