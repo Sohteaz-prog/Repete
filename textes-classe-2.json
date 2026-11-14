@@ -1,0 +1,661 @@
+[
+ {
+  "id": "u1794651499440",
+  "title": "Le retour de Richard 3",
+  "author": "Gilles Dyrek",
+  "note": "Ajouté par moi",
+  "mine": true,
+  "season": "2027-01",
+  "scenes": [
+   {
+    "id": "u17946514994400",
+    "title": "Atelier théâtre",
+    "characters": [
+     "Richard 3",
+     "Mélanie",
+     "Élisabeth",
+     "MC",
+     "William",
+     "PH",
+     "Isa",
+     "Richard 2"
+    ],
+    "roles": {},
+    "items": [
+     {
+      "k": "dir",
+      "t": "Arrivée de Richard 3."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Bonjour."
+     },
+     {
+      "k": "l",
+      "c": "Mélanie",
+      "t": "Bonjour…"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Je cherche Monsieur Langlois, c’est ici ?"
+     },
+     {
+      "k": "l",
+      "c": "Mélanie",
+      "t": "Euh… oui…"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Il est là ?"
+     },
+     {
+      "k": "l",
+      "c": "Mélanie",
+      "t": "Il va arriver, il est parti faire un tour à la rivière…"
+     },
+     {
+      "k": "dir",
+      "t": "Richard 3 pose son sac et s’assoit."
+     },
+     {
+      "k": "l",
+      "c": "Élisabeth",
+      "t": "(À Richard 3.) Et vous, vous êtes… ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "On m’a dit qu’il y avait des jeux de rôle avec des comédiens, c’est vous ?"
+     },
+     {
+      "k": "l",
+      "c": "Mélanie",
+      "t": "Vous venez pour le rôle du fils ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Oui, c’est ça : le rôle du fils."
+     },
+     {
+      "k": "l",
+      "c": "Élisabeth",
+      "t": "Encore un ?"
+     },
+     {
+      "k": "l",
+      "c": "MC",
+      "t": "Mais… c’est le dernier jour…"
+     },
+     {
+      "k": "l",
+      "c": "Mélanie",
+      "t": "Il nous dit « on arrête les jeux de rôle » et il fait venir un nouveau comédien…"
+     },
+     {
+      "k": "l",
+      "c": "MC",
+      "t": "Non, moi, je suis désolée, mais je me vois pas recommencer à zéro…"
+     },
+     {
+      "k": "l",
+      "c": "William",
+      "t": "Je sais pas si un acteur recommence vraiment à zéro… C’est quoi, un acteur ?…"
+     },
+     {
+      "k": "l",
+      "c": "MC",
+      "t": "(Le coupe.) Stop ! (À Richard 3.) Vous vous êtes déplacé, je suis désolée, mais là, moi j’ai plus la tête à ça…"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Je comprends, oui…"
+     },
+     {
+      "k": "l",
+      "c": "Mélanie",
+      "t": "(À Richard 3.) En plus, faudrait que pH vous fasse une nouvelle fiche, parce que le Richard d’avant l’a déchirée…"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Ah ! y a des fiches ? Ah oui ! Moi, je veux bien ma fiche !"
+     },
+     {
+      "k": "dir",
+      "t": "Arrivée de pH."
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Richard ? Qu’est-ce que tu fais là ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Ah ! on commence directement ? Sans préambule ? O.K., pourquoi pas…"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Tu es arrivé quand ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "C’est payé combien ? (Un silence gêné.) Mon père ne m’a jamais aidé financièrement, il n’a jamais, mais alors jamais voulu même me prêter de l’argent donc là, être payé pour être son fils, ça me convient bien ! (À pH.) Alors ? Combien tu vas me donner pour que je sois Richard ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "J’avais tellement besoin de vous revoir…"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "T’avais tellement besoin de nous revoir que tu en vois d’autres à notre place… O.K., pourquoi pas…"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Si tu as des choses à dire, dis-les. Je t’écoute."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Ah non ! Moi je suis venu pour jouer ! Je vais essayer d’être à la hauteur du rôle… Le rôle de ma vie, je vais quand même pas passer à côté, non ? Même si c’est pas évident de jouer la comédie devant des professionnels… Excusez-moi, moi, j’ai jamais fait ça et j’ai pas votre talent…"
+     },
+     {
+      "k": "l",
+      "c": "William",
+      "t": "(Inquiet, à MC.) Ça risque de sonner un peu amateur, non ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "(À pH.) Par quoi on commence ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Comment tu m’as retrouvé ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "C’est une de tes comédiennes qui m’a téléphoné…"
+     },
+     {
+      "k": "dir",
+      "t": "pH se tourne vers le groupe, Isa rompt le silence."
+     },
+     {
+      "k": "l",
+      "c": "Isa",
+      "t": "Comme Richard 2 ne croyait pas du tout à votre maladie, ça m’a mis le doute sur le reste, alors quand il est parti hier soir… j’ai fait une petite recherche… Et des Richard Langlois du côté de Versailles, y en a pas tant que ça…"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Bien joué…"
+     },
+     {
+      "k": "dir",
+      "t": "Grand malaise parmi les comédiens qui commencent seulement à comprendre…"
+     },
+     {
+      "k": "l",
+      "c": "Mélanie",
+      "t": "Je comprends pas… C’est le vrai Richard ?"
+     },
+     {
+      "k": "l",
+      "c": "Élisabeth",
+      "t": "Il est pas mort ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Je sais pas… Papa ? Je suis vivant, pour toi ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Arrête, Richard…"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Est-ce qu’au moins ça te fait plaisir d’apprendre que ton fils n’est pas mort ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Laisse-moi t’expliquer, Richard…"
+     },
+     {
+      "k": "l",
+      "c": "Élisabeth",
+      "t": "Mais nous ? On est vivants ou on est morts ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Papa ? Tu leur dis ou je leur dis, moi ?"
+     },
+     {
+      "k": "l",
+      "c": "Élisabeth",
+      "t": "Je comprends pas. On n’est pas morts, en fait ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Demande à Papa. C’est lui qui décide qui est mort et qui est vivant… (À pH.) Tu veux des nouvelles de quelqu’un d’autre ? À moins que pour toi tout le monde soit mort ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Comment va ta mère ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Elle a refait sa vie. Elle s’est trouvé quelqu’un de gentil, rassurant. Et présent. Étonnant, non ? Tu veux des nouvelles de qui d’autre ? (pH ne répond pas.) Élisabeth ? Tu sais, ta fille…"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Comment va-t-elle ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Mal mais mieux. Toujours au chômage, grosses galères de thunes, mais au moins elle est vivante. Elle est sortie de l’hôpital."
+     },
+     {
+      "k": "l",
+      "c": "Élisabeth",
+      "t": "Elle était à l’hôpital ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Oui."
+     },
+     {
+      "k": "l",
+      "c": "Élisabeth",
+      "t": "Mais qu’est-ce qu’elle avait ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "(Invitant pH à répondre.) Papa ? (pH reste muet.) Je lui dis, moi ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Arrête ton numéro."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Numéro ? Tu engages des comédiens pour nous jouer et c’est moi qui fais un numéro ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Si je leur avais dit « ça fait dix ans que ma famille me fait la gueule et ne veut plus me voir », jamais ils n’auraient accepté de venir."
+     },
+     {
+      "k": "l",
+      "c": "Isa",
+      "t": "pH, vous savez pourquoi on a accepté de venir ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Non…"
+     },
+     {
+      "k": "l",
+      "c": "Isa",
+      "t": "Parce que, pour nous, c’est du travail. Et vous, vous avez voulu nous manipuler parce que vous ne savez pas faire autrement avec les gens. Vous avez passé votre vie à manipuler tout le monde, mais c’est uniquement parce que vous ne savez pas faire confiance."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "(À pH.) Il paraît que tu es malade ? C’est vrai aussi, ça ? Ou c’est encore un de tes mensonges pour les faire venir ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "C’est vrai."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Je suis censé pleurer ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Tu fais comme tu veux…"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "(À la cantonade.) Donc on fait quoi ? On joue à la petite famille parfaite, c’est ça ? Eh ben, c’est parti. Qui commence ?"
+     },
+     {
+      "k": "l",
+      "c": "Mélanie",
+      "t": "Allez-y doucement avec votre père, il est fragile…"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Oui, oui, je vais essayer de pas le tuer."
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Arrête, Richard ! Tu sais rien de ce que je vis, moi, depuis dix ans. Tu sais pas ce que c’est que de ne plus vous voir, de plus avoir de vos nouvelles, de ressentir ce mépris…"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "(L’interrompt.) Attends juste deux petites secondes avant de te lancer dans ta grande tirade riche en émotions… (Au groupe.) Qui joue quoi ? Ma mère, c’est qui ? (À Mélanie.) C’est vous ? (Isa fait un geste de la main. Étonné.) C’est vous ?"
+     },
+     {
+      "k": "l",
+      "c": "Isa",
+      "t": "Oui."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "(À propos de la jeunesse d’Isa.) C’est énorme."
+     },
+     {
+      "k": "l",
+      "c": "Mélanie",
+      "t": "Oui, c’est ce qu’on s’est tous dit."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "(À MC.) Et vous, vous jouez qui ?"
+     },
+     {
+      "k": "l",
+      "c": "MC",
+      "t": "Votre femme. Marie-Christine."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Non ?"
+     },
+     {
+      "k": "l",
+      "c": "MC",
+      "t": "Si."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "(À pH.) Tu fais jouer ma femme et pas une seule de tes maîtresses ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Arrête, maintenant !"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "(À William.) Vous, je ne vois pas du tout ce que vous faites…"
+     },
+     {
+      "k": "l",
+      "c": "William",
+      "t": "Je suis William."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "(À pH.) C’est qui, ça, William ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "William, mon associé."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Le mec qui s’est suicidé ?"
+     },
+     {
+      "k": "dir",
+      "t": "Grosse réaction de stupeur de tous."
+     },
+     {
+      "k": "l",
+      "c": "William",
+      "t": "(Consterné.) Il s’est… ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Dans les locaux de mon père. (À pH.) C’est bien ça ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Sa femme voulait divorcer, tu n’as pas le droit de me mettre ça aussi sur le dos !"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "(Cassant.) Il s’est donné la mort dans ton bureau, mais tu as raison : ça n’a aucun rapport avec toi. (À William.) Il vous avait mis dans l’avion avec moi et les autres ? (Atterré, William reste sans réaction.) Peu importe. Pour le coup, vous, vous êtes réellement mort, si je peux me permettre. (Au groupe.) O.K. Allez-y, jouez ma famille, ça m’intéresse. (Silence. Les comédiens semblent tétanisés par la situation.) J’ai cassé l’ambiance. J’ai l’impression que je dérangeais beaucoup moins quand j’étais mort."
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Arrête !"
+     },
+     {
+      "k": "dir",
+      "t": "pH s’écroule sur une chaise et pleure."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "(Cynique, désignant son père.) Ah ! la vache ! Il joue super bien le mec qui pleure !"
+     },
+     {
+      "k": "l",
+      "c": "Isa",
+      "t": "Non, Richard. Tu peux pas lui parler comme ça…"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Oui, Maman."
+     },
+     {
+      "k": "dir",
+      "t": "Isa se tait aussitôt, stupéfaite."
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "(À Richard 3.) Arrête ton petit jeu, là. Tu te régales, j’ai bien compris."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "C’est moi qui joue ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Si tu as des choses à dire, dis-les. Je t’écoute."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "O.K. Alors dans l’ordre : tu as trompé Maman. (À Isa.) Pardon, Maman, je suis désolé si je te l’apprends…"
+     },
+     {
+      "k": "l",
+      "c": "Isa",
+      "t": "Non, non, je suis au courant. Mais moi aussi."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Ah oui ? O.K. Bien joué. (À pH.) Tu as massacré Élisabeth en ne l’aimant pas. Déjà moi, je peux dire que tu ne m’as pas aimé, mais elle, tu l’as carrément détestée, je sais pas pourquoi."
+     },
+     {
+      "k": "l",
+      "c": "Élisabeth",
+      "t": "Et pourquoi elle était à l’hôpital ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Anorexie. Mais bien, une belle anorexie. Avec ma femme… je devrais plutôt dire avec mon ex-femme… Oui, tu n’es pas au courant de tout… Avec elle, tu as fait fort d’emblée puisque tu as couché avec sa mère à notre mariage. (À MC.) Il a couché avec ta mère le jour de ton mariage. Et curieusement, ça t’avait un petit peu contrariée…"
+     },
+     {
+      "k": "l",
+      "c": "MC",
+      "t": "Et c’est moi qui t’ai quitté ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Oui."
+     },
+     {
+      "k": "l",
+      "c": "MC",
+      "t": "Mais pourquoi j’ai fait ça ?"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "J’ai eu une aventure avec une collègue, et c’était pas la première fois… (À pH.) Et tu sais quoi ? Mes propres enfants à moi ne veulent plus me voir… Ah ! T’en dis quoi, de ça ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Je suis désolé pour toi…"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Tu ne m’as jamais donné confiance en moi et c’est pour me rassurer… Donc tu peux être désolé pour moi. (À MC.) Toi ça fait quatre ans que je t’ai pas vue et que j’ai pas vu les enfants. Et ça me donne envie de crever."
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Viens, on va se parler."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "On est bien, là, non ? Tu voulais faire du théâtre regarde, c’est pas mal, t’as du public. C’est vrai qu’ils ont peut-être pas envie d’applaudir…"
+     },
+     {
+      "k": "l",
+      "c": "MC",
+      "t": "Le public a surtout envie de vous laisser vous parler… Vous avez des choses à vous dire, tous les deux, on vous laisse tranquilles…"
+     },
+     {
+      "k": "dir",
+      "t": "Les comédiens s’écartent mais restent présents laissant Richard 3 et pH au centre. Mélanie va pour s’éloigner aussi et revient sur ses pas."
+     },
+     {
+      "k": "l",
+      "c": "Mélanie",
+      "t": "(À Richard.) Votre père, il est malade. Et ce qui le rend malade c’est de plus vous voir, de pas pouvoir s’expliquer avec vous, de pas pouvoir réparer. Et s’il a eu cette idée complètement dingue d’engager des comédiens pour jouer sa famille, ça veut bien dire qu’il a besoin de vous parler."
+     },
+     {
+      "k": "dir",
+      "t": "Mélanie rejoint le cercle des comédiens autour de pH et Richard 3."
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "(À Richard 3.) L’autre jour, t’étais pas là, je t’ai dit que je t’aimais. J’étais à genoux devant ta femme pour lui demander pardon, tu m’as aidé à me relever, tu m’as dit… tu m’as dit que tu m’aimais. Je t’ai pris dans mes bras et je te l’ai dit."
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "Tu m’as dit quoi ?"
+     },
+     {
+      "k": "l",
+      "c": "PH",
+      "t": "Je t’ai dit « je t’aime ». Je t’aime, Richard."
+     },
+     {
+      "k": "dir",
+      "t": "Ils se blottissent dans les bras l’un de l’autre. Noir. L’intérieur d’une église. Richard 3 est debout, il reçoit les condoléances d’après cérémonie. Élisabeth, Isa, Mélanie, MC, Richard 2 et William avancent en silence, et l’embrassent chacun à leur tour. Après l’avoir embrassé, les comédiens se tournent vers le public."
+     },
+     {
+      "k": "l",
+      "c": "William",
+      "t": "(Au public.) Le curé était très bien. Belle voix, bonne diction, bonne respiration. Un peu en retrait, mais c’était bien, justement. Il ne cherchait pas à s’imposer dans le personnage, comme font souvent les comédiens. En fait c’était curieux, il était curé et en même temps il ne l’était pas, il nous indiquait le curé. Comme s’il voulait juste nous montrer comment on pourrait le jouer… C’est toujours intéressant à observer. Au moment des condoléances, c’était étrange parce que j’ai vu les autres comédiens se rapprocher des personnes qu’ils avaient jouées. Mais moi… Je me suis jamais senti aussi seul…"
+     },
+     {
+      "k": "l",
+      "c": "Élisabeth",
+      "t": "(Au public.) J’ai vu la vraie Élisabeth, qui donc n’était pas morte… Beaucoup plus forte que ce à quoi je m’attendais… Mais une force comme une colère rentrée. À un moment, quand elle m’a passé le goupillon, j’ai presque cru qu’elle allait me frapper avec… J’avais envie de lui dire : « Pardonne-moi, je t’ai pas jouée comme tu étais… » Mais j’ai bien senti qu’il fallait surtout pas parler de ça…"
+     },
+     {
+      "k": "l",
+      "c": "Isa",
+      "t": "(Au public.) C’était horrible… J’étais complètement dévastée dans l’église. Et d’un coup la femme de pH, la vraie Isa… J’ai pas compris : elle s’est levée, elle est venue devant moi et devant tout le monde, elle m’a dit d’arrêter de pleurer… Non, mais elle est pas bien ? Même là, j’avais pas le droit d’exprimer mes émotions… (texte coupé) pour elle, elle m’a vue comme une remplaçante… Ce qui était un peu le cas, finalement…"
+     },
+     {
+      "k": "dir",
+      "t": "Isa ne peut retenir un sanglot."
+     },
+     {
+      "k": "l",
+      "c": "Mélanie",
+      "t": "(Au public.) Et c’est reparti ! Jusqu’au bout elle nous aura gonflés, celle-là… C’est pile au moment où on a arrêté les jeux de rôle que pH a eu son attaque… Moi qui avais peur de le voir mourir en jouant avec lui, j’avais tout faux ! Je culpabilise, je me dis qu’on aurait jamais dû arrêter de jouer… À l’église, j’ai rencontré Mélanie. Très sympa, on est tombées dans les bras l’une de l’autre… Comme si on s’était reconnues. Elle joue de la clarinette… Je lui ai proposé de faire un récital poésie-clarinette, on va se revoir. Pour les maisons de retraite, ça plaît bien les duos musique et poésie."
+     },
+     {
+      "k": "l",
+      "c": "Richard 2",
+      "t": "(Au public.) J’y croyais pas à la maladie de pH. Comme quoi, quand on a une grande gueule, on l’ouvre souvent pour dire des conneries. En deux jours, j’ai enterré deux pères. Deux pères que je connaissais à peine, finalement… À l’église, j’ai rencontré le vrai Richard. Un mec bien. Il m’a dit : « Merci de m’avoir joué. » C’est la première fois qu’un personnage me dit merci. Je crois que c’est le plus beau compliment qu’un acteur puisse jamais recevoir, et qui n’arrive quasiment jamais…"
+     },
+     {
+      "k": "l",
+      "c": "MC",
+      "t": "(Au public.) Je l’ai vu, j’ai eu un coup de foudre… Richard a été mon troisième mari en moins d’une semaine, mais là, j’ai tout de suite senti que c’était le bon… Il ne jouait ni la fragilité, ni la violence, ni la colère, ni la douleur… Justement parce qu’il ne jouait pas… Je me suis retrouvée face à une telle authenticité que ça m’a désarmée… À l’enterrement j’ai entrevu son ex-femme… Très belle. C’est idiot mais ça m’a flattée…"
+     },
+     {
+      "k": "l",
+      "c": "Richard 3",
+      "t": "(Au public.) Le jour où mon père est mort, c’était assez particulier… (texte coupé) retrouvailles n’a pas pu être à l’origine de son départ… Il était malade mais quand même… Ça a été violent mais aussi très apaisant, comme si on avait réussi à tout réparer en une fois… Et ce jour-là, je me suis découvert une deuxième famille. Et aussi, je peux dire que ce jour-là, j’ai récupéré ma femme… mais une autre."
+     },
+     {
+      "k": "dir",
+      "t": "FIN"
+     }
+    ]
+   }
+  ]
+ }
+]
