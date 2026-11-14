@@ -2710,7 +2710,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 128, APP_LABEL = '2.05 · essai 1'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 129, APP_LABEL = '2.05 · essai 2'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -2743,6 +2743,8 @@ function ensureTop(e){
   } catch(x) {}
 }
 ['pointerup', 'click', 'keydown', 'touchend'].forEach(t => document.addEventListener(t, ensureTop, { capture: true }));
+/* 2.05 essai 2 : le navigateur ne remet pas lui-même l'ancienne position de défilement quand on appuie sur retour (saut de l'écran en fermant la liste des personnages) */
+try { history.scrollRestoration = 'manual'; } catch(x) {}
 document.addEventListener('visibilitychange', () => hlog(document.hidden ? 'appli masquée' : 'appli visible'));
 window.addEventListener('pageshow', e => hlog('pageshow' + (e.persisted ? ' (cache)' : '')));
 window.addEventListener('pagehide', () => hlog('pagehide'));
