@@ -954,6 +954,9 @@ html.tmlock,html.tmlock body{overflow:hidden;overscroll-behavior:none}
 /* 182 (M72 A) : flèche de retour plus proche du titre */
 .bar{gap:4px}
 .bar .ghost.back{min-width:34px;margin-left:-4px;padding-right:0}
+/* 2.05 essai 4 (M86 B) : 8 px entre minuteur et réglages, comme à l'accueil ; en mode admin, la barre de la scène à la même hauteur que l'accueil (les marges se fondaient avec le bandeau) */
+.bar .tm-ic{margin-right:4px}
+.admbar + .bar{margin-top:18px}
 /* 184 (M74 A) : bouton pause de la barre en carré arrondi */
 .tm-pbi{border-radius:8px;width:30px;height:28px}
 /* 188 (M75) : halo vert, une seule pulsation, quand le minuteur repart après une pause */
@@ -2710,7 +2713,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 129, APP_LABEL = '2.05 · essai 2'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 131, APP_LABEL = '2.05 · essai 4'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -3050,10 +3053,13 @@ function navBack(){
   if (rw) { if (rw._close) rw._close(); else rw.click(); return; }
   /* 2.04 : le retour referme d'abord les petites listes et menus ouverts */
   if (!S.settings) {
-    if (S.nMenu != null) { S.nMenu = null; render(); return; }
-    if (S.pick) { S.pick = false; render(); return; }
-    if (S.pickK) { S.pickK = null; render(); return; }
-    if (S.dpan) { S.dpan = false; render(); return; }
+    /* 2.05 essai 3 : le retour fait comme un toucher sur « Changer » (même bouton), et l'écran reste où il était */
+    const keepY = fn => { const y = window.scrollY; fn(); const back = () => { if (Math.abs(window.scrollY - y) > 1) window.scrollTo(0, y); };
+      back(); requestAnimationFrame(back); setTimeout(back, 120); setTimeout(back, 350); };
+    if (S.nMenu != null) { keepY(() => { S.nMenu = null; render(); }); return; }
+    if (S.pick) { keepY(() => { const b = document.querySelector('[data-act="pick"]'); if (b) b.click(); else { S.pick = false; render(); } }); return; }
+    if (S.pickK) { keepY(() => { const b = document.querySelector('[data-act="pickme"][data-k="' + S.pickK + '"]'); if (b) b.click(); else { S.pickK = null; render(); } }); return; }
+    if (S.dpan) { keepY(() => { S.dpan = false; render(); }); return; }
   }
   if (S.nEdit || S.nList) { S.nEdit = null; S.nList = false; render(); return; }
   if (S.nView != null) {
