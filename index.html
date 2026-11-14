@@ -940,7 +940,6 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(-
 /* message « Minuteur arrêté », en haut */
 .tm-toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top));transform:translate(-50%,-16px);opacity:0;transition:.25s;z-index:9998;display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:12px;font:600 14.5px system-ui,sans-serif;white-space:nowrap;pointer-events:none}
 .tm-toast.on{opacity:1;transform:translate(-50%,0)}
-@media (prefers-reduced-motion:reduce){.tm-al.fl::before{animation:none;box-shadow:inset 0 0 40px 14px color-mix(in srgb,var(--st-ko) 80%,transparent)}.tm-bell{animation:none}}
 
 /* ===== 2.04 · essai 2 ===== */
 /* 175 / 181 : grand minuteur ouvert → la page derrière ne défile plus, pas de rechargement en glissant */
@@ -962,7 +961,6 @@ html.tmlock,html.tmlock body{overflow:hidden;overscroll-behavior:none}
 .tm-go.go{animation:tmgo 1s ease-out}
 @keyframes tmgo{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
 /* animations réduites : les halos jaune et vert restent affichés, fixes, pendant 1 s */
-@media (prefers-reduced-motion:reduce){.tm-pre.go,.tm-go.go{animation:tmfix 1s steps(1,end)}}
 @keyframes tmfix{0%{opacity:1}100%{opacity:0}}
 
 /* ===== 2.04 · essai 3 ===== */
@@ -981,7 +979,11 @@ html.tmlock,html.tmlock body{overflow:hidden;overscroll-behavior:none}
 /* 209 (M80-5 C) : « Suivant » pendant un passage : pulsation à la couleur du thème */
 .tm-go.th{box-shadow:inset 0 0 35px 13px color-mix(in srgb,var(--accent) 90%,transparent)}
 @keyframes tmglow{0%,100%{box-shadow:inset 0 0 9px 2px color-mix(in srgb,var(--st-ko) 35%,transparent)}50%{box-shadow:inset 0 0 35px 13px color-mix(in srgb,var(--st-ko) 95%,transparent)}}
-@media (prefers-reduced-motion:reduce){.tm-al.fl::before{box-shadow:inset 0 0 20px 7px color-mix(in srgb,var(--st-ko) 80%,transparent)}}
+/* 224 (essai 4) : le minuteur suit le réglage de l'appli Réglages › Animations (Réduites ou Désactivées → halos fixes, pas de mouvement) ;
+   sans choix, ce réglage suit déjà le téléphone. Attribut data-tmrm posé par tmPaint. */
+:root[data-tmrm] .tm-pre.go,:root[data-tmrm] .tm-go.go{animation:tmfix 1s steps(1,end)}
+:root[data-tmrm] .tm-al.fl::before{animation:none;box-shadow:inset 0 0 20px 7px color-mix(in srgb,var(--st-ko) 80%,transparent)}
+:root[data-tmrm] .tm-bell{animation:none}
 /* 210 (M81-5) : ligne de détection dans admin › Minuteur */
 .tm-rmr{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;font-size:var(--fs-14)}
 .tm-rmd{flex:none;width:auto;min-width:0;font:700 12.5px system-ui,sans-serif;padding:4px 10px;border-radius:999px;background:var(--line);color:var(--ink)}
@@ -2698,7 +2700,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 123, APP_LABEL = '2.04 · essai 3'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 124, APP_LABEL = '2.04 · essai 4'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 const HLOG_KEY = 'repete.hlog';
 /* Journal du bouton retour : uniquement dans le profil de test (visible dans le panneau admin) */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
@@ -4452,7 +4454,7 @@ function tmBuild(){
   const mv = (y, e) => { if (y0 === null) return; const d = y - y0;
     if (!lock && d < -6) { y0 = null; return; }
     dy = Math.max(0, d); if (dy > 6) { lock = true; if (e && e.cancelable) e.preventDefault(); sh.style.transition = 'none'; sh.style.transform = 'translateY(' + dy + 'px)'; } };
-  const up = () => { if (y0 === null) return; y0 = null; drag = dy > 6; if (dy > 90) tmCloseSheet(true); else { sh.style.transition = ''; sh.style.transform = ''; } };
+  const up = () => { if (y0 === null) return; y0 = null; drag = dy > 6; if (dy > 120) tmCloseSheet(true);   /* 214 : 120 px (essai 4) */ else { sh.style.transition = ''; sh.style.transform = ''; } };
   const cancel = () => { if (y0 === null) return; y0 = null; sh.style.transition = ''; sh.style.transform = ''; };
   sh.addEventListener('touchstart', e => { if (e.touches.length !== 1 || !canGo(e.target)) { y0 = null; return; } dn(e.touches[0].clientY); }, { passive: true });
   sh.addEventListener('touchmove', e => { if (e.touches.length === 1) mv(e.touches[0].clientY, e); }, { passive: false });
@@ -4467,7 +4469,7 @@ function tmOpenSheet(){ tmBuild(); tmOpen = true; document.documentElement.class
 function tmCloseSheet(anim){
   const sh = TME && TME.sh;
   /* 2.04 essai 3 (M81-1 B) : la fiche finit de descendre (glissement, flèche « Réduire ») ; la croix des réglages ferme d'un coup */
-  if (anim && sh && !sh.hidden && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+  if (anim && sh && !sh.hidden && animMode() === 'on') {
     if (tmClosing) return; tmClosing = true;
     sh.style.transition = 'transform .25s ease'; sh.style.transform = 'translateY(100%)';
     setTimeout(() => { tmClosing = false; tmCloseSheet(false); }, 250); return; }
@@ -4496,6 +4498,7 @@ function tmPaint(){
   }
   /* grand minuteur */
   sh.hidden = !tmOpen; document.documentElement.classList.toggle('tmlock', tmOpen);
+  { const de = document.documentElement, rm = animMode() !== 'on'; if (de.hasAttribute('data-tmrm') !== rm) de.toggleAttribute('data-tmrm', rm); }
   if (tmOpen) { if (!TMS) { const k = 'set' + JSON.stringify(tmCfg()); if (tmShKey !== k) { tmShKey = k; sh.innerHTML = tmSetupHTML(); } } else tmRunUI(sh); }
   /* alerte de fin de passage (Minuteur-M33, halo doux) */
   const alarm = TMS && (TMS.ph === 'alarm' || TMS.ph === 'done');
