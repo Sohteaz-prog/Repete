@@ -38,7 +38,9 @@ Remplacer `index.html` et `sw.js` sur GitHub, puis attendre la coche verte du d�
 - **Daltonisme** (Réglages) : deux modes (rouge-vert, bleu-jaune) qui changent les couleurs des niveaux et ajoutent des formes.
 - **Vérifier** la mise à jour (Réglages, lien discret) : cherche une nouvelle version et recharge l'appli ; un rechargement fait depuis les Réglages y ramène toujours.
 - **Ajouter mon texte** : coller un texte, il est découpé en répliques par personnage ; export et import possibles (fichier `textes-classe.json`).
-- **Notes sur les répliques** (onglet Texte, version test) : un libellé « ✎ Notes » en haut à droite de chaque réplique ; une note est un texte libre (obligatoire, 300 caractères). Une réplique qui a une note affiche un petit chevron : un appui déplie ou replie la note, avec « Modifier » et « Supprimer ». Le bouton « Notes · n » en haut à gauche du texte ouvre la liste des notes de la scène : un appui sur une ligne saute à la réplique. Stockées sur le téléphone uniquement.
+- **Notes sur les répliques** (onglet Texte) : toucher une réplique affiche « Ajouter une note » (ou « Note » s'il y en a déjà une). Une note est un texte libre de 300 caractères au plus ; le menu ⋮ de la note permet de la modifier ou de la supprimer. L'interrupteur « Afficher mes notes » (bouton des options de l'onglet Texte) les ouvre toutes sous leur réplique. Le bouton « Notes · n » en haut du texte ouvre la liste des notes de la scène : un appui sur une ligne saute à la réplique. Les notes peuvent aussi s'afficher pendant la Répétition et les Cartes. Stockées sur le téléphone uniquement.
+- **Répéter** : deux modes, « Répétition » (toute la scène dans l'ordre, en fil de bulles, avec indices) et « Cartes » (façon flashcards, toutes les répliques ou seulement les « à revoir »). « Terminer ici » ouvre le bilan sans finir la scène.
+- **Minuteur de répétition** (icône en haut de l'accueil et de l'onglet Texte) : durée, nombre de passages, pause, préavis ; alarme sonore, vibration et clignotement réglables. Il s'arrête quand on ouvre « Répéter ».
 - **Au rafraîchissement**, l'appli revient sur l'écran où on était (scène, onglet, position). Un lancement à froid repart de l'accueil.
 
 ## Bouton retour du téléphone
@@ -51,7 +53,7 @@ Il fait la même chose que les boutons « Retour » ou « Fermer » de l'appli. 
 
 ## Mode admin (profil de test)
 
-Profil parallèle pour tester (données séparées, rien n'est envoyé au classement). On l'ouvre en touchant cinq fois la ligne « Répète · v… » en bas des Réglages, puis le code. Le panneau permet de simuler maîtrise, niveau, série, badges, jours, et contient le journal du bouton retour.
+Profil parallèle pour tester (données séparées, rien n'est envoyé au classement). On l'ouvre en touchant cinq fois la ligne « Répète · v… » en bas des Réglages, puis le code. Le panneau permet de simuler maîtrise, niveau, série, badges et jours, de rejouer le guide et les animations, et de tester le minuteur en accéléré.
 
 ## Objectif
 
