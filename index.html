@@ -2742,7 +2742,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 137, APP_LABEL = '2.06 · essai 5'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 138, APP_LABEL = '2.06'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
