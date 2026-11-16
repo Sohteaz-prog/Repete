@@ -288,7 +288,7 @@ button.tapk,.fpv.tapk{animation:tapk .18s ease-out}
 .admsh .gch{color:var(--mute);transition:transform .15s}.adms.open .admsh .gch{transform:rotate(180deg)}
 .admsb{padding:0 0 12px}
 .guide .gh{display:flex;justify-content:space-between;align-items:center;margin:-6px 0 4px}.guide .gh .ghost{color:var(--mute)}
-.gst{display:flex;align-items:center;gap:10px;padding:11px 0;font-size:var(--fs-15)}
+.gst{display:flex;align-items:center;gap:10px;padding:9px 0;font-size:var(--fs-15)}
 .gck{width:22px;height:22px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--ink) 30%,transparent);display:inline-flex;align-items:center;justify-content:center;flex:none;font-size:var(--fs-13);font-weight:700;color:#fff}
 .gst.ok .gck{background:#3B8A2E;border-color:#3B8A2E}.gst.ok{color:var(--mute)}
 .cbleg{display:flex;gap:12px;margin-top:8px;font-size:var(--fs-13);color:var(--mute);white-space:nowrap}.cbleg span{display:inline-flex;align-items:center;gap:5px}
@@ -297,7 +297,7 @@ button.tapk,.fpv.tapk{animation:tapk .18s ease-out}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]) .btn.dgr{background:#3A2526;border-color:#E5484D;color:#F6A5A7}}
 .btn.soft{background:var(--accent-bg);border-color:transparent;color:var(--accent-ink)}
 .iconb{display:inline-flex;align-items:center;justify-content:center;gap:6px}
-.gsb{width:100%;background:none;border:0;text-align:left;color:var(--ink);cursor:pointer;font:inherit;font-size:var(--fs-15);padding:11px 0}
+.gsb{width:100%;background:none;border:0;text-align:left;color:var(--ink);cursor:pointer;font:inherit;font-size:var(--fs-15);padding:9px 0}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .plh{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:0;text-align:left;color:inherit;cursor:pointer}
 .plh > span{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.plh h2{margin:0}
@@ -369,7 +369,7 @@ button.tapk,.fpv.tapk{animation:tapk .18s ease-out}
 .tline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:var(--fs-14)}
 .tk{font-weight:700}.tv{font-weight:700;color:var(--accent-ink)}
 .tn{color:var(--mute);font-size:var(--fs-13);flex:1;min-width:0}.tn.ok{color:#1f8a5a;font-weight:700}
-.info{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--mute);background:none;color:var(--mute);font:700 13px/1 system-ui,sans-serif;padding:0;flex:none;position:relative}.info::after{content:"";position:absolute;inset:-10px}
+.info{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--mute);background:none;color:var(--mute);font:700 9px/1 system-ui,sans-serif;padding:0;flex:none;position:relative}.info::after{content:"";position:absolute;inset:-16px}
 #exittoast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:var(--r-999);font:600 14px/1.2 system-ui,sans-serif;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:9999;max-width:90vw;text-align:center}#exittoast.on{opacity:1;transform:translate(-50%,0)}
 .infobox{background:var(--card);border:1px solid var(--line);border-radius:var(--r-10);padding:10px 12px;font-size:var(--fs-14);line-height:1.45}
 .infobox p{margin:0 0 6px}.infobox p:last-child{margin:0}
@@ -925,8 +925,8 @@ html.tmlock,html.tmlock body{overflow:hidden;overscroll-behavior:none}
 .jrow{display:flex;gap:8px;align-items:stretch;margin-bottom:10px}
 .jrow .whoc{flex:1;min-width:0;margin:0;padding:0 2px 0 12px;min-height:44px;gap:6px}
 .jrow .whoc .grow{display:flex;align-items:baseline;gap:8px;min-width:0;white-space:nowrap}
-.jrow .whoc .lbl{margin:0;flex:none;font-size:var(--fs-11)}
-.jrow .whoc b{overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:var(--fs-15)}
+.jrow .whoc .lbl{margin:0;flex:none}
+.jrow .whoc b{overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:var(--fs-18)}
 .jrow .whoc .chg{min-width:44px;min-height:44px;padding:0;font-size:18px;font-weight:700;color:var(--accent-ink);flex:none}
 .endr{margin:18px 0 8px}.endr .btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px}
 /* 2.06 (260 / 261, M92 c, apparence 4) : pastille « Installer » / « Mise à jour » au milieu de l'en-tête de l'accueil ;
@@ -935,6 +935,10 @@ html.tmlock,html.tmlock body{overflow:hidden;overscroll-behavior:none}
 .hdpw{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex}
 .hdp{white-space:nowrap;flex:none;display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 11px 0 9px;border-radius:999px;border:0;background:var(--accent-bg);color:var(--accent-ink);box-shadow:inset 0 0 0 1.5px var(--accent);font-weight:700;font-size:var(--fs-13);position:relative;margin:0}
 .hdp::after{content:"";position:absolute;inset:-6px -4px}
+/* 2.06 essai 4 (M95-4 c) : avertissement voix compact ; « Aide » en lien ; ✕ petit, dans le coin, zone 48 × 44 */
+.warnbox.wsm{font-size:13px;line-height:1.35;padding:8px 34px 8px 36px}.warnbox.wsm::before{left:10px;top:9px;width:18px;height:18px}
+.wbh{border:0;background:none;padding:0;color:var(--accent-ink);font:inherit;font-weight:600;text-decoration:underline;text-underline-offset:2px;position:relative}.wbh::after{content:"";position:absolute;inset:-12px -8px}
+.wbx{position:absolute;top:0;right:0;width:32px;height:30px;border:0;background:none;color:inherit;opacity:.65;font:700 12px/1 system-ui,sans-serif;display:flex;align-items:flex-start;justify-content:flex-end;padding:7px 8px 0 0}.wbx::after{content:"";position:absolute;inset:-7px -8px -7px -8px}
 </style>
 </head>
 <body>
@@ -2219,7 +2223,7 @@ function saveFailMsg(){
     d.style.cssText = 'position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:99998;background:var(--ink);color:var(--card);padding:12px 14px;border-radius:12px;font-size:14px;text-align:left';
     d.innerHTML = '<div></div><div style="display:flex;justify-content:flex-end;margin-top:8px"><button type="button" style="border:0;background:var(--accent);color:var(--on-accent);font:700 14px system-ui,sans-serif;border-radius:10px;min-height:40px;padding:0 14px">Sauvegarder</button></div>';
     d.firstChild.textContent = SAVE_FAIL_MSG;
-    d.querySelector('button').addEventListener('click', e => { e.stopPropagation(); d.remove(); try { openSettings(); S.setSec = 'data'; renderSheet(); } catch(x) {} });
+    d.querySelector('button').addEventListener('click', e => { e.stopPropagation(); d.remove(); try { exportAll(); } catch(x) {} });   /* 2.06 essai 4 : même effet que « Tout sauvegarder » des Réglages */
     document.body.appendChild(d); } catch(e) {}
 }
 function persist(){
@@ -2737,7 +2741,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 135, APP_LABEL = '2.06 · essai 3'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 136, APP_LABEL = '2.06 · essai 4'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -3065,6 +3069,8 @@ function navBack(){
     if (S.pick) { keepY(() => { const b = document.querySelector('[data-act="pick"]'); if (b) b.click(); else { S.pick = false; render(); } }); return; }
     if (S.pickK) { keepY(() => { const b = document.querySelector('[data-act="pickme"][data-k="' + S.pickK + '"]'); if (b) b.click(); else { S.pickK = null; render(); } }); return; }
     if (S.dpan) { keepY(() => { S.dpan = false; render(); }); return; }
+    /* 2.06 essai 4 (280) : en « Suivre la lecture », le retour coupe d'abord le suivi */
+    if (S.view === 'scene' && S.tab === 'text' && S.follow && !isFocus()) { keepY(() => { S.follow = false; render(); }); return; }
   }
   if (S.nEdit || S.nList) { S.nEdit = null; S.nList = false; render(); return; }
   if (S.nView != null) {
@@ -3661,7 +3667,7 @@ function guideSteps(){
   const mine = saved.mine || [], meSet = mine.some(k => saved.me && saved.me[k]);
   const played = !!((saved.bgc && saved.bgc.scenes) || Object.values(saved.lines || {}).some(L => Object.keys(L || {}).length));
   const inst = isStandalone();
-  return [[inst, 'Installe l’appli sur ton téléphone', 'guideinst'], [mine.length > 0, 'Ajoute une scène depuis la Bibliothèque (étoile)', 'guidelib'], [meSet, 'Choisis ton personnage', 'guideme'], [played, 'Fais ta première répétition', 'guideplay']];
+  return [[inst, 'Installe l’appli sur ton téléphone', 'guideinst'], [mine.length > 0, 'Ajoute tes scènes (étoile ☆)', 'guidelib'], [meSet, 'Choisis ton personnage', 'guideme'], [played, 'Fais ta première répétition', 'guideplay']];
 }
 function guideCard(){
   if (saved.guideDone) return '';
@@ -3674,7 +3680,8 @@ function guideCard(){
 const ttsWarn = () => !synth
   ? (S.tts.status === 'unsupported' ? `<div class="warnbox">La lecture vocale n’est pas disponible dans ce navigateur ou cette application. Ouvre le lien dans Chrome (menu ⋮ → « Ouvrir dans le navigateur ») pour l’essayer.</div>` : '')
   : (S.audio && (S.tts.status === 'silent' || S.tts.status === 'err'))
-  ? `<div class="warnbox">Aucun son détecté${S.tts.msg ? ' (' + esc(S.tts.msg) + ')' : ''}. Vérifie le volume « média » du téléphone. Si rien ne change, ouvre cette page dans ton navigateur (Chrome) : la lecture vocale est parfois bloquée dans l’application.</div>` : '';
+  && S.ttsOff !== S.tts   /* 2.06 essai 4 (M95-4 c) : bandeau compact, « Aide » déplie le conseil complet, ✕ le ferme jusqu'au prochain échec */
+  ? `<div class="warnbox wsm">Aucun son détecté. Vérifie le volume « média ».${S.ttsHelp ? ` Si rien ne change, ouvre cette page dans Chrome : la voix est parfois bloquée dans l’application.${S.tts.msg ? ' (' + esc(S.tts.msg) + ')' : ''}` : ` <button class="wbh" data-act="ttshelp">Aide</button>`}<button class="wbx" data-act="ttsclose" aria-label="Fermer">✕</button></div>` : '';
 function topBar(extra){
   const tx = !extra && S.tab === 'text';   /* 2.04 : minuteur dans l'onglet Texte seulement (pas dans Répéter) */
   return `<div class="bar"><button class="ghost back" data-act="${extra ? 'leave' : 'back'}" aria-label="Retour">${BACK}</button>
@@ -3686,7 +3693,7 @@ function sceneView(){
   const sc = S.scene;
   /* 2.06 (254, M87-2 B · 1, M88-2 c · y, M89-2 h44, M90-2 R) : onglets (non collants), puis une ligne [« Je joue » réduit + ⇅ | bouton des options].
      ⇅ ouvre la même petite liste qu'avant (M28 ; sans rôle : « Aucun » coché, M37). Sur l'onglet Répéter : même ligne, sans bouton des options. */
-  const who = `<div class="whoc"><div class="grow"><span class="lbl">Je joue</span>${S.me ? `<b>${esc(S.me)}</b>` : `<b class="nome">Aucun personnage</b>`}</div><button class="ghost chg" data-act="pick" aria-expanded="${!!S.pick}" aria-label="${S.me ? 'Changer de personnage' : 'Choisir un personnage'}">⇅</button></div>`;
+  const who = `<div class="whoc" data-act="pick"><div class="grow"><span class="lbl">Je joue</span>${S.me ? `<b>${esc(S.me)}</b>` : `<b class="nome">Aucun personnage</b>`}</div><button class="ghost chg" data-act="pick" aria-expanded="${!!S.pick}" aria-label="${S.me ? 'Changer de personnage' : 'Choisir un personnage'}">⇅</button></div>`;
   const list = !S.pick ? '' : S.me
     ? `<div class="rmenu wrm" role="listbox" aria-label="Je joue">${sc.characters.map(c => `<button class="${S.me === c ? 'on' : ''}" role="option" aria-selected="${S.me === c}" data-act="me" data-c="${esc(c)}"><span>${esc(c)}</span>${S.me === c ? '<span aria-hidden="true">✓</span>' : ''}</button>`).join('')}<button class="no" role="option" aria-selected="false" data-act="me" data-c=""><span>Aucun</span></button></div>`
     : `<div class="rmenu wrm" role="listbox" aria-label="Je joue">${sc.characters.map(c => `<button role="option" aria-selected="false" data-act="me" data-c="${esc(c)}"><span>${esc(c)}</span></button>`).join('')}<button class="no on" role="option" aria-selected="true" data-act="me" data-c=""><span>Aucun</span><span aria-hidden="true">✓</span></button></div>`;
@@ -3773,8 +3780,7 @@ function textView(){
     <label class="sw"><input type="checkbox" data-act="showprog" ${saved.showProg && S.me ? 'checked' : ''} ${S.me ? '' : 'disabled'}> Voir ma progression</label>
     <label class="sw"><input type="checkbox" data-act="notesopen" ${saved.notesOpen ? 'checked' : ''}> Afficher mes notes</label>
     <label class="sw"><input type="checkbox" data-act="follow" ${S.follow ? 'checked' : ''}> Suivre la lecture</label>
-    ${S.mode==='mine' ? `<label class="sw"><input type="checkbox" data-act="cue" ${S.cue?'checked':''}> Montrer la fin de la réplique qui précède</label>` : ''}
-    </div>` : '') + ttsWarn();
+    </div>` : '');   /* 2.06 essai 4 : plus d'avertissement voix dans l'onglet Texte (pas de lecture à voix haute ici) */
   const opts = (S.stMap ? `<div class="pgl"><span><i class="dot new"></i>nouvelle</span><span><i class="dot ko"></i>à revoir</span><span><i class="dot known"></i>connue</span><span><i class="dot solid"></i>solide</span></div>` : '')
     + (S.textHide && S.revealed.size ? `<div><button class="mini big" data-act="rehide">Recacher tout</button></div>` : '');
   if (opts) h += `<div class="opts">${opts}</div>`;
@@ -3787,7 +3793,7 @@ function textView(){
     const mine = it.c === S.me;
     if (S.mode === 'all') h += lineHtml(it, i, mine);
     else if (mine) {
-      if (S.cue && prev >= 0) h += `<p class="cue"><b class="nm">${lineNo(prev)} · ${esc(items[prev].c)}</b>${fmt(tail(items[prev].t))}</p>`;
+      if (prev >= 0) h += `<p class="cue"><b class="nm">${lineNo(prev)} · ${esc(items[prev].c)}</b>${fmt(tail(items[prev].t))}</p>`;
       h += lineHtml(it, i, mine);
     }
     prev = i;
@@ -4251,7 +4257,9 @@ document.addEventListener('click', e => {
     case 'weaktab': S.weakTab = S.weakTab || {}; S.weakTab[b.dataset.k] = b.dataset.v; render(); break;
     case 'admbg': { const x = BADGES.find(y => y.id === b.dataset.b), t = +b.dataset.v; saved.bg = saved.bg || {}; saved.bgc = saved.bgc || {};
       saved.bg[x.id] = t; saved.bgc[x.id] = x.unique ? t : (t ? x.T[t - 1] : 0); saved.bgFix = saved.bgFix || {}; saved.bgFix[x.id] = true; persist(); renderSheet(); render(); admToast(x.name + ' : ' + (x.unique ? (t ? 'obtenu' : 'retiré') : 'palier ' + t)); break; }
-    case 'admtts': S.tts = S.tts.status === 'silent' && S.tts.msg === 'test admin' ? { status:'idle' } : { status:'silent', msg:'test admin' }; S.audio = true; renderSheet(); render(); admToast(S.tts.status === 'silent' ? 'Avertissement voix affiché (Texte, Répéter)' : 'Avertissement voix retiré'); break;   /* 2.06 essai 2 */
+    case 'admtts': S.tts = S.tts.status === 'silent' && S.tts.msg === 'test admin' ? { status:'idle' } : { status:'silent', msg:'test admin' }; S.audio = true; renderSheet(); render(); admToast(S.tts.status === 'silent' ? 'Avertissement voix affiché (onglet Répéter, répétition)' : 'Avertissement voix retiré'); break;   /* 2.06 essai 2 */
+    case 'ttshelp': S.ttsHelp = true; render(); break;   /* 2.06 essai 4 (M95-4 c) */
+    case 'ttsclose': S.ttsOff = S.tts; S.ttsHelp = false; render(); break;
     case 'admsavefail': closeSettings(); saveFailMsg(); break;   /* 2.06 essai 2 : affiche le message sans rien casser */
     case 'admwarn': appAlert('Exemple de message d’erreur : ce fichier est illisible.', null, true); break;
     case 'admcnt': S.admCnt = !S.admCnt; renderSheet(); break;
@@ -4373,7 +4381,6 @@ document.addEventListener('change', e => {
   else if (a === 'hlme') { saved.noHl = !t.checked; persist(); render(); }
   else if (a === 'thide') { S.textHide = t.checked; S.revealed = new Set(); render(); }
   else if (a === 'onlyme') { S.mode = t.checked ? 'mine' : 'all'; render(); }   /* 2.06 (254) : remplace « Tout le texte / Mes répliques » */
-  else if (a === 'cue') { S.cue = t.checked; render(); }
   else if (a === 'follow') { S.follow = t.checked; if (t.checked) { S.dpan = false; if (saved.trk) { delete saved.trk[key()]; persist(); } } render(); if (t.checked) trkScroll(true); }   /* 2.03 : pas gardé ; repart de la 1re réplique */   /* 2.04 : le panneau se ferme quand on active le suivi */
   else if (a === 'notesopen') { saved.notesOpen = t.checked; S.nClosed = new Set(); S.nView = null; persist(); render(); }
   else if (a === 'boldck') { S.bold = t.checked; persist(); render(); }
