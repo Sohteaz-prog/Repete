@@ -2327,7 +2327,8 @@ function installBlock(){
    Nouvelle version prête = le nouveau service worker a pris la main (controllerchange) et son index.html a un APP_VER plus grand. */
 let updReady = false;
 function updProbe(){
-  fetch('index.html').then(r => r.text()).then(t => { const m = /APP_VER\s*=\s*(\d+)/.exec(t);
+  /* 2.06 essai 5 : lu sur le réseau (no-store) : juste après le changement de service worker, le cache peut encore rendre l'ancien fichier */
+  fetch('index.html', { cache: 'no-store' }).then(r => r.text()).then(t => { const m = /APP_VER\s*=\s*(\d+)/.exec(t);
     if (m && +m[1] > APP_VER && !updReady) { updReady = true; try { if (S.view === 'library') render(); } catch(e) {} } }).catch(() => {});
 }
 try { if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('controllerchange', updProbe); } catch(e) {}
@@ -2741,7 +2742,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 136, APP_LABEL = '2.06 · essai 4'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 137, APP_LABEL = '2.06 · essai 5'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -3606,6 +3607,7 @@ function rankView(){
   const info = `<div class="infobox" style="margin-top:10px"><p><b>Qu’est-ce qui est envoyé ?</b> Seuls ton pseudo et tes chiffres de progression : niveau, maîtrise globale, série, badges et nombre de répliques répondues. Aucun texte, aucun nom.</p>
       <p>Ordre : niveau, puis maîtrise, puis badges, puis série. Un pseudo ne peut être utilisé que par une seule personne.</p>
       <p>Tu peux voir le classement sans participer. Tu peux te retirer à tout moment : ta ligne est alors supprimée.</p></div>`;
+  /* 2.06 essai 5 (M96 b) : bulle (i) juste après le texte (« Je participe » / « Rejoindre le classement ») */
   /* 2.01 : participation compacte (M6) — bouton « Participer », pseudo en texte, champ seulement au toucher */
   const ib = `<button class="info" data-act="inforank" aria-label="Quelles données sont envoyées ?" aria-expanded="${S.infoRank ? 'true' : 'false'}">i</button>`;
   const err = rankErr === 'blocked' ? 'Ce pseudo est refusé. Choisis-en un autre.' : rankErr === 'taken' ? 'Ce pseudo est déjà utilisé par quelqu’un d’autre. Choisis-en un autre.' : rankErr === 'full' ? 'Le classement est complet pour cette saison.' : '';
@@ -3613,9 +3615,9 @@ function rankView(){
       <div style="display:flex;gap:8px"><input id="rankpin" type="text" maxlength="10" value="${esc(r.pseudo || '')}" placeholder="Ton pseudo" autocomplete="off" aria-label="Pseudo" style="flex:1"><button class="btn pri sm" data-act="rankok">Valider</button></div>
       ${S.rankPErr ? '<div class="warnbox" style="margin:8px 0 0">Écris un pseudo d’abord.</div>' : ''}
       <button class="ghost" data-act="rankcancel" style="padding-left:0">Annuler</button></div>`;
-  if (!r.on && !r.pseudo) h += `<section class="card rkpart"><div class="tline"><b style="flex:1">Rejoindre le classement</b>${ib}</div>${S.infoRank ? info : ''}
+  if (!r.on && !r.pseudo) h += `<section class="card rkpart"><div class="tline"><b style="flex:none">Rejoindre le classement</b>${ib.replace('class="info"', 'class="info" style="margin-left:8px"')}</div>${S.infoRank ? info : ''}
       ${S.rankEdit ? editor : `<div class="mute small" style="margin:4px 0 10px">Tu peux le consulter sans participer.</div><button class="btn pri" style="width:100%" data-act="rankjoin">Participer</button>`}</section>`;
-  else h += `<section class="card rkpart"><div class="tline"><label class="sw" style="flex:1"><input type="checkbox" data-act="rankon" ${r.on ? 'checked' : ''}> Je participe</label>${ib}</div>${S.infoRank ? info : ''}
+  else h += `<section class="card rkpart"><div class="tline"><label class="sw" style="flex:1"><input type="checkbox" data-act="rankon" ${r.on ? 'checked' : ''}> <span class="vlt">Je participe${ib}</span></label></div>${S.infoRank ? info : ''}
       ${S.rankEdit ? editor : `<button class="rkps" data-act="rankedit"><span class="mute small">Ton pseudo</span><b>${esc(r.pseudo || '—')} <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></b></button>`}
       ${err ? `<div class="warnbox" style="margin:8px 0 0">${err}</div>` : ''}</section>`;
   const list = c ? rankSort(c.players) : [];
@@ -4176,7 +4178,7 @@ document.addEventListener('click', e => {
     case 'rankopen': S.view = 'rank'; render(); window.scrollTo(0, 0); rankSync(); rankLoad(); break;
     case 'rankrefresh': { if (b.disabled) break; b.disabled = true; b.textContent = 'Actualisation…';
       (rk().on && rankClean(rk().pseudo) ? rankSend(true) : Promise.resolve()).then(rankLoad).then(() => { const x = document.querySelector('[data-act=rankrefresh]'); if (x) { x.disabled = false; x.textContent = 'Actualiser'; } }); break; }
-    case 'inforank': S.infoRank = !S.infoRank; render(); break;
+    case 'inforank': e.preventDefault(); S.infoRank = !S.infoRank; render(); break;   /* 2.06 essai 5 (M96 b) : dans le libellé, ne bascule pas l'interrupteur */
     case 'rankback': navBack(); break;
     case 'rankrow': { const k = b.dataset.p; rankOpen.has(k) ? rankOpen.delete(k) : rankOpen.add(k); const el = b.closest('.rkp'); if (el) { el.classList.toggle('open'); b.setAttribute('aria-expanded', rankOpen.has(k)); } break; }
     case 'progressback': navBack(); break;
