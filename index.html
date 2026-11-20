@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#faf7f2">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
@@ -950,6 +950,31 @@ html.tmlock,html.tmlock body{overflow:hidden;overscroll-behavior:none}
 .warnbox.wsm{font-size:13px;line-height:1.35;padding:8px 34px 8px 36px}.warnbox.wsm::before{left:10px;top:9px;width:18px;height:18px}
 .wbh{border:0;background:none;padding:0;color:var(--accent-ink);font:inherit;font-weight:600;text-decoration:underline;text-underline-offset:2px;position:relative}.wbh::after{content:"";position:absolute;inset:-12px -8px}
 .wbx{position:absolute;top:0;right:0;width:32px;height:30px;border:0;background:none;color:inherit;opacity:.65;font:700 12px/1 system-ui,sans-serif;display:flex;align-items:flex-start;justify-content:flex-end;padding:7px 8px 0 0}.wbx::after{content:"";position:absolute;inset:-7px -8px -7px -8px}
+/* 2.07 essai 2 (356, M145) : Préparation sur la ligne des notes */
+.nprow{display:flex;gap:8px;margin:0 0 8px}.nprow .nlb{flex:none}
+.prb{flex:1;min-width:0;display:flex;align-items:center;gap:8px;min-height:38px;padding:0 12px;border-radius:var(--r-10);border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 14px system-ui,sans-serif}
+.prb>svg:first-child{color:var(--accent-ink);flex:none;width:18px;height:18px}.prb .g{flex:1;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.prb small{color:var(--mute);font-weight:600;font-size:13px}.prb .sncv{width:16px;height:16px}
+.prb.open{border-bottom-left-radius:0;border-bottom-right-radius:0}
+.snc.pnc{margin-top:-8px}
+/* 2.07 essai 2 (366, M150 b) : en Italienne, la voix est toujours active */
+.sw.vlock input{opacity:.45;filter:grayscale(.6)}
+/* 2.07 essai 2 (353, M160 ; 368, M157) */
+.sni .x.tr{color:var(--st-ko);display:inline-flex;align-items:center;justify-content:center}
+.pcan{flex:none;height:28px;border-radius:14px;border:0;background:color-mix(in srgb,var(--mute) 22%,transparent);color:var(--ink);font:700 13px system-ui,sans-serif;padding:0 12px}
+.sni.sed .sedi{flex:1;min-width:0;min-height:36px;padding:0 10px}
+.sok{flex:none;width:36px;height:36px;border-radius:10px;border:0;background:var(--accent);color:#1b1408;font:800 16px system-ui,sans-serif}
+html:has(.psh),html:has(.psh) body{overflow:hidden;overscroll-behavior:none}   /* 2.07 essai 2 (352) */
+/* 2.07 essai 2 (364, M148 a) : Collection qui se déplie en glissant */
+.cwrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}.cwrap.op{grid-template-rows:1fr}.cwrap>div{overflow:hidden;min-height:0}
+/* 2.07 essai 2 (363, M152) : bandeau, icônes et texte centrés sur une même ligne */
+.band .bm small.bx2{display:flex;align-items:center;gap:4px;line-height:16px}.bx2 .bi{display:inline-flex;align-items:center;height:16px}.bx2 .bi svg{display:block}.band .bm small.bx2 .ico{vertical-align:0}.bx2 .sep{margin:0 2px}.bx2 .bfl{transform:translateY(-.55px)}
+/* 2.07 essai 2 (362, M159) : quadrillage de Ma progression */
+.hg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}.hg>div{display:flex;flex-direction:column;gap:1px;padding:6px 8px;border-radius:10px;background:color-mix(in srgb,var(--line) 35%,transparent);min-width:0}
+.hg b{display:block;font-size:17px;line-height:22px;color:var(--ink);white-space:nowrap}.hg .up b{color:var(--st-ok,#1f8a4c)}.hg small{color:var(--mute);font-size:11.5px;line-height:1.3}
+.hg .fl{display:inline-block;margin-right:3px;line-height:0}.hg .fl svg{vertical-align:baseline}.hg .tarn .fl svg{filter:grayscale(1) opacity(.55)}.hg .fl.live svg{vertical-align:-1.3px}
+/* 2.07 essai 2 (367, M161) : choix du mode sous « Répéter d'ici » */
+.la.on{border-color:color-mix(in srgb,var(--accent) 60%,var(--line))}.la .sncv{width:14px;height:14px}
+.rmenu.fm{margin:8px 0 0}.fm button{justify-content:flex-start;gap:12px;font-weight:600}.fm button svg{color:var(--accent-ink);flex:none;width:18px;height:18px}
 </style>
 </head>
 <body>
@@ -2437,7 +2462,8 @@ const animMode = () => { const v = saved.anim; if (v === 'on' || v === 'off' || 
 const animsOn = () => animMode() === 'on';
 let animQ = [], animBusy = false, animHold = [];
 const animHolding = () => { try { return isFocus() && !S.done; } catch(e) { return false; } };
-function celebrate(kind, data){ if (animMode() === 'none') return; if (animHolding()) { animHold.push({ kind, data }); return; } animQ.push({ kind, data }); if (!animBusy) { animBusy = true; setTimeout(animNext, 0); } }
+let animMute = false;   /* 2.07 essai 2 (361) : simulation de la progression (admin) sans animations */
+function celebrate(kind, data){ if (animMute || animMode() === 'none') return; if (animHolding()) { animHold.push({ kind, data }); return; } animQ.push({ kind, data }); if (!animBusy) { animBusy = true; setTimeout(animNext, 0); } }
 function animNext(){
   const e = animQ.shift(); if (!e) { animBusy = false; return; }
   animBusy = true; (window.__anim = window.__anim || []).push(e.kind);
@@ -2558,10 +2584,10 @@ const TIER_UNIT = { streak:n => n + ' jour' + (n > 1 ? 's' : ''), obj:n => n + '
 function badgeTiers(b, t, p){
   const GCH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
   let h = `<button class="tdrop" data-act="bcoll" aria-expanded="${!!S.bcoll}">Collection${GCH}</button>`;
-  if (!S.bcoll) return h;
-  h += '<ul class="tiers">' + TIERS.map((nm, i) => i < t ? `<li class="ok"><i class="tc" style="background:${TIERC[i]}"></i><span class="tl">${nm}</span><span class="tval">${esc(TIER_UNIT[b.id](b.T[i]))} ✓</span></li>`
+  /* 2.07 essai 2 (364, M148 a) : la liste est toujours là, elle se déplie en glissant */
+  h += `<div class="cwrap${S.bcoll ? ' op' : ''}"><div>` + '<ul class="tiers">' + TIERS.map((nm, i) => i < t ? `<li class="ok"><i class="tc" style="background:${TIERC[i]}"></i><span class="tl">${nm}</span><span class="tval">${esc(TIER_UNIT[b.id](b.T[i]))} ✓</span></li>`
     : i === t ? `<li class="tnow"><i class="tc" style="background:${TIERC[i]}"></i><span class="tl">${nm}</span><span class="tval">${p | 0} %</span><span class="tpb"><i style="width:${p | 0}%"></i></span></li>`
-    : `<li class="lock"><i class="tc qq"></i><span class="tl">???</span><span class="tval"></span></li>`).join('') + '</ul>';
+    : `<li class="lock"><i class="tc qq"></i><span class="tl">???</span><span class="tval"></span></li>`).join('') + '</ul></div></div>';
   return h;
 }
 function badgesView(){
@@ -2779,7 +2805,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 139, APP_LABEL = '2.07 · essai 1'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 140, APP_LABEL = '2.07 · essai 2'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -2851,7 +2877,7 @@ let navT = 0;
 window.addEventListener('scroll', () => { clearTimeout(navT); navT = setTimeout(navSave, 300); }, { passive: true });
 document.addEventListener('visibilitychange', () => { if (document.hidden) navSave(); });
 window.addEventListener('pagehide', navSave);
-const navDepth = () => !!(document.getElementById('appcf') || S.prepK || (typeof tmOpen !== 'undefined' && tmOpen) || S.settings || S.pick || S.pickK || S.dpan || S.nMenu != null || S.nEdit || S.nList || S.nView != null || S.view !== 'library' || S.started || document.querySelector('.rwl.on') || (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()));
+const navDepth = () => !!(document.getElementById('appcf') || S.prepK || S.prepDel || S.prepEd || S.fromOpen != null || (S.prepOpen && S.view === 'scene') || (typeof tmOpen !== 'undefined' && tmOpen) || S.settings || S.pick || S.pickK || S.dpan || S.nMenu != null || S.nEdit || S.nList || S.nView != null || S.view !== 'library' || S.started || document.querySelector('.rwl.on') || (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()));
 
 /* ===== Textes de la classe : fichier textes-classe.json placé à côté de index.html ===== */
 function mergeShared(arr){
@@ -3107,7 +3133,7 @@ function importView(){
 function navBack(src){ const b0 = bview(); exitAt = 0; navBack0(); blog((src || 'bouton ‹') + ' : ' + b0 + ' ⇒ ' + bview()); }
 function navBack0(){
   const cf = document.getElementById('appcf'); if (cf) { cf._cancel(); return; }
-  if (tmOpen) { tmCloseSheet(true); return; }   /* 2.04 : le retour ferme d'abord le grand minuteur ; 2.07 (310) : comme « Réduire » (la fiche glisse) */
+  if (tmOpen) { tmCloseSheet(!!TMS); return; }   /* 2.07 essai 2 (365) : dans les réglages du minuteur, le retour ferme comme la croix */   /* 2.04 : le retour ferme d'abord le grand minuteur ; 2.07 (310) : comme « Réduire » (la fiche glisse) */
   const rw = document.querySelector('.rwl.on');
   if (rw) { if (rw._close) rw._close(); else rw.click(); return; }
   /* 2.04 : le retour referme d'abord les petites listes et menus ouverts */
@@ -3122,6 +3148,11 @@ function navBack0(){
     /* 2.06 essai 4 (280) : en « Suivre la lecture », le retour coupe d'abord le suivi */
     if (S.view === 'scene' && S.tab === 'text' && S.follow && !isFocus()) { keepY(() => { S.follow = false; render(); }); return; }
   }
+  /* 2.07 essai 2 (353, 368, 355, 367) : le retour annule d'abord la suppression ou la modification, puis referme les listes */
+  if (S.prepDel) { prepDelOff(); prepKeep(render); return; }
+  if (S.prepEd) { S.prepEd = null; render(); return; }
+  if (S.fromOpen != null) { S.fromOpen = null; render(); return; }
+  if (S.prepOpen && S.view === 'scene') { S.prepOpen = false; render(); return; }
   if (S.prepK) { S.prepK = null; render(); return; }   /* 2.07 (307) : panneau Préparation */
   if (S.nEdit || S.nList) { S.nEdit = null; S.nList = false; render(); return; }
   if (S.nView != null) {
@@ -3135,6 +3166,8 @@ function navBack0(){
   if (S.view === 'badges') { S.view = 'progress'; render(); window.scrollTo(0, 0); return; }
   if (S.view === 'rank') { S.view = 'progress'; render(); window.scrollTo(0, 0); return; }
   if (S.view === 'progress' || S.view === 'import') { S.view = 'library'; render(); window.scrollTo(0, 0); return; }
+  /* 2.07 essai 2 (358) : dans l'onglet Texte, le retour remonte d'abord en haut, puis ramène à l'accueil */
+  if (S.view === 'scene' && S.tab === 'text' && !S.started && window.scrollY > 8) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
   if (S.view === 'scene') { if (canEndHere()) { endHere(); return; } stopSpeech(); if (S.started) S.started = false; else S.view = 'library'; render(); window.scrollTo(0, 0); }
 }
 /* Quitter l'appli : à l'accueil, un premier « retour » affiche un message, un second dans les 2 s quitte vraiment. */
@@ -3235,7 +3268,7 @@ function say(text, pitch, idx){
     u.rate = S.rate; u.pitch = pitch || 1;
     S.tts = { status:'wait' }; S.speakI = idx === undefined ? null : idx; ttsMark();
     u.onstart = () => { if (id === ttsId) { S.tts = { status:'ok' }; } };
-    u.onend = () => { if (id === ttsId) { S.speakI = null; ttsMark(); try { italOnEnd(idx); } catch(e) {} } };
+    u.onend = () => { if (id === ttsId) { S.speakI = null; ttsMark(); } };
     u.onerror = e => {
       if (id !== ttsId) return;
       const err = (e && e.error) || '';
@@ -3542,7 +3575,7 @@ function mineView(){
   let h = `<button class="band" data-act="progressopen" aria-label="Ouvrir Ma progression">
     <span class="rg">${ring(lv.max ? 100 : lv.toNext, 52, 10)}<b>${lv.lvl}</b></span>
     <span class="bm"><b>${lv.title ? esc(lv.title) + ' · ' : ''}Niveau ${lv.lvl}</b>
-    <small>${t ? '<span class="fli" style="' + fliMargin(t.streak.n) + '">' + flameSvg(t.streak.n, 30) + '</span>' + t.streak.n + ' j · <span role="img" aria-label="Objectif du jour">' + ico('target', 15) + '</span> ' + Math.min(t.objDone, t.objNeed) + ' / ' + t.objNeed + ' · ' : ''}<span role="img" aria-label="Date objectif">${ico('cal', 15)}</span> ${dl > 0 ? 'J-' + dl : dl === 0 ? 'Jour J' : 'Date passée'}</small></span><span class="ch">›</span></button>`;
+    <small class="bx2">${t ? '<span class="bi bfl">' + flameCrop(t.streak.n, 16) + '</span>' + t.streak.n + ' j<span class="sep">·</span><span class="bi" role="img" aria-label="Objectif du jour">' + ico('target', 15) + '</span>' + Math.min(t.objDone, t.objNeed) + ' / ' + t.objNeed + '<span class="sep">·</span>' : ''}<span class="bi" role="img" aria-label="Date objectif">${ico('cal', 15)}</span>${dl > 0 ? 'J-' + dl : dl === 0 ? 'Jour J' : 'Date passée'}</small></span><span class="ch">›</span></button>`;
   list.forEach(([p, s]) => {
     const st = stats(p, s), at = `data-play="${p.id}" data-scene="${s.id}"`, k = keyOf(p, s);
     h += `<section class="card scard" data-act="open" ${at} role="link" aria-label="Ouvrir le texte de ${esc(s.title)}"><div class="sct1"><h2 class="one">${esc(s.title)}</h2>
@@ -3706,8 +3739,11 @@ function progressView(){
   const items = allStats(), t = items.length ? todayInfo(items) : null, bg = saved.bg || {};
   let h = `<div class="bhead"><button class="ghost back" data-act="progressback" aria-label="Retour">${BACK}</button><h2>Ma progression</h2></div>
     <section class="card hero"><div class="herorow"><span class="rg big">${ring(lv.max ? 100 : lv.toNext, 108, 9)}<span class="rgt"><small>Niveau</small><b>${lv.lvl}</b></span></span>
-      <div class="hm"><div class="hti">${lv.title ? esc(lv.title) : 'Niveau ' + lv.lvl}</div>${(() => { const rb = streakBest(); return rb > 0 ? `<div class="rtxt">${flameCrop(rb, 16)}Record : <b>${rb} j</b></div>` : ''; })()}
-      <div class="mline"><b>${D.pct} %</b> de maîtrise</div>${t && t.gain > 0 ? `<div class="gain">+${t.gain} % aujourd’hui</div>` : ''}<div class="mute small">${D.SOL} / ${D.T} solides${D.KO ? ' · ' + D.KO + ' à répéter' : ''}</div></div></div>
+      <div class="hm"><div class="hti">${lv.title ? esc(lv.title) : 'Niveau ' + lv.lvl}</div>${(() => {
+        /* 2.07 essai 2 (362, M159) : quadrillage 2 × 2 ; meilleure série ternie, en couleur et un peu plus grande quand la série en cours est la meilleure */
+        const rb = streakBest(), cur = t ? t.streak.n : 0, live = rb > 0 && cur >= rb, g = t && t.gain > 0 ? t.gain : 0;
+        const cell = (v, l, c) => `<div${c ? ` class="${c}"` : ''}><b>${v}</b><small>${l}</small></div>`;
+        return `<div class="hg">${cell(D.pct + ' %', 'maîtrise')}${cell((g ? '+' : '') + g + ' %', 'aujourd’hui', g ? 'up' : '')}${cell(D.SOL + ' / ' + D.T, 'solides' + (D.KO ? '<br>' + D.KO + ' à répéter' : ''))}${cell(`<span class="fl${live ? ' live' : ''}">${flameCrop(rb, live ? 17 : 14)}</span>${rb} j`, 'meilleure série', live ? '' : 'tarn')}</div>`; })()}</div></div>
       ${D.withMe < D.list.length ? (() => { const no = D.list.filter(([p, sc]) => !stats(p, sc)).map(([p, sc]) => '<b class="hnm">« ' + esc(sc.title) + ' »</b>');
         return `<p class="hint" style="margin:10px 0 0">Choisis ton personnage dans ${no.length > 1 ? no.length + ' scènes : ' + no.join(', ') : no[0]} pour suivre ta progression.</p>`; })() : ''}</section>`;
   if (t) {
@@ -3777,7 +3813,7 @@ function sceneView(){
   return topBar(false) + `<div class="tabw"><div class="tabs">
     <button class="${T?'on':''}" data-act="tab" data-v="text">Texte</button>
     <button class="${S.tab==='reh'?'on':''}" data-act="tab" data-v="reh">Répéter</button>
-  </div></div><div class="jrow">${who}${T ? `<button class="ib dpb ${S.dpan ? 'act' : ''}" data-act="dpan" aria-expanded="${!!S.dpan}" aria-label="Affichage">${IC_SLIDERS}</button>` : ''}</div>` + list + (T ? prepBlock(key()) + textView() : rehView());
+  </div></div><div class="jrow">${who}${T ? `<button class="ib dpb ${S.dpan ? 'act' : ''}" data-act="dpan" aria-expanded="${!!S.dpan}" aria-label="Affichage">${IC_SLIDERS}</button>` : ''}</div>` + list + (T ? textView() : rehView());
 }
 
 /* --- onglet Texte --- */
@@ -3834,8 +3870,8 @@ function lineHtml(it, i, mine){
   const open = S.lineOpen === i, hasN = !!noteOf(i);
   /* 2.03 : « Écouter » retiré ; « Ajouter une note » */
   const acts = open ? `<div class="lacts">
-      ${S.me ? `<button class="la" data-act="from" data-i="${i}">${PLAY}<span>Répéter d’ici</span></button>` : ''}
-      <button class="la" data-act="nedit" data-i="${i}">${FICHE}<span>${hasN ? 'Note' : 'Ajouter une note'}</span></button></div>` : '';
+      ${S.me ? `<button class="la${S.fromOpen === i ? ' on' : ''}" data-act="from" data-i="${i}" aria-expanded="${S.fromOpen === i}">${PLAY}<span>Répéter d’ici</span>${prepChev(S.fromOpen === i)}</button>` : ''}
+      <button class="la" data-act="nedit" data-i="${i}">${FICHE}<span>${hasN ? 'Note' : 'Ajouter une note'}</span></button></div>${S.me && S.fromOpen === i ? `<div class="rmenu fm" role="menu" aria-label="Répéter d’ici en mode">${[['reh', ICO_LIST, 'Répliques'], ['cards', ICO_CARDS, 'Cartes'], ['ital', ICO_ITAL, 'Italienne']].map(([v, ic, n]) => `<button role="menuitem" data-act="fromm" data-v="${v}" data-i="${i}">${ic}<span>${n}</span></button>`).join('')}</div>` : ''}` : '';
   const ps = mine && S.stMap ? S.stMap[i] : null;
   return `<div class="line ${mine?'me':''} ${ps ? 'ps ' + ps.st : ''} ${open ? 'open' : ''} ${S.follow && trkOf() === i ? 'trk' : ''}" data-line="${i}" data-act="lineopen" data-i="${i}">
     <div class="who2"><span class="num">${lineNo(i)}</span>${esc(it.c)}${ps && ps.stale ? '<span class="stg">À rafraîchir</span>' : ''}${noteBtn(it, 'l' + i)}${noteEditBtn(i)}</div>
@@ -3860,7 +3896,9 @@ function textView(){
   const opts = (S.stMap ? `<div class="pgl"><span><i class="dot new"></i>nouvelle</span><span><i class="dot ko"></i>à répéter</span><span><i class="dot known"></i>connue</span><span><i class="dot solid"></i>solide</span></div>` : '')
     + (S.textHide && S.revealed.size ? `<div><button class="mini big" data-act="rehide">Recacher tout</button></div>` : '');
   if (opts) h += `<div class="opts">${opts}</div>`;
-  if (notesCount()) h += `<div style="margin:0 0 8px"><button class="nlb" data-act="nlist">${NOTES_IC}Notes · ${notesCount()}</button></div>`;
+  /* 2.07 essai 2 (356, M145) : la Préparation partage la ligne des notes et prend le reste de la largeur */
+  { const k = key(), [d, n] = prepCount(k), open = !!S.prepOpen;
+    h += `<div class="nprow">${notesCount() ? `<button class="nlb" data-act="nlist">${NOTES_IC}Notes · ${notesCount()}</button>` : ''}<button class="prb ${open ? 'open' : ''}" data-act="prepopen" aria-expanded="${open}">${IC_CLIP}<span class="g">Préparation</span>${n ? `<small aria-label="${d} sur ${n} prêts">${d}/${n}</small>` : ''}${prepChev(open)}</button></div>${open ? `<div class="snc pnc">${prepItems(k)}</div>` : ''}`; }
   if (!S.me) h += `<p class="hint">Choisis ton personnage ci-dessus pour surligner tes répliques.</p>`;
   h += `<div class="script ${saved.noHl ? 'nohl' : ''} ${S.follow ? 'follow' : ''}">`;
   let prev = -1;
@@ -3898,9 +3936,15 @@ const prepOf = k => ((saved.prep = saved.prep || {})[k] || []);
 const prepCount = k => { const L = prepOf(k); return [L.filter(x => x.on).length, L.length]; };
 function prepTag(t){ const m = /^\s*([^:]{1,18}?)\s*:\s*(\S.*)$/.exec(t); return m ? [m[1], m[2]] : ['', t]; }
 function prepItems(k){
-  const a = `data-k="${esc(k)}"`;
+  const a = `data-k="${esc(k)}"`, del = S.prepDel && S.prepDel.k === k ? S.prepDel.i : -1, ed = S.prepEd && S.prepEd.k === k ? S.prepEd.i : -1;
   return prepOf(k).map((x, i) => { const [tg, tx] = prepTag(x.t);
-    return `<div class="sni ${x.on ? 'on' : ''}"><button class="ck" data-act="preptog" ${a} data-i="${i}" role="checkbox" aria-checked="${!!x.on}" aria-label="${esc(x.t)}">${x.on ? '✓' : ''}</button><span class="t" data-act="preptog" ${a} data-i="${i}">${tg ? `<span class="tg">${esc(tg)}</span>` : ''}<span class="tx">${esc(tx)}</span></span><button class="x" data-act="prepdel" ${a} data-i="${i}" aria-label="Supprimer">✕</button></div>`; }).join('')
+    const ck = `<button class="ck" data-act="preptog" ${a} data-i="${i}" role="checkbox" aria-checked="${!!x.on}" aria-label="${esc(x.t)}">${x.on ? '✓' : ''}</button>`;
+    /* 2.07 essai 2 (368, M157) : toucher le texte le modifie ; ✓ ou Entrée enregistre */
+    if (i === ed) return `<div class="sni sed">${ck}<input class="in sedi" id="prepedin" ${a} data-i="${i}" maxlength="80" autocomplete="off" enterkeyhint="done" value="${esc(x.t)}" aria-label="Modifier l’élément"><button class="sok" data-act="prepsave" ${a} data-i="${i}" aria-label="Enregistrer">✓</button></div>`;
+    const t = `<span class="t" data-act="${i === del ? 'noop' : 'prepedit'}" ${a} data-i="${i}">${tg ? `<span class="tg">${esc(tg)}</span>` : ''}<span class="tx">${esc(tx)}</span></span>`;
+    /* 2.07 essai 2 (353, M160) : ✕ devient « Annuler » + poubelle rouge */
+    if (i === del) return `<div class="sni ${x.on ? 'on' : ''}">${ck}${t}<button class="pcan" data-act="prepnodel">Annuler</button><button class="x tr" data-act="prepdel" ${a} data-i="${i}" aria-label="Confirmer la suppression">${IC_TRASH.replace('width="16" height="16"', 'width="20" height="20"')}</button></div>`;
+    return `<div class="sni ${x.on ? 'on' : ''}">${ck}${t}<button class="x" data-act="prepask" ${a} data-i="${i}" aria-label="Supprimer">✕</button></div>`; }).join('')
     + `<div class="snadd"><input class="in" id="prepin" ${a} maxlength="80" autocomplete="off" enterkeyhint="done" placeholder="Ajouter (ex. « Son : sifflet »)…" aria-label="Ajouter un élément"><button class="pl" data-act="prepadd" ${a} aria-label="Ajouter">＋</button></div>`;
 }
 const prepChev = up => `<svg class="sncv${up ? ' up' : ''}" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`;
@@ -3946,11 +3990,11 @@ function introView(){
     </div>
     ${RM === 'cards' ? `<label class="sw"><input type="checkbox" data-act="cardsko" ${co().ko ? 'checked' : ''}> Uniquement les « à répéter »</label>
     <label class="sw"><input type="checkbox" data-act="cnotes" ${co().notes ? 'checked' : ''}> Afficher mes notes</label>`
-    : RM === 'ital' ? `<label class="sw"><input type="checkbox" data-act="italhide" ${saved.italHide ? 'checked' : ''}> Cacher mes répliques</label>
-    <label class="sw"><input type="checkbox" data-act="italauto" ${saved.italAuto ? 'checked' : ''}> Enchaîner les répliques des autres</label>
+    : RM === 'ital' ? `<label class="sw"><input type="checkbox" data-act="italgo" ${saved.italGo !== false ? 'checked' : ''}> Aller à ma réplique</label>
+    <label class="sw"><input type="checkbox" data-act="italhide" ${saved.italHide ? 'checked' : ''}> Cacher mes répliques</label>
     <label class="sw"><input type="checkbox" data-act="rehnotes" ${saved.rehNotes ? 'checked' : ''}> Afficher mes notes</label>`
     : `<label class="sw"><input type="checkbox" data-act="rehnotes" ${saved.rehNotes ? 'checked' : ''}> Afficher mes notes</label>`}
-    ${synth ? `${RM === 'ital' ? '<div class="sw"><span class="vlt">Voix<button' : `<label class="sw"><input type="checkbox" data-act="${S.rmode === 'cards' ? 'caudio' : 'audio'}" ${(S.rmode === 'cards' ? co().audio : S.audio) ? 'checked' : ''}> <span class="vlt">Lecture à voix haute<button`} type="button" class="vdt" data-act="vdet" aria-expanded="${!!S.vdet}" aria-controls="vdx">Détails</button></span>${RM === 'ital' ? '</div>' : '</label>'}
+    ${synth ? `${RM === 'ital' ? '<label class="sw vlock"><input type="checkbox" checked disabled aria-label="Lecture à voix haute (toujours active en Italienne)"> <span class="vlt">Lecture à voix haute<button' : `<label class="sw"><input type="checkbox" data-act="${S.rmode === 'cards' ? 'caudio' : 'audio'}" ${(S.rmode === 'cards' ? co().audio : S.audio) ? 'checked' : ''}> <span class="vlt">Lecture à voix haute<button`} type="button" class="vdt" data-act="vdet" aria-expanded="${!!S.vdet}" aria-controls="vdx">Détails</button></span></label>
       ${S.vdet ? `<div class="vdx" id="vdx">${voiceOpts ? `<label class="f">Voix<select data-act="voice">${voiceOpts}</select></label>` : ''}
       <div class="lbl" style="margin-top:6px">Vitesse de lecture · <span id="rateval">${S.rate.toFixed(1)}</span>×</div>
       <input type="range" class="rng" min="1" max="2" step="0.1" value="${S.rate}" data-act="rate" aria-label="Vitesse de lecture" style="--p:${Math.round((S.rate - 1) * 100)}%">
@@ -4020,8 +4064,7 @@ function cardView(){
     <div class="fface fback">${cardSpk(si)}<div class="fk">Ta réplique · ${esc(it.c)}</div><div class="ft">${fmt(it.t)}</div>${rehNote(si)}</div>
   </div></div>`;
   /* 2.03 (M54-A) : plus de bouton ‹ (il permettait de changer la note de la carte d'avant) ; icônes comme en Répétition */
-  const actions = rev ? `<button class="btn ko" data-act="grade" data-v="ko">${IC_X}<span>À répéter</span></button><button class="btn ok" data-act="grade" data-v="ok">${IC_OK}<span>Je connais</span></button>`
-    : hintBtn() + `<button class="btn pri" data-act="reveal-step">${IC_FLIP}<span>Retourner</span></button>`;
+  const actions = cardActs(rev);
   return `<div class="prog"><i style="width:${Math.round(S.pos / n * 100)}%"></i></div>
     <div class="pcount fpc"><span>Carte ${S.pos + 1} / ${n}</span>${pRight()}</div>
     <div class="fwrap" data-act="cardflip">${card}</div><div class="actions acol"><div class="arow">${actions}</div></div>${rev ? '<div class="edge l" id="edgeL"></div><div class="edge r" id="edgeR"></div>' : ''}`;
@@ -4078,7 +4121,10 @@ function stepView(){
     thr += `<div class="bub ${mine ? 'mine' : 'oth'} now${rb ? ' rvl' : ''}" data-i="${si}"${rb ? ` style="min-height:${rb.h}px;min-width:${rb.w}px"` : ''}>${who(si, noteBtn(it, 'c' + si))}${!mine ? cardSpk(si) : ''}<div class="btxt">${fmt(it.t)}</div>${noteBox(it, 'c' + si)}${mine ? rehNote(si) : ''}</div>`;
   }
   let actions;
-  if (hide) actions = (S.ital ? '' : hintBtn()) + `<button class="btn pri" data-act="reveal-step">${IC_EYE}<span>Révéler</span></button>`;
+  /* 2.07 essai 2 (359, M144 b) : en Italienne, on peut revenir à la réplique précédente */
+  const prevB = S.ital ? `<button class="btn" data-act="prev"${S.pos ? '' : ' disabled'}>‹ Précédente</button>` : '';
+  if (hide) actions = (S.ital ? prevB : hintBtn()) + `<button class="btn pri" data-act="reveal-step">${IC_EYE}<span>Révéler</span></button>`;
+  else if (S.ital) actions = prevB + `<button class="btn pri" data-act="next">Suivante ›</button>`;
   else if (gradable(si)) actions = `<button class="btn ko" data-act="grade" data-v="ko">${IC_X}<span>À répéter</span></button><button class="btn ok" data-act="grade" data-v="ok">${IC_OK}<span>Je connais</span></button>`;
   else actions = `<button class="btn pri" data-act="next">Suivant ›</button>`;
   return `<div class="prog"><i style="width:${pct}%"></i></div>
@@ -4125,6 +4171,11 @@ function doneView(){
     <div class="row2"><button class="btn sm soft iconb rcm" data-act="${S.cards ? 'startcards' : 'start'}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Recommencer</span></button><button class="btn sm" data-act="totext">Retour au texte</button></div></div>`;
 }
 
+
+/* 2.07 essai 2 (360) : boutons des cartes ; posés tout de suite quand la carte se retourne (sans attendre la fin du retournement) */
+const cardActs = rev => rev ? `<button class="btn ko" data-act="grade" data-v="ko">${IC_X}<span>À répéter</span></button><button class="btn ok" data-act="grade" data-v="ok">${IC_OK}<span>Je connais</span></button>`
+    : hintBtn() + `<button class="btn pri" data-act="reveal-step">${IC_FLIP}<span>Retourner</span></button>`;
+function cardActsNow(rev){ const r = document.querySelector('.actions .arow'); if (r && S.cards) r.innerHTML = cardActs(rev); }
 /* ============ ACTIONS ============ */
 const cardList = () => { const items = S.scene.items; return items.map((it, i) => i).filter(i => items[i].k === 'l' && items[i].c === S.me); };
 function beginSteps(steps, pos, all, focus, cards, ital){
@@ -4144,7 +4195,6 @@ const canEndHere = () => isFocus() && S.started && !S.done && !S.ital && (S.rehH
 /* 2.07 (308) : on commence à la réplique qui précède ma première réplique (les répliques des autres avant elle sont sautées) */
 function firstPos(steps){ const k = steps.findIndex(i => S.scene.items[i].c === S.me); return k > 0 ? k - 1 : 0; }
 /* 2.07 (314) : Italienne — « Enchaîner les répliques des autres » : à la fin de la voix, on passe seul à la suivante (jamais après ma réplique) */
-function italOnEnd(i){ if (!S.ital || !saved.italAuto || !S.started || S.done || S.steps[S.pos] !== i || S.scene.items[i].c === S.me) return; setTimeout(() => { if (S.ital && S.started && !S.done && S.steps[S.pos] === i) step(1); }, 350); }
 function endHere(){
   stopSpeech(); S.early = true; S.done = true;
   if (S.stepsAll && S.scene) {
@@ -4274,8 +4324,9 @@ document.addEventListener('click', e => {
     case 'adm': { const op = b.dataset.op; let v = b.dataset.v !== undefined ? +b.dataset.v : 0;
       if (b.dataset.in) { const el = document.getElementById(b.dataset.in); if (!el || el.value === '') break; v = Math.max(0, +el.value); if (op === 'mastery') v = Math.min(100, v); }
       if (op === 'bgreset') { appConfirm('Effacer tous les badges ?\n\nTous les badges et leurs compteurs du profil de test seront remis à zéro.', 'Effacer', () => { admOp('bgreset', 0); admFeedback('bgreset', 0); }, true); break; }
-      if (op === 'progreset') { appConfirm('Réinitialiser la progression ?\n\nRépliques, séries, objectifs et badges du profil de test repartent de zéro. Tes notes, tes textes et tes réglages sont gardés. Ta vraie progression n’est pas touchée.', 'Réinitialiser', () => { admOp('progreset', 0); admFeedback('progreset', 0); }, true); break; }
+      if (op === 'progreset') { appConfirm('Réinitialiser la progression ?\n\nRépliques, séries, objectifs et badges du profil de test repartent de zéro. Tes notes, tes textes et tes réglages sont gardés. Ta vraie progression n’est pas touchée.', 'Réinitialiser', () => { animMute = true; try { admOp('progreset', 0); admFeedback('progreset', 0); render(); } finally { animMute = false; } }, true); break; }
       if (op === 'wipe') { appConfirm('Effacer le profil de test ?\n\nToute la progression du mode admin sera effacée. Ta vraie progression n’est pas touchée.', 'Effacer', () => admOp('wipe', 0), true); break; }
+      if (['mastery','level','streak','lit','objdone','ko','stale','rand'].includes(op)) { animMute = true; try { admOp(op, v); admFeedback(op, v, b.dataset.v); render(); } finally { animMute = false; } break; }
       admOp(op, v); admFeedback(op, v, b.dataset.v); break; }
     case 'badgesopen': S.view = 'badges'; S.bsel = null; render(); window.scrollTo(0, 0); break;
     case 'importopen': S.imp = S.imp || impNew(); S.imp.step = 1; S.view = 'import'; render(); window.scrollTo(0, 0); break;
@@ -4302,7 +4353,7 @@ document.addEventListener('click', e => {
     case 'scmenu': S.menuK = S.menuK === b.dataset.k ? null : b.dataset.k; render(); break;
     case 'badgesback': navBack(); break;
     case 'badgesel': S.bsel = b.dataset.id; S.bcoll = false; render(); break;
-    case 'bcoll': S.bcoll = !S.bcoll; render(); break;   /* 2.07 (317) : Collection */
+    case 'bcoll': { S.bcoll = !S.bcoll; b.setAttribute('aria-expanded', S.bcoll); const w = b.nextElementSibling; if (w && w.classList.contains('cwrap')) w.classList.toggle('op', S.bcoll); else render(); break; }   /* 364 : sans redessiner, pour l'animation */   /* 2.07 (317) : Collection */
     case 'badgeclose': if (b.classList.contains('bov') && e.target !== b) break; S.bsel = null; render(); break;
     case 'settings': openSettings(); break;
     case 'closesettings': closeSettings(); break;
@@ -4314,7 +4365,7 @@ document.addEventListener('click', e => {
     case 'setfs': S.fs = +b.dataset.v; applyFs(); persist(); render(); break;
     case 'settheme': saved.theme = b.dataset.v; applyTheme(); persist(); render(); break;
     case 'setcolor': saved.color = b.dataset.v; applyTheme(); persist(); render(); break;
-    case 'lineopen': { const i = +b.dataset.i;
+    case 'lineopen': { const i = +b.dataset.i; S.fromOpen = null;
       /* 2.03 · essai 6 : en mode suivi, la réplique suivie ouvre ses actions tout de suite ;
          une autre réplique ne réagit qu'au double toucher (elle devient suivie), sans délai ni actions */
       if (S.follow && trkOf() !== i) {
@@ -4427,12 +4478,16 @@ document.addEventListener('click', e => {
     case 'fpdyn': { const f = document.createElement('input'); f.type = 'file'; f.accept = '.json,application/json'; f.click(); break; }
     case 'notestoggle': if (S.cards) co().notes = !co().notes; else saved.rehNotes = !saved.rehNotes; persist(); render(); break;
     case 'audiotoggle': if (S.cards) co().audio = !co().audio; else S.audio = !S.audio; persist(); if (!audioOn()) stopSpeech(); else autoSpeak(); render(); break;
-    case 'from': { const i = +b.dataset.i; tmGuard(() => { const all = allSteps(); S.missed = new Set(); beginSteps(all, Math.max(0, all.indexOf(i)), true); }); break; }
+    /* 2.07 essai 2 (367, M161) : « Répéter d'ici » déplie le choix du mode */
+    case 'from': S.fromOpen = S.fromOpen === +b.dataset.i ? null : +b.dataset.i; render(); break;
+    case 'fromm': { const i = +b.dataset.i, m = b.dataset.v; S.fromOpen = null; tmGuard(() => { S.missed = new Set(); S.rmode = m;
+      if (m === 'cards') { const L = cardList(), k = L.findIndex(x => x >= i); beginSteps(L, k < 0 ? 0 : k, true, null, true); }
+      else { const all = allSteps(); beginSteps(all, Math.max(0, all.indexOf(i)), true, null, false, m === 'ital'); } }); break; }
     case 'start': { S.missed = new Set(); const st = allSteps(); beginSteps(st, firstPos(st), true); break; }
-    case 'startital': { S.missed = new Set(); const st = allSteps(); beginSteps(st, firstPos(st), true, null, false, true); break; }
+    case 'startital': { S.missed = new Set(); const st = allSteps(); beginSteps(st, saved.italGo === false ? 0 : firstPos(st), true, null, false, true); break; }
     case 'italhide': saved.italHide = !saved.italHide; persist(); render(); break;
-    case 'italauto': saved.italAuto = !saved.italAuto; persist(); render(); break;
-    case 'rmode': S.rmode = ['cards', 'ital'].includes(b.dataset.v) ? b.dataset.v : 'reh'; render(); break;
+    case 'italgo': saved.italGo = saved.italGo === false; persist(); render(); break;   /* 2.07 essai 2 (359) */
+    case 'rmode': S.rmode = ['cards', 'ital'].includes(b.dataset.v) ? b.dataset.v : 'reh'; S.vdet = false; render(); break;   /* 351 : les détails de la voix se referment */
     case 'hdupd': location.reload(); break;   /* 2.06 (260) */
     case 'hdinst':   /* 2.06 (261, essai 2) : même effet que le bouton « Installer Répète sur ce téléphone » des Réglages ;
                         sans proposition d'installation du navigateur (iPhone…) : Réglages › Données, où se trouve la marche à suivre */
@@ -4459,12 +4514,18 @@ document.addEventListener('click', e => {
     case 'prepopen': S.prepOpen = !S.prepOpen; render(); break;
     case 'prepk': S.prepK = b.dataset.k; render(); break;
     case 'prepclose': S.prepK = null; render(); break;
-    case 'preptog': { const L = prepOf(b.dataset.k), x = L[+b.dataset.i]; if (x) { x.on = !x.on; persist(); render(); } break; }
-    case 'prepdel': { const L = prepOf(b.dataset.k); L.splice(+b.dataset.i, 1); persist(); render(); break; }
+    case 'preptog': { const L = prepOf(b.dataset.k), x = L[+b.dataset.i]; if (x) { x.on = !x.on; persist(); prepKeep(render); } break; }
+    /* 2.07 essai 2 (353, M160) : ✕ demande confirmation (Annuler + poubelle) ; sans réponse, la ligne revient après 3 s */
+    case 'prepask': S.prepEd = null; S.prepDel = { k: b.dataset.k, i: +b.dataset.i }; prepDelArm(); prepKeep(render); break;
+    case 'prepnodel': prepDelOff(); prepKeep(render); break;
+    case 'prepdel': { const L = prepOf(b.dataset.k); L.splice(+b.dataset.i, 1); prepDelOff(); persist(); prepKeep(render); break; }
+    /* 2.07 essai 2 (368, M157) : modifier un élément */
+    case 'prepedit': prepDelOff(); S.prepEd = { k: b.dataset.k, i: +b.dataset.i }; render(); { const n = document.getElementById('prepedin'); if (n) { n.focus({ preventScroll:true }); n.setSelectionRange(n.value.length, n.value.length); } } break;
+    case 'prepsave': prepSave(); break;
     case 'prepadd': { const inp = document.getElementById('prepin'), t = inp ? inp.value.replace(/\s+/g, ' ').trim().slice(0, 80) : '';
       if (!t) { if (inp) inp.focus(); break; }
       saved.prep = saved.prep || {}; (saved.prep[b.dataset.k] = saved.prep[b.dataset.k] || []).push({ t, on:false }); persist(); render();
-      const n = document.getElementById('prepin'); if (n) n.focus(); break; }
+      const n = document.getElementById('prepin'); if (n) n.focus({ preventScroll:true }); break; }
     case 'bilsec': S.bilOpen = S.bilOpen === b.dataset.k ? null : b.dataset.k; render(); break;
     case 'biltab': S.bilTab = b.dataset.v; S.bilOpen = null; render(); break;   /* 2.07 (315) : onglets Évolution / Stables */
     case 'redomiss': { const m = [...S.missed].sort((a, c) => a - c); if (!m.length) break; S.missed = new Set(); S.bilOpen = null; beginSteps(m, 0, false, new Set(m), S.cards); break; }
@@ -4472,15 +4533,15 @@ document.addEventListener('click', e => {
     case 'cardflip': {
       if (!S.cards || S.done || Date.now() - cardSwiped < 450) break;
       if (!S.stepRevealed) { const fc = document.querySelector('.fcard'); S.stepRevealed = true;
-        if (fc && animMode() === 'on') { fc.classList.add('flip'); requestAnimationFrame(() => setTimeout(stopSpeech, 60)); setTimeout(render, 480); }
+        if (fc && animMode() === 'on') { fc.classList.add('flip'); cardActsNow(true); requestAnimationFrame(() => setTimeout(stopSpeech, 60)); setTimeout(render, 480); }
         else { render(); requestAnimationFrame(() => setTimeout(stopSpeech, 60)); } break; }
       { const fc = document.querySelector('.fcard'); S.stepRevealed = false;
-        if (fc && animMode() === 'on') { fc.style.transform = ''; fc.classList.remove('flip'); setTimeout(render, 480); } else render(); }
+        if (fc && animMode() === 'on') { fc.style.transform = ''; fc.classList.remove('flip'); cardActsNow(false); setTimeout(render, 480); } else render(); }
       break; }
     case 'reveal-step': {
       /* 2.02 : retourner la carte coupe la voix — après le début du retournement (l'arrêt de la voix peut bloquer un instant le téléphone) */
       const hush = () => { if (S.cards) requestAnimationFrame(() => setTimeout(stopSpeech, 60)); };
-      if (S.cards && !S.stepRevealed && animMode() === 'on') { S.stepRevealed = true; const fc = document.querySelector('.fcard'); if (fc) { fc.classList.add('flip'); hush(); setTimeout(render, 480); break; } }
+      if (S.cards && !S.stepRevealed && animMode() === 'on') { S.stepRevealed = true; const fc = document.querySelector('.fcard'); if (fc) { fc.classList.add('flip'); cardActsNow(true); hush(); setTimeout(render, 480); break; } }
       keepTodoBox(); S.stepRevealed = true; render(); hush(); break; }
     case 'thrtap': { const si = S.steps[S.pos];   /* 2.03 · essai 4 : toucher le fil = Révéler (ma réplique cachée) ou Suivant (réplique d'un autre) ; rien quand il faut noter */
       if (italHidden(si)) { keepTodoBox(); S.stepRevealed = true; render(); }   /* 2.07 (314) : Italienne, ma réplique cachée */
@@ -4555,6 +4616,17 @@ document.addEventListener('touchend', e => {
 }, {passive:true});
 /* clavier */
 document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target && e.target.id === 'prepin') { e.preventDefault(); const b = document.querySelector('[data-act=prepadd]'); if (b) b.click(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target && e.target.id === 'prepedin') { e.preventDefault(); prepSave(); } });
+/* 2.07 essai 2 (354) : toucher ✕, la case, Annuler… pendant la saisie ne ferme pas le clavier */
+document.addEventListener('mousedown', e => { const a = document.activeElement; if (a && (a.id === 'prepin' || a.id === 'prepedin') && e.target.closest && e.target.closest('.sni button, .snadd .pl')) e.preventDefault(); }, true);
+/* 2.07 essai 2 (353, 355, 368) : toucher ailleurs annule la suppression, la modification, et referme la liste de l'onglet Texte */
+document.addEventListener('click', e => {
+  const t = e.target; if (!t.closest) return; let ch = false;
+  if (S.prepDel && !t.closest('[data-act=prepdel],[data-act=prepnodel],[data-act=prepask]')) { prepDelOff(); ch = true; }
+  if (S.prepEd && !t.closest('.sni.sed')) { S.prepEd = null; ch = true; }
+  if (S.prepOpen && S.view === 'scene' && !t.closest('.nprow,.snc.pnc')) { S.prepOpen = false; S.prepDel = null; S.prepEd = null; ch = true; }
+  if (ch && !t.closest('[data-act]')) prepKeep(render);
+}, true);
 document.addEventListener('keydown', e => {
   if (!isFocus() || S.done || e.target.closest('input,select,textarea')) return;
   const onBtn = !!e.target.closest('button,[role=button]');
@@ -4579,8 +4651,10 @@ try { rankSync(true); } catch(e) {}   /* 2.07 (316) : au démarrage, envoi forc�
     return Math.abs(r.top - want) <= 80; }
   document.addEventListener('click', e => {
     if (!(S.view === 'scene' && S.tab === 'text' && S.follow) || S.settings || S.lineOpen != null || S.dpan) return;
-    const t = e.target; if (!t.closest || t.closest(EXCL)) return;
+    const t = e.target; if (!t.closest) return;
     const line = t.closest('.script .line'); if (line && line.classList.contains('trk')) return;
+    /* 2.07 essai 2 (357) : le bouton « Note » ne réagit que sur la réplique suivie ; ailleurs, c'est un toucher comme un autre */
+    if (t.closest(EXCL) && !(line && t.closest('.nb'))) return;
     e.stopPropagation(); e.preventDefault();
     const i = line ? +line.dataset.i : -1; saved.trk = saved.trk || {};
     if (pend) { const same = i >= 0 && pend.i === i && Date.now() - pend.t < 250; clearTimeout(pend.tm); pend = null;
@@ -4590,6 +4664,14 @@ try { rankSync(true); } catch(e) {}   /* 2.07 (316) : au démarrage, envoi forc�
     pend = { i, t: Date.now(), tm: setTimeout(() => { pend = null; trkScroll(true); }, 250) };
   }, true);
 })();
+
+/* 2.07 essai 2 : outils de la Préparation */
+function prepKeep(fn){ const inp = document.getElementById('prepin'), had = inp && document.activeElement === inp, v = inp ? inp.value : ''; fn(); const n = document.getElementById('prepin'); if (n) { n.value = v; if (had) n.focus({ preventScroll:true }); } }
+let prepDelT = null;
+function prepDelArm(){ clearTimeout(prepDelT); prepDelT = setTimeout(() => { if (S.prepDel) { S.prepDel = null; prepKeep(render); } }, 3000); }
+function prepDelOff(){ clearTimeout(prepDelT); S.prepDel = null; }
+function prepSave(){ const n = document.getElementById('prepedin'); if (!S.prepEd || !n) return; const x = prepOf(S.prepEd.k)[S.prepEd.i], t = n.value.replace(/\s+/g, ' ').trim().slice(0, 80);
+  if (x && t) { x.t = t; persist(); } S.prepEd = null; render(); }
 /* ===================== 2.04 : MINUTEUR DE RÉPÉTITION (claude/minuteur-integration.md + minuteur-2.04-decisions.md) =====================
    Éléments persistants hors de #app (#tm, #tmsheet, #tmalarm, #tmpre) : render() ne les détruit jamais.
    Temps calculé à partir d'horloges (fin de passage), jamais en comptant des ticks. Horloge « virtuelle » pour la vitesse du mode admin. */
