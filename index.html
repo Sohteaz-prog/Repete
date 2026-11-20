@@ -228,7 +228,7 @@ h2{font-size:var(--fs-20);margin:0 0 2px}
 .sni{display:flex;align-items:center;gap:8px;min-height:44px;border-top:1px solid var(--line);font:15px/1.3 system-ui,sans-serif;color:var(--ink)}.sni .ck{width:36px;height:40px;margin-left:-7px;border:0;background:none;display:flex;align-items:center;justify-content:center;color:#fff;font:800 13px system-ui;flex:none;position:relative;isolation:isolate}.sni .ck::before{content:"";position:absolute;width:22px;height:22px;border-radius:6px;border:2px solid var(--mute);box-sizing:border-box;z-index:-1}.sni.on .ck::before{background:#1f8a5a;border-color:#1f8a5a}
 .sni .t{flex:1;padding:8px 0;cursor:pointer}.sni.on .t{color:var(--mute)}.sni.on .tx{text-decoration:line-through}.sni .tg{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--accent-ink);margin-right:6px}.sni .x{width:40px;height:40px;margin-right:-8px;border:0;background:none;color:var(--mute);font-size:15px;flex:none}
 .snadd{display:flex;gap:8px;margin-top:10px}.snadd .in{flex:1;min-width:0;min-height:44px;border:1.5px dashed var(--line);border-radius:var(--r-10);padding:0 12px;background:none;color:var(--ink);font:15px system-ui,sans-serif}.snadd .pl{width:44px;min-height:44px;border:0;border-radius:var(--r-10);background:var(--accent);color:#1d1a16;font:800 22px system-ui;flex:none}
-.psh-bg{position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:60}.psh{position:fixed;left:0;right:0;bottom:0;z-index:61;max-height:80dvh;overflow:auto;background:var(--card);border-radius:18px 18px 0 0;padding:8px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -6px 24px rgba(0,0,0,.25)}.psh .grip{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 10px}.psh h3{display:flex;align-items:center;gap:8px;margin:0 0 4px;font-size:17px;color:var(--ink)}.psh h3 svg{color:var(--accent-ink)}.psh h3 small{margin-left:auto;font:600 13px system-ui;color:var(--mute)}.psh .sub{font-size:13px;color:var(--mute);margin:0 0 6px}
+.psh-bg{position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:60}.psh{position:fixed;left:0;right:0;bottom:var(--kb,0px);z-index:61;max-height:calc(80dvh - var(--kb,0px));overscroll-behavior:contain;overflow:auto;background:var(--card);border-radius:18px 18px 0 0;padding:8px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -6px 24px rgba(0,0,0,.25)}.psh .grip{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 10px}.psh h3{display:flex;align-items:center;gap:8px;margin:0 0 4px;font-size:17px;color:var(--ink)}.psh h3 svg{color:var(--accent-ink)}.psh h3 small{margin-left:auto;font:600 13px system-ui;color:var(--mute)}.psh .sub{font-size:13px;color:var(--mute);margin:0 0 6px}
 .btn.go.cardsb{background:var(--card);border:1.5px solid var(--accent);color:var(--accent-ink)}
 .card.scard{cursor:pointer;padding:10px 14px 8px;position:relative}
 button:not(:disabled):active{transform:scale(.97);filter:brightness(.95)}
@@ -958,16 +958,16 @@ html.tmlock,html.tmlock body{overflow:hidden;overscroll-behavior:none}
 .snc.pnc{margin-top:-8px}
 /* 2.07 essai 2 (366, M150 b) : en Italienne, la voix est toujours active */
 .sw.vlock input{opacity:.45;filter:grayscale(.6)}
-/* 2.07 essai 2 (353, M160 ; 368, M157) */
+/* 2.07 essai 2 (353, M160 ; 368, M157) ; essai 3 (M164 d) : « Annuler » en petite pastille pâle */
 .sni .x.tr{color:var(--st-ko);display:inline-flex;align-items:center;justify-content:center}
-.pcan{flex:none;height:28px;border-radius:14px;border:0;background:color-mix(in srgb,var(--mute) 22%,transparent);color:var(--ink);font:700 13px system-ui,sans-serif;padding:0 12px}
+.pcan{flex:none;height:24px;border-radius:12px;border:0;background:color-mix(in srgb,var(--mute) 10%,transparent);color:var(--mute);font:600 12px system-ui,sans-serif;padding:0 10px}
 .sni.sed .sedi{flex:1;min-width:0;min-height:36px;padding:0 10px}
 .sok{flex:none;width:36px;height:36px;border-radius:10px;border:0;background:var(--accent);color:#1b1408;font:800 16px system-ui,sans-serif}
 html:has(.psh),html:has(.psh) body{overflow:hidden;overscroll-behavior:none}   /* 2.07 essai 2 (352) */
 /* 2.07 essai 2 (364, M148 a) : Collection qui se déplie en glissant */
 .cwrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}.cwrap.op{grid-template-rows:1fr}.cwrap>div{overflow:hidden;min-height:0}
 /* 2.07 essai 2 (363, M152) : bandeau, icônes et texte centrés sur une même ligne */
-.band .bm small.bx2{display:flex;align-items:center;gap:4px;line-height:16px}.bx2 .bi{display:inline-flex;align-items:center;height:16px}.bx2 .bi svg{display:block}.band .bm small.bx2 .ico{vertical-align:0}.bx2 .sep{margin:0 2px}.bx2 .bfl{transform:translateY(-.55px)}
+.band .bm small.bx2{display:flex;align-items:center;gap:4px;line-height:16px}.bx2 .bi{display:inline-flex;align-items:center;height:16px}.bx2 .bi svg{display:block}.band .bm small.bx2 .ico{vertical-align:0}.bx2 .sep{margin:0 2px}.bx2 .bfl{transform:translateY(-3.25px)}.bx2 .bi:not(.bfl){transform:translateY(-1px)}   /* essai 3 (M165 c) : icônes centrées sur les chiffres, base de la flamme au bas des icônes */
 /* 2.07 essai 2 (362, M159) : quadrillage de Ma progression */
 .hg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}.hg>div{display:flex;flex-direction:column;gap:1px;padding:6px 8px;border-radius:10px;background:color-mix(in srgb,var(--line) 35%,transparent);min-width:0}
 .hg b{display:block;font-size:17px;line-height:22px;color:var(--ink);white-space:nowrap}.hg .up b{color:var(--st-ok,#1f8a4c)}.hg small{color:var(--mute);font-size:11.5px;line-height:1.3}
@@ -2805,7 +2805,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 140, APP_LABEL = '2.07 · essai 2'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 141, APP_LABEL = '2.07 · essai 3'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -3167,7 +3167,7 @@ function navBack0(){
   if (S.view === 'rank') { S.view = 'progress'; render(); window.scrollTo(0, 0); return; }
   if (S.view === 'progress' || S.view === 'import') { S.view = 'library'; render(); window.scrollTo(0, 0); return; }
   /* 2.07 essai 2 (358) : dans l'onglet Texte, le retour remonte d'abord en haut, puis ramène à l'accueil */
-  if (S.view === 'scene' && S.tab === 'text' && !S.started && window.scrollY > 8) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+  if (S.view === 'scene' && S.tab === 'text' && !S.started && window.scrollY > 8) { fastTop(); return; }
   if (S.view === 'scene') { if (canEndHere()) { endHere(); return; } stopSpeech(); if (S.started) S.started = false; else S.view = 'library'; render(); window.scrollTo(0, 0); }
 }
 /* Quitter l'appli : à l'accueil, un premier « retour » affiche un message, un second dans les 2 s quitte vraiment. */
@@ -3249,6 +3249,10 @@ document.addEventListener('touchend', e => {
 /* 2.07 (312 / 318) : journal — l'appli passe en arrière-plan ou se ferme */
 window.addEventListener('pagehide', () => blog('appli masquée ou fermée · ' + bview()));
 window.addEventListener('pageshow', e => blog('appli affichée' + (e.persisted ? ' (reprise)' : '') + ' · ' + bview()));
+
+/* 2.07 essai 3 (358) : remontée plus rapide que le défilement doux du navigateur (environ 0,22 s) */
+function fastTop(){ const y0 = window.scrollY, t0 = performance.now(), D = 220; if (y0 <= 0) return;
+  const f = t => { const k = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - k, 3); window.scrollTo(0, Math.round(y0 * (1 - e))); if (k < 1) requestAnimationFrame(f); }; requestAnimationFrame(f); }
 let VOICES = [];
 function loadVoices(){ if (!synth) return; try { VOICES = synth.getVoices().filter(v => /^fr/i.test(v.lang)); } catch(e){} }
 loadVoices();
@@ -4485,8 +4489,6 @@ document.addEventListener('click', e => {
       else { const all = allSteps(); beginSteps(all, Math.max(0, all.indexOf(i)), true, null, false, m === 'ital'); } }); break; }
     case 'start': { S.missed = new Set(); const st = allSteps(); beginSteps(st, firstPos(st), true); break; }
     case 'startital': { S.missed = new Set(); const st = allSteps(); beginSteps(st, saved.italGo === false ? 0 : firstPos(st), true, null, false, true); break; }
-    case 'italhide': saved.italHide = !saved.italHide; persist(); render(); break;
-    case 'italgo': saved.italGo = saved.italGo === false; persist(); render(); break;   /* 2.07 essai 2 (359) */
     case 'rmode': S.rmode = ['cards', 'ital'].includes(b.dataset.v) ? b.dataset.v : 'reh'; S.vdet = false; render(); break;   /* 351 : les détails de la voix se referment */
     case 'hdupd': location.reload(); break;   /* 2.06 (260) */
     case 'hdinst':   /* 2.06 (261, essai 2) : même effet que le bouton « Installer Répète sur ce téléphone » des Réglages ;
@@ -4587,6 +4589,9 @@ document.addEventListener('change', e => {
   else if (a === 'soundck') { saved.sound = t.checked ? 'on' : 'off'; persist(); render(); if (t.checked) rwSound(() => { RepeteSons.unlock(); RepeteSons.badge('or'); }); }
   else if (a === 'audio') { S.audio = t.checked; persist(); render(); }
   else if (a === 'rehnotes') { saved.rehNotes = t.checked; persist(); }
+  /* 2.07 essai 3 : les options de l'Italienne passent ici (les interrupteurs ne déclenchent pas l'action au clic) */
+  else if (a === 'italhide') { saved.italHide = t.checked; persist(); }
+  else if (a === 'italgo') { saved.italGo = t.checked; persist(); }
   else if (a === 'cardsko') { co().ko = t.checked; persist(); }
   else if (a === 'cnotes') { co().notes = t.checked; persist(); }
   else if (a === 'caudio') { co().audio = t.checked; persist(); render(); }
@@ -4672,6 +4677,26 @@ function prepDelArm(){ clearTimeout(prepDelT); prepDelT = setTimeout(() => { if 
 function prepDelOff(){ clearTimeout(prepDelT); S.prepDel = null; }
 function prepSave(){ const n = document.getElementById('prepedin'); if (!S.prepEd || !n) return; const x = prepOf(S.prepEd.k)[S.prepEd.i], t = n.value.replace(/\s+/g, ' ').trim().slice(0, 80);
   if (x && t) { x.t = t; persist(); } S.prepEd = null; render(); }
+
+/* 2.07 essai 3 (369) : glisser vers le bas depuis le haut du panneau Préparation le ferme, comme le grand minuteur (seuil 160 px, liste tout en haut) */
+(() => { let y0 = null, dy = 0, drag = false, lock = false, sh = null;
+  const canGo = t => { const s = t.closest('.psh'); if (!s || s.scrollTop > 0 || t.closest('input')) return null; return s; };
+  const reset = () => { if (sh) { sh.style.transition = ''; sh.style.transform = ''; } };
+  document.addEventListener('touchstart', e => { y0 = null; if (e.touches.length !== 1 || !e.target.closest) return; const s = canGo(e.target); if (!s) return; sh = s; y0 = e.touches[0].clientY; dy = 0; lock = false; }, { passive: true });
+  document.addEventListener('touchmove', e => { if (y0 === null || e.touches.length !== 1) return; const d = e.touches[0].clientY - y0;
+    if (!lock && d < -6) { y0 = null; return; }
+    if (d > 0 && e.cancelable) e.preventDefault();
+    dy = Math.max(0, d); if (dy > 6) { lock = true; sh.style.transition = 'none'; sh.style.transform = 'translateY(' + dy + 'px)'; } }, { passive: false });
+  document.addEventListener('touchend', () => { if (y0 === null) return; y0 = null; drag = dy > 6; if (drag) setTimeout(() => { drag = false; }, 400);
+    /* essai 3 : seuil = un tiers de la hauteur du panneau (au plus 160 px, comme le minuteur) ; le panneau finit de descendre (0,25 s) */
+    if (dy > Math.min(160, sh.offsetHeight / 3)) { sh.style.transition = 'transform .25s ease'; sh.style.transform = 'translateY(100%)'; const bg = document.querySelector('.psh-bg'); if (bg) { bg.style.transition = 'opacity .25s ease'; bg.style.opacity = '0'; }
+      setTimeout(() => { prepDelOff(); S.prepEd = null; S.prepK = null; render(); }, 250); } else reset(); });
+  document.addEventListener('touchcancel', () => { if (y0 === null) return; y0 = null; reset(); });
+  document.addEventListener('click', e => { if (drag && e.target.closest && e.target.closest('.psh,.psh-bg')) { drag = false; e.stopImmediatePropagation(); e.preventDefault(); } }, true);
+})();
+/* 2.07 essai 3 (352) : le bas du panneau reste collé au-dessus du clavier, même si le navigateur ne réduit pas la page */
+if (window.visualViewport) { const vv = visualViewport; const kb = () => { const k = Math.max(0, Math.round(innerHeight - vv.height - vv.offsetTop)); document.documentElement.style.setProperty('--kb', k + 'px'); };
+  vv.addEventListener('resize', kb); vv.addEventListener('scroll', kb); kb(); }
 /* ===================== 2.04 : MINUTEUR DE RÉPÉTITION (claude/minuteur-integration.md + minuteur-2.04-decisions.md) =====================
    Éléments persistants hors de #app (#tm, #tmsheet, #tmalarm, #tmpre) : render() ne les détruit jamais.
    Temps calculé à partir d'horloges (fin de passage), jamais en comptant des ticks. Horloge « virtuelle » pour la vitesse du mode admin. */
