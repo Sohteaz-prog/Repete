@@ -2481,8 +2481,16 @@ function sheetInner(){
 /* 2.07 essai 4 : quand l'appli revient au premier plan (ou toutes les 30 min si elle reste ouverte), demander au navigateur
    de vérifier s'il y a une nouvelle version ; sinon une appli laissée ouverte ne voyait jamais la pastille « Mise à jour ». Au plus une fois par minute. */
 let updLast = 0;
-function updCheckSoon(){ const n = Date.now(); if (n - updLast < 60000 || !('serviceWorker' in navigator)) return; updLast = n;
+function updCheckSoon(){ const n = Date.now(); if (n - updLast < 15000 || !('serviceWorker' in navigator)) return; updLast = n;
+  updProbe();   /* essai 6 : on regarde tout de suite la version publiée (la pastille n'attend plus que le navigateur ait tout téléchargé) */
   navigator.serviceWorker.getRegistration().then(r => { if (r) return r.update(); }).catch(() => {}); }
+/* essai 6 : « Mise à jour » attend que la nouvelle version soit prête (au plus 8 s) avant de recharger ; sinon le rechargement pouvait rouvrir l'ancienne */
+function updApply(){ const go = () => location.reload(); if (!('serviceWorker' in navigator)) return go();
+  let done = false; const fin = () => { if (!done) { done = true; go(); } }; setTimeout(fin, 8000);
+  navigator.serviceWorker.addEventListener('controllerchange', fin);
+  navigator.serviceWorker.getRegistration().then(r => { if (!r) return fin(); const w = r.waiting || r.installing;
+    if (w) { if (w.state === 'activated') return fin(); w.addEventListener('statechange', () => { if (w.state === 'activated') fin(); }); return; }
+    return r.update().then(() => { const w2 = r.installing || r.waiting; if (!w2) return fin(); w2.addEventListener('statechange', () => { if (w2.state === 'activated') fin(); }); }); }).catch(fin); }
 try { document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') updCheckSoon(); }); setInterval(updCheckSoon, 30 * 60000); } catch(e) {}
 /* ---- Animations : déclencheurs et file d'attente (les visuels seront branchés dans ANIM) ---- */
 const ANIM = {};   /* ANIM.applause / ANIM.title / ANIM.badge = (data, {animate}) => Promise. Absent = rien ne s'affiche. */
@@ -2882,7 +2890,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 143, APP_LABEL = '2.07 · essai 5'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 144, APP_LABEL = '2.07 · essai 6'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -3692,7 +3700,7 @@ async function rankSend(force){
   const j = await rankPost(rankPayload());
   rankBusy = false;
   if (j && j.ok) { r.last = Date.now(); rankErr = ''; } else rankErr = j && j.error ? j.error : 'net';
-  persist(); if (S.view === 'rank') rankFoot();
+  persist(); if (S.view === 'rank') rankLoad();   /* essai 6 : un envoi qui se termine pendant qu'on regarde le classement relit la liste (avant : seulement le bas de page) */
 }
 async function rankDelete(){
   const r = rk(); if (ADMIN || !r.id) { r.del = false; return; }
@@ -3701,7 +3709,7 @@ async function rankDelete(){
 }
 async function rankLoad(){
   if (ADMIN) return;
-  try { const res = await fetch(RANK_URL + '?action=list&season=' + encodeURIComponent(saved.season) + '&id=' + encodeURIComponent(rk().on ? rk().id : ''));
+  try { const res = await fetch(RANK_URL + '?action=list&season=' + encodeURIComponent(saved.season) + '&id=' + encodeURIComponent(rk().on ? rk().id : '') + '&t=' + Date.now(), { cache: 'no-store' });   /* essai 6 : jamais une liste gardée en cache */
     const j = await res.json();
     if (j && j.ok) { rk().cache = { at:Date.now(), now:j.now, players:j.players }; if (!['taken', 'blocked', 'full'].includes(rankErr)) rankErr = ''; persist(); } else rankErr = 'srv';
   } catch(x) { rankErr = 'net'; }
@@ -4558,7 +4566,7 @@ document.addEventListener('click', e => {
     case 'start': { S.missed = new Set(); const st = allSteps(); beginSteps(st, firstPos(st), true); break; }
     case 'startital': { S.missed = new Set(); const st = allSteps(); beginSteps(st, saved.italGo === false ? 0 : firstPos(st), true, null, false, true); break; }
     case 'rmode': S.rmode = ['cards', 'ital'].includes(b.dataset.v) ? b.dataset.v : 'reh'; S.vdet = false; render(); break;   /* 351 : les détails de la voix se referment */
-    case 'hdupd': location.reload(); break;   /* 2.06 (260) */
+    case 'hdupd': b.disabled = true; b.lastChild && (b.lastChild.textContent = 'Mise à jour…'); updApply(); break;   /* 2.06 (260) ; essai 6 : attend la nouvelle version */
     case 'hdinst':   /* 2.06 (261, essai 2) : même effet que le bouton « Installer Répète sur ce téléphone » des Réglages ;
                         sans proposition d'installation du navigateur (iPhone…) : Réglages › Données, où se trouve la marche à suivre */
       if (installEvt) { const ev = installEvt; ev.prompt(); Promise.resolve(ev.userChoice).then(() => { installEvt = null; render(); if (S.settings) renderSheet(); }).catch(() => {}); }
