@@ -228,7 +228,7 @@ h2{font-size:var(--fs-20);margin:0 0 2px}
 .sni{display:flex;align-items:center;gap:8px;min-height:44px;border-top:1px solid var(--line);font:15px/1.3 system-ui,sans-serif;color:var(--ink)}.sni .ck{width:36px;height:40px;margin-left:-7px;border:0;background:none;display:flex;align-items:center;justify-content:center;color:#fff;font:800 13px system-ui;flex:none;position:relative;isolation:isolate}.sni .ck::before{content:"";position:absolute;width:22px;height:22px;border-radius:6px;border:2px solid var(--mute);box-sizing:border-box;z-index:-1}.sni.on .ck::before{background:#1f8a5a;border-color:#1f8a5a}
 .sni .t{flex:1;padding:8px 0;cursor:pointer}.sni.on .t{color:var(--mute)}.sni.on .tx{text-decoration:line-through}.sni .tg{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--accent-ink);margin-right:6px}.sni .x{width:40px;height:40px;margin-right:-8px;border:0;background:none;color:var(--mute);font-size:15px;flex:none}
 .snadd{display:flex;gap:8px;margin-top:10px}.snadd .in{flex:1;min-width:0;min-height:44px;border:1.5px dashed var(--line);border-radius:var(--r-10);padding:0 12px;background:none;color:var(--ink);font:15px system-ui,sans-serif}.snadd .pl{width:44px;min-height:44px;border:0;border-radius:var(--r-10);background:var(--accent);color:#1d1a16;font:800 22px system-ui;flex:none}
-.psh-bg{position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:60}.psh{position:fixed;left:0;right:0;bottom:var(--kb,0px);z-index:61;max-height:calc(80dvh - var(--kb,0px));overscroll-behavior:contain;overflow:auto;background:var(--card);border-radius:18px 18px 0 0;padding:8px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -6px 24px rgba(0,0,0,.25)}.psh .grip{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 10px}.psh h3{display:flex;align-items:center;gap:8px;margin:0 0 4px;font-size:17px;color:var(--ink)}.psh h3 svg{color:var(--accent-ink)}.psh h3 small{margin-left:auto;font:600 13px system-ui;color:var(--mute)}.psh .sub{font-size:13px;color:var(--mute);margin:0 0 6px}
+.psh-bg{position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:60}.psh{position:fixed;left:0;right:0;top:0;bottom:var(--kb,0px);z-index:61;display:flex;flex-direction:column;background:var(--card);padding:env(safe-area-inset-top) 0 0;overflow:hidden}.psh h3{display:flex;align-items:center;gap:8px;margin:0 0 4px;font-size:17px;color:var(--ink);padding:0 16px}.psh h3 svg{color:var(--accent-ink)}.psh h3 small{margin-left:auto;font:600 13px system-ui;color:var(--mute)}.psh .sub{font-size:13px;color:var(--mute);margin:0 0 6px;padding:0 16px}
 .btn.go.cardsb{background:var(--card);border:1.5px solid var(--accent);color:var(--accent-ink)}
 .card.scard{cursor:pointer;padding:10px 14px 8px;position:relative}
 button:not(:disabled):active{transform:scale(.97);filter:brightness(.95)}
@@ -835,7 +835,7 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(-
 .tm-bar.end .tm-tt,.tm-bar.end .tm-rd{color:var(--st-ko)}.tm-bar.end .tm-pg i{background:var(--st-ko)}
 .tm-bar.wait .tm-pg i{background:var(--mute)}
 /* grand minuteur plein écran (Minuteur-M30, M31) */
-.tm-sh{position:fixed;inset:0;z-index:70;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);transition:transform .25s ease}
+.tm-sh{position:fixed;inset:calc(10px + env(safe-area-inset-top)) 10px 10px;z-index:70;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;border-radius:18px;box-shadow:0 10px 40px rgba(0,0,0,.35);overflow:hidden}   /* 2.07 essai 4 (M169 a, M172 b) : fenêtre, plus plein écran */
 .tm-sh[hidden]{display:none}
 .tm-hd{display:flex;align-items:center;gap:8px;padding:14px 12px 4px 18px}
 .tm-hd h2{flex:1;margin:0;font-size:var(--fs-18)}
@@ -956,8 +956,6 @@ html.tmlock,html.tmlock body{overflow:hidden;overscroll-behavior:none}
 .prb>svg:first-child{color:var(--accent-ink);flex:none;width:18px;height:18px}.prb .g{flex:1;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.prb small{color:var(--mute);font-weight:600;font-size:13px}.prb .sncv{width:16px;height:16px}
 .prb.open{border-bottom-left-radius:0;border-bottom-right-radius:0}
 .snc.pnc{margin-top:-8px}
-/* 2.07 essai 2 (366, M150 b) : en Italienne, la voix est toujours active */
-.sw.vlock input{opacity:.45;filter:grayscale(.6)}
 /* 2.07 essai 2 (353, M160 ; 368, M157) ; essai 3 (M164 d) : « Annuler » en petite pastille pâle */
 .sni .x.tr{color:var(--st-ko);display:inline-flex;align-items:center;justify-content:center}
 .pcan{flex:none;height:24px;border-radius:12px;border:0;background:color-mix(in srgb,var(--mute) 10%,transparent);color:var(--mute);font:600 12px system-ui,sans-serif;padding:0 10px}
@@ -975,6 +973,25 @@ html:has(.psh),html:has(.psh) body{overflow:hidden;overscroll-behavior:none}   /
 /* 2.07 essai 2 (367, M161) : choix du mode sous « Répéter d'ici » */
 .la.on{border-color:color-mix(in srgb,var(--accent) 60%,var(--line))}.la .sncv{width:14px;height:14px}
 .rmenu.fm{margin:8px 0 0}.fm button{justify-content:flex-start;gap:12px;font-weight:600}.fm button svg{color:var(--accent-ink);flex:none;width:18px;height:18px}
+/* 2.07 essai 4 : fenêtres uniformes (js/fenetres.js) */
+.ugrip{flex:none;display:flex;justify-content:center;align-items:center;height:22px;touch-action:none}
+.ugrip i{display:block;width:40px;height:4px;border-radius:2px;background:var(--line)}
+[data-win]{will-change:transform}
+/* M168 b2 : Réglages, fenêtre qui sort du bouton ⚙ */
+.sh-win{position:absolute;top:calc(10px + env(safe-area-inset-top));left:10px;right:10px;margin:0 auto;max-width:620px;max-height:calc(100dvh - 20px - env(safe-area-inset-top));display:flex;flex-direction:column;background:var(--card);border-radius:18px;box-shadow:0 10px 40px rgba(0,0,0,.35);overflow:hidden}
+.sh-win .sh-panel{min-height:0;max-height:none;flex:1 1 auto;padding:10px 16px 6px}
+.sh-head .shx{flex:none}
+/* M169 a, M172 b : minuteur, fenêtre qui sort de son bouton (ou de sa barre) ; petite barre en bas */
+.tm-sh::after{content:"";flex:none;display:block;width:40px;height:4px;border-radius:2px;background:var(--line);margin:9px auto}
+.tm-sh .tm-ft{padding-bottom:6px}
+.tm-bk{position:fixed;inset:0;z-index:69;background:rgba(0,0,0,.45)}
+.tm-bk[hidden]{display:none}
+/* M173 c : Préparation plein écran depuis le bas */
+.psh .pscr{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;padding:0 16px}
+.psh .snadd{flex:none;margin:0;border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:var(--card)}
+/* essai 4 : Italienne, deux boutons de même largeur ; M171 b : onglets de « Répliques à travailler » */
+.arow.half>.btn{flex:1 1 0;min-width:0}
+.wbt{margin:4px 0 0;border-bottom:1px solid var(--line)}.wbt button{margin-bottom:-1px;display:inline-flex;align-items:center;justify-content:center;gap:5px}.wbt + .wl{border-top:0;margin-top:0}
 </style>
 </head>
 <body>
@@ -2410,7 +2427,7 @@ function sheetInner(){
   const dark = isDark(), cur = COLORS.find(x => x.id === saved.color) || COLORS[0];
   const nm = (arr, v) => (arr.find(x => x[0] === v) || ['', ''])[1];
   const cbName = nm(CB_MODES, saved.cb || '').toLowerCase();
-  return `<div class="sh-head"><h2>Réglages</h2><button class="ghost" data-act="closesettings">Fermer</button></div>
+  return `<div class="sh-head"><h2>Réglages</h2><button class="ib shx" data-act="closesettings" aria-label="Fermer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
       ${secBlock('txt', 'text', 'Texte', 'Texte ' + FS_NAMES[S.fs].toLowerCase(), `
       <div class="lbl">Taille du texte</div>
       <div class="seg sm">${FS_NAMES.map((n, i) => `<button class="${S.fs === i ? 'on' : ''}" data-act="setfs" data-v="${i}">${n}</button>`).join('')}</div>
@@ -2452,6 +2469,12 @@ function sheetInner(){
       ${updateBlock()}
       ${ADMIN ? admPanel() : `<div class="admtap" data-act="admtap">Répète · v${APP_LABEL}</div>${S.admAsk ? `<div class="admask"><input id="admcode" type="password" inputmode="numeric" autocomplete="off" placeholder="Code" aria-label="Code"><button class="ghost" data-act="admgo">OK</button></div>${S.admErr ? '<div class="mute small">Code incorrect.</div>' : ''}` : ''}`}`;
 }
+/* 2.07 essai 4 : quand l'appli revient au premier plan (ou toutes les 30 min si elle reste ouverte), demander au navigateur
+   de vérifier s'il y a une nouvelle version ; sinon une appli laissée ouverte ne voyait jamais la pastille « Mise à jour ». Au plus une fois par minute. */
+let updLast = 0;
+function updCheckSoon(){ const n = Date.now(); if (n - updLast < 60000 || !('serviceWorker' in navigator)) return; updLast = n;
+  navigator.serviceWorker.getRegistration().then(r => { if (r) return r.update(); }).catch(() => {}); }
+try { document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') updCheckSoon(); }); setInterval(updCheckSoon, 30 * 60000); } catch(e) {}
 /* ---- Animations : déclencheurs et file d'attente (les visuels seront branchés dans ANIM) ---- */
 const ANIM = {};   /* ANIM.applause / ANIM.title / ANIM.badge = (data, {animate}) => Promise. Absent = rien ne s'affiche. */
 const ANIM_MODES = [['on','Activées'],['off','Réduites'],['none','Désactivées']];
@@ -2606,6 +2629,52 @@ function badgesView(){
   h += `<p class="tip">Touche un badge pour voir comment le gagner.</p>`;
   return h;
 }
+/* ---- 2.07 essai 4 : fenêtres uniformes (M168 b2, M169 a, M172 b, M173 c) ----
+   Réglages et minuteur : la fenêtre sort de son bouton (ou de la barre du minuteur) et y retourne.
+   Préparation : plein écran depuis le bas.
+   Commun : petite barre 40 × 4 px du côté où l'on tire ; la fenêtre suit le doigt ; lâchée au-delà d'un tiers de sa hauteur
+   (160 px au plus) elle finit de partir (0,25 s), sinon elle revient ; le fond s'éclaircit en même temps.
+   Une fenêtre déplaçable porte data-win="up" (on la pousse vers le haut) ou "down", data-winclose = nom de la fonction de fermeture,
+   data-winbg = sélecteur de son fond assombri ; sa liste qui défile porte la classe .uscr. */
+const WIN_IN = 280, WIN_OUT = 250;
+const winVis = sel => [...document.querySelectorAll(sel)].find(e => { const r = e.getBoundingClientRect(); return r.width && r.height && !e.closest('[hidden]'); }) || null;
+function winOrigin(el, src, dy){ if (!src) return false; const r = el.getBoundingClientRect(), b = src.getBoundingClientRect(); if (!b.width) return false;
+  el.style.transformOrigin = (b.left + b.width / 2 - r.left) + 'px ' + (b.top + b.height / 2 - (r.top - (dy || 0))) + 'px'; return true; }
+const winBg = el => el && el.dataset.winbg ? document.querySelector(el.dataset.winbg) : null;
+/* entrée : depuis le bouton (pop) ou depuis le bas (slide) */
+function winIn(el, src){ if (!el) return; const bg = winBg(el), pop = !!src;
+  el.style.transition = 'none'; el.style.opacity = pop ? '0' : '';
+  if (pop) { el.style.transform = 'none'; if (!winOrigin(el, src)) { el.style.opacity = ''; return; } el.style.transform = 'scale(.06)'; } else el.style.transform = 'translateY(100%)';
+  if (bg) { bg.style.transition = 'none'; bg.style.opacity = '0'; }
+  void el.offsetHeight;
+  el.style.transition = 'transform ' + WIN_IN + 'ms ease, opacity 200ms ease'; el.style.transform = ''; el.style.opacity = '';
+  if (bg) { bg.style.transition = 'opacity ' + WIN_IN + 'ms ease'; bg.style.opacity = ''; }
+  setTimeout(() => { el.style.transition = ''; }, WIN_IN + 20); }
+/* sortie : vers le bouton (pop) ou vers le bas (slide) ; done() à la fin */
+function winOut(el, src, done){ if (!el) { done(); return; } const bg = winBg(el), m = /translateY\((-?[\d.]+)px\)/.exec(el.style.transform || ''), dy = m ? +m[1] : 0;
+  const pop = !!src && winOrigin(el, src, dy);
+  el.style.transition = 'transform ' + WIN_OUT + 'ms ease, opacity ' + WIN_OUT + 'ms ease';
+  el.style.transform = pop ? 'scale(.06)' : 'translateY(100%)'; if (pop) el.style.opacity = '0';
+  if (bg) { bg.style.transition = 'opacity ' + WIN_OUT + 'ms ease'; bg.style.opacity = '0'; }
+  setTimeout(() => { el.style.transition = ''; el.style.transform = ''; el.style.opacity = ''; if (bg) { bg.style.transition = ''; bg.style.opacity = ''; } done(); }, WIN_OUT); }
+/* glisser pour fermer (au doigt, et à la souris pour l'ordinateur) */
+(() => { let y0 = null, d = 0, lock = false, drag = false, el = null, dir = 1;
+  const can = (w, t, dr) => { if (t.closest('input,textarea,select,.tm-stp button')) return false; const s = w.querySelector('.uscr');
+    if (s && s.contains(t)) return dr > 0 ? s.scrollTop <= 0 : s.scrollTop + s.clientHeight >= s.scrollHeight - 2; return true; };
+  const dn = (t, y) => { y0 = null; const w = t && t.closest && t.closest('[data-win]'); if (!w) return; const dr = w.dataset.win === 'up' ? -1 : 1; if (!can(w, t, dr)) return; el = w; dir = dr; y0 = y; d = 0; lock = false; };
+  const mv = (y, e) => { if (y0 === null) return; const v = (y - y0) * dir; if (!lock && v < -6) { y0 = null; return; } if (v > 0 && e && e.cancelable) e.preventDefault();
+    d = Math.max(0, v); if (d > 6) { lock = true; el.style.transition = 'none'; el.style.transform = 'translateY(' + (dir * d) + 'px)'; const bg = winBg(el); if (bg) { bg.style.transition = 'none'; bg.style.opacity = String(Math.max(0, 1 - d / el.offsetHeight)); } } };
+  const up = () => { if (y0 === null) return; y0 = null; drag = d > 6; if (drag) setTimeout(() => { drag = false; }, 400);
+    if (d > Math.min(160, el.offsetHeight / 3)) { const f = window[el.dataset.winclose]; if (typeof f === 'function') f(true); }
+    else if (lock) { el.style.transition = 'transform .2s ease'; el.style.transform = ''; const bg = winBg(el); if (bg) { bg.style.transition = 'opacity .2s ease'; bg.style.opacity = ''; } setTimeout(() => { el.style.transition = ''; }, 220); } };
+  document.addEventListener('touchstart', e => { if (e.touches.length !== 1) { y0 = null; return; } dn(e.target, e.touches[0].clientY); }, { passive: true });
+  document.addEventListener('touchmove', e => { if (e.touches.length === 1) mv(e.touches[0].clientY, e); }, { passive: false });
+  document.addEventListener('touchend', up); document.addEventListener('touchcancel', up);
+  document.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse') dn(e.target, e.clientY); });
+  window.addEventListener('pointermove', e => { if (e.pointerType === 'mouse') mv(e.clientY, null); });
+  window.addEventListener('pointerup', e => { if (e.pointerType === 'mouse') up(); });
+  document.addEventListener('click', e => { if (drag && e.target.closest && e.target.closest('[data-win],.sh-back,.tm-bk,.psh-bg')) { drag = false; e.stopImmediatePropagation(); e.preventDefault(); } }, true);
+})();
 /* ---- Mode admin (profil de test) ---- */
 let admToastT = 0;
 function admToast(msg){
@@ -2782,22 +2851,21 @@ function renderSheet(){
   if (S.settings) {
     clearTimeout(sheetTimer);
     document.body.style.overflow = 'hidden';
-    if (wrap) {                       // déjà ouvert : mise à jour sur place, sans rejouer l'animation
+    if (wrap && wrap.dataset.out) { el.innerHTML = ''; }   /* rouverte pendant qu'elle se range : on repart d'une fenêtre neuve */
+    else if (wrap) {                  // déjà ouvert : mise à jour sur place, sans rejouer l'animation
       const pn = wrap.querySelector('.sh-panel'), top = pn.scrollTop;
       pn.innerHTML = sheetInner(); pn.scrollTop = top;
       wrap.classList.add('open');
       return;
     }
+    /* 2.07 essai 4 (M168 b2) : fenêtre qui sort du bouton ⚙ et y retourne ; petite barre en bas, on la pousse vers le haut */
     el.innerHTML = `<div class="sh-wrap"><div class="sh-back" data-act="closesettings"></div>
-      <div class="sh-drop" role="dialog" aria-modal="true" aria-label="Réglages">
-        <div class="sh-clip"><div class="sh-panel">${sheetInner()}</div>
-          <div class="sh-roll" data-act="closesettings" role="button" aria-label="Fermer les réglages"><svg viewBox="0 0 30 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4h22M4 10h22M4 16h22"/></svg></div></div>
-      </div></div>`;
-    const w = el.querySelector('.sh-wrap'); void w.offsetHeight;
-    if (S.shInstant) { S.shInstant = false; w.classList.add('instant', 'open'); setTimeout(() => w.classList.remove('instant'), 80); } else requestAnimationFrame(() => w.classList.add('open'));
-  } else if (wrap) {                  // fermeture : le panneau s'enroule vers le haut
-    wrap.classList.remove('open');
-    sheetTimer = setTimeout(() => { el.innerHTML = ''; document.body.style.overflow = ''; }, 520);
+      <div class="sh-win" role="dialog" aria-modal="true" aria-label="Réglages" data-win="up" data-winclose="closeSettings" data-winbg=".sh-back"><div class="sh-panel uscr">${sheetInner()}</div><div class="ugrip" aria-hidden="true"><i></i></div></div></div>`;
+    const w = el.querySelector('.sh-wrap'); w.classList.add('open');
+    if (S.shInstant) S.shInstant = false; else winIn(w.querySelector('.sh-win'), winVis('[data-act=settings]'));
+  } else if (wrap) {                  // fermeture : la fenêtre retourne dans le bouton ⚙
+    clearTimeout(sheetTimer); if (wrap.dataset.out) return; wrap.dataset.out = '1';
+    winOut(wrap.querySelector('.sh-win'), winVis('[data-act=settings]'), () => { if (!S.settings) { el.innerHTML = ''; document.body.style.overflow = ''; } });
   } else { document.body.style.overflow = ''; }
 }
 /* ===== Bouton retour du téléphone =====
@@ -2805,7 +2873,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 141, APP_LABEL = '2.07 · essai 3'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 142, APP_LABEL = '2.07 · essai 4'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -3133,7 +3201,7 @@ function importView(){
 function navBack(src){ const b0 = bview(); exitAt = 0; navBack0(); blog((src || 'bouton ‹') + ' : ' + b0 + ' ⇒ ' + bview()); }
 function navBack0(){
   const cf = document.getElementById('appcf'); if (cf) { cf._cancel(); return; }
-  if (tmOpen) { tmCloseSheet(!!TMS); return; }   /* 2.07 essai 2 (365) : dans les réglages du minuteur, le retour ferme comme la croix */   /* 2.04 : le retour ferme d'abord le grand minuteur ; 2.07 (310) : comme « Réduire » (la fiche glisse) */
+  if (tmOpen) { tmCloseSheet(true); return; }   /* 2.07 essai 2 (365) : dans les réglages du minuteur, le retour ferme comme la croix */   /* 2.04 : le retour ferme d'abord le grand minuteur ; 2.07 (310) : comme « Réduire » (la fiche glisse) */
   const rw = document.querySelector('.rwl.on');
   if (rw) { if (rw._close) rw._close(); else rw.click(); return; }
   /* 2.04 : le retour referme d'abord les petites listes et menus ouverts */
@@ -3153,7 +3221,7 @@ function navBack0(){
   if (S.prepEd) { S.prepEd = null; render(); return; }
   if (S.fromOpen != null) { S.fromOpen = null; render(); return; }
   if (S.prepOpen && S.view === 'scene') { S.prepOpen = false; render(); return; }
-  if (S.prepK) { S.prepK = null; render(); return; }   /* 2.07 (307) : panneau Préparation */
+  if (S.prepK) { prepCloseAnim(); return; }   /* essai 4 : se replie vers le bas */   /* 2.07 (307) : panneau Préparation */
   if (S.nEdit || S.nList) { S.nEdit = null; S.nList = false; render(); return; }
   if (S.nView != null) {
     const q = '.nb[data-i="' + S.nView + '"]', e = document.querySelector(q), t0 = e ? e.getBoundingClientRect().top : null;
@@ -3206,23 +3274,7 @@ window.addEventListener('popstate', () => {
 function openSettings(){ if (S.settings) return; S.settings = true; try { sessionStorage.setItem('repete.reopenSet', '1'); } catch(e) {} renderSheet(); }
 function closeSettings(){ if (!S.settings) return; S.settings = false; try { sessionStorage.removeItem('repete.reopenSet'); } catch(e) {} renderSheet(); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && S.settings) closeSettings(); });
-/* Réglages : glisser vers le haut ferme la fenêtre (depuis le bas du contenu, ou depuis le fond assombri) */
-let shSwipe = null;
-document.addEventListener('touchstart', e => {
-  shSwipe = null;
-  if (!S.settings || e.touches.length !== 1) return;
-  const t = e.target; if (!t || !t.closest || !t.closest('.sh-wrap')) return;
-  if (t.closest('input[type=range],input[type=date]')) return;
-  const pn = t.closest('.sh-panel');
-  const atEnd = !pn || pn.scrollTop + pn.clientHeight >= pn.scrollHeight - 3;
-  shSwipe = { y: e.touches[0].clientY, x: e.touches[0].clientX, ok: atEnd };
-}, { passive: true });
-document.addEventListener('touchend', e => {
-  const g = shSwipe; shSwipe = null;
-  if (!g || !g.ok || !S.settings || !e.changedTouches.length) return;
-  const dy = e.changedTouches[0].clientY - g.y, dx = e.changedTouches[0].clientX - g.x;
-  if (dy < -60 && Math.abs(dy) > Math.abs(dx) * 1.5) closeSettings();
-}, { passive: true });
+/* 2.07 essai 4 : « glisser vers le haut ferme les Réglages » est maintenant fait par fenetres.js (la fenêtre suit le doigt) */
 
 /* Réglages : tirer vers le bas depuis le haut = actualiser l'appli (revient dans les Réglages) */
 let ptr = null;
@@ -3441,7 +3493,8 @@ function todayInfo(items){
     objNeed: h.obj ? h.obj.need : 0, objDone: h.done.length, met: !!(h.obj && h.done.length >= h.obj.need) };
 }
 const STLAB = { new:'Nouvelle', ko:'À répéter', known:'Connue', solid:'Solide' };
-/* 2.01 : « Répliques à travailler » (M16-B) — un bouton, puis un filtre À répéter / À rafraîchir (icône horloge, M15-C) */
+/* 2.01 : « Répliques à travailler » (M16-B) — un bouton, puis un filtre À répéter / À rafraîchir (icône horloge, M15-C) ;
+   2.07 essai 4 (M171 b) : onglets comme le bilan, toujours les deux, « (0) » si vide */
 const CLOCK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
 function weakList(s, st, k){
   if (!st.att.length) return '';
@@ -3452,8 +3505,8 @@ function weakList(s, st, k){
       <div class="wfull">${fmt(s.items[a.i].t)}<div class="mute small">${STLAB[a.st]}${a.st === 'known' ? ' · ' + a.n + ' / 5 jours' : ''}${a.age !== null && a.age > 0 ? ' · dernière validation il y a ' + a.age + ' jour' + (a.age > 1 ? 's' : '') : ''}</div></div></details>`;
   const list = tab === 'ko' ? ko : stl;
   return `<div class="weak ${open ? 'open' : ''}" data-act="noop"><button class="wsum" data-act="weaktog" data-k="${esc(k)}" aria-expanded="${open}">Répliques à travailler (${ko.length + stl.length})<span class="wch">▾</span></button>
-    ${open ? `<div class="seg sm wseg">${ko.length ? `<button class="${tab === 'ko' ? 'on' : ''}" data-act="weaktab" data-k="${esc(k)}" data-v="ko">À répéter (${ko.length})</button>` : ''}${stl.length ? `<button class="${tab === 'stale' ? 'on' : ''}" data-act="weaktab" data-k="${esc(k)}" data-v="stale">${CLOCK} À rafraîchir (${stl.length})</button>` : ''}</div>
-      ${list.map(row).join('') || '<div class="mute small" style="padding:6px 2px">Rien ici.</div>'}
+    ${open ? `<div class="btabs wbt" role="tablist"><button role="tab" aria-selected="${tab === 'ko'}" class="${tab === 'ko' ? 'on' : ''}" data-act="weaktab" data-k="${esc(k)}" data-v="ko">À répéter (${ko.length})</button><button role="tab" aria-selected="${tab === 'stale'}" class="${tab === 'stale' ? 'on' : ''}" data-act="weaktab" data-k="${esc(k)}" data-v="stale">${CLOCK} À rafraîchir (${stl.length})</button></div>
+      ${list.map(row).join('')}
       ${list.length ? `<button class="btn sm soft iconb wcards" data-act="weakcards" data-k="${esc(k)}" data-v="${tab}">${ICO_CARDS}<span>Réviser ${list.length > 1 ? 'ces ' + list.length + ' répliques' : 'cette réplique'} en cartes</span></button>` : ''}` : ''}</div>`;
 }
 const sceneRow = (p, s) => {
@@ -3939,7 +3992,7 @@ const IC_CLIP = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" str
 const prepOf = k => ((saved.prep = saved.prep || {})[k] || []);
 const prepCount = k => { const L = prepOf(k); return [L.filter(x => x.on).length, L.length]; };
 function prepTag(t){ const m = /^\s*([^:]{1,18}?)\s*:\s*(\S.*)$/.exec(t); return m ? [m[1], m[2]] : ['', t]; }
-function prepItems(k){
+function prepRows(k){
   const a = `data-k="${esc(k)}"`, del = S.prepDel && S.prepDel.k === k ? S.prepDel.i : -1, ed = S.prepEd && S.prepEd.k === k ? S.prepEd.i : -1;
   return prepOf(k).map((x, i) => { const [tg, tx] = prepTag(x.t);
     const ck = `<button class="ck" data-act="preptog" ${a} data-i="${i}" role="checkbox" aria-checked="${!!x.on}" aria-label="${esc(x.t)}">${x.on ? '✓' : ''}</button>`;
@@ -3948,8 +4001,11 @@ function prepItems(k){
     const t = `<span class="t" data-act="${i === del ? 'noop' : 'prepedit'}" ${a} data-i="${i}">${tg ? `<span class="tg">${esc(tg)}</span>` : ''}<span class="tx">${esc(tx)}</span></span>`;
     /* 2.07 essai 2 (353, M160) : ✕ devient « Annuler » + poubelle rouge */
     if (i === del) return `<div class="sni ${x.on ? 'on' : ''}">${ck}${t}<button class="pcan" data-act="prepnodel">Annuler</button><button class="x tr" data-act="prepdel" ${a} data-i="${i}" aria-label="Confirmer la suppression">${IC_TRASH.replace('width="16" height="16"', 'width="20" height="20"')}</button></div>`;
-    return `<div class="sni ${x.on ? 'on' : ''}">${ck}${t}<button class="x" data-act="prepask" ${a} data-i="${i}" aria-label="Supprimer">✕</button></div>`; }).join('')
-    + `<div class="snadd"><input class="in" id="prepin" ${a} maxlength="80" autocomplete="off" enterkeyhint="done" placeholder="Ajouter (ex. « Son : sifflet »)…" aria-label="Ajouter un élément"><button class="pl" data-act="prepadd" ${a} aria-label="Ajouter">＋</button></div>`;
+    return `<div class="sni ${x.on ? 'on' : ''}">${ck}${t}<button class="x" data-act="prepask" ${a} data-i="${i}" aria-label="Supprimer">✕</button></div>`; }).join('');
+}
+function prepItems(k){ return prepRows(k) + prepAddRow(k); }
+function prepAddRow(k){ const a = `data-k="${esc(k)}"`;
+  return `<div class="snadd"><input class="in" id="prepin" ${a} maxlength="80" autocomplete="off" enterkeyhint="done" placeholder="Ajouter (ex. « Son : sifflet »)…" aria-label="Ajouter un élément"><button class="pl" data-act="prepadd" ${a} aria-label="Ajouter">＋</button></div>`;
 }
 const prepChev = up => `<svg class="sncv${up ? ' up' : ''}" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`;
 function prepBlock(k){ const [d, n] = prepCount(k), open = !!S.prepOpen;
@@ -3957,7 +4013,8 @@ function prepBlock(k){ const [d, n] = prepCount(k), open = !!S.prepOpen;
 function prepSheet(){
   const k = S.prepK; if (!k) return '';
   const [pid, sid] = k.split('/'), pl = LIBRARY.find(p => p.id === pid), sc = pl && pl.scenes.find(x => x.id === sid), [d, n] = prepCount(k);
-  return `<div class="psh-bg" data-act="prepclose"></div><div class="psh" role="dialog" aria-label="Préparation"><div class="grip"></div><h3>${IC_CLIP}Préparation${n ? `<small>${d} / ${n} prêt${d > 1 ? 's' : ''}</small>` : ''}</h3>${sc ? `<p class="sub">${esc(sc.title)}</p>` : ''}${prepItems(k)}</div>`;
+  /* 2.07 essai 4 (M173 c) : plein écran depuis le bas, sans bouton ; petite barre en haut ; seule la liste défile, « Ajouter » reste en bas */
+  return `<div class="psh" role="dialog" aria-label="Préparation" data-win="down" data-winclose="prepCloseAnim"><div class="ugrip" aria-hidden="true"><i></i></div><h3>${IC_CLIP}Préparation${n ? `<small>${d} / ${n} prêt${d > 1 ? 's' : ''}</small>` : ''}</h3>${sc ? `<p class="sub">${esc(sc.title)}</p>` : ''}<div class="pscr uscr">${prepRows(k)}</div>${prepAddRow(k)}</div>`;
 }
 const prepBtn = k => { const [d, n] = prepCount(k); return `<button class="btn go cardsb pbtn" data-act="prepk" data-k="${esc(k)}" aria-label="Préparation${n ? ' : ' + d + ' sur ' + n + ' prêts' : ''}">${IC_CLIP}<small>${n ? d + '/' + n : '＋'}</small></button>`; };
 /* --- onglet Répéter --- */
@@ -3998,7 +4055,7 @@ function introView(){
     <label class="sw"><input type="checkbox" data-act="italhide" ${saved.italHide ? 'checked' : ''}> Cacher mes répliques</label>
     <label class="sw"><input type="checkbox" data-act="rehnotes" ${saved.rehNotes ? 'checked' : ''}> Afficher mes notes</label>`
     : `<label class="sw"><input type="checkbox" data-act="rehnotes" ${saved.rehNotes ? 'checked' : ''}> Afficher mes notes</label>`}
-    ${synth ? `${RM === 'ital' ? '<label class="sw vlock"><input type="checkbox" checked disabled aria-label="Lecture à voix haute (toujours active en Italienne)"> <span class="vlt">Lecture à voix haute<button' : `<label class="sw"><input type="checkbox" data-act="${S.rmode === 'cards' ? 'caudio' : 'audio'}" ${(S.rmode === 'cards' ? co().audio : S.audio) ? 'checked' : ''}> <span class="vlt">Lecture à voix haute<button`} type="button" class="vdt" data-act="vdet" aria-expanded="${!!S.vdet}" aria-controls="vdx">Détails</button></span></label>
+    ${synth ? `<label class="sw"><input type="checkbox" data-act="${RM === 'ital' ? 'italaudio' : S.rmode === 'cards' ? 'caudio' : 'audio'}" ${(RM === 'ital' ? italAudio() : S.rmode === 'cards' ? co().audio : S.audio) ? 'checked' : ''}> <span class="vlt">Lecture à voix haute<button type="button" class="vdt" data-act="vdet" aria-expanded="${!!S.vdet}" aria-controls="vdx">Détails</button></span></label>
       ${S.vdet ? `<div class="vdx" id="vdx">${voiceOpts ? `<label class="f">Voix<select data-act="voice">${voiceOpts}</select></label>` : ''}
       <div class="lbl" style="margin-top:6px">Vitesse de lecture · <span id="rateval">${S.rate.toFixed(1)}</span>×</div>
       <input type="range" class="rng" min="1" max="2" step="0.1" value="${S.rate}" data-act="rate" aria-label="Vitesse de lecture" style="--p:${Math.round((S.rate - 1) * 100)}%">
@@ -4074,7 +4131,9 @@ function cardView(){
     <div class="fwrap" data-act="cardflip">${card}</div><div class="actions acol"><div class="arow">${actions}</div></div>${rev ? '<div class="edge l" id="edgeL"></div><div class="edge r" id="edgeR"></div>' : ''}`;
 }
 /* 2.03 (M36) : haut-parleur sur la ligne du compteur ; en Cartes il commande « Lecture à voix haute » des cartes */
-const audioOn = () => S.cards ? co().audio : S.audio;
+/* essai 4 : en Italienne, la voix a son propre interrupteur (activé par défaut), plus bloqué */
+const italAudio = () => saved.italAudio !== false;
+const audioOn = () => S.cards ? co().audio : S.ital ? italAudio() : S.audio;
 function pSpk(){
   if (!synth) return `<button class="ib pspk" data-act="nosound" aria-label="Lecture vocale indisponible">${MUTE}</button>`;
   const on = audioOn();
@@ -4134,7 +4193,7 @@ function stepView(){
   return `<div class="prog"><i style="width:${pct}%"></i></div>
     <div class="pcount fpc"><span>${myCount()}</span>${pRight()}</div>
     <div class="thr" data-act="thrtap">${thr}</div>
-    <div class="actions acol"><div class="arow">${actions}</div></div>`;
+    <div class="actions acol"><div class="arow${S.ital ? ' half' : ''}">${actions}</div></div>`;   /* essai 4 : en Italienne, deux boutons de même largeur */
 }
 function doneView(){
   const items = S.scene.items, miss = [...S.missed].sort((a,b)=>a-b);
@@ -4188,7 +4247,7 @@ function beginSteps(steps, pos, all, focus, cards, ital){
   render(); window.scrollTo(0,0); keepNow(); autoSpeak();
 }
 function autoSpeak(){
-  if (!(S.cards ? co().audio : (S.audio || S.ital)) || !synth || !S.started || S.done) return;
+  if (!audioOn() || !synth || !S.started || S.done) return;   /* essai 4 : l'Italienne suit son interrupteur (le raccourci coupe vraiment le son) */
   const it = S.scene.items[S.steps[S.pos]];
   if (S.cards) { const si = S.steps[S.pos]; for (let j = si - 1; j >= 0; j--) if (S.scene.items[j].k === 'l') { speak(j); break; } return; }
   if (it && it.c !== S.me) speak(S.steps[S.pos]);
@@ -4471,7 +4530,7 @@ document.addEventListener('click', e => {
     case 'tmspd': tmSetSpeed(+b.dataset.v); renderSheet(); break;
     case 'tmjump': tmUnlock(); tmAdmJump(b.dataset.v); break;
     case 'tmtest': tmUnlock(); tmBeep(3); break;
-    case 'tmopen': tmUnlock(); tmOpenSheet(); break;
+    case 'tmopen': tmUnlock(); tmOpenSheet(b); break;
     case 'mode': S.mode = b.dataset.v; render(); break;
     case 'reveal': S.revealed.add(+b.dataset.i); render(); break;
     case 'rehide': S.revealed = new Set(); render(); break;
@@ -4481,7 +4540,7 @@ document.addEventListener('click', e => {
     case 'fpo': { const f = document.querySelector(`input[data-act=fpt][data-k="${b.dataset.k}"]`); if (f) f.click(); break; }
     case 'fpdyn': { const f = document.createElement('input'); f.type = 'file'; f.accept = '.json,application/json'; f.click(); break; }
     case 'notestoggle': if (S.cards) co().notes = !co().notes; else saved.rehNotes = !saved.rehNotes; persist(); render(); break;
-    case 'audiotoggle': if (S.cards) co().audio = !co().audio; else S.audio = !S.audio; persist(); if (!audioOn()) stopSpeech(); else autoSpeak(); render(); break;
+    case 'audiotoggle': if (S.cards) co().audio = !co().audio; else if (S.ital) saved.italAudio = !italAudio(); else S.audio = !S.audio; persist(); if (!audioOn()) stopSpeech(); else autoSpeak(); render(); break;
     /* 2.07 essai 2 (367, M161) : « Répéter d'ici » déplie le choix du mode */
     case 'from': S.fromOpen = S.fromOpen === +b.dataset.i ? null : +b.dataset.i; render(); break;
     case 'fromm': { const i = +b.dataset.i, m = b.dataset.v; S.fromOpen = null; tmGuard(() => { S.missed = new Set(); S.rmode = m;
@@ -4514,19 +4573,20 @@ document.addEventListener('click', e => {
     case 'totext': stopSpeech(); S.started = false; S.tab = 'text'; render(); window.scrollTo(0,0); break;
     /* 2.07 (307) : Préparation de la scène */
     case 'prepopen': S.prepOpen = !S.prepOpen; render(); break;
-    case 'prepk': S.prepK = b.dataset.k; render(); break;
-    case 'prepclose': S.prepK = null; render(); break;
+    case 'prepk': S.prepK = b.dataset.k; render(); winIn(document.querySelector('.psh')); break;   /* essai 4 (M173 c) : monte depuis le bas */
+    case 'prepclose': prepCloseAnim(); break;   /* essai 4 : le panneau se replie vers le bas */
     case 'preptog': { const L = prepOf(b.dataset.k), x = L[+b.dataset.i]; if (x) { x.on = !x.on; persist(); prepKeep(render); } break; }
     /* 2.07 essai 2 (353, M160) : ✕ demande confirmation (Annuler + poubelle) ; sans réponse, la ligne revient après 3 s */
     case 'prepask': S.prepEd = null; S.prepDel = { k: b.dataset.k, i: +b.dataset.i }; prepDelArm(); prepKeep(render); break;
     case 'prepnodel': prepDelOff(); prepKeep(render); break;
     case 'prepdel': { const L = prepOf(b.dataset.k); L.splice(+b.dataset.i, 1); prepDelOff(); persist(); prepKeep(render); break; }
     /* 2.07 essai 2 (368, M157) : modifier un élément */
-    case 'prepedit': prepDelOff(); S.prepEd = { k: b.dataset.k, i: +b.dataset.i }; render(); { const n = document.getElementById('prepedin'); if (n) { n.focus({ preventScroll:true }); n.setSelectionRange(n.value.length, n.value.length); } } break;
+    case 'prepedit': prepDelOff(); S.prepEd = { k: b.dataset.k, i: +b.dataset.i }; prepKeep(render); { const n = document.getElementById('prepedin'); if (n) { n.focus({ preventScroll:true }); n.setSelectionRange(n.value.length, n.value.length); } } break;
     case 'prepsave': prepSave(); break;
     case 'prepadd': { const inp = document.getElementById('prepin'), t = inp ? inp.value.replace(/\s+/g, ' ').trim().slice(0, 80) : '';
       if (!t) { if (inp) inp.focus(); break; }
       saved.prep = saved.prep || {}; (saved.prep[b.dataset.k] = saved.prep[b.dataset.k] || []).push({ t, on:false }); persist(); render();
+      { const sc = document.querySelector('.psh .pscr'); if (sc) sc.scrollTop = sc.scrollHeight; }   /* essai 4 : la liste descend pour montrer le nouvel élément */
       const n = document.getElementById('prepin'); if (n) n.focus({ preventScroll:true }); break; }
     case 'bilsec': S.bilOpen = S.bilOpen === b.dataset.k ? null : b.dataset.k; render(); break;
     case 'biltab': S.bilTab = b.dataset.v; S.bilOpen = null; render(); break;   /* 2.07 (315) : onglets Évolution / Stables */
@@ -4592,6 +4652,7 @@ document.addEventListener('change', e => {
   /* 2.07 essai 3 : les options de l'Italienne passent ici (les interrupteurs ne déclenchent pas l'action au clic) */
   else if (a === 'italhide') { saved.italHide = t.checked; persist(); }
   else if (a === 'italgo') { saved.italGo = t.checked; persist(); }
+  else if (a === 'italaudio') { saved.italAudio = t.checked; persist(); }
   else if (a === 'cardsko') { co().ko = t.checked; persist(); }
   else if (a === 'cnotes') { co().notes = t.checked; persist(); }
   else if (a === 'caudio') { co().audio = t.checked; persist(); render(); }
@@ -4671,32 +4732,26 @@ try { rankSync(true); } catch(e) {}   /* 2.07 (316) : au démarrage, envoi forc�
 })();
 
 /* 2.07 essai 2 : outils de la Préparation */
-function prepKeep(fn){ const inp = document.getElementById('prepin'), had = inp && document.activeElement === inp, v = inp ? inp.value : ''; fn(); const n = document.getElementById('prepin'); if (n) { n.value = v; if (had) n.focus({ preventScroll:true }); } }
+function prepKeep(fn){ const inp = document.getElementById('prepin'), had = inp && document.activeElement === inp, v = inp ? inp.value : '', sc = document.querySelector('.psh .pscr'), top = sc ? sc.scrollTop : 0; fn();
+  const s2 = document.querySelector('.psh .pscr'); if (s2) s2.scrollTop = top;   /* essai 4 : la liste garde sa position */
+  const n = document.getElementById('prepin'); if (n) { n.value = v; if (had) n.focus({ preventScroll:true }); } }
 let prepDelT = null;
 function prepDelArm(){ clearTimeout(prepDelT); prepDelT = setTimeout(() => { if (S.prepDel) { S.prepDel = null; prepKeep(render); } }, 3000); }
 function prepDelOff(){ clearTimeout(prepDelT); S.prepDel = null; }
 function prepSave(){ const n = document.getElementById('prepedin'); if (!S.prepEd || !n) return; const x = prepOf(S.prepEd.k)[S.prepEd.i], t = n.value.replace(/\s+/g, ' ').trim().slice(0, 80);
-  if (x && t) { x.t = t; persist(); } S.prepEd = null; render(); }
+  if (x && t) { x.t = t; persist(); } S.prepEd = null; prepKeep(render); }
 
-/* 2.07 essai 3 (369) : glisser vers le bas depuis le haut du panneau Préparation le ferme, comme le grand minuteur (seuil 160 px, liste tout en haut) */
-(() => { let y0 = null, dy = 0, drag = false, lock = false, sh = null;
-  const canGo = t => { const s = t.closest('.psh'); if (!s || s.scrollTop > 0 || t.closest('input')) return null; return s; };
-  const reset = () => { if (sh) { sh.style.transition = ''; sh.style.transform = ''; } };
-  document.addEventListener('touchstart', e => { y0 = null; if (e.touches.length !== 1 || !e.target.closest) return; const s = canGo(e.target); if (!s) return; sh = s; y0 = e.touches[0].clientY; dy = 0; lock = false; }, { passive: true });
-  document.addEventListener('touchmove', e => { if (y0 === null || e.touches.length !== 1) return; const d = e.touches[0].clientY - y0;
-    if (!lock && d < -6) { y0 = null; return; }
-    if (d > 0 && e.cancelable) e.preventDefault();
-    dy = Math.max(0, d); if (dy > 6) { lock = true; sh.style.transition = 'none'; sh.style.transform = 'translateY(' + dy + 'px)'; } }, { passive: false });
-  document.addEventListener('touchend', () => { if (y0 === null) return; y0 = null; drag = dy > 6; if (drag) setTimeout(() => { drag = false; }, 400);
-    /* essai 3 : seuil = un tiers de la hauteur du panneau (au plus 160 px, comme le minuteur) ; le panneau finit de descendre (0,25 s) */
-    if (dy > Math.min(160, sh.offsetHeight / 3)) { sh.style.transition = 'transform .25s ease'; sh.style.transform = 'translateY(100%)'; const bg = document.querySelector('.psh-bg'); if (bg) { bg.style.transition = 'opacity .25s ease'; bg.style.opacity = '0'; }
-      setTimeout(() => { prepDelOff(); S.prepEd = null; S.prepK = null; render(); }, 250); } else reset(); });
-  document.addEventListener('touchcancel', () => { if (y0 === null) return; y0 = null; reset(); });
-  document.addEventListener('click', e => { if (drag && e.target.closest && e.target.closest('.psh,.psh-bg')) { drag = false; e.stopImmediatePropagation(); e.preventDefault(); } }, true);
-})();
+/* 2.07 essai 3 (369) : glisser vers le bas pour fermer la Préparation → fenetres.js (essai 4) */
 /* 2.07 essai 3 (352) : le bas du panneau reste collé au-dessus du clavier, même si le navigateur ne réduit pas la page */
 if (window.visualViewport) { const vv = visualViewport; const kb = () => { const k = Math.max(0, Math.round(innerHeight - vv.height - vv.offsetTop)); document.documentElement.style.setProperty('--kb', k + 'px'); };
   vv.addEventListener('resize', kb); vv.addEventListener('scroll', kb); kb(); }
+
+/* 2.07 essai 4 : fermer la Préparation en la repliant vers le bas (0,25 s), comme les Réglages : glissement, retour, fond */
+let prepClosing = false;
+function prepCloseAnim(){ const sh = document.querySelector('.psh'); const done = () => { prepClosing = false; prepDelOff(); S.prepEd = null; S.prepK = null; render(); };
+  if (!sh) return done(); if (prepClosing) return; prepClosing = true;
+  const a = document.activeElement; if (a && a.blur) a.blur();
+  winOut(sh, null, done); }   /* essai 4 : redescend (fenetres.js) */
 /* ===================== 2.04 : MINUTEUR DE RÉPÉTITION (claude/minuteur-integration.md + minuteur-2.04-decisions.md) =====================
    Éléments persistants hors de #app (#tm, #tmsheet, #tmalarm, #tmpre) : render() ne les détruit jamais.
    Temps calculé à partir d'horloges (fin de passage), jamais en comptant des ticks. Horloge « virtuelle » pour la vitesse du mode admin. */
@@ -4786,7 +4841,7 @@ function tmBuild(){
   if (TME) return;
   const bar = document.createElement('div'); bar.id = 'tm'; bar.className = 'tm-bar'; bar.hidden = true;
   bar.innerHTML = '<div class="tm-row"><span class="tm-rd"></span><span class="tm-tt"></span><button type="button" class="tm-pb" aria-label="Pause"><span class="tm-pbi"></span></button></div><div class="tm-pg"><i></i></div>';
-  bar.addEventListener('click', e => { tmUnlock(); if (e.target.closest('.tm-pb')) { tmToggle(); return; } tmOpenSheet(); });
+  bar.addEventListener('click', e => { tmUnlock(); if (e.target.closest('.tm-pb')) { tmToggle(); return; } tmOpenSheet(bar); });
   const sh = document.createElement('div'); sh.id = 'tmsheet'; sh.className = 'tm-sh'; sh.hidden = true; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-label', 'Minuteur');
   sh.addEventListener('click', tmSheetClick);
   const al = document.createElement('div'); al.id = 'tmalarm'; al.className = 'tm-al'; al.hidden = true; al.setAttribute('role', 'alertdialog');
@@ -4794,38 +4849,24 @@ function tmBuild(){
   const pre = document.createElement('div'); pre.id = 'tmpre'; pre.className = 'tm-pre';
   const go = document.createElement('div'); go.id = 'tmgo'; go.className = 'tm-pre tm-go';
   const to = document.createElement('div'); to.id = 'tmtoast'; to.className = 'tm-toast'; to.setAttribute('role', 'status'); to.innerHTML = TM_OFF + '<span>Minuteur arrêté</span>';
-  [bar, sh, al, pre, go, to].forEach(x => document.body.appendChild(x));
+  /* 2.07 essai 4 (M169 a, M172 b) : fenêtre qui sort du bouton du minuteur (ou de sa barre) et y retourne ; fond assombri */
+  const bk = document.createElement('div'); bk.id = 'tmbk'; bk.className = 'tm-bk'; bk.hidden = true; bk.addEventListener('click', () => tmCloseSheet(true));
+  sh.dataset.win = 'up'; sh.dataset.winclose = 'tmCloseSheet'; sh.dataset.winbg = '#tmbk';
+  [bar, bk, sh, al, pre, go, to].forEach(x => document.body.appendChild(x));
   /* 228 (essai 5) : une fois le halo joué, on retire « go » ; sinon changer le réglage Animations le rejouait */
   [pre, go].forEach(x => x.addEventListener('animationend', () => x.classList.remove('go')));
-  TME = { bar, sh, al };
-  /* glisser vers le bas ferme le grand minuteur ; 2.04 essai 3 (M81-1 B) : aussi depuis la liste des réglages quand elle est tout en haut
-     (au doigt : touchmove non passif, la page ne défile pas) ; vers le haut, la liste défile ; un glissement ne déclenche pas le bouton dessous */
-  let y0 = null, dy = 0, drag = false, lock = false;
-  const canGo = t => { const sb = t.closest('.tm-sb'); if (sb && sb.scrollTop > 0) return false; return !t.closest('.tm-stp button'); };
-  const dn = y => { y0 = y; dy = 0; lock = false; };
-  const mv = (y, e) => { if (y0 === null) return; const d = y - y0;
-    if (!lock && d < -6) { y0 = null; return; }
-    if (d > 0 && e && e.cancelable) e.preventDefault();   /* 225 (essai 5) : dès le premier mouvement vers le bas, sinon le navigateur prend le geste pour faire défiler la liste */
-    dy = Math.max(0, d); if (dy > 6) { lock = true; sh.style.transition = 'none'; sh.style.transform = 'translateY(' + dy + 'px)'; } };
-  const up = () => { if (y0 === null) return; y0 = null; drag = dy > 6; if (dy > 160) tmCloseSheet(true);   /* 214 / 225 : 160 px (essai 5) */ else { sh.style.transition = ''; sh.style.transform = ''; } };
-  const cancel = () => { if (y0 === null) return; y0 = null; sh.style.transition = ''; sh.style.transform = ''; };
-  sh.addEventListener('touchstart', e => { if (e.touches.length !== 1 || !canGo(e.target)) { y0 = null; return; } dn(e.touches[0].clientY); }, { passive: true });
-  sh.addEventListener('touchmove', e => { if (e.touches.length === 1) mv(e.touches[0].clientY, e); }, { passive: false });
-  sh.addEventListener('touchend', up); sh.addEventListener('touchcancel', cancel);
-  sh.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse' && canGo(e.target)) dn(e.clientY); });
-  window.addEventListener('pointermove', e => { if (e.pointerType === 'mouse') mv(e.clientY, null); });
-  window.addEventListener('pointerup', e => { if (e.pointerType === 'mouse') up(); });
-  sh.addEventListener('click', e => { if (drag) { drag = false; e.stopPropagation(); e.preventDefault(); } }, true);
+  TME = { bar, sh, al, bk };
+  /* 2.07 essai 4 : le glissement (pousser vers le haut pour ranger la fenêtre) est géré par fenetres.js */
   document.addEventListener('pointerdown', () => { if (TMS || tmOpen) tmUnlock(); }, true);
 }
-function tmOpenSheet(){ tmBuild(); tmOpen = true; document.documentElement.classList.add('tmlock'); tmShKey = ''; tmPaint(); try { navSave(); } catch(e) {} }
+function tmOpenSheet(src){ tmBuild(); const was = tmOpen; tmOpen = true; document.documentElement.classList.add('tmlock'); tmShKey = ''; tmPaint(); try { navSave(); } catch(e) {}
+  if (!was) winIn(TME.sh, (src && src.getBoundingClientRect ? src : null) || winVis('.tm-ic')); }   /* 2.07 essai 4 : sort du bouton (ou de la barre) */
 function tmCloseSheet(anim){
   const sh = TME && TME.sh;
   /* 2.04 essai 3 (M81-1 B) : la fiche finit de descendre (glissement, flèche « Réduire ») ; la croix des réglages ferme d'un coup */
-  if (anim && sh && !sh.hidden) {   /* 228 (essai 5) : la fiche glisse quel que soit le réglage Animations */
+  if (anim && sh && !sh.hidden) {   /* 2.07 essai 4 : la fenêtre retourne dans la barre du minuteur (s'il tourne) ou dans son bouton */
     if (tmClosing) return; tmClosing = true;
-    sh.style.transition = 'transform .25s ease'; sh.style.transform = 'translateY(100%)';
-    setTimeout(() => { tmClosing = false; tmCloseSheet(false); }, 250); return; }
+    winOut(sh, (TMS && winVis('.tm-bar')) || winVis('.tm-ic'), () => { tmClosing = false; tmCloseSheet(false); }); return; }
   tmOpen = false; document.documentElement.classList.remove('tmlock'); tmArm = 0; tmPaint();
   if (sh) { sh.style.transition = ''; sh.style.transform = ''; }
 }
@@ -4850,7 +4891,7 @@ function tmPaint(){
     const run = ph === 'run'; if (pb._run !== run) { pb._run = run; pb.querySelector('.tm-pbi').innerHTML = run ? TM_PA : TM_PL; pb.setAttribute('aria-label', run ? 'Pause' : 'Reprendre'); }
   }
   /* grand minuteur */
-  sh.hidden = !tmOpen; document.documentElement.classList.toggle('tmlock', tmOpen);
+  sh.hidden = !tmOpen; if (TME.bk) TME.bk.hidden = !tmOpen; document.documentElement.classList.toggle('tmlock', tmOpen);
   { const de = document.documentElement, rm = animMode() !== 'on'; if (de.hasAttribute('data-tmrm') !== rm) de.toggleAttribute('data-tmrm', rm); }
   if (tmOpen) { if (!TMS) { const k = 'set' + JSON.stringify(tmCfg()); if (tmShKey !== k) { tmShKey = k; sh.innerHTML = tmSetupHTML(); } } else tmRunUI(sh); }
   /* alerte de fin de passage (Minuteur-M33, halo doux) */
@@ -4883,7 +4924,7 @@ function tmSetupHTML(){
 function tmRunUI(sh){
   const st = tmState(), N = st.N, ar = tmArm > Date.now();
   if (tmShKey !== 'run' + N) { tmShKey = 'run' + N;
-    sh.innerHTML = `<div class="tm-hd"><h2 class="tm-ti"></h2><button type="button" class="ib" data-tmx="fold" aria-label="Réduire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
+    sh.innerHTML = `<div class="tm-hd"><h2 class="tm-ti"></h2><button type="button" class="ib" data-tmx="fold" aria-label="Réduire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
       <div class="tm-sb tm-rsb"><div class="tm-ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="tm-bg" cx="50" cy="50" r="46"/><circle class="tm-fg" cx="50" cy="50" r="46" stroke-dasharray="289.03" stroke-dashoffset="289.03"/></svg>
         <button type="button" class="tm-rc" data-tmx="toggle" aria-label="Pause ou reprise"><span class="tm-big"></span><span class="tm-cap"></span><span class="tm-pi"></span></button></div>
         <div class="tm-seg">${Array.from({ length: N }, (_, i) => `<i><b data-tseg="${i}"></b></i>`).join('')}</div></div>
@@ -4906,8 +4947,7 @@ function tmSheetClick(e){
   if (d && !TMS) { const c = tmCfg(), k = d.dataset.tmd, n = +d.dataset.n, L = k === 'dur' ? TM_DURS : k === 'pause' ? TM_PAUSES : k === 'warn' ? TM_WARNS : [1,2,3,4,5,6,7,8,9,10];
     c[k] = L[Math.min(L.length - 1, Math.max(0, L.indexOf(c[k]) + n))]; persist(); tmPaint(); return; }
   if (!x) return; const a = x.dataset.tmx;
-  if (a === 'close') tmCloseSheet();
-  else if (a === 'fold') tmCloseSheet(true);
+  if (a === 'close' || a === 'fold') tmCloseSheet(true);   /* 2.07 essai 4 : la croix range aussi la fenêtre dans son bouton */
   else if (a === 'go') { tmUnlock(); tmStart(0); }
   else if (a === 'test') tmBeep(3);
   else if (a === 'toggle') tmToggle();
