@@ -990,8 +990,17 @@ html:has(.psh),html:has(.psh) body{overflow:hidden;overscroll-behavior:none}   /
 .psh .pscr{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;padding:0 16px}
 .psh .snadd{flex:none;margin:0;border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:var(--card)}
 /* essai 4 : Italienne, deux boutons de même largeur ; M171 b : onglets de « Répliques à travailler » */
-.arow.half>.btn{flex:1 1 0;min-width:0}
+.actions .arow.half>.btn.btn{flex:1 1 0;min-width:0}   /* essai 5 : passe devant la règle « Révéler » plus large (1,18) */
 .wbt{margin:4px 0 0;border-bottom:1px solid var(--line)}.wbt button{margin-bottom:-1px;display:inline-flex;align-items:center;justify-content:center;gap:5px}.wbt + .wl{border-top:0;margin-top:0}
+.sh-win .sh-head{margin:4px -4px 0 0}   /* essai 5 : ✕ des Réglages à la même place que celle du minuteur (14 px du haut, 12 px du bord) */
+/* essai 5 (essai 4 · 4) : les réglages du minuteur s'adaptent à la hauteur de l'écran (--tmk, calculé par tmFit) pour tenir sans défiler */
+#tmsheet .tm-stp{min-height:calc(var(--tmk,1) * 54px);margin-bottom:calc(var(--tmk,1) * 8px);padding-top:calc(var(--tmk,1) * 5px);padding-bottom:calc(var(--tmk,1) * 5px)}
+#tmsheet .tm-stp button{width:calc(var(--tmk,1) * 44px);height:calc(var(--tmk,1) * 44px)}
+#tmsheet .tm-sw{min-height:calc(var(--tmk,1) * 50px);margin-bottom:calc(var(--tmk,1) * 8px);padding-top:calc(var(--tmk,1) * 6px);padding-bottom:calc(var(--tmk,1) * 6px)}
+#tmsheet .tm-test{min-height:calc(var(--tmk,1) * 48px)}
+#tmsheet .tm-sb .lbl{margin-bottom:calc(var(--tmk,1) * 8px)}
+/* M175 a : onglet vide */
+.wnone{padding:14px 2px 6px;text-align:center;font-size:var(--fs-13);color:var(--mute)}
 </style>
 </head>
 <body>
@@ -2873,7 +2882,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 142, APP_LABEL = '2.07 · essai 4'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 143, APP_LABEL = '2.07 · essai 5'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -3506,7 +3515,7 @@ function weakList(s, st, k){
   const list = tab === 'ko' ? ko : stl;
   return `<div class="weak ${open ? 'open' : ''}" data-act="noop"><button class="wsum" data-act="weaktog" data-k="${esc(k)}" aria-expanded="${open}">Répliques à travailler (${ko.length + stl.length})<span class="wch">▾</span></button>
     ${open ? `<div class="btabs wbt" role="tablist"><button role="tab" aria-selected="${tab === 'ko'}" class="${tab === 'ko' ? 'on' : ''}" data-act="weaktab" data-k="${esc(k)}" data-v="ko">À répéter (${ko.length})</button><button role="tab" aria-selected="${tab === 'stale'}" class="${tab === 'stale' ? 'on' : ''}" data-act="weaktab" data-k="${esc(k)}" data-v="stale">${CLOCK} À rafraîchir (${stl.length})</button></div>
-      ${list.map(row).join('')}
+      ${list.map(row).join('') || `<div class="wnone">Aucune réplique ${tab === 'ko' ? 'à répéter' : 'à rafraîchir'}.</div>`}
       ${list.length ? `<button class="btn sm soft iconb wcards" data-act="weakcards" data-k="${esc(k)}" data-v="${tab}">${ICO_CARDS}<span>Réviser ${list.length > 1 ? 'ces ' + list.length + ' répliques' : 'cette réplique'} en cartes</span></button>` : ''}` : ''}</div>`;
 }
 const sceneRow = (p, s) => {
@@ -4893,7 +4902,7 @@ function tmPaint(){
   /* grand minuteur */
   sh.hidden = !tmOpen; if (TME.bk) TME.bk.hidden = !tmOpen; document.documentElement.classList.toggle('tmlock', tmOpen);
   { const de = document.documentElement, rm = animMode() !== 'on'; if (de.hasAttribute('data-tmrm') !== rm) de.toggleAttribute('data-tmrm', rm); }
-  if (tmOpen) { if (!TMS) { const k = 'set' + JSON.stringify(tmCfg()); if (tmShKey !== k) { tmShKey = k; sh.innerHTML = tmSetupHTML(); } } else tmRunUI(sh); }
+  if (tmOpen) { if (!TMS) { const k = 'set' + JSON.stringify(tmCfg()); if (tmShKey !== k) { tmShKey = k; sh.innerHTML = tmSetupHTML(); tmFit(); } } else tmRunUI(sh); }
   /* alerte de fin de passage (Minuteur-M33, halo doux) */
   const alarm = TMS && (TMS.ph === 'alarm' || TMS.ph === 'done');
   al.hidden = !alarm;
@@ -4988,6 +4997,13 @@ function showRecovery(){
 try { if (tryRestoreNav()) { render(); navScroll(); } else render(); } catch(e) { try { render(); } catch(e2) { showRecovery(); } }
 if (restoredFromBak) { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {} flashMsg('Données abîmées : la dernière sauvegarde automatique a été restaurée.'); }
 try { if (sessionStorage.getItem('repete.reopenSet')) { sessionStorage.removeItem('repete.reopenSet'); S.shInstant = true; openSettings(); } } catch(e) {}
+
+/* 2.07 essai 5 : les réglages du minuteur rapetissent (jusqu'à 70 %) pour tenir dans l'écran sans défiler */
+function tmFit(){ const sh = TME && TME.sh; if (!sh || sh.hidden || TMS) return; const sb = sh.querySelector('.tm-sb'); if (!sb) return;
+  sh.style.setProperty('--tmk', '1'); const over = sb.scrollHeight - sb.clientHeight; if (over <= 0) return;
+  let tot = 0; sb.querySelectorAll('.tm-stp,.tm-sw,.tm-test').forEach(e => { const cs = getComputedStyle(e); tot += e.offsetHeight + parseFloat(cs.marginBottom || 0); });
+  if (tot > 0) sh.style.setProperty('--tmk', String(Math.max(.7, 1 - (over + 4) / tot).toFixed(3))); }
+window.addEventListener('resize', () => { try { tmFit(); } catch(e) {} });
 </script>
 <script>
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
