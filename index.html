@@ -1001,6 +1001,9 @@ html:has(.psh),html:has(.psh) body{overflow:hidden;overscroll-behavior:none}   /
 #tmsheet .tm-sb .lbl{margin-bottom:calc(var(--tmk,1) * 8px)}
 /* M175 a : onglet vide */
 .wnone{padding:14px 2px 6px;text-align:center;font-size:var(--fs-13);color:var(--mute)}
+/* essai 7 (M174 c) : alertes du minuteur repliées sur une ligne, seulement si l'écran est trop petit */
+.tmfold{display:flex;align-items:center;gap:10px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:var(--r-12);padding:6px 14px;min-height:calc(var(--tmk,1) * 54px);margin-top:calc(var(--tmk,1) * 6px);font:600 16px system-ui,sans-serif;color:var(--ink);text-align:left}
+.tmfold span{flex:1}.tmfold small{display:block;font-weight:500;font-size:13px;color:var(--mute)}.tmfold svg{color:var(--mute);flex:none}
 </style>
 </head>
 <body>
@@ -2890,7 +2893,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 144, APP_LABEL = '2.07 · essai 6'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 145, APP_LABEL = '2.07 · essai 7'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -3693,11 +3696,12 @@ async function rankPost(body){
     try { await fetch(RANK_URL, Object.assign({ mode:'no-cors' }, opt)); return { ok:true, blind:true }; } catch(y) { return null; } }
 }
 async function rankSend(force){
-  const r = rk(); if (ADMIN || !r.on || !rankClean(r.pseudo) || rankBusy) return;
+  const r = rk(); if (ADMIN || !r.on || !rankClean(r.pseudo)) return;
+  if (rankBusy) return rankP;   /* essai 7 : un envoi déjà en cours → on attend sa fin */
   if (!force && Date.now() - r.last < RANK_EVERY) return;
   if (!navigator.onLine) return;
   rankBusy = true;
-  const j = await rankPost(rankPayload());
+  rankP = rankPost(rankPayload()); const j = await rankP;
   rankBusy = false;
   if (j && j.ok) { r.last = Date.now(); rankErr = ''; } else rankErr = j && j.error ? j.error : 'net';
   persist(); if (S.view === 'rank') rankLoad();   /* essai 6 : un envoi qui se termine pendant qu'on regarde le classement relit la liste (avant : seulement le bas de page) */
@@ -3717,9 +3721,10 @@ async function rankLoad(){
 }
 /* 2.07 (316) : force = envoyer même si le dernier envoi date de moins d'une minute ; la liste n'est lue qu'APRÈS l'envoi
    (avant, les deux partaient en même temps et la liste pouvait revenir avec ses anciens chiffres). */
-function rankSync(force){ if (ADMIN) return; const r = rk(); let p = Promise.resolve();
+let rankP = null;
+function rankSync(force){ if (ADMIN) return Promise.resolve(); const r = rk(); let p = Promise.resolve();
   if (r.del) p = rankDelete(); else if (r.on) p = rankSend(force);
-  if (S.view === 'rank') p.then(rankLoad, rankLoad); }
+  return S.view === 'rank' ? p.then(rankLoad, rankLoad) : p; }
 /* 2.07 (316) : un envoi bloqué par la limite d'une minute est reprogrammé à la fin de la minute (avant, il était perdu). */
 function rankSoon(){ if (ADMIN || !saved.rank || !saved.rank.on) return; clearTimeout(rankT);
   const wait = Math.max(5000, RANK_EVERY - (Date.now() - (rk().last || 0)) + 500); rankT = setTimeout(() => rankSend(), wait); }
@@ -3783,7 +3788,7 @@ function rankCard(){
 }
 function rankView(){
   const r = rk(), c = r.cache;
-  let h = `<div class="bhead"><button class="ghost back" data-act="rankback" aria-label="Retour">${BACK}</button><h2>Classement</h2><button class="ghost" data-act="rankrefresh">Actualiser</button></div>
+  let h = `<div class="bhead"><button class="ghost back" data-act="rankback" aria-label="Retour">${BACK}</button><h2>Classement</h2>${S.rankUpd ? '<button class="ghost" data-act="rankrefresh" disabled>Mise à jour…</button>' : '<button class="ghost" data-act="rankrefresh">Actualiser</button>'}</div>
     <p class="mute small" style="margin:-4px 2px 12px">${esc(saved.profile)}</p>`;
   if (ADMIN) return h + '<section class="card"><p class="mute">Profil de test : le classement est désactivé (rien n’est envoyé).</p></section>';
   const info = `<div class="infobox" style="margin-top:10px"><p><b>Qu’est-ce qui est envoyé ?</b> Seuls ton pseudo et tes chiffres de progression : niveau, maîtrise globale, série, badges et nombre de répliques entraînées (chaque réponse compte). Aucun texte, aucun nom.</p>
@@ -4423,9 +4428,9 @@ document.addEventListener('click', e => {
     case 'mytexts': { const y = window.scrollY; S.myTexts = !S.myTexts; render(); window.scrollTo(0, y); break; }   /* 2.06 essai 2 (M93 C) */
     case 'importdel': { const pl = b.dataset.play, sc = b.dataset.scene; appConfirm('Supprimer ce texte de ce téléphone ?', 'Supprimer', () => { impDelete(pl, sc); render(); }, true); break; }
     case 'progressopen': S.view = 'progress'; S.menuK = null; S.infoObj = false; render(); window.scrollTo(0, 0); break;
-    case 'rankopen': S.view = 'rank'; render(); window.scrollTo(0, 0); rankSync(true); break;   /* 2.07 (316) : envoie ses chiffres, puis lit la liste (comme « Actualiser ») */
-    case 'rankrefresh': { if (b.disabled) break; b.disabled = true; b.textContent = 'Actualisation…';
-      (rk().on && rankClean(rk().pseudo) ? rankSend(true) : Promise.resolve()).then(rankLoad).then(() => { const x = document.querySelector('[data-act=rankrefresh]'); if (x) { x.disabled = false; x.textContent = 'Actualiser'; } }); break; }
+    case 'rankopen': S.view = 'rank'; S.rankUpd = !ADMIN; render(); window.scrollTo(0, 0); rankSync(true).finally(rankUpdEnd); break;   /* essai 7 (M176 b) : « Mise à jour… » pendant l'envoi et la lecture */   /* 2.07 (316) : envoie ses chiffres, puis lit la liste (comme « Actualiser ») */
+    case 'rankrefresh': { if (b.disabled) break; S.rankUpd = true; b.disabled = true; b.textContent = 'Mise à jour…';   /* essai 7 : même « Mise à jour… » que l'ouverture */
+      (rk().on && rankClean(rk().pseudo) ? rankSend(true) : Promise.resolve()).then(rankLoad).finally(rankUpdEnd); break; }
     case 'inforank': e.preventDefault(); S.infoRank = !S.infoRank; render(); break;   /* 2.06 essai 5 (M96 b) : dans le libellé, ne bascule pas l'interrupteur */
     case 'rankback': navBack(); break;
     case 'rankrow': { const k = b.dataset.p; rankOpen.has(k) ? rankOpen.delete(k) : rankOpen.add(k); const el = b.closest('.rkp'); if (el) { el.classList.toggle('open'); b.setAttribute('aria-expanded', rankOpen.has(k)); } break; }
@@ -4769,6 +4774,9 @@ function prepCloseAnim(){ const sh = document.querySelector('.psh'); const done 
   if (!sh) return done(); if (prepClosing) return; prepClosing = true;
   const a = document.activeElement; if (a && a.blur) a.blur();
   winOut(sh, null, done); }   /* essai 4 : redescend (fenetres.js) */
+
+/* essai 7 (M176 b) : fin de « Mise à jour… » sans redessiner l'écran (ne coupe pas une saisie du pseudo) */
+function rankUpdEnd(){ S.rankUpd = false; const x = document.querySelector('[data-act=rankrefresh]'); if (x) { x.disabled = false; x.textContent = 'Actualiser'; } }
 /* ===================== 2.04 : MINUTEUR DE RÉPÉTITION (claude/minuteur-integration.md + minuteur-2.04-decisions.md) =====================
    Éléments persistants hors de #app (#tm, #tmsheet, #tmalarm, #tmpre) : render() ne les détruit jamais.
    Temps calculé à partir d'horloges (fin de passage), jamais en comptant des ticks. Horloge « virtuelle » pour la vitesse du mode admin. */
@@ -4876,7 +4884,7 @@ function tmBuild(){
   /* 2.07 essai 4 : le glissement (pousser vers le haut pour ranger la fenêtre) est géré par fenetres.js */
   document.addEventListener('pointerdown', () => { if (TMS || tmOpen) tmUnlock(); }, true);
 }
-function tmOpenSheet(src){ tmBuild(); const was = tmOpen; tmOpen = true; document.documentElement.classList.add('tmlock'); tmShKey = ''; tmPaint(); try { navSave(); } catch(e) {}
+function tmOpenSheet(src){ tmBuild(); const was = tmOpen; if (!was) { tmAlFold = false; tmAlOpen = false; } tmOpen = true; document.documentElement.classList.add('tmlock'); tmShKey = ''; tmPaint(); try { navSave(); } catch(e) {}
   if (!was) winIn(TME.sh, (src && src.getBoundingClientRect ? src : null) || winVis('.tm-ic')); }   /* 2.07 essai 4 : sort du bouton (ou de la barre) */
 function tmCloseSheet(anim){
   const sh = TME && TME.sh;
@@ -4934,8 +4942,9 @@ function tmSetupHTML(){
   const sw = (k, n, dis) => `<label class="sw tm-sw"><input type="checkbox" data-tms="${k}" ${c[k] && !dis ? 'checked' : ''} ${dis ? 'disabled' : ''}> ${n}</label>`;
   return `<div class="tm-hd"><h2>Minuteur</h2><button type="button" class="ib" data-tmx="close" aria-label="Fermer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
     <div class="tm-sb"><div class="lbl" style="margin-top:6px">Temps</div>${stp('dur', 'Durée')}${stp('passages', 'Passages')}${stp('pause', 'Pause')}${stp('warn', 'Préavis')}
-    <div class="lbl" style="margin-top:14px">Alertes</div>${sw('sound', 'Alarme sonore')}${sw('vib', 'Vibration', !vibOk)}${sw('flash', 'Clignotement')}
-    <button type="button" class="btn tm-test" data-tmx="test">Tester l’alarme</button></div>
+    ${tmAlFold ? `<button type="button" class="tmfold" data-tmx="alerts" aria-expanded="${tmAlOpen}"><span>Alertes<small>${[c.sound && 'Son', c.vib && vibOk && 'Vibration', c.flash && 'Clignotement'].filter(Boolean).join(' · ') || 'Aucune'}</small></span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"${tmAlOpen ? ' style="transform:rotate(180deg)"' : ''}><path d="M6 9l6 6 6-6"/></svg></button>` : ''}
+    ${!tmAlFold || tmAlOpen ? `<div class="lbl" style="margin-top:14px">Alertes</div>${sw('sound', 'Alarme sonore')}${sw('vib', 'Vibration', !vibOk)}${sw('flash', 'Clignotement')}
+    <button type="button" class="btn tm-test" data-tmx="test">Tester l’alarme</button>` : ''}</div>
     <div class="tm-ft"><button type="button" class="btn pri tm-full" data-tmx="go">${TM_PL} Démarrer · ${c.passages} × ${c.dur} min</button></div>`;
 }
 function tmRunUI(sh){
@@ -4964,6 +4973,7 @@ function tmSheetClick(e){
   if (d && !TMS) { const c = tmCfg(), k = d.dataset.tmd, n = +d.dataset.n, L = k === 'dur' ? TM_DURS : k === 'pause' ? TM_PAUSES : k === 'warn' ? TM_WARNS : [1,2,3,4,5,6,7,8,9,10];
     c[k] = L[Math.min(L.length - 1, Math.max(0, L.indexOf(c[k]) + n))]; persist(); tmPaint(); return; }
   if (!x) return; const a = x.dataset.tmx;
+  if (a === 'alerts') { tmAlOpen = !tmAlOpen; tmShKey = ''; tmPaint(); return; }   /* essai 7 : alertes repliées (très petits écrans) */
   if (a === 'close' || a === 'fold') tmCloseSheet(true);   /* 2.07 essai 4 : la croix range aussi la fenêtre dans son bouton */
   else if (a === 'go') { tmUnlock(); tmStart(0); }
   else if (a === 'test') tmBeep(3);
@@ -5010,7 +5020,10 @@ try { if (sessionStorage.getItem('repete.reopenSet')) { sessionStorage.removeIte
 function tmFit(){ const sh = TME && TME.sh; if (!sh || sh.hidden || TMS) return; const sb = sh.querySelector('.tm-sb'); if (!sb) return;
   sh.style.setProperty('--tmk', '1'); const over = sb.scrollHeight - sb.clientHeight; if (over <= 0) return;
   let tot = 0; sb.querySelectorAll('.tm-stp,.tm-sw,.tm-test').forEach(e => { const cs = getComputedStyle(e); tot += e.offsetHeight + parseFloat(cs.marginBottom || 0); });
-  if (tot > 0) sh.style.setProperty('--tmk', String(Math.max(.7, 1 - (over + 4) / tot).toFixed(3))); }
+  if (tot > 0) sh.style.setProperty('--tmk', String(Math.max(.7, 1 - (over + 4) / tot).toFixed(3)));
+  /* essai 7 (M174 c, très petits écrans) : si ça ne tient toujours pas à 70 %, les alertes se replient sur une ligne */
+  if (!tmAlFold && sb.scrollHeight - sb.clientHeight > 0) { tmAlFold = true; tmAlOpen = false; sh.innerHTML = tmSetupHTML(); tmShKey = 'set' + JSON.stringify(tmCfg()); tmFit(); } }
+let tmAlFold = false, tmAlOpen = false;
 window.addEventListener('resize', () => { try { tmFit(); } catch(e) {} });
 </script>
 <script>
