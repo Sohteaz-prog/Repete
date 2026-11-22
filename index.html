@@ -947,6 +947,7 @@ html.tmlock,html.tmlock body{overflow:hidden;overscroll-behavior:none}
 .hd.hdc{position:relative}
 .bkl{margin:-2px 0 8px}
 .bksw{margin:10px 0 6px}
+.bksub{display:block;font-weight:400}
 .hdpw{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex}
 .hdp{white-space:nowrap;flex:none;display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 11px 0 9px;border-radius:999px;border:0;background:var(--accent-bg);color:var(--accent-ink);box-shadow:inset 0 0 0 1.5px var(--accent);font-weight:700;font-size:var(--fs-13);position:relative;margin:0}
 .hdp::after{content:"";position:absolute;inset:-6px -4px}
@@ -2484,14 +2485,14 @@ function sheetInner(){
       <div class="mute small bkl">${esc(bkLine())}</div>
       <button class="btn sm soft dbt" data-act="expall">${IC_DL}<span>Sauvegarder</span></button>
       <span class="btn sm dbt dout fpv" role="button">${IC_UL}<span>Restaurer</span><input type="file" accept=".json,application/json" data-act="impall" class="fpvi"></span>
-      <label class="sw bksw"><input type="checkbox" data-act="bkrem" ${bkInit().off ? '' : 'checked'}> Me rappeler de sauvegarder (tous les 30 jours)</label>
+      <label class="sw bksw"><input type="checkbox" data-act="bkrem" ${bkInit().off ? '' : 'checked'}> <span>Me rappeler de sauvegarder<span class="mute small bksub">Tous les 30 jours</span></span></label>
       <button class="dfold" data-act="dfold" aria-expanded="${!!S.dFold}">Un seul élément<svg class="dch" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
       ${S.dFold ? `<div class="dit"><b>Progression</b><button class="dsq" data-act="expprog" aria-label="Exporter ma progression">${IC_DL}</button><span class="dsq fpv" aria-label="Importer une progression" role="button">${IC_UL}<input type="file" accept=".json,application/json" data-act="impprog" class="fpvi"></span></div>
       <div class="dit"><b>Notes</b><button class="dsq" data-act="expnotes" aria-label="Exporter mes notes">${IC_DL}</button><span class="dsq fpv" aria-label="Importer des notes" role="button">${IC_UL}<input type="file" accept=".json,application/json" data-act="impnotes" class="fpvi"></span></div>` : ''}`)}
       ${updateBlock()}
       ${ADMIN ? admPanel() : `<div class="admtap" data-act="admtap">Répète · v${APP_LABEL}</div>${S.admAsk ? `<div class="admask"><input id="admcode" type="password" inputmode="numeric" autocomplete="off" placeholder="Code" aria-label="Code"><button class="ghost" data-act="admgo">OK</button></div>${S.admErr ? '<div class="mute small">Code incorrect.</div>' : ''}` : ''}`}`;
 }
-/* 2.07 essai 4 : quand l'appli revient au premier plan (ou toutes les 30 min si elle reste ouverte), demander au navigateur
+/* 2.07 essai 4 : quand l'appli revient au premier plan (ou toutes les 5 min si elle reste affichée, essai 3 de la 2.08), demander au navigateur
    de vérifier s'il y a une nouvelle version ; sinon une appli laissée ouverte ne voyait jamais la pastille « Mise à jour ». Au plus une fois par minute. */
 let updLast = 0;
 function updCheckSoon(){ const n = Date.now(); if (n - updLast < 15000 || !('serviceWorker' in navigator)) return; updLast = n;
@@ -2506,7 +2507,7 @@ function updApply(){ const go = () => location.reload(); if (!('serviceWorker' i
   navigator.serviceWorker.getRegistration().then(r => { if (!r) return fin(); const w = r.waiting || r.installing;
     if (w) { if (w.state === 'activated') return fin(); w.addEventListener('statechange', () => { if (w.state === 'activated') fin(); }); return; }
     return r.update().then(() => { const w2 = r.installing || r.waiting; if (!w2) return fin(); w2.addEventListener('statechange', () => { if (w2.state === 'activated') fin(); }); }); }).catch(fin); }
-try { document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') updCheckSoon(); }); setInterval(updCheckSoon, 30 * 60000); } catch(e) {}
+try { document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') updCheckSoon(); }); setInterval(() => { if (document.visibilityState === 'visible') updCheckSoon(); }, 5 * 60000); } catch(e) {}   /* essai 3 (417) : toutes les 5 min tant que l'appli est affichée */
 /* ---- Animations : déclencheurs et file d'attente (les visuels seront branchés dans ANIM) ---- */
 const ANIM = {};   /* ANIM.applause / ANIM.title / ANIM.badge = (data, {animate}) => Promise. Absent = rien ne s'affiche. */
 const ANIM_MODES = [['on','Activées'],['off','Réduites'],['none','Désactivées']];
@@ -2857,6 +2858,7 @@ function admPanel(){
       <button class="admb" style="width:100%;margin-top:8px" data-act="admwarn">Tester un message d’erreur</button>
       <button class="admb" style="width:100%;margin-top:8px" data-act="admtts">${S.tts.status === 'silent' && S.tts.msg === 'test admin' ? 'Retirer' : 'Tester'} l’avertissement « aucun son détecté »</button>
       <button class="admb" style="width:100%;margin-top:8px" data-act="admsavefail">Tester le message « enregistrement impossible »</button>
+      <button class="admb" style="width:100%;margin-top:8px" data-act="admbk">Tester : rappel de sauvegarde (pastille)</button>
       <div class="lbl" style="margin:14px 0 6px">Journal du bouton retour (40 derniers)</div>
       <pre class="blog" id="blogtxt">${esc(blogRead().slice().reverse().join('\n') || 'Vide.')}</pre>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><button class="admb" data-act="blogrf">Actualiser</button><button class="admb" data-act="blogcp">Copier</button><button class="admb" data-act="blogclr">Vider</button></div>
@@ -2905,7 +2907,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 148, APP_LABEL = '2.08 · essai 2'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 149, APP_LABEL = '2.08 · essai 3'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -3058,7 +3060,10 @@ function exportAll(){
    « Plus tard » : revient 3 jours plus tard, au changement de journée (4 h). « Ne plus me le rappeler » coupe l'interrupteur des Réglages.
    saved.bk = { from, last, ans, snooze, off } (dates de today()). */
 const BK_DAYS = 30, BK_LATER = 3, BK_GOAL = 7;
-function bkInit(){ if (!saved.bk || typeof saved.bk !== 'object' || Array.isArray(saved.bk)) saved.bk = {}; if (!saved.bk.from) saved.bk.from = today(); return saved.bk; }
+function bkInit(){ if (!saved.bk || typeof saved.bk !== 'object' || Array.isArray(saved.bk)) saved.bk = {}; const b = saved.bk, d = today(); if (!b.from) b.from = d;
+  /* essai 3 (419) : une date du futur (horloge qui a sauté, « Jour +n » de l'admin puis retour au jour réel) est ramenée à aujourd'hui */
+  if (daysBetween(d, b.from) > 0) b.from = d; if (b.last && daysBetween(d, b.last) > 0) b.last = d;
+  if (b.snooze && daysBetween(d, b.snooze) > BK_LATER) b.snooze = bkAdd(d, BK_LATER); return b; }
 const bkAdd = (s, n) => { const [y, m, d] = s.split('-').map(Number); return ymd(new Date(y, m - 1, d + n)); };
 function bkDue(){ const b = bkInit(), d = today();
   if (b.off || !((saved.nAns | 0) > (b.ans | 0))) return false;
@@ -4576,6 +4581,7 @@ document.addEventListener('click', e => {
     case 'ttshelp': S.ttsHelp = true; render(); break;   /* 2.06 essai 4 (M95-4 c) */
     case 'ttsclose': S.ttsOff = S.tts; S.ttsHelp = false; render(); break;
     case 'admsavefail': closeSettings(); saveFailMsg(); break;
+    case 'admbk': { const k = bkInit(); Object.assign(k, { from: bkAdd(today(), -BK_DAYS), last: null, snooze: null, off: false, ans: (saved.nAns | 0) - 1 }); persist(); closeSettings(); S.view = 'library'; render(); break; }   /* 2.08 essai 3 (419) */
     /* 2.07 (312 / 318) : journal du bouton retour */
     case 'blogrf': renderSheet(); break;
     case 'blogcp': { const t = blogRead().join('\n'); try { navigator.clipboard.writeText(t).then(() => flashMsg('Journal copié'), () => flashMsg('Copie impossible')); } catch(e) { flashMsg('Copie impossible'); } break; }
