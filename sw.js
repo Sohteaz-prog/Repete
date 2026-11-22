@@ -1,5 +1,5 @@
 /* Répète — hors ligne. Changer le numéro de CACHE à chaque mise à jour des fichiers listés. */
-const CACHE = 'repete-v147';
+const CACHE = 'repete-v148';
 const FILES = [
   './', './index.html', './manifest.webmanifest',
   './icon-192.png', './icon-512.png', './icon-maskable-512.png',
@@ -37,7 +37,9 @@ self.addEventListener('fetch', e => {
   const nav = req.mode === 'navigate';
   const shell = () => caches.match('./index.html').then(r => r || caches.match('./'));
   const fromCache = () => caches.match(req, { ignoreSearch: nav }).then(r => r || (nav ? shell() : undefined));
-  if (req.cache === 'reload' || req.cache === 'no-store') {
+  /* 2.08 (372) : « no-store » (vérification de version) = lu sur le réseau, jamais rangé ; « reload » (Vérifier, Mise à jour) = rangé */
+  if (req.cache === 'no-store') { e.respondWith(fetch(req).catch(() => fromCache().then(r => r || Response.error()))); return; }
+  if (req.cache === 'reload') {
     e.respondWith(fetch(req).then(res => store(req, res)).catch(() => fromCache().then(r => r || Response.error())));
     return;
   }
