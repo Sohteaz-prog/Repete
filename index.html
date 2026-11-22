@@ -330,7 +330,8 @@ button.tapk,.fpv.tapk{animation:tapk .18s ease-out}
 .seg.sm button{font-size:var(--fs-14);padding:10px 2px}
 .sh-prev{margin:10px 0 4px}
 .weak{margin-top:8px;border-top:1px solid var(--line);padding-top:2px}
-.wsum{display:flex;align-items:center;gap:6px;width:100%;min-height:32px;background:none;border:0;padding:0;text-align:left;font-weight:600;font-size:var(--fs-13);color:var(--ink);cursor:pointer}
+.wsum{display:flex;align-items:center;gap:6px;width:100%;min-height:32px;background:none;border:0;padding:0;text-align:left;font-weight:600;font-size:var(--fs-13);color:var(--ink);cursor:pointer;position:relative}
+.wsum::after{content:"";position:absolute;left:0;right:0;top:-6px;bottom:-6px}
 .wsum .wch{color:var(--mute);transition:transform .15s}.weak.open .wsum .wch{transform:rotate(180deg)}
 .wseg{margin:4px 0 6px}.wseg button{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:38px;font-size:var(--fs-13)}
 .sct1{display:flex;align-items:center;gap:4px;padding-right:28px}.sct1 h2{flex:1;min-width:0;margin:0}
@@ -382,7 +383,8 @@ button.tapk,.fpv.tapk{animation:tapk .18s ease-out}
 .infobox{background:var(--card);border:1px solid var(--line);border-radius:var(--r-10);padding:10px 12px;font-size:var(--fs-14);line-height:1.45}
 .infobox p{margin:0 0 6px}.infobox p:last-child{margin:0}
 .gain{font-size:var(--fs-14);font-weight:700;color:#1f8a5a}
-.hdtog{display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0 0 2px;min-height:32px;text-align:left}
+.hdtog{display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0 0 2px;min-height:32px;text-align:left;position:relative}
+.hdtog::after{content:"";position:absolute;left:0;right:0;top:-6px;bottom:-6px}
 .vhelp{font-size:var(--fs-14);color:var(--mute)}.vhelp summary{cursor:pointer;color:var(--accent-ink);font-weight:600;min-height:36px;display:flex;align-items:center}.vhelp p{margin:6px 0}
 .hdtog .tg{font-size:var(--fs-13);font-weight:700;color:var(--accent-ink)}
 .rkcard,.bgcard{cursor:pointer}
@@ -900,7 +902,8 @@ html.tmlock,html.tmlock body{overflow:hidden;overscroll-behavior:none}
 .tm-sh,.tm-sb{overscroll-behavior:contain}
 .tm-hd,.tm-ring,.tm-sb.tm-rsb,.tm-ft{touch-action:none}
 /* 182 (M72 A) : flèche de retour plus proche du titre */
-.bar .ghost.back{min-width:34px;margin-left:-4px;padding-right:0}
+.bar .ghost.back{min-width:34px;margin-left:-4px;padding-right:0;position:relative}
+.bar .ghost.back::after{content:"";position:absolute;top:0;bottom:0;left:-5px;right:-5px}
 /* 2.05 essai 4 (M86 B) : 8 px entre minuteur et réglages, comme à l'accueil ; en mode admin, la barre de la scène à la même hauteur que l'accueil (les marges se fondaient avec le bandeau) */
 .bar .tm-ic{margin-right:4px}
 .admbar + .bar{margin-top:18px}
@@ -957,7 +960,8 @@ html.tmlock,html.tmlock body{overflow:hidden;overscroll-behavior:none}
 .wbx{position:absolute;top:0;right:0;width:32px;height:30px;border:0;background:none;color:inherit;opacity:.65;font:700 12px/1 system-ui,sans-serif;display:flex;align-items:flex-start;justify-content:flex-end;padding:7px 8px 0 0}.wbx::after{content:"";position:absolute;inset:-7px -8px -7px -8px}
 /* 2.07 essai 2 (356, M145) : Préparation sur la ligne des notes */
 .nprow{display:flex;gap:8px;margin:0 0 8px}.nprow .nlb{flex:none}
-.prb{flex:1;min-width:0;display:flex;align-items:center;gap:8px;min-height:38px;padding:0 12px;border-radius:var(--r-10);border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 14px system-ui,sans-serif}
+.prb{position:relative;flex:1;min-width:0;display:flex;align-items:center;gap:8px;min-height:38px;padding:0 12px;border-radius:var(--r-10);border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 14px system-ui,sans-serif}
+.prb::after{content:"";position:absolute;left:0;right:0;top:-3px;bottom:-3px}
 .prb>svg:first-child{color:var(--accent-ink);flex:none;width:18px;height:18px}.prb .g{flex:1;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.prb small{color:var(--mute);font-weight:600;font-size:13px}.prb .sncv{width:16px;height:16px}
 .prb.open{border-bottom-left-radius:0;border-bottom-right-radius:0}
 .snc.pnc{margin-top:-8px}
@@ -1009,6 +1013,19 @@ html:has(.psh),html:has(.psh) body{overflow:hidden;overscroll-behavior:none}   /
 /* essai 7 (M174 c) : alertes du minuteur repliées sur une ligne, seulement si l'écran est trop petit */
 .tmfold{display:flex;align-items:center;gap:10px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:var(--r-12);padding:6px 14px;min-height:calc(var(--tmk,1) * 54px);margin-top:calc(var(--tmk,1) * 6px);font:600 16px system-ui,sans-serif;color:var(--ink);text-align:left}
 .tmfold span{flex:1}.tmfold small{display:block;font-weight:500;font-size:13px;color:var(--mute)}.tmfold svg{color:var(--mute);flex:none}
+
+/* 2.08 essai 4 (M196) : mains libres */
+.pcount:has(.hfind){position:relative}
+.hfind{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;border:0;border-radius:999px;height:26px;padding:0 8px;display:inline-flex;align-items:center;white-space:nowrap;font:700 12px/1 system-ui,sans-serif;background:color-mix(in srgb,var(--accent) 22%,var(--card));color:var(--ink)}
+.hfind::after{content:"";position:absolute;inset:-9px -2px}
+.hfind.off{background:var(--line)}
+.hfind.below{top:auto;bottom:-46px;transform:translateX(-50%)}
+.hfmid{position:fixed;left:50%;top:45%;transform:translate(-50%,-50%);z-index:50;pointer-events:none;background:color-mix(in srgb,var(--ink) 82%,transparent);color:var(--card);padding:12px 18px;border-radius:14px;font-weight:700;font-size:16px;white-space:nowrap}
+/* 2.08 essai 4 (M197) : voix des personnages */
+.vpsw{margin:2px 0 4px}.vpn{display:block;font-weight:400}
+.vpl{margin:4px 0 10px}.vpt{margin:8px 0 3px}
+.vps{display:flex;gap:6px}.vps select{flex:1;min-width:0;min-height:44px}
+.vpb{flex:none;min-width:44px;display:inline-flex;align-items:center;justify-content:center}
 </style>
 </head>
 <body>
@@ -2218,10 +2235,12 @@ try {
   if (ok) saved = v;
   else {
     /* données abîmées : on garde une trace de la copie illisible, puis on reprend la dernière sauvegarde automatique valide */
-    try { localStorage.setItem(KEY + '.corrupt', String(raw)); } catch(e) {}
+    try { localStorage.setItem(KEY + '.corrupt', String(raw)); localStorage.setItem(KEY + '.corruptAt', String(Date.now())); } catch(e) {}
     try { const b = JSON.parse(localStorage.getItem(BAK) || 'null'); if (b && typeof b === 'object' && !Array.isArray(b)) { saved = b; restoredFromBak = true; } } catch(e) {}
   }
 } catch(e) {}
+/* 2.08 (397) : la copie illisible est effacée après 30 jours */
+try { const ca = +localStorage.getItem(KEY + '.corruptAt'); if (localStorage.getItem(KEY + '.corrupt') !== null) { if (!ca) localStorage.setItem(KEY + '.corruptAt', String(Date.now())); else if (Date.now() - ca > 30 * 86400000) { localStorage.removeItem(KEY + '.corrupt'); localStorage.removeItem(KEY + '.corruptAt'); } } } catch(e) {}
 /* Données illisibles ou de mauvais type : on garde ce qui est valide, on repart de zéro pour le reste (évite un écran vide). */
 const isObj = v => !!v && typeof v === 'object' && !Array.isArray(v);
 if (!isObj(saved)) saved = {};
@@ -2700,9 +2719,10 @@ function winOut(el, src, done){ if (!el) { done(); return; } const bg = winBg(el
   const up = () => { if (y0 === null) return; y0 = null; drag = d > 6; if (drag) setTimeout(() => { drag = false; }, 400);
     if (d > Math.min(160, el.offsetHeight / 3)) { const f = window[el.dataset.winclose]; if (typeof f === 'function') f(true); }
     else if (lock) { el.style.transition = 'transform .2s ease'; el.style.transform = ''; const bg = winBg(el); if (bg) { bg.style.transition = 'opacity .2s ease'; bg.style.opacity = ''; } setTimeout(() => { el.style.transition = ''; }, 220); } };
-  document.addEventListener('touchstart', e => { if (e.touches.length !== 1) { y0 = null; return; } dn(e.target, e.touches[0].clientY); }, { passive: true });
-  document.addEventListener('touchmove', e => { if (e.touches.length === 1) mv(e.touches[0].clientY, e); }, { passive: false });
-  document.addEventListener('touchend', up); document.addEventListener('touchcancel', up);
+  /* 2.08 (394) : l'écouteur qui peut bloquer le défilement n'existe que pendant un geste sur une fenêtre ; (379) un geste interrompu (appel…) remet la fenêtre en place */
+  const tmv = e => { if (e.touches.length === 1) mv(e.touches[0].clientY, e); }, off = () => document.removeEventListener('touchmove', tmv);
+  document.addEventListener('touchstart', e => { off(); if (e.touches.length !== 1) { y0 = null; return; } dn(e.target, e.touches[0].clientY); if (y0 !== null) document.addEventListener('touchmove', tmv, { passive: false }); }, { passive: true });
+  document.addEventListener('touchend', () => { off(); up(); }); document.addEventListener('touchcancel', () => { off(); d = 0; up(); });
   document.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse') dn(e.target, e.clientY); });
   window.addEventListener('pointermove', e => { if (e.pointerType === 'mouse') mv(e.clientY, null); });
   window.addEventListener('pointerup', e => { if (e.pointerType === 'mouse') up(); });
@@ -2907,7 +2927,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 149, APP_LABEL = '2.08 · essai 3'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 150, APP_LABEL = '2.08 · essai 4'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -3383,21 +3403,21 @@ function loadVoices(){ if (!synth) return; try { VOICES = synth.getVoices().filt
 loadVoices();
 if (synth) { try { synth.onvoiceschanged = () => { loadVoices(); if (S.view==='scene' && S.tab==='reh' && !S.started) render(); }; } catch(e){} }
 
-const PITCH = [1, 0.8, 1.25];
-let ttsId = 0;
-function say(text, pitch, idx){
+/* 2.08 essai 4 (429) : plus de hauteurs différentes par personnage ; (M197) une voix par personnage, au choix */
+let ttsId = 0, ttsFirst = true;
+function say(text, pitch, idx, vname){
   if (!synth) return;
   const id = ++ttsId;
   try {
     synth.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = 'fr-FR';
-    const v = VOICES.find(v => v.name === S.voice) || VOICES.find(v => /fr-BE|fr-FR/i.test(v.lang)) || VOICES[0];
+    const v = (vname && VOICES.find(v => v.name === vname)) || VOICES.find(v => v.name === S.voice) || VOICES.find(v => /fr-BE|fr-FR/i.test(v.lang)) || VOICES[0];
     if (v) u.voice = v;
     u.rate = S.rate; u.pitch = pitch || 1;
     S.tts = { status:'wait' }; S.speakI = idx === undefined ? null : idx; ttsMark();
-    u.onstart = () => { if (id === ttsId) { S.tts = { status:'ok' }; } };
-    u.onend = () => { if (id === ttsId) { S.speakI = null; ttsMark(); } };
+    u.onstart = () => { ttsFirst = false; if (id === ttsId) { S.tts = { status:'ok' }; } };
+    u.onend = () => { if (id === ttsId) { S.speakI = null; ttsMark(); try { hfSpoken(); } catch(e) {} } };
     u.onerror = e => {
       if (id !== ttsId) return;
       const err = (e && e.error) || '';
@@ -3406,14 +3426,35 @@ function say(text, pitch, idx){
       S.tts = { status:'err', msg:err }; refreshTts();
     };
     synth.speak(u);
-    setTimeout(() => { if (id === ttsId && S.tts.status === 'wait') { S.tts = { status:'silent' }; S.speakI = null; refreshTts(); } }, 2500);
+    setTimeout(() => { if (id === ttsId && S.tts.status === 'wait') { S.tts = { status:'silent' }; S.speakI = null; refreshTts(); } }, ttsFirst ? 5000 : 2500);   /* 2.08 (374) : la 1re lecture peut être lente (chargement de la voix) */
   } catch(e) { S.tts = { status:'err', msg:String(e) }; refreshTts(); }
 }
 function refreshTts(){ if (S.view === 'scene') render(); }
 function speak(i){
   const it = S.scene.items[i]; if (!it || it.k !== 'l') return;
-  say(spokenText(it.t), PITCH[Math.max(0, S.scene.characters.indexOf(it.c)) % PITCH.length], i);
+  say(spokenText(it.t), 1, i, saved.vPer && VOICES.length > 1 ? vMap()[it.c] : null);
 }
+/* 2.08 essai 4 (M197) : voix des personnages, dans « Détails » ; même présentation, une voix pour tous ou une par personnage.
+   saved.vCh[pièce][personnage] = nom de voix. Noms lisibles : le nom donné par le téléphone, sinon « Voix France A / B ». */
+const vMap = () => { saved.vCh = saved.vCh || {}; const k = S.play ? S.play.id : '_'; return saved.vCh[k] = saved.vCh[k] || {}; };
+function vPerInit(){ const m = vMap(); if (!VOICES.length) return; S.scene.characters.forEach((c, i) => { if (!m[c] || !VOICES.some(v => v.name === m[c])) m[c] = VOICES[i % VOICES.length].name; }); }
+const V_PAYS = { FR:'France', BE:'Belgique', CA:'Canada', CH:'Suisse', LU:'Luxembourg' };
+function vName(v){ const cc = (v.lang.split(/[-_]/)[1] || '').toUpperCase(), pays = V_PAYS[cc] || cc, code = n => /^[a-z]{2,3}[-_][a-z]{2}/i.test(n);
+  if (code(v.name)) { const same = VOICES.filter(x => code(x.name) && (x.lang.split(/[-_]/)[1] || '').toUpperCase() === cc); return 'Voix ' + (pays || '?') + (same.length > 1 ? ' ' + 'ABCDEFGHIJKLMNOP'[same.indexOf(v)] : ''); }
+  const n = v.name.replace(/^(Google|Microsoft|Samsung|Apple)\s+/i, ''); return n.charAt(0).toUpperCase() + n.slice(1) + (pays && !new RegExp(pays, 'i').test(n) ? ' (' + pays + ')' : ''); }
+const IC_PLAY = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg>';
+function voiceBlock(voiceOpts){ const n = VOICES.length, per = !!saved.vPer && n > 1;
+  const sw = `<label class="sw vpsw"><input type="checkbox" data-act="vper" ${per ? 'checked' : ''} ${n < 2 ? 'disabled' : ''}> <span>Une voix par personnage<span class="mute small vpn">${n} voix française${n > 1 ? 's' : ''} sur ce téléphone${n < 2 ? ' : il en faut au moins 2' : ''}</span></span></label>`;
+  if (!per) return sw + `<div class="vpl"><div class="lbl vpt">Tous les personnages</div><div class="vps"><select data-act="voice" aria-label="Voix de tous les personnages">${voiceOpts}</select><button class="btn sm vpb" data-act="ttstest" aria-label="Écouter la voix">${IC_PLAY}</button></div></div>`;
+  const m = vMap(); if (S.scene.characters.some(c => !m[c])) vPerInit();
+  return sw + `<div class="vpl">${S.scene.characters.map(c => `<div class="lbl vpt">${esc(c)}${c === S.me ? ' · toi' : ''}</div><div class="vps"><select data-act="vch" data-c="${esc(c)}" aria-label="Voix de ${esc(c)}">${VOICES.map(v => `<option value="${esc(v.name)}" ${m[c] === v.name ? 'selected' : ''}>${esc(vName(v))}</option>`).join('')}</select><button class="btn sm vpb" data-act="vtest" data-c="${esc(c)}" aria-label="Écouter ${esc(c)}">${IC_PLAY}</button></div>`).join('')}</div>`; }
+/* 2.08 (391) : le lecteur d'écran annonce la réplique en cours (zone hors de #app, qui n'est pas redessinée) */
+let srLast = '';
+function srSay(){ let z = document.getElementById('srlive'); if (!z) { z = document.createElement('div'); z.id = 'srlive'; z.className = 'sr'; z.setAttribute('aria-live', 'polite'); document.body.appendChild(z); }
+  if (!(S.view === 'scene' && S.started && !S.done && S.steps && S.scene)) { srLast = ''; return; }
+  const si = S.steps[S.pos], it = S.scene.items[si]; if (!it) return;
+  const hid = it.c === S.me && ((S.ital && saved.italHide) || gradable(si)) && !S.stepRevealed;
+  const t = it.c + ' : ' + (hid ? 'à toi.' : spokenText(it.t)); if (t !== srLast) { srLast = t; z.textContent = t; } }
 function stopSpeech(){ ttsId++; try { synth && synth.cancel(); } catch(e){} S.speakI = null; try { ttsMark(); } catch(e) {} }
 /* Les boutons de lecture (haut-parleur / Réécouter) deviennent « ■ Arrêter » pendant que cette réplique est lue */
 const SQ = '<svg class="sq" width="9" height="9" viewBox="0 0 10 10" aria-hidden="true" style="flex:none"><rect width="10" height="10" rx="1.5" fill="currentColor"/></svg>';
@@ -3450,6 +3491,7 @@ function render(){
   try { bindCardSwipe(); } catch(e) {}
   try { keepNow(); } catch(e) {}
   try { tmDock(); } catch(e) {}
+  try { hfAfter(); srSay(); } catch(e) {}   /* 2.08 essai 4 : mains libres (M196), lecteur d'écran (391) */
   if (animHold.length && !animHolding()) { const h = animHold.splice(0); h.forEach(x => celebrate(x.kind, x.data)); }
 }
 /* 2.03 : en Répétition, la bulle en cours reste visible au-dessus des boutons */
@@ -3892,7 +3934,7 @@ function progressView(){
       <p><b>Série.</b> Une journée compte quand tu as noté l’équivalent de 15 % de ton texte. Un jour d’absence est toléré, deux d’affilée cassent la série.</p></div>` : ''}</section>`;
   }
   const got = BADGES.filter(b => bg[b.id]).length;
-  h += `<section class="card bgcard" data-act="badgesopen"><button class="hdtog" data-act="badgesopen"><span class="lbl" style="margin:0">Mes badges · ${badgePts()} / ${BADGE_MAX}</span><span class="tg">Tout voir ›</span></button>
+  h += `<section class="card bgcard" data-act="badgesopen"><button class="hdtog" data-act="badgesopen"><span class="lbl" style="margin:0">Mes badges · ${badgePts()} / ${BADGE_MAX}</span><span class="tg">Voir ›</span></button>
     <div class="bstrip">${BADGES.map(b => `<span class="bsc ${b.unique ? 'u' : ''}">${medal(b, bg[b.id] || 0)}</span>`).join('')}</div></section>
     ${rankCard()}
 `;
@@ -3945,7 +3987,7 @@ function sceneView(){
   return topBar(false) + `<div class="tabw"><div class="tabs">
     <button class="${T?'on':''}" data-act="tab" data-v="text">Texte</button>
     <button class="${S.tab==='reh'?'on':''}" data-act="tab" data-v="reh">Répéter</button>
-  </div></div><div class="jrow">${who}${T ? `<button class="ib dpb ${S.dpan ? 'act' : ''}" data-act="dpan" aria-expanded="${!!S.dpan}" aria-label="Affichage">${IC_SLIDERS}</button>` : ''}</div>` + list + (T ? textView() : rehView());
+  </div></div>${T || !S.me ? `<div class="jrow">${who}${T ? `<button class="ib dpb ${S.dpan ? 'act' : ''}" data-act="dpan" aria-expanded="${!!S.dpan}" aria-label="Affichage">${IC_SLIDERS}</button>` : ''}</div>` : ''}` + list + (T ? textView() : rehView());   /* 2.08 (422, M180 b) : plus de ligne « Je joue » dans Répéter (sauf sans personnage) */
 }
 
 /* --- onglet Texte --- */
@@ -4109,7 +4151,7 @@ function introView(){
   const canResume = pr && pr.me === S.me && !pr.done && pr.pos > 0;
   const cpr = (saved.cprog || {})[key()], canCRes = !co().ko && cpr && cpr.me === S.me && !cpr.done && cpr.pos > 0;
   const voiceOpts = VOICES.length
-    ? `<option value="">Voix par défaut</option>` + VOICES.map(v => `<option value="${esc(v.name)}" ${S.voice===v.name?'selected':''}>${esc(v.name)} (${esc(v.lang)})</option>`).join('')
+    ? `<option value="">Voix par défaut</option>` + VOICES.map(v => `<option value="${esc(v.name)}" ${S.voice===v.name?'selected':''}>${esc(vName(v))}</option>`).join('')
     : '';
   const RM = S.rmode === 'cards' || S.rmode === 'ital' ? S.rmode : 'reh';
   return `<div class="card set">
@@ -4128,14 +4170,18 @@ function introView(){
     <label class="sw"><input type="checkbox" data-act="cnotes" ${co().notes ? 'checked' : ''}> Afficher mes notes</label>`
     : RM === 'ital' ? `<label class="sw"><input type="checkbox" data-act="italgo" ${saved.italGo !== false ? 'checked' : ''}> Aller à ma réplique</label>
     <label class="sw"><input type="checkbox" data-act="italhide" ${saved.italHide ? 'checked' : ''}> Cacher mes répliques</label>
+    ${synth ? `<label class="sw"><input type="checkbox" data-act="italhf" ${saved.italHf ? 'checked' : ''}> <span class="vlt">Mains libres<button type="button" class="info" data-act="infohf" aria-label="À quoi sert « Mains libres » ?" aria-expanded="${S.infoHf ? 'true' : 'false'}" style="margin-left:8px">i</button></span></label>
+    ${S.infoHf ? `<div class="infobox"><p>La voix lit les autres personnages, laisse un blanc pour ta réplique (selon sa longueur), puis enchaîne toute seule. <b>Entendre ma réplique</b> : la voix la dit après le blanc. <b>Mode lent</b> : un blanc plus long, pour réfléchir. Toucher l’écran : pause / reprise.</p></div>` : ''}
+    ${saved.italHf ? `<label class="sw"><input type="checkbox" data-act="italhear" ${saved.italHear !== false ? 'checked' : ''}> Entendre ma réplique</label>
+    <label class="sw"><input type="checkbox" data-act="italslow" ${saved.italSlow ? 'checked' : ''}> Mode lent</label>` : ''}` : ''}
     <label class="sw"><input type="checkbox" data-act="rehnotes" ${saved.rehNotes ? 'checked' : ''}> Afficher mes notes</label>`
     : `<label class="sw"><input type="checkbox" data-act="rehnotes" ${saved.rehNotes ? 'checked' : ''}> Afficher mes notes</label>`}
     ${synth ? `<label class="sw"><input type="checkbox" data-act="${RM === 'ital' ? 'italaudio' : S.rmode === 'cards' ? 'caudio' : 'audio'}" ${(RM === 'ital' ? italAudio() : S.rmode === 'cards' ? co().audio : S.audio) ? 'checked' : ''}> <span class="vlt">Lecture à voix haute<button type="button" class="vdt" data-act="vdet" aria-expanded="${!!S.vdet}" aria-controls="vdx">Détails</button></span></label>
-      ${S.vdet ? `<div class="vdx" id="vdx">${voiceOpts ? `<label class="f">Voix<select data-act="voice">${voiceOpts}</select></label>` : ''}
+      ${S.vdet ? `<div class="vdx" id="vdx">${VOICES.length ? voiceBlock(voiceOpts) : ''}
       <div class="lbl" style="margin-top:6px">Vitesse de lecture · <span id="rateval">${S.rate.toFixed(1)}</span>×</div>
       <input type="range" class="rng" min="1" max="2" step="0.1" value="${S.rate}" data-act="rate" aria-label="Vitesse de lecture" style="--p:${Math.round((S.rate - 1) * 100)}%">
       <div class="rngs"><span>1× normale</span><span>2× rapide</span></div>
-      <div class="row2" style="align-items:center"><button class="btn sm" data-act="ttstest" style="flex:0 0 auto;padding:0 14px;display:inline-flex;align-items:center;gap:6px">${SPK}<span>Tester la voix</span></button><span class="mute small">${VOICES.length ? VOICES.length + ' voix française' + (VOICES.length>1?'s':'') + ' détectée' + (VOICES.length>1?'s':'') : 'aucune voix française détectée'}</span></div>
+      ${VOICES.length ? '' : `<div class="row2" style="align-items:center"><button class="btn sm" data-act="ttstest" style="flex:0 0 auto;padding:0 14px;display:inline-flex;align-items:center;gap:6px">${SPK}<span>Tester la voix</span></button><span class="mute small">${VOICES.length ? VOICES.length + ' voix française' + (VOICES.length>1?'s':'') + ' détectée' + (VOICES.length>1?'s':'') : 'aucune voix française détectée'}</span></div>`}
       ${VOICES.length ? '' : `<details class="vhelp"><summary>Comment installer une voix française ?</summary>
         <p><b>Android :</b> Paramètres → cherche « Synthèse vocale » (souvent dans Accessibilité ou Gestion générale) → moteur Google → Langue : Français (France ou Belgique) → télécharge la voix. Puis ferme et rouvre Répète.</p>
         <p><b>iPhone :</b> Réglages → Accessibilité → Contenu énoncé → Voix → Français → télécharge une voix. Puis ferme et rouvre Répète.</p></details>`}</div>` : ''}
@@ -4266,8 +4312,8 @@ function stepView(){
   else if (gradable(si)) actions = `<button class="btn ko" data-act="grade" data-v="ko">${IC_X}<span>À répéter</span></button><button class="btn ok" data-act="grade" data-v="ok">${IC_OK}<span>Je connais</span></button>`;
   else actions = `<button class="btn pri" data-act="next">Suivant ›</button>`;
   return `<div class="prog"><i style="width:${pct}%"></i></div>
-    <div class="pcount fpc"><span>${myCount()}</span>${pRight()}</div>
-    <div class="thr" data-act="thrtap">${thr}</div>
+    <div class="pcount fpc"><span>${myCount()}</span>${hfInd()}${pRight()}</div>
+    <div class="thr" data-act="thrtap">${thr}</div>${hfMid()}
     <div class="actions acol"><div class="arow${S.ital ? ' half' : ''}">${actions}</div></div>`;   /* essai 4 : en Italienne, deux boutons de même largeur */
 }
 function doneView(){
@@ -4317,9 +4363,10 @@ function cardActsNow(rev){ const r = document.querySelector('.actions .arow'); i
 /* ============ ACTIONS ============ */
 const cardList = () => { const items = S.scene.items; return items.map((it, i) => i).filter(i => items[i].k === 'l' && items[i].c === S.me); };
 function beginSteps(steps, pos, all, focus, cards, ital){
+  HF.run = !!(ital && saved.italHf); HF.pause = false;   /* 2.08 essai 4 (M196) */
   S.cards = !!cards; S.ital = !!ital; S.early = false; S.bilOpen = null; S.bilTab = 'evo'; S.revBox = null; S.enterFrom = null; S.hinted = new Set(); S.trans = {}; S.focus = focus || null; S.steps = steps; S.pos = pos || 0; S.stepsAll = all !== false; S.started = true; S.done = false; S.stepRevealed = false; S.hint = false;
   S.tab = 'reh'; saveProg();
-  render(); window.scrollTo(0,0); keepNow(); autoSpeak();
+  render(); window.scrollTo(0,0); keepNow(); autoSpeak(); hfArrive();
 }
 function autoSpeak(){
   if (!audioOn() || !synth || !S.started || S.done) return;   /* essai 4 : l'Italienne suit son interrupteur (le raccourci coupe vraiment le son) */
@@ -4359,7 +4406,8 @@ function flipEnd(f){
   kids.forEach(k => { k.style.transition = 'transform .42s cubic-bezier(.25,.8,.25,1)'; k.style.transform = ''; });
   setTimeout(() => kids.forEach(k => { k.style.transition = ''; }), 460);
 }
-function step(d){
+function step(d){ step0(d); hfArrive(); }   /* 2.08 essai 4 : mains libres */
+function step0(d){
   stopSpeech();
   const fl = d > 0 ? flipStart() : null;
   const n = S.pos + d;
@@ -4370,7 +4418,9 @@ function step(d){
   render(); window.scrollTo(0,0); keepNow(); flipEnd(fl); autoSpeak();
 }
 const stOf = r => !r ? { st:'new', n:0 } : { st: r.ko ? 'ko' : r.n >= 5 ? 'solid' : r.n >= 1 ? 'known' : 'new', n: Math.min(5, r.n | 0) };
+let gradeT = 0;
 function grade(v){
+  gradeT = Date.now();
   const si = S.steps[S.pos];
   if (v === 'ko') S.missed.add(si); else S.missed.delete(si);
   S.hinted = S.hinted || new Set(); S.hinted.delete(si);
@@ -4426,6 +4476,8 @@ document.addEventListener('click', e => {
   if (!b || b.tagName === 'INPUT' || b.tagName === 'SELECT') return;
   const a = b.dataset.act;
   if (a === 'noop') return;
+  if (Date.now() - HF.swallow < 450) return;   /* 2.08 essai 4 : le toucher qui suit un glissement */
+  if (Date.now() - gradeT < 300 && /^(reveal-step|grade|next|thrtap|hint|hfskip)$/.test(a)) return;   /* 2.08 (375) : double toucher après une note */
   /* Panneau admin : même vibration pour tous les boutons (l'éclair de surbrillance est retiré : l'animation au toucher suffit) */
   const admSec = b.closest('.admsec');
   if (a !== 'admtap' && !b.classList.contains('sh-back')) buzz(a === 'adm' || admSec ? 'ok' : 'tap');
@@ -4689,11 +4741,17 @@ document.addEventListener('click', e => {
         if (fc && animMode() === 'on') { fc.style.transform = ''; fc.classList.remove('flip'); cardActsNow(false); setTimeout(render, 480); } else render(); }
       break; }
     case 'reveal-step': {
+      if (HF.run && hfOn() && b.classList.contains('bub')) { hfToggle(); break; }   /* 2.08 essai 4 : mains libres, toucher la bulle = pause */
       /* 2.02 : retourner la carte coupe la voix — après le début du retournement (l'arrêt de la voix peut bloquer un instant le téléphone) */
       const hush = () => { if (S.cards) requestAnimationFrame(() => setTimeout(stopSpeech, 60)); };
       if (S.cards && !S.stepRevealed && animMode() === 'on') { S.stepRevealed = true; const fc = document.querySelector('.fcard'); if (fc) { fc.classList.add('flip'); cardActsNow(true); hush(); setTimeout(render, 480); break; } }
       keepTodoBox(); S.stepRevealed = true; render(); hush(); break; }
-    case 'thrtap': { const si = S.steps[S.pos];   /* 2.03 · essai 4 : toucher le fil = Révéler (ma réplique cachée) ou Suivant (réplique d'un autre) ; rien quand il faut noter */
+    case 'hfskip': hfFinish(); break;   /* 2.08 essai 4 (M196) : « À toi… n s » termine le blanc */
+    case 'hfpause': hfToggle(); break;
+    case 'infohf': e.preventDefault(); S.infoHf = !S.infoHf; render(); break;
+    case 'vtest': { const c = b.dataset.c, i = S.scene.items.findIndex(it => it.k === 'l' && it.c === c); if (S.speakI === i) stopSpeech(); else if (i >= 0) speak(i); break; }   /* 2.08 essai 4 (M197) */
+    case 'thrtap': { if (HF.run && hfOn()) { hfToggle(); break; }   /* mains libres : toucher = pause / reprise */
+      const si = S.steps[S.pos];   /* 2.03 · essai 4 : toucher le fil = Révéler (ma réplique cachée) ou Suivant (réplique d'un autre) ; rien quand il faut noter */
       if (italHidden(si)) { keepTodoBox(); S.stepRevealed = true; render(); }   /* 2.07 (314) : Italienne, ma réplique cachée */
       else if (gradable(si)) { if (!S.stepRevealed) { keepTodoBox(); S.stepRevealed = true; render(); } }
       else step(1); break; }
@@ -4742,6 +4800,11 @@ document.addEventListener('change', e => {
   else if (a === 'italhide') { saved.italHide = t.checked; persist(); }
   else if (a === 'italgo') { saved.italGo = t.checked; persist(); }
   else if (a === 'italaudio') { saved.italAudio = t.checked; persist(); }
+  else if (a === 'italhf') { saved.italHf = t.checked; persist(); render(); }   /* 2.08 essai 4 (M196) */
+  else if (a === 'italhear') { saved.italHear = t.checked; persist(); }
+  else if (a === 'italslow') { saved.italSlow = t.checked; persist(); }
+  else if (a === 'vper') { saved.vPer = t.checked; if (t.checked) vPerInit(); persist(); render(); }   /* 2.08 essai 4 (M197) */
+  else if (a === 'vch') { vMap()[t.dataset.c] = t.value; persist(); }
   else if (a === 'cardsko') { co().ko = t.checked; persist(); }
   else if (a === 'cnotes') { co().notes = t.checked; persist(); }
   else if (a === 'caudio') { co().audio = t.checked; persist(); render(); }
@@ -4844,6 +4907,68 @@ function prepCloseAnim(){ const sh = document.querySelector('.psh'); const done 
 
 /* essai 7 (M176 b) : fin de « Mise à jour… » sans redessiner l'écran (ne coupe pas une saisie du pseudo) */
 function rankUpdEnd(){ S.rankUpd = false; const x = document.querySelector('[data-act=rankrefresh]'); if (x) { x.disabled = false; x.textContent = 'Actualiser'; } }
+/* ===== 2.08 essai 4 : Italienne « Mains libres » (M196), glisser haut / bas (M192) =====
+   Mains libres : la voix lit les autres personnages ; sur ma réplique, un blanc (selon sa longueur) avec « À toi… n s »
+   à la place du bouton de droite (le toucher termine le blanc) ; « Entendre ma réplique » : la voix la dit après le blanc ;
+   « Mode lent » : blanc × 1,8 + 2 s et 1,3 s entre deux répliques des autres. Toucher le fil = pause / reprise.
+   Indicateur « Mains libres » / « ▶ En pause » sur la ligne du compteur, entre le compteur et les boutons, à leur hauteur
+   (en dessous, centré, si la place manque). Glisser vers le haut = suivante (ou révéler), vers le bas = précédente. */
+const HF = { run:false, pause:false, tm:0, tick:0, left:0, then:null, swallow:0 };
+const hfOn = () => S.view === 'scene' && S.started && S.ital && !S.done;
+const hfWords = t => (String(t || '').replace(/<[^>]*>/g, ' ').match(/[\p{L}\p{N}’'-]+/gu) || []).length;
+function hfClear(){ clearTimeout(HF.tm); clearInterval(HF.tick); HF.tm = 0; HF.tick = 0; HF.then = null; HF.left = 0; hfPaint(); }
+function hfReveal(si){ if (italHidden(si) && !S.stepRevealed) { keepTodoBox(); S.stepRevealed = true; render(); } }
+function hfNext(){ if (!HF.run || HF.pause || !hfOn()) return; hfClear(); hfReveal(S.steps[S.pos]); step(1); }
+function hfFinish(){ const f = HF.then; clearInterval(HF.tick); clearTimeout(HF.tm); HF.tick = 0; HF.tm = 0; HF.then = null; HF.left = 0; hfPaint(); if (f) f(); }
+/* à l'arrivée sur une réplique (début, suivante, précédente) */
+function hfArrive(){
+  hfClear(); if (!HF.run || HF.pause || !hfOn()) return;
+  const si = S.steps[S.pos], it = S.scene.items[si]; if (!it) return;
+  const base = hfWords(it.t) * 0.42 / (S.rate || 1) + 1, slow = !!saved.italSlow;
+  if (it.c === S.me) {
+    const sec = Math.round(Math.min(45, Math.max(2, slow ? base * 1.8 + 2 : base)));
+    HF.left = sec; HF.then = () => { hfReveal(si);
+      if (saved.italHear !== false && audioOn() && synth && S.tts.status !== 'silent') { speak(si); HF.tm = setTimeout(() => { if (S.tts.status !== 'ok') hfNext(); }, 3000); }
+      else HF.tm = setTimeout(hfNext, 400); };
+    hfPaint(); HF.tick = setInterval(() => { HF.left -= 0.25; hfPaint(); }, 250); HF.tm = setTimeout(hfFinish, sec * 1000);
+  } else {
+    /* la voix lit (autoSpeak) ; sa fin appelle hfSpoken. Sans voix : un temps selon la longueur. */
+    HF.tm = setTimeout(() => { if (S.tts.status !== 'ok') HF.tm = setTimeout(hfNext, Math.max(0, base - 3) * 1000 + 400); }, 3000);
+  }
+}
+/* fin d'une lecture à voix haute (voix.js) */
+function hfSpoken(){ if (!HF.run || HF.pause || !hfOn()) return; clearTimeout(HF.tm); HF.tm = setTimeout(hfNext, saved.italSlow ? 1300 : 500); }
+function hfStart(){ HF.run = !!saved.italHf; HF.pause = false; }
+function hfToggle(){ HF.pause = !HF.pause; if (HF.pause) { hfClear(); stopSpeech(); render(); } else { render(); autoSpeak(); hfArrive(); } }
+/* « À toi… n s » à la place du bouton de droite, mis à jour sans tout redessiner */
+function hfPaint(){ const b = document.querySelector('.actions .arow > .btn:last-child'); if (!b) return;
+  if (HF.run && HF.then && !HF.pause && hfOn()) { if (b.dataset.act !== 'hfskip') { b.dataset.was = b.dataset.act; b.dataset.act = 'hfskip'; } b.textContent = 'À toi… ' + Math.max(1, Math.ceil(HF.left)) + ' s'; }
+  else if (b.dataset.act === 'hfskip') render(); }
+const HF_PLAY = '<svg width="8" height="10" viewBox="0 0 8 10" aria-hidden="true" style="margin-right:5px"><path d="M0 0l8 5-8 5z" fill="currentColor"/></svg>';
+const hfInd = () => (HF.run && hfOn()) ? `<button class="hfind${HF.pause ? ' off' : ''}" data-act="hfpause" aria-label="${HF.pause ? 'En pause, toucher pour reprendre' : 'Mains libres, toucher pour mettre en pause'}">${HF.pause ? HF_PLAY + 'En pause' : 'Mains libres'}</button>` : '';
+const hfMid = () => (HF.run && HF.pause && hfOn()) ? '<div class="hfmid" aria-hidden="true">Toucher pour reprendre</div>' : '';
+/* après chaque rendu : place l'indicateur, bloque « tirer pour actualiser » pendant l'Italienne */
+function hfAfter(){
+  document.documentElement.style.overscrollBehaviorY = hfOn() ? 'none' : '';
+  const b = document.querySelector('.pcount .hfind'); if (!b) return;
+  const pc = b.parentElement, lab = pc.firstElementChild, g = pc.querySelector('.pwrap'), pr = pc.getBoundingClientRect(), lr = lab.getBoundingClientRect(), gr = g ? g.getBoundingClientRect() : { left: innerWidth, top: pr.top, bottom: pr.bottom };
+  b.style.left = ((lr.right + gr.left) / 2 - pr.left) + 'px'; b.style.top = ((gr.top + gr.bottom) / 2 - pr.top) + 'px';
+  const r = b.getBoundingClientRect(); if (r.left < lr.right + 4 || r.right > gr.left - 4) { b.classList.add('below'); b.style.left = (innerWidth / 2 - pr.left) + 'px'; b.style.top = ''; }
+  hfPaint();
+}
+/* glisser haut / bas en Italienne ; l'écouteur qui bloque le défilement n'existe que pendant le geste */
+(() => { let g = null;
+  const mv = e => { if (!g) return; const dy = e.touches[0].clientY - g.y, dx = e.touches[0].clientX - g.x; if (Math.abs(dy) > 8 && Math.abs(dy) > Math.abs(dx) && e.cancelable) e.preventDefault(); };
+  const off = () => document.removeEventListener('touchmove', mv);
+  document.addEventListener('touchstart', e => { g = null; if (!hfOn() || e.touches.length !== 1 || e.target.closest('button,input,label,select,a,.bar,#appcf')) return;
+    g = { x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now() }; document.addEventListener('touchmove', mv, { passive: false }); }, { passive: true });
+  document.addEventListener('touchcancel', () => { g = null; off(); });
+  document.addEventListener('touchend', e => { off(); if (!g) return; const t = e.changedTouches[0], dx = t.clientX - g.x, dy = t.clientY - g.y, dt = Date.now() - g.t; g = null;
+    if (dt > 900 || Math.abs(dy) < 50 || Math.abs(dy) < 1.5 * Math.abs(dx)) return;
+    if (e.cancelable) e.preventDefault(); HF.swallow = Date.now(); hfClear();
+    if (dy < 0) { const si = S.steps[S.pos]; if (italHidden(si) && !S.stepRevealed) { keepTodoBox(); S.stepRevealed = true; render(); hfArrive(); } else step(1); }
+    else if (S.pos > 0) step(-1); }, { passive: false });
+})();
 /* ===================== 2.04 : MINUTEUR DE RÉPÉTITION (claude/minuteur-integration.md + minuteur-2.04-decisions.md) =====================
    Éléments persistants hors de #app (#tm, #tmsheet, #tmalarm, #tmpre) : render() ne les détruit jamais.
    Temps calculé à partir d'horloges (fin de passage), jamais en comptant des ticks. Horloge « virtuelle » pour la vitesse du mode admin. */
