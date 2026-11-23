@@ -983,7 +983,7 @@ html:has(.psh),html:has(.psh) body{overflow:hidden;overscroll-behavior:none}   /
 .hg .fl{display:inline-block;margin-right:3px;line-height:0}.hg .fl svg{vertical-align:baseline}.hg .tarn .fl svg{filter:grayscale(1) opacity(.55)}.hg .fl.live svg{vertical-align:-1.3px}
 /* 2.07 essai 2 (367, M161) : choix du mode sous « Répéter d'ici » */
 .la.on{border-color:color-mix(in srgb,var(--accent) 60%,var(--line))}.la .sncv{width:14px;height:14px}
-.rmenu.fm{margin:8px 0 0}.weak .rmenu.fm{margin:8px auto 0;max-width:none}.fm button{justify-content:flex-start;gap:12px;font-weight:600}.fm button svg{color:var(--accent-ink);flex:none;width:18px;height:18px}
+.rmenu.fm{margin:8px 0 0}.weak .rmenu.fm{margin:4px auto 0;max-width:none}.fm button{justify-content:flex-start;gap:12px;font-weight:600}.fm button svg{color:var(--accent-ink);flex:none;width:18px;height:18px}
 /* 2.07 essai 4 : fenêtres uniformes (js/fenetres.js) */
 .ugrip{flex:none;display:flex;justify-content:center;align-items:center;height:22px;touch-action:none}
 .ugrip i{display:block;width:40px;height:4px;border-radius:2px;background:var(--line)}
@@ -2933,7 +2933,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 155, APP_LABEL = '2.08 · essai 9'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 156, APP_LABEL = '2.08'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -3024,13 +3024,26 @@ window.addEventListener('pagehide', navSave);
 const navDepth = () => !!(document.getElementById('appcf') || S.prepK || S.prepDel || S.prepEd || S.fromOpen != null || (S.prepOpen && S.view === 'scene') || (typeof tmOpen !== 'undefined' && tmOpen) || S.settings || S.pick || S.pickK || S.dpan || S.nMenu != null || S.nEdit || S.nList || S.nView != null || S.view !== 'library' || S.started || document.querySelector('.rwl.on') || (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()));
 
 /* ===== Textes de la classe : fichier textes-classe.json placé à côté de index.html ===== */
+/* 2.08 essai 10 (376) : la progression est rangée par position de réplique ; si une scène partagée change de nombre de répliques
+   (réplique ajoutée ou retirée dans textes-classe.json), sa progression est remise à zéro pour ne pas tomber sur les mauvaises répliques.
+   Changer des mots sans changer le nombre de répliques ne touche à rien. Les notes sont gardées. */
+function shCheck(pl, sc){ try { const k = keyOf(pl, sc), n = (sc.items || []).filter(x => x.k === 'l').length; saved.shN = saved.shN || {};
+  const was = saved.shN[k];
+  if (was != null && was !== n) {
+    const had = Object.keys(saved.lines).some(x => x.indexOf(k + '|') === 0) || (saved.prog && saved.prog[k]) || (saved.cprog && saved.cprog[k]);
+    Object.keys(saved.lines).forEach(x => { if (x.indexOf(k + '|') === 0) delete saved.lines[x]; });
+    ['prog', 'cprog', 'trk'].forEach(f => { if (saved[f]) delete saved[f][k]; });
+    const h = saved.hist && saved.hist[today()]; if (h && h.base) delete h.base[k];
+    if (had) setTimeout(() => { try { flashMsg('Le texte de « ' + sc.title + ' » a changé : sa progression repart de zéro.'); } catch(e) {} }, 600);
+  }
+  if (was !== n) { saved.shN[k] = n; persist(); } } catch(e) {} }
 function mergeShared(arr){
   let n = 0;
   (Array.isArray(arr) ? arr : []).forEach(pl => {
     if (!pl || !pl.id || !Array.isArray(pl.scenes)) return;
     const have = LIBRARY.find(x => x.id === pl.id);
-    if (!have) { pl.shared = true; pl.season = playSeason(pl); LIBRARY.push(pl); n++; return; }
-    pl.scenes.forEach(sc => { if (!have.scenes.some(x => x.id === sc.id)) { have.scenes.push(sc); n++; } });
+    if (!have) { pl.shared = true; pl.season = playSeason(pl); LIBRARY.push(pl); pl.scenes.forEach(sc => shCheck(pl, sc)); n++; return; }
+    pl.scenes.forEach(sc => { if (!have.scenes.some(x => x.id === sc.id)) { have.scenes.push(sc); shCheck(have, sc); n++; } });
   });
   return n;
 }
