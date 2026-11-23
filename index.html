@@ -2460,7 +2460,7 @@ async function checkUpdate(){
     else updMsg = 'Tu as la dernière version : v' + APP_LABEL + '.';
   } catch(e) { updMsg = 'Vérification impossible (hors ligne ?).'; }
   updBusy = false; try { renderSheet(); } catch(e) {}
-  if (found) { try { sessionStorage.setItem('repete.reopenSet', '1'); } catch(e) {} setTimeout(() => location.reload(), 900); }
+  if (found) { try { sessionStorage.setItem('repete.reopenSet', '1'); } catch(e) {} setTimeout(() => appReload(), 900); }
 }
 function updateBlock(){
   return `<div class="mute small" style="margin-top:14px;text-align:center">${updMsg || 'Version installée : v' + APP_LABEL + '.'} <button class="updlk" data-act="chkupd" ${updBusy ? 'disabled' : ''}>${updBusy ? 'Vérification…' : 'Vérifier'}</button></div>`;
@@ -2524,7 +2524,7 @@ function updCheckSoon(){ const n = Date.now(); if (n - updLast < 15000 || !('ser
   updProbe();   /* essai 6 : on regarde tout de suite la version publiée (la pastille n'attend plus que le navigateur ait tout téléchargé) */
   navigator.serviceWorker.getRegistration().then(r => { if (r) return r.update(); }).catch(() => {}); }
 /* essai 6 : « Mise à jour » attend que la nouvelle version soit prête (au plus 8 s) avant de recharger ; sinon le rechargement pouvait rouvrir l'ancienne */
-function updApply(){ const go = () => location.reload(); if (!('serviceWorker' in navigator)) return go();
+function updApply(){ const go = () => appReload(); if (!('serviceWorker' in navigator)) return go();
   let done = false; const fin = () => { if (!done) { done = true; go(); } };
   /* 2.08 (372) : la vérification ne range plus rien dans le cache ; si la nouvelle version tarde, on la recharge exprès avant de rouvrir */
   setTimeout(() => { if (!done) fetch('index.html', { cache: 'reload' }).catch(() => {}).then(fin); }, 8000);
@@ -2795,7 +2795,7 @@ function admOp(op, v){
   else if (op === 'bgready') { saved.bgc = saved.bgc || {}; saved.bgc.ready = 1; }
   else if (op === 'bgreset') { saved.bg = {}; saved.bgc = {}; saved.bgFix = {}; BADGES.forEach(b => { saved.bgFix[b.id] = true; }); }
   else if (op === 'progreset') { saved.lines = {}; saved.prog = {}; saved.hist = {}; saved.bg = {}; saved.bgc = {}; saved.bgFix = {}; saved.levelMax = 0; }
-  else if (op === 'wipe') { try { localStorage.removeItem('repete.admin'); sessionStorage.setItem('admToast', 'Profil de test effacé'); } catch(e) {} location.reload(); return; }
+  else if (op === 'wipe') { try { localStorage.removeItem('repete.admin'); sessionStorage.setItem('admToast', 'Profil de test effacé'); } catch(e) {} appReload(); return; }
   persist(); render();
 }
 let offMsg = '';
@@ -2933,7 +2933,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 152, APP_LABEL = '2.08 · essai 6'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 153, APP_LABEL = '2.08 · essai 7'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -2964,9 +2964,14 @@ function ensureTop(e){
 ['pointerup', 'click', 'keydown', 'touchend'].forEach(t => document.addEventListener(t, ensureTop, { capture: true }));
 /* 2.05 essai 2 : le navigateur ne remet pas lui-même l'ancienne position de défilement quand on appuie sur retour (saut de l'écran en fermant la liste des personnages) */
 try { history.scrollRestoration = 'manual'; } catch(x) {}
+/* 2.08 essai 7 (450) : arriver sur une entrée sentinelle par « retour » avec une page neuve (et non par popstate) veut dire que
+   cette entrée appartient à une ancienne page (avant un rechargement, une mise à jour, ou si le téléphone a fermé l'appli en arrière-plan).
+   Journal du 23 novembre : chaque retour rechargeait l'appli sur le même écran (« appli masquée / affichée », pos 5 → 4 → 3 → 2). */
+let backLoad = false;
 (function histInit(){
   try {
     const st = history.state;
+    try { backLoad = (performance.getEntriesByType('navigation')[0] || {}).type === 'back_forward' && !!st && st.k === 'top'; } catch(x) {}
     if (st && st.k === 'top' && typeof st.a === 'number') baseIdx = st.a;      // sentinelles d'une visite précédente : on les réutilise
     else {
       baseIdx = (st && st.k === 'base' && typeof st.a === 'number') ? st.a : history.length - 1;
@@ -2982,7 +2987,7 @@ try { navPending = JSON.parse(sessionStorage.getItem(NAV_KEY) || 'null'); } catc
 function navSave(){
   if (navPending) return;                       // pas avant d'avoir restauré (ou renoncé à restaurer)
   try {
-    const o = { v: S.view, t: S.tab, y: Math.round(window.scrollY) };
+    const o = { v: S.view, t: S.tab, m: S.rmode, y: Math.round(window.scrollY) };   /* essai 7 : le mode (Répliques, Cartes, Italienne) est gardé */
     if (S.view === 'scene' && S.play && S.scene) { o.p = S.play.id; o.s = S.scene.id; }
     sessionStorage.setItem(NAV_KEY, JSON.stringify(o));
   } catch(e) {}
@@ -2995,11 +3000,22 @@ function tryRestoreNav(){
     if (!sc) return false;                      // texte pas encore chargé : on réessaie après le chargement des textes partagés
     S.play = pl; S.scene = sc;
     const m = saved.me[key()]; S.me = sc.characters.includes(m) ? m : null;
-    Object.assign(S, { view:'scene', noteK:null, nEdit:null, nList:false, nView:null, tab:(n.t === 'reh' && S.me) ? 'reh' : 'text', mode:'all', textHide:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set() });
+    Object.assign(S, { view:'scene', noteK:null, nEdit:null, nList:false, nView:null, tab:(n.t === 'reh' && S.me) ? 'reh' : 'text', rmode:['cards', 'ital'].includes(n.m) ? n.m : 'reh', mode:'all', textHide:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set() });
   }
   navPending = null; navY = n.y || 0;
   return true;
 }
+/* 2.08 essai 7 (450) : ce « retour » a rechargé l'appli : on fait ce que le retour aurait dû faire (un niveau plus haut) */
+function histBackLoad(){ if (!backLoad || navPending) return; backLoad = false; const b0 = bview();
+  if (S.view === 'library' && !S.settings) { const n = curIdx() - baseIdx; if (n > 0) { jumping = true; try { history.go(-n); } catch(x) { jumping = false; } }
+    blog('retour tél. (page rechargée) à l’accueil : retour à l’entrée de départ · ' + b0); return; }
+  try { navBack0(); render(); } catch(x) {} blog('retour tél. (page rechargée) : ' + b0 + ' ⇒ ' + bview()); }
+/* 2.08 essai 7 (450) : avant de recharger, on revient à l'entrée de départ ; sinon les sentinelles restent celles de l'ancienne page
+   et chaque retour suivant rechargerait l'appli au lieu de passer par popstate */
+function appReload(){ try { const n = curIdx() - baseIdx;
+    if (n > 0 && !leaving) { leaving = true; let d = false; const go = () => { if (!d) { d = true; location.reload(); } };
+      blog('rechargement : d’abord retour à l’entrée de départ · ' + bview()); window.addEventListener('popstate', go, { once: true }); history.go(-n); setTimeout(go, 700); return; } } catch(e) {}
+  location.reload(); }
 function navScroll(){ if (navY) { const y = navY; navY = 0; requestAnimationFrame(() => window.scrollTo(0, y)); } }
 let navT = 0;
 window.addEventListener('scroll', () => { clearTimeout(navT); navT = setTimeout(navSave, 300); }, { passive: true });
@@ -3026,7 +3042,7 @@ async function loadShared(){
       const r = await fetch(name, { cache:'no-cache' });
       if (!r.ok) break;
       const j = await r.json();
-      if (mergeShared(j)) { tryRestoreNav(); render(); navScroll(); }
+      if (mergeShared(j)) { tryRestoreNav(); render(); navScroll(); histBackLoad(); }
     } catch(e) { break; }
   }
   if (navPending) { navPending = null; navSave(); }   // scène introuvable : on reste sur l'accueil
@@ -3125,7 +3141,7 @@ function importAll(f){
         const cur = localStorage.getItem(KEY); if (cur) { localStorage.setItem(BAK, cur); localStorage.setItem(BAK + '.t', String(Date.now())); }
         localStorage.setItem(KEY, JSON.stringify(data));
       } catch(e) { appAlert('Import impossible (stockage plein ?).', null, true); return; }
-      location.reload();
+      appReload();
     }, true);
   });
 }
@@ -3145,7 +3161,7 @@ function importProg(f){
       const nw = Object.assign({}, data, { userLib: saved.userLib, notes: saved.notes });
       localStorage.setItem(KEY, JSON.stringify(nw));
     } catch(e) { appAlert('Import impossible (stockage plein ?).', null, true); return; }
-    location.reload();
+    appReload();
     }, true);
   });
 }
@@ -3384,7 +3400,7 @@ document.addEventListener('touchstart', e => {
   if (pn && pn.scrollTop <= 0 && !e.target.closest('input[type=range],input[type=date]')) ptr = { y: e.touches[0].clientY, x: e.touches[0].clientX };
 }, { passive: true });
 let ptrDone = false;
-const ptrGo = () => { if (ptrDone) return; ptrDone = true; try { sessionStorage.setItem('repete.reopenSet', '1'); } catch(x) {} location.reload(); };
+const ptrGo = () => { if (ptrDone) return; ptrDone = true; try { sessionStorage.setItem('repete.reopenSet', '1'); } catch(x) {} appReload(); };
 document.addEventListener('touchmove', e => {
   if (!ptr || !S.settings || !e.touches.length) return;
   const dy = e.touches[0].clientY - ptr.y, dx = Math.abs(e.touches[0].clientX - ptr.x);
@@ -4335,7 +4351,7 @@ function stepView(){
 function doneView(){
   const items = S.scene.items, miss = [...S.missed].sort((a,b)=>a-b);
   if (S.ital || (!S.rehHide && !S.cards)) return `<div class="card"><h2>Scène terminée</h2><p class="mute">Tu as parcouru les ${S.steps.length} répliques.</p>
-    </div><div class="actions acol"><div class="arow half"><button class="btn pri" data-act="${S.ital ? 'startital' : 'start'}">Recommencer</button><button class="btn" data-act="tomine">Mes scènes</button></div></div>`;   /* 2.08 essai 6 (448, M205 d) : boutons en bas, « Mes scènes » au lieu de « Retour au texte » */
+    </div><div class="actions acol"><div class="arow half"><button class="btn pri iconb" data-act="${S.ital ? 'startital' : 'start'}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Recommencer</span></button><button class="btn" data-act="tomine">Mes scènes</button></div></div>`;   /* 2.08 essai 6 (448, M205 d) : boutons en bas, « Mes scènes » au lieu de « Retour au texte » ; essai 7 (452) : ↻ comme dans le bilan noté */
   /* 2.01 : bilan — ancien → nouveau statut, listes dépliables */
   const T = S.trans || {}, H = S.hinted || new Set(), ids = Object.keys(T).map(Number).sort((a, b) => a - b);
   const mineTotal = S.focus ? S.focus.size : S.steps.filter(i => items[i].k === 'l' && items[i].c === S.me).length;
@@ -4536,9 +4552,9 @@ document.addEventListener('click', e => {
       if (d.go && sc0 && sc0.characters.includes(saved.me[pl0.id + '/' + sc0.id])) tmGuard(go); else go();
       break; }
     case 'admtap': S.admTaps = (S.admTaps || 0) + 1; if (S.admTaps >= 5) { S.admAsk = true; S.admTaps = 0; renderSheet(); } break;
-    case 'admgo': { const v = ($('#admcode') || {}).value || ''; if (admHash(v) === ADM_OK) { try { localStorage.setItem('repete.active', 'admin'); } catch(e) {} location.reload(); } else { S.admErr = true; renderSheet(); } break; }
+    case 'admgo': { const v = ($('#admcode') || {}).value || ''; if (admHash(v) === ADM_OK) { try { localStorage.setItem('repete.active', 'admin'); } catch(e) {} appReload(); } else { S.admErr = true; renderSheet(); } break; }
     case 'vibetest': { let r = 'indisponible'; try { if (canVibe) r = String(navigator.vibrate([200, 120, 200])); } catch(e) { r = 'erreur'; } admToast('Vibration · API ' + (canVibe ? 'oui' : 'non') + ' · retour ' + r); break; }
-    case 'admquit': try { localStorage.setItem('repete.active', 'main'); } catch(e) {} location.reload(); break;
+    case 'admquit': try { localStorage.setItem('repete.active', 'main'); } catch(e) {} appReload(); break;
     case 'adm': { const op = b.dataset.op; let v = b.dataset.v !== undefined ? +b.dataset.v : 0;
       if (b.dataset.in) { const el = document.getElementById(b.dataset.in); if (!el || el.value === '') break; v = Math.max(0, +el.value); if (op === 'mastery') v = Math.min(100, v); }
       if (op === 'bgreset') { appConfirm('Effacer tous les badges ?\n\nTous les badges et leurs compteurs du profil de test seront remis à zéro.', 'Effacer', () => { admOp('bgreset', 0); admFeedback('bgreset', 0); }, true); break; }
@@ -4946,6 +4962,18 @@ function rankUpdEnd(){ S.rankUpd = false; const x = document.querySelector('[dat
 const HF = { run:false, pause:false, tm:0, tick:0, left:0, then:null, swallow:0 };
 const hfOn = () => S.view === 'scene' && S.started && S.ital && !S.done;
 const hfWords = t => (String(t || '').replace(/<[^>]*>/g, ' ').match(/[\p{L}\p{N}’'-]+/gu) || []).length;
+/* 2.08 essai 7 (451) : le blanc se calcule en syllabes (approximation : groupes de voyelles ; « e » muet final ignoré sauf dans les mots d'une syllabe ;
+   « -ent » final des verbes non compté si le mot a d'autres voyelles ; nombres : 2 syllabes par chiffre). Pas de liaisons ni d'élisions. */
+const HF_V = /[aeiouyàâäéèêëîïôöùûüÿœæ]+/g;
+function hfSyl(t){ let n = 0;
+  (String(t || '').replace(/<[^>]*>/g, ' ').toLowerCase().match(/[\p{L}\p{N}’'-]+/gu) || []).forEach(w0 => w0.split(/[’'-]/).forEach(w => { if (!w) return;
+    if (/^\d+$/.test(w)) { n += 2 * w.length; return; }
+    w = w.replace(/qu/g, 'q').replace(/gu(?=[eéèêiy])/g, 'g');   /* « qu », « gu » + e / i : le u ne se prononce pas */
+    let g = (w.match(HF_V) || []).length; if (!g) return;
+    if (g > 1 && /[^aeiouyàâäéèêëîïôöùûüÿ](e|es)$/.test(w)) g--;
+    else if (g > 1 && /[^aeiouy]ent$/.test(w) && !/(ment)$/.test(w) && w.length > 4) g--;
+    n += g; }));
+  return n; }
 function hfClear(){ clearTimeout(HF.tm); clearInterval(HF.tick); HF.tm = 0; HF.tick = 0; HF.then = null; HF.left = 0; hfPaint(); }
 function hfReveal(si){ if (italHidden(si) && !S.stepRevealed) { keepTodoBox(); S.stepRevealed = true; render(); } }
 function hfNext(){ if (!HF.run || HF.pause || !hfOn()) return; hfClear(); hfReveal(S.steps[S.pos]); step(1); }
@@ -4954,7 +4982,7 @@ function hfFinish(){ const f = HF.then; clearInterval(HF.tick); clearTimeout(HF.
 function hfArrive(){
   hfClear(); if (!HF.run || HF.pause || !hfOn()) return;
   const si = S.steps[S.pos], it = S.scene.items[si]; if (!it) return;
-  const base = hfWords(it.t) * 0.42 / (S.rate || 1) + 1, slow = !!saved.italSlow;
+  const base = hfSyl(it.t) * 0.22 / (S.rate || 1) + 1, slow = !!saved.italSlow;   /* essai 7 (451) : 0,22 s par syllabe */
   if (it.c === S.me) {
     const sec = Math.round(Math.min(45, Math.max(2, slow ? base * 1.8 + 2 : base)));
     HF.left = sec; HF.then = () => { if (!HF.run || HF.pause || !hfOn()) return; hfReveal(si);   /* 2.08 essai 5 (435) : rien si on a quitté */
@@ -5244,15 +5272,15 @@ function showRecovery(){
   let hasBak = false; try { const b = JSON.parse(localStorage.getItem(BAK) || 'null'); hasBak = isObj(b); } catch(e) {}
   const bs = 'display:block;width:100%;min-height:52px;margin:10px 0 0;font:inherit;font-weight:700;border-radius:12px;border:1.5px solid #888;background:transparent;color:inherit';
   d.innerHTML = '<div style="padding:28px 20px;font:16px/1.5 system-ui,sans-serif;max-width:480px;margin:0 auto"><h2 style="margin:0 0 8px">Les données de l’appli sont illisibles</h2><p>Recharge la page d’abord.' + (hasBak ? ' Une sauvegarde automatique existe : tu peux la restaurer sans rien perdre d’important.' : '') + '</p><button id="rcr" style="' + bs + '">Recharger</button>' + (hasBak ? '<button id="rcb" style="' + bs + '">Restaurer la sauvegarde automatique</button>' : '') + '<p style="margin-top:26px;font-size:14px;opacity:.75">Dernier recours : tout effacer sur ce téléphone (progression, notes et textes ajoutés).</p><button id="rcz" style="' + bs + ';font-weight:600;font-size:14px;min-height:44px">Tout effacer…</button></div>';
-  document.getElementById('rcr').onclick = () => location.reload();
+  document.getElementById('rcr').onclick = () => appReload();
   const rb = document.getElementById('rcb');
-  if (rb) rb.onclick = () => { try { localStorage.setItem(KEY, localStorage.getItem(BAK)); } catch(e) {} location.reload(); };
+  if (rb) rb.onclick = () => { try { localStorage.setItem(KEY, localStorage.getItem(BAK)); } catch(e) {} appReload(); };
   document.getElementById('rcz').onclick = () => {
     appConfirm('Tout effacer sur ce téléphone ?\n\nProgression, notes et textes ajoutés seront perdus. Cette action est définitive.', 'Tout effacer', () =>
       appConfirm('Dernière confirmation : effacer définitivement toutes les données de l’appli ?', 'Effacer', () => {
-        try { localStorage.removeItem(KEY); localStorage.removeItem(BAK); localStorage.removeItem(BAK + '.t'); sessionStorage.clear(); } catch(e) {} location.reload(); }, true), true); };
+        try { localStorage.removeItem(KEY); localStorage.removeItem(BAK); localStorage.removeItem(BAK + '.t'); sessionStorage.clear(); } catch(e) {} appReload(); }, true), true); };
 }
-try { if (tryRestoreNav()) { render(); navScroll(); } else render(); } catch(e) { try { render(); } catch(e2) { showRecovery(); } }
+try { if (tryRestoreNav()) { render(); navScroll(); } else render(); histBackLoad(); } catch(e) { try { render(); } catch(e2) { showRecovery(); } }   /* essai 7 (450) */
 if (restoredFromBak) { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {} flashMsg('Données abîmées : la dernière sauvegarde automatique a été restaurée.'); }
 try { if (sessionStorage.getItem('repete.reopenSet')) { sessionStorage.removeItem('repete.reopenSet'); S.shInstant = true; openSettings(); } } catch(e) {}
 
