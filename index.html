@@ -983,7 +983,7 @@ html:has(.psh),html:has(.psh) body{overflow:hidden;overscroll-behavior:none}   /
 .hg .fl{display:inline-block;margin-right:3px;line-height:0}.hg .fl svg{vertical-align:baseline}.hg .tarn .fl svg{filter:grayscale(1) opacity(.55)}.hg .fl.live svg{vertical-align:-1.3px}
 /* 2.07 essai 2 (367, M161) : choix du mode sous « Répéter d'ici » */
 .la.on{border-color:color-mix(in srgb,var(--accent) 60%,var(--line))}.la .sncv{width:14px;height:14px}
-.rmenu.fm{margin:8px 0 0}.weak .rmenu.fm{margin:8px auto 0}.fm button{justify-content:flex-start;gap:12px;font-weight:600}.fm button svg{color:var(--accent-ink);flex:none;width:18px;height:18px}
+.rmenu.fm{margin:8px 0 0}.weak .rmenu.fm{margin:8px auto 0;max-width:none}.fm button{justify-content:flex-start;gap:12px;font-weight:600}.fm button svg{color:var(--accent-ink);flex:none;width:18px;height:18px}
 /* 2.07 essai 4 : fenêtres uniformes (js/fenetres.js) */
 .ugrip{flex:none;display:flex;justify-content:center;align-items:center;height:22px;touch-action:none}
 .ugrip i{display:block;width:40px;height:4px;border-radius:2px;background:var(--line)}
@@ -2933,7 +2933,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 154, APP_LABEL = '2.08 · essai 8'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 155, APP_LABEL = '2.08 · essai 9'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -3494,6 +3494,9 @@ function ttsMark(){
 const isFocus = () => S.view === 'scene' && S.tab === 'reh' && !!S.me && S.started;
 
 /* ============ VUES ============ */
+/* 2.08 essai 9 (454, M207 e) : le menu « Répliques / Cartes » s'ouvre centré sous le texte de « Répéter ces n répliques », de la largeur de ce texte (+ marges) */
+function weakMenuFit(){ try { const b = document.querySelector('.wcards[aria-expanded=true]'), m = b && b.parentElement.querySelector('.rmenu.fm'); if (!m) return;
+  const r = document.createRange(); r.setStartBefore(b.firstElementChild); r.setEndAfter(b.lastElementChild); m.style.width = Math.min(b.getBoundingClientRect().width, Math.round(r.getBoundingClientRect().width) + 28) + 'px'; } catch(e) {} }
 function render(){
   try { ensureDay(); } catch(e) {}
   let nb = []; try { nb = checkBadges(); } catch(e) {}
@@ -3513,7 +3516,7 @@ function render(){
   try { bindCardSwipe(); } catch(e) {}
   try { keepNow(); } catch(e) {}
   try { tmDock(); } catch(e) {}
-  try { hfAfter(); srSay(); } catch(e) {}   /* 2.08 essai 4 : mains libres (M196), lecteur d'écran (391) */
+  try { hfAfter(); srSay(); weakMenuFit(); } catch(e) {}   /* 2.08 essai 4 : mains libres (M196), lecteur d'écran (391) */
   if (animHold.length && !animHolding()) { const h = animHold.splice(0); h.forEach(x => celebrate(x.kind, x.data)); }
 }
 /* 2.03 : en Répétition, la bulle en cours reste visible au-dessus des boutons */
