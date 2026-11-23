@@ -357,6 +357,8 @@ button.tapk,.fpv.tapk{animation:tapk .18s ease-out}
 .mlist li span{display:inline-flex;align-items:center;gap:6px}.mlist li b{font-size:var(--fs-15)}
 
 .mlist li[hidden]{display:none}
+.mlist li.mop[role=button]{cursor:pointer}.mlist li.mop .gch{color:var(--mute);transition:transform .15s}.mlist li.mop[aria-expanded=true] .gch{transform:rotate(180deg)}
+.mlist .mrl{border-top:0;padding:5px 0 5px 18px;font-size:var(--fs-13);justify-content:flex-start}.mlist .mrl.deep{padding-left:36px}.mlist .mrl span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.mlist .mrl b{font-size:var(--fs-13);margin-right:4px;color:var(--mute)}
 .mlist .ms{border-top:0;padding:4px 0 4px 18px;font-size:var(--fs-13)}
 .pips{display:inline-flex;gap:3px;margin-right:4px}.pips i{width:9px;height:9px;border-radius:50%;background:color-mix(in srgb,var(--ink) 15%,transparent)}.pips i.on{background:var(--st-known)}
 .mdet{margin:8px 0 2px;background:var(--bg);border-radius:var(--r-10);padding:10px 12px;font-size:var(--fs-13);color:var(--mute);cursor:default}.mdet b{color:var(--ink)}
@@ -1020,6 +1022,10 @@ html:has(.psh),html:has(.psh) body{overflow:hidden;overscroll-behavior:none}   /
 .hfind::after{content:"";position:absolute;inset:-9px -2px}
 .hfind.off{background:var(--line)}
 .hfind.below{top:auto;bottom:-46px;transform:translateX(-50%)}
+.hfbx{margin:0 -12px 10px;padding:0 12px 4px;border-radius:var(--r-12);box-shadow:inset 0 0 0 1px var(--line);background:var(--bg)}
+.hfsub{padding-left:18px}
+.hfil{margin-top:6px}
+.wmch{margin-left:6px;display:inline-block;transition:transform .15s}.wcards[aria-expanded=true] .wmch{transform:rotate(180deg)}
 .hfmid{position:fixed;left:50%;top:45%;transform:translate(-50%,-50%);z-index:50;pointer-events:none;background:color-mix(in srgb,var(--ink) 82%,transparent);color:var(--card);padding:12px 18px;border-radius:14px;font-weight:700;font-size:16px;white-space:nowrap}
 /* 2.08 essai 4 (M197) : voix des personnages */
 .vpsw{margin:2px 0 4px}.vpn{display:block;font-weight:400}
@@ -2927,7 +2933,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 150, APP_LABEL = '2.08 · essai 4'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 151, APP_LABEL = '2.08 · essai 5'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -3622,7 +3628,8 @@ function weakList(s, st, k){
   return `<div class="weak ${open ? 'open' : ''}" data-act="noop"><button class="wsum" data-act="weaktog" data-k="${esc(k)}" aria-expanded="${open}">Répliques à travailler (${ko.length + stl.length})<span class="wch">▾</span></button>
     ${open ? `<div class="btabs wbt" role="tablist"><button role="tab" aria-selected="${tab === 'ko'}" class="${tab === 'ko' ? 'on' : ''}" data-act="weaktab" data-k="${esc(k)}" data-v="ko">À répéter (${ko.length})</button><button role="tab" aria-selected="${tab === 'stale'}" class="${tab === 'stale' ? 'on' : ''}" data-act="weaktab" data-k="${esc(k)}" data-v="stale">${CLOCK} À rafraîchir (${stl.length})</button></div>
       ${list.map(row).join('') || `<div class="wnone">Aucune réplique ${tab === 'ko' ? 'à répéter' : 'à rafraîchir'}.</div>`}
-      ${list.length ? `<button class="btn sm soft iconb wcards" data-act="weakcards" data-k="${esc(k)}" data-v="${tab}">${ICO_CARDS}<span>Réviser ${list.length > 1 ? 'ces ' + list.length + ' répliques' : 'cette réplique'} en cartes</span></button>` : ''}` : ''}</div>`;
+      ${list.length ? `<button class="btn sm soft wcards" data-act="weakmenu" data-k="${esc(k)}" aria-expanded="${S.weakMenu === k}"><span>Répéter ${list.length > 1 ? 'ces ' + list.length + ' répliques' : 'cette réplique'}</span><span class="wmch" aria-hidden="true">▾</span></button>
+      ${S.weakMenu === k ? `<div class="rmenu fm" role="menu" aria-label="Répéter en mode">${[['reh', ICO_LIST, 'Répliques'], ['cards', ICO_CARDS, 'Cartes']].map(([m, ic, n]) => `<button role="menuitem" data-act="weakcards" data-k="${esc(k)}" data-v="${tab}" data-m="${m}">${ic}<span>${n}</span></button>`).join('')}</div>` : ''}` : ''}` : ''}</div>`;   /* 2.08 essai 5 (430, M204 a) : choix du mode, sans l'Italienne (le but est d'évaluer) */
 }
 const sceneRow = (p, s) => {
   const on = isMine(p, s), me = saved.me[keyOf(p, s)];
@@ -3691,10 +3698,14 @@ function progData(){
   return { list, T, SOL, KO, withMe, pct: Math.round(pctExact), pctExact, lv: levelInfo(pctExact) };
 }
 /* 2.02 : détail de la maîtrise (M20-A) — fenêtre par-dessus, croix, fond et bouton retour la ferment */
-function openMastery(st, title){
+function openMastery(st, title, sc){
   const L = st.lines, c = st.counts, T = st.total || 1;
   const kn = n => L.filter(l => l.st === 'known' && l.n === n).length, todayN = L.filter(l => l.age === 0).length;
   const w = n => (n / T * 100).toFixed(1) + '%';
+  /* 2.08 essai 5 (442, M203) : chaque statut se déplie sur ses répliques (numéro + fin), une seule liste ouverte ; tout replié à la réouverture */
+  const GCH = '<svg class="gch" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+  const lnum = i => { let n = 0; for (let j = 0; j <= i; j++) if (sc.items[j].k === 'l') n++; return n; };
+  const mrows = (f, g, deep) => !sc ? '' : L.filter(f).map(l => `<li class="mrl${deep ? ' deep' : ''}" data-r="${g}" hidden><span><b>${lnum(l.i)}.</b> ${esc(tail(sc.items[l.i].t))}</span></li>`).join('');
   const pips = n => `<span class="pips">${[1, 2, 3, 4, 5].map(x => `<i class="${x <= n ? 'on' : ''}"></i>`).join('')}</span>`;
   const old = document.getElementById('appcf'); if (old) old.remove();
   const d = document.createElement('div'); d.id = 'appcf'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); d.setAttribute('aria-label', 'Détail de la maîtrise');
@@ -3712,27 +3723,33 @@ function openMastery(st, title){
     </ul>
     <div class="mbar"><i class="solid" style="width:${w(c.solid)}"></i><i class="known" style="width:${w(c.known)}"></i><i class="ko" style="width:${w(c.ko)}"></i></div>
     <ul class="mlist">
-      <li><span><i class="dot solid"></i>Solides</span><b>${c.solid}</b></li>
+      <li class="mop" data-g="solid" ${c.solid ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span><i class="dot solid"></i>Solides ${c.solid ? GCH : ''}</span><b>${c.solid}</b></li>${mrows(l => l.st === 'solid', 'solid')}
       <li class="mkn" role="button" aria-expanded="false" tabindex="0"><span><i class="dot known"></i>Connues <svg class="gch" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span><b>${c.known}</b></li>
-      ${[4, 3, 2, 1].map(n => `<li class="ms" hidden><span>${pips(n)}${n} jour${n > 1 ? 's' : ''} sur 5</span><b>${kn(n)}</b></li>`).join('')}
-      <li><span><i class="dot ko"></i>À répéter</span><b>${c.ko}</b></li>
-      <li><span><i class="dot new"></i>Nouvelles</span><b>${c.new}</b></li>
+      ${[4, 3, 2, 1].map(n => `<li class="ms mop" data-g="k${n}" hidden ${kn(n) ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span>${pips(n)}${n} jour${n > 1 ? 's' : ''} sur 5 ${kn(n) ? GCH : ''}</span><b>${kn(n)}</b></li>${mrows(l => l.st === 'known' && l.n === n, 'k' + n, true)}`).join('')}
+      <li class="mop" data-g="ko" ${c.ko ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span><i class="dot ko"></i>À répéter ${c.ko ? GCH : ''}</span><b>${c.ko}</b></li>${mrows(l => l.st === 'ko', 'ko')}
+      <li class="mop" data-g="new" ${c.new ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span><i class="dot new"></i>Nouvelles ${c.new ? GCH : ''}</span><b>${c.new}</b></li>${mrows(l => l.st === 'new', 'new')}
       <li><span>${CLOCK} À rafraîchir</span><b>${st.stale}</b></li>
       <li><span>✓ Validées aujourd’hui</span><b>${todayN}</b></li>
     </ul></div>`;
   const close = () => { d.remove(); };
+  const shut = () => { d.querySelectorAll('.mop[aria-expanded=true]').forEach(x => x.setAttribute('aria-expanded', 'false')); d.querySelectorAll('.mrl').forEach(x => { x.hidden = true; }); };
   d._cancel = close;
   d.addEventListener('click', e => {
     const inf = e.target.closest('.mwi'); if (inf) { const x = d.querySelector('.mwinfo'); x.hidden = !x.hidden; inf.setAttribute('aria-expanded', String(!x.hidden)); return; }
-    const kn = e.target.closest('.mkn'); if (kn) { const op = kn.getAttribute('aria-expanded') !== 'true'; kn.setAttribute('aria-expanded', String(op)); d.querySelectorAll('.ms').forEach(x => { x.hidden = !op; }); return; }
+    const kn = e.target.closest('.mkn'); if (kn) { const op = kn.getAttribute('aria-expanded') !== 'true'; kn.setAttribute('aria-expanded', String(op)); d.querySelectorAll('.ms').forEach(x => { x.hidden = !op; }); if (!op) shut(); return; }
+    const mo = e.target.closest('.mop[role=button]'); if (mo) { const g = mo.dataset.g, op = mo.getAttribute('aria-expanded') !== 'true'; shut(); if (op) { mo.setAttribute('aria-expanded', 'true'); d.querySelectorAll(`.mrl[data-r="${g}"]`).forEach(x => { x.hidden = false; }); } return; }
     if (e.target.closest('[data-cf]') || e.target === d) close(); });
   document.body.appendChild(d);
 }
 function donut(st, k){
   const c = st.counts, tot = st.total || 1, C = 213.6, col = { solid:'var(--st-solid)', known:'var(--st-known)', ko:'var(--st-ko)', new:'color-mix(in srgb,var(--ink) 16%,transparent)' };
   let off = 0, segs = '';
-  ['solid','known','ko','new'].forEach(k => { if (!c[k]) return; const L = c[k] / tot * C;
-    segs += `<circle cx="40" cy="40" r="34" fill="none" style="stroke:${col[k]}" stroke-width="9" stroke-dasharray="${L.toFixed(1)} ${(C - L).toFixed(1)}" stroke-dashoffset="${(-off).toFixed(1)}" transform="rotate(-90 40 40)"/>`; off += L; });
+  /* 2.08 essai 5 (441) : chaque segment est un arc séparé (plus de pointillés : Chrome Android laissait un cran à 12 h, au début du cercle) */
+  const pt = f => { const a = f * 2 * Math.PI - Math.PI / 2; return (40 + 34 * Math.cos(a)).toFixed(2) + ' ' + (40 + 34 * Math.sin(a)).toFixed(2); };
+  ['solid','known','ko','new'].forEach(k => { if (!c[k]) return; const f0 = off / C, f1 = (off + c[k] / tot * C) / C;
+    segs += f1 - f0 > 0.9999 ? `<circle cx="40" cy="40" r="34" fill="none" style="stroke:${col[k]}" stroke-width="9"/>`
+      : `<path d="M ${pt(f0)} A 34 34 0 ${f1 - f0 > 0.5 ? 1 : 0} 1 ${pt(f1)}" fill="none" style="stroke:${col[k]}" stroke-width="9"/>`;
+    off += c[k] / tot * C; });
   const it = (k, n, w) => `<span class="dli"><i class="dot ${k}"></i>${n} ${k === 'ko' ? w : w + (n > 1 ? 's' : '')}</span>`;
   const l1 = [['solid', c.solid, 'solide'], ['known', c.known, 'connue']].filter(x => x[1]).map(x => it(...x)).join('<span class="dsep">·</span>');
   const l2 = [['ko', c.ko, 'à répéter'], ['new', c.new, 'nouvelle']].filter(x => x[1]).map(x => it(...x)).join('<span class="dsep">·</span>');
@@ -4148,7 +4165,7 @@ function rehView(){
 function introView(){
   const mine = S.scene.items.filter(i => i.k==='l' && i.c===S.me).length;
   const pr = saved.prog[key()];
-  const canResume = pr && pr.me === S.me && !pr.done && pr.pos > 0;
+  const canResume = !saved.rehKo && pr && pr.me === S.me && !pr.done && pr.pos > 0;   /* 2.08 essai 5 (431) : pas de « Reprendre » avec « à répéter » seulement */
   const cpr = (saved.cprog || {})[key()], canCRes = !co().ko && cpr && cpr.me === S.me && !cpr.done && cpr.pos > 0;
   const voiceOpts = VOICES.length
     ? `<option value="">Voix par défaut</option>` + VOICES.map(v => `<option value="${esc(v.name)}" ${S.voice===v.name?'selected':''}>${esc(vName(v))}</option>`).join('')
@@ -4170,12 +4187,10 @@ function introView(){
     <label class="sw"><input type="checkbox" data-act="cnotes" ${co().notes ? 'checked' : ''}> Afficher mes notes</label>`
     : RM === 'ital' ? `<label class="sw"><input type="checkbox" data-act="italgo" ${saved.italGo !== false ? 'checked' : ''}> Aller à ma réplique</label>
     <label class="sw"><input type="checkbox" data-act="italhide" ${saved.italHide ? 'checked' : ''}> Cacher mes répliques</label>
-    ${synth ? `<label class="sw"><input type="checkbox" data-act="italhf" ${saved.italHf ? 'checked' : ''}> <span class="vlt">Mains libres<button type="button" class="info" data-act="infohf" aria-label="À quoi sert « Mains libres » ?" aria-expanded="${S.infoHf ? 'true' : 'false'}" style="margin-left:8px">i</button></span></label>
-    ${S.infoHf ? `<div class="infobox"><p>La voix lit les autres personnages, laisse un blanc pour ta réplique (selon sa longueur), puis enchaîne toute seule. <b>Entendre ma réplique</b> : la voix la dit après le blanc. <b>Mode lent</b> : un blanc plus long, pour réfléchir. Toucher l’écran : pause / reprise.</p></div>` : ''}
-    ${saved.italHf ? `<label class="sw"><input type="checkbox" data-act="italhear" ${saved.italHear !== false ? 'checked' : ''}> Entendre ma réplique</label>
-    <label class="sw"><input type="checkbox" data-act="italslow" ${saved.italSlow ? 'checked' : ''}> Mode lent</label>` : ''}` : ''}
-    <label class="sw"><input type="checkbox" data-act="rehnotes" ${saved.rehNotes ? 'checked' : ''}> Afficher mes notes</label>`
-    : `<label class="sw"><input type="checkbox" data-act="rehnotes" ${saved.rehNotes ? 'checked' : ''}> Afficher mes notes</label>`}
+    <label class="sw"><input type="checkbox" data-act="rehnotes" ${saved.rehNotes ? 'checked' : ''}> Afficher mes notes</label>
+    ${synth ? hfOpts() : ''}`
+    : `<label class="sw"><input type="checkbox" data-act="rehko" ${saved.rehKo ? 'checked' : ''}> Uniquement les « à répéter »</label>
+    <label class="sw"><input type="checkbox" data-act="rehnotes" ${saved.rehNotes ? 'checked' : ''}> Afficher mes notes</label>`}
     ${synth ? `<label class="sw"><input type="checkbox" data-act="${RM === 'ital' ? 'italaudio' : S.rmode === 'cards' ? 'caudio' : 'audio'}" ${(RM === 'ital' ? italAudio() : S.rmode === 'cards' ? co().audio : S.audio) ? 'checked' : ''}> <span class="vlt">Lecture à voix haute<button type="button" class="vdt" data-act="vdet" aria-expanded="${!!S.vdet}" aria-controls="vdx">Détails</button></span></label>
       ${S.vdet ? `<div class="vdx" id="vdx">${VOICES.length ? voiceBlock(voiceOpts) : ''}
       <div class="lbl" style="margin-top:6px">Vitesse de lecture · <span id="rateval">${S.rate.toFixed(1)}</span>×</div>
@@ -4364,6 +4379,7 @@ function cardActsNow(rev){ const r = document.querySelector('.actions .arow'); i
 const cardList = () => { const items = S.scene.items; return items.map((it, i) => i).filter(i => items[i].k === 'l' && items[i].c === S.me); };
 function beginSteps(steps, pos, all, focus, cards, ital){
   HF.run = !!(ital && saved.italHf); HF.pause = false;   /* 2.08 essai 4 (M196) */
+  if (HF.run && saved.italBip !== false) hfBipInit();   /* essai 5 : le son se prépare pendant le toucher « Lancer » */
   S.cards = !!cards; S.ital = !!ital; S.early = false; S.bilOpen = null; S.bilTab = 'evo'; S.revBox = null; S.enterFrom = null; S.hinted = new Set(); S.trans = {}; S.focus = focus || null; S.steps = steps; S.pos = pos || 0; S.stepsAll = all !== false; S.started = true; S.done = false; S.stepRevealed = false; S.hint = false;
   S.tab = 'reh'; saveProg();
   render(); window.scrollTo(0,0); keepNow(); autoSpeak(); hfArrive();
@@ -4389,9 +4405,9 @@ function endHere(){
   }
   persist(); render(); window.scrollTo(0,0);
 }
-function flipStart(){
+function flipStart(d){
   if (S.cards || !isFocus() || S.done) return null;
-  const el = document.querySelector('.thr .now'); if (!el) return null;
+  const el = d < 0 ? document.querySelector(`.thr [data-i="${S.steps[S.pos + d]}"]`) : document.querySelector('.thr .now'); if (!el) return null;   /* 2.08 essai 5 (437) : même glissement pour « Précédente » */
   return { i: el.dataset.i, top: el.getBoundingClientRect().top };
 }
 function flipEnd(f){
@@ -4409,7 +4425,7 @@ function flipEnd(f){
 function step(d){ step0(d); hfArrive(); }   /* 2.08 essai 4 : mains libres */
 function step0(d){
   stopSpeech();
-  const fl = d > 0 ? flipStart() : null;
+  const fl = d ? flipStart(d) : null;
   const n = S.pos + d;
   if (n < 0) return;
   if (n >= S.steps.length) { if (S.stepsAll && S.me && !S.done) { S.done = true; if (APPLAUSE_ON) celebrate('applause', { scene:S.scene.title }); } S.done = true; saveProg(); render(); window.scrollTo(0,0); return; }
@@ -4418,9 +4434,12 @@ function step0(d){
   render(); window.scrollTo(0,0); keepNow(); flipEnd(fl); autoSpeak();
 }
 const stOf = r => !r ? { st:'new', n:0 } : { st: r.ko ? 'ko' : r.n >= 5 ? 'solid' : r.n >= 1 ? 'known' : 'new', n: Math.min(5, r.n | 0) };
-let gradeT = 0;
+let actT = 0; S.coolMs = 500;
+/* 2.08 essai 5 (430, 431) : mes répliques choisies, chacune précédée de la réplique qui l'amène */
+function withCues(list){ const it = S.scene.items, out = new Set();
+  list.forEach(i => { for (let j = i - 1; j >= 0; j--) if (it[j].k === 'l') { if (it[j].c !== S.me || !list.includes(j)) out.add(j); break; } out.add(i); });
+  return [...out].sort((a, b) => a - b); }
 function grade(v){
-  gradeT = Date.now();
   const si = S.steps[S.pos];
   if (v === 'ko') S.missed.add(si); else S.missed.delete(si);
   S.hinted = S.hinted || new Set(); S.hinted.delete(si);
@@ -4472,12 +4491,13 @@ document.addEventListener('click', e => {
   if (S.bsel === 'scenes' && e.target.closest && e.target.closest('.bov .bigart')) { try { RepeteEgg.tap(); } catch(x) {} }
   if (soundOn()) { try { RepeteSons.unlock(); } catch(x) {} }
   if (S.nMenu != null && !(e.target.closest && e.target.closest('.nmenu,.nmore'))) { S.nMenu = null; render(); if (!e.target.closest('[data-act]')) return; }
+  if (S.weakK && !(e.target.closest && e.target.closest('.weak'))) { S.weakK = null; S.weakMenu = null; if (!e.target.closest('[data-act]')) { render(); return; } }   /* 2.08 essai 5 (432) : toucher ailleurs replie « Répliques à travailler » */
   const b = e.target.closest('[data-act]');
   if (!b || b.tagName === 'INPUT' || b.tagName === 'SELECT') return;
   const a = b.dataset.act;
   if (a === 'noop') return;
   if (Date.now() - HF.swallow < 450) return;   /* 2.08 essai 4 : le toucher qui suit un glissement */
-  if (Date.now() - gradeT < 300 && /^(reveal-step|grade|next|thrtap|hint|hfskip)$/.test(a)) return;   /* 2.08 (375) : double toucher après une note */
+  if (!S.ital && S.started && /^(reveal-step|grade|next|prev|thrtap|cardflip)$/.test(a)) { if (Date.now() - actT < S.coolMs) return; actT = Date.now(); }   /* 2.08 essai 5 (440) : 0,5 s entre deux actions en Répliques et Cartes */
   /* Panneau admin : même vibration pour tous les boutons (l'éclair de surbrillance est retiré : l'animation au toucher suffit) */
   const admSec = b.closest('.admsec');
   if (a !== 'admtap' && !b.classList.contains('sh-back')) buzz(a === 'adm' || admSec ? 'ok' : 'tap');
@@ -4608,6 +4628,7 @@ document.addEventListener('click', e => {
       rankSend(true).then(() => { if (rankErr === 'taken' || rankErr === 'blocked') { S.rankEdit = true; } rankLoad(); }); break; }
     case 'scremove': { const pl = b.dataset.play, sc = b.dataset.scene, t = b.dataset.t;
       appConfirm('Retirer « ' + t + ' » de Mes scènes ?\n\nTa progression est conservée : tu pourras la remettre depuis la Bibliothèque.', 'Retirer', () => { const k = pl + '/' + sc; saved.mine = (saved.mine || []).filter(x => x !== k); persist(); render(); }, true); break; }
+    case 'weakmenu': S.weakMenu = S.weakMenu === b.dataset.k ? null : b.dataset.k; render(); break;   /* 2.08 essai 5 (430, M204 a) */
     case 'weakcards': {
       /* 2.08 (370) : comme l'onglet Répéter, on demande avant d'arrêter le minuteur */
       const d = Object.assign({}, b.dataset);
@@ -4615,17 +4636,17 @@ document.addEventListener('click', e => {
       const k = d.k, cut = k.indexOf('/'), pl = LIBRARY.find(p => p.id === k.slice(0, cut)), sc = pl && pl.scenes.find(x => x.id === k.slice(cut + 1));
       if (!pl || !sc) return;
       S.play = pl; S.scene = sc; S.me = saved.me[k];
-      Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, tab:'reh', rmode:'cards', mode:'all', textHide:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set()});
+      Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, tab:'reh', rmode:d.m === 'reh' ? 'reh' : 'cards', mode:'all', textHide:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set(), weakK:null, weakMenu:null});
       saved.last = { play:pl.id, scene:sc.id }; persist(); window.scrollTo(0,0);
       const st = stats(pl, sc), list = (st ? st.att : []).filter(a => d.v === 'ko' ? a.st === 'ko' : (a.stale && a.st !== 'ko')).map(a => a.i).sort((x, y) => x - y);
       if (!list.length) { render(); return; }
-      S.missed = new Set(); beginSteps(list, 0, false, null, true);
+      S.missed = new Set(); if (d.m === 'reh') beginSteps(withCues(list), 0, false); else beginSteps(list, 0, false, null, true);   /* 2.08 essai 5 (430, M204 a) */
       };
       tmGuard(go); break; }
     case 'noop': break;
     case 'mdet': { const k = b.dataset.k, cut = k.indexOf('/'), pl = LIBRARY.find(p => p.id === k.slice(0, cut)), sc = pl && pl.scenes.find(x => x.id === k.slice(cut + 1));
-      if (!pl || !sc) break; const st = stats(pl, sc); if (st) openMastery(st, sc.title + ' · ' + st.c); break; }
-    case 'weaktog': S.weakK = S.weakK === b.dataset.k ? null : b.dataset.k; render(); break;
+      if (!pl || !sc) break; const st = stats(pl, sc); if (st) openMastery(st, sc.title + ' · ' + st.c, sc); break; }
+    case 'weaktog': S.weakK = S.weakK === b.dataset.k ? null : b.dataset.k; S.weakMenu = null; render(); break;
     case 'weaktab': S.weakTab = S.weakTab || {}; S.weakTab[b.dataset.k] = b.dataset.v; render(); break;
     case 'admbg': { const x = BADGES.find(y => y.id === b.dataset.b), t = +b.dataset.v; saved.bg = saved.bg || {}; saved.bgc = saved.bgc || {};
       saved.bg[x.id] = t; saved.bgc[x.id] = x.unique ? t : (t ? x.T[t - 1] : 0); saved.bgFix = saved.bgFix || {}; saved.bgFix[x.id] = true; persist(); renderSheet(); render(); admToast(x.name + ' : ' + (x.unique ? (t ? 'obtenu' : 'retiré') : 'palier ' + t)); break; }
@@ -4685,7 +4706,10 @@ document.addEventListener('click', e => {
     case 'fromm': { const i = +b.dataset.i, m = b.dataset.v; S.fromOpen = null; tmGuard(() => { S.missed = new Set(); S.rmode = m;
       if (m === 'cards') { const L = cardList(), k = L.findIndex(x => x >= i); beginSteps(L, k < 0 ? 0 : k, true, null, true); }
       else { const all = allSteps(); beginSteps(all, Math.max(0, all.indexOf(i)), true, null, false, m === 'ital'); } }); break; }
-    case 'start': { S.missed = new Set(); const st = allSteps(); beginSteps(st, firstPos(st), true); break; }
+    case 'start': { S.missed = new Set();
+      if (saved.rehKo) { const st0 = stats(S.play, S.scene), ko = st0 ? st0.lines.filter(l => l.st === 'ko').map(l => l.i) : []; const list = withCues(ko);   /* 2.08 essai 5 (431, M199 c) */
+        if (!list.length) { flashMsg('Aucune réplique « à répéter » dans cette scène.'); break; } beginSteps(list, 0, false); break; }
+      const st = allSteps(); beginSteps(st, firstPos(st), true); break; }
     case 'startital': { S.missed = new Set(); const st = allSteps(); beginSteps(st, saved.italGo === false ? 0 : firstPos(st), true, null, false, true); break; }
     case 'rmode': S.rmode = ['cards', 'ital'].includes(b.dataset.v) ? b.dataset.v : 'reh'; S.vdet = false; render(); break;   /* 351 : les détails de la voix se referment */
     case 'hdupd': b.disabled = true; b.lastChild && (b.lastChild.textContent = 'Mise à jour…'); updApply(); break;   /* 2.06 (260) ; essai 6 : attend la nouvelle version */
@@ -4803,6 +4827,8 @@ document.addEventListener('change', e => {
   else if (a === 'italhf') { saved.italHf = t.checked; persist(); render(); }   /* 2.08 essai 4 (M196) */
   else if (a === 'italhear') { saved.italHear = t.checked; persist(); }
   else if (a === 'italslow') { saved.italSlow = t.checked; persist(); }
+  else if (a === 'italbip') { saved.italBip = t.checked; persist(); }   /* 2.08 essai 5 (434) */
+  else if (a === 'rehko') { saved.rehKo = t.checked; persist(); render(); }   /* 2.08 essai 5 (431) */
   else if (a === 'vper') { saved.vPer = t.checked; if (t.checked) vPerInit(); persist(); render(); }   /* 2.08 essai 4 (M197) */
   else if (a === 'vch') { vMap()[t.dataset.c] = t.value; persist(); }
   else if (a === 'cardsko') { co().ko = t.checked; persist(); }
@@ -4927,9 +4953,10 @@ function hfArrive(){
   const base = hfWords(it.t) * 0.42 / (S.rate || 1) + 1, slow = !!saved.italSlow;
   if (it.c === S.me) {
     const sec = Math.round(Math.min(45, Math.max(2, slow ? base * 1.8 + 2 : base)));
-    HF.left = sec; HF.then = () => { hfReveal(si);
+    HF.left = sec; HF.then = () => { if (!HF.run || HF.pause || !hfOn()) return; hfReveal(si);   /* 2.08 essai 5 (435) : rien si on a quitté */
       if (saved.italHear !== false && audioOn() && synth && S.tts.status !== 'silent') { speak(si); HF.tm = setTimeout(() => { if (S.tts.status !== 'ok') hfNext(); }, 3000); }
       else HF.tm = setTimeout(hfNext, 400); };
+    if (saved.italBip !== false) hfBip();   /* 2.08 essai 5 (434) : bip court au début du blanc */
     hfPaint(); HF.tick = setInterval(() => { HF.left -= 0.25; hfPaint(); }, 250); HF.tm = setTimeout(hfFinish, sec * 1000);
   } else {
     /* la voix lit (autoSpeak) ; sa fin appelle hfSpoken. Sans voix : un temps selon la longueur. */
@@ -4937,7 +4964,7 @@ function hfArrive(){
   }
 }
 /* fin d'une lecture à voix haute (voix.js) */
-function hfSpoken(){ if (!HF.run || HF.pause || !hfOn()) return; clearTimeout(HF.tm); HF.tm = setTimeout(hfNext, saved.italSlow ? 1300 : 500); }
+function hfSpoken(){ if (!HF.run || HF.pause || !hfOn()) return; clearTimeout(HF.tm); HF.tm = setTimeout(hfNext, 500); }   /* 2.08 essai 5 (436) : le mode lent n'allonge que mon blanc */
 function hfStart(){ HF.run = !!saved.italHf; HF.pause = false; }
 function hfToggle(){ HF.pause = !HF.pause; if (HF.pause) { hfClear(); stopSpeech(); render(); } else { render(); autoSpeak(); hfArrive(); } }
 /* « À toi… n s » à la place du bouton de droite, mis à jour sans tout redessiner */
@@ -4950,6 +4977,7 @@ const hfMid = () => (HF.run && HF.pause && hfOn()) ? '<div class="hfmid" aria-hi
 /* après chaque rendu : place l'indicateur, bloque « tirer pour actualiser » pendant l'Italienne */
 function hfAfter(){
   document.documentElement.style.overscrollBehaviorY = hfOn() ? 'none' : '';
+  if (!hfOn() && (HF.tm || HF.tick)) { clearTimeout(HF.tm); clearInterval(HF.tick); HF.tm = 0; HF.tick = 0; HF.then = null; }   /* 2.08 essai 5 (435) : on a quitté l'Italienne */
   const b = document.querySelector('.pcount .hfind'); if (!b) return;
   const pc = b.parentElement, lab = pc.firstElementChild, g = pc.querySelector('.pwrap'), pr = pc.getBoundingClientRect(), lr = lab.getBoundingClientRect(), gr = g ? g.getBoundingClientRect() : { left: innerWidth, top: pr.top, bottom: pr.bottom };
   b.style.left = ((lr.right + gr.left) / 2 - pr.left) + 'px'; b.style.top = ((gr.top + gr.bottom) / 2 - pr.top) + 'px';
@@ -4969,6 +4997,22 @@ function hfAfter(){
     if (dy < 0) { const si = S.steps[S.pos]; if (italHidden(si) && !S.stepRevealed) { keepTodoBox(); S.stepRevealed = true; render(); hfArrive(); } else step(1); }
     else if (S.pos > 0) step(-1); }, { passive: false });
 })();
+
+/* 2.08 essai 5 (434, M198 son a) : bip court (880 Hz, 0,12 s), indépendant des effets sonores de l'appli */
+let hfAC = null;
+function hfBipInit(){ try { hfAC = hfAC || new (window.AudioContext || window.webkitAudioContext)(); if (hfAC.state === 'suspended') hfAC.resume(); } catch(e) { hfAC = null; } }
+function hfBip(){ hfBipInit(); if (!hfAC) return; try { const t = hfAC.currentTime, o = hfAC.createOscillator(), g = hfAC.createGain(); o.type = 'sine'; o.frequency.value = 880;
+  g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.35, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.12); o.connect(g).connect(hfAC.destination); o.start(t); o.stop(t + 0.16); } catch(e) {} }
+/* 2.08 essai 5 (M202, M204 b) : options de l'Italienne ; cadre (style du bloc « Détails ») qui s'ouvre quand « Mains libres » est coché,
+   sous-options décalées, « Mains libres » ne bouge pas */
+function hfOpts(){
+  const lab = `<label class="sw"><input type="checkbox" data-act="italhf" ${saved.italHf ? 'checked' : ''}> <span class="vlt">Mains libres<button type="button" class="info" data-act="infohf" aria-label="À quoi sert « Mains libres » ?" aria-expanded="${S.infoHf ? 'true' : 'false'}" style="margin-left:8px">i</button></span></label>`;
+  const info = S.infoHf ? `<div class="infobox"><p>La voix lit les autres personnages, laisse un blanc pour ta réplique (selon sa longueur), puis enchaîne toute seule. Toucher l’écran : pause / reprise.</p><p class="hfil"><b>Entendre ma réplique</b> : la voix la dit après le blanc.<br><b>Mode lent</b> : un blanc plus long, pour réfléchir.<br><b>Bip sonore</b> : un bip court quand c’est à toi.</p></div>` : '';
+  if (!saved.italHf) return lab + info;
+  return `<div class="hfbx">${lab}${info}
+    <label class="sw hfsub"><input type="checkbox" data-act="italhear" ${saved.italHear !== false ? 'checked' : ''}> Entendre ma réplique</label>
+    <label class="sw hfsub"><input type="checkbox" data-act="italslow" ${saved.italSlow ? 'checked' : ''}> Mode lent</label>
+    <label class="sw hfsub"><input type="checkbox" data-act="italbip" ${saved.italBip !== false ? 'checked' : ''}> Bip sonore</label></div>`; }
 /* ===================== 2.04 : MINUTEUR DE RÉPÉTITION (claude/minuteur-integration.md + minuteur-2.04-decisions.md) =====================
    Éléments persistants hors de #app (#tm, #tmsheet, #tmalarm, #tmpre) : render() ne les détruit jamais.
    Temps calculé à partir d'horloges (fin de passage), jamais en comptant des ticks. Horloge « virtuelle » pour la vitesse du mode admin. */
