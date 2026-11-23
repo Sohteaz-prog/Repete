@@ -1,5 +1,5 @@
 /* Répète — hors ligne. Changer le numéro de CACHE à chaque mise à jour des fichiers listés. */
-const CACHE = 'repete-v152';
+const CACHE = 'repete-v153';
 const FILES = [
   './', './index.html', './manifest.webmanifest',
   './icon-192.png', './icon-512.png', './icon-maskable-512.png',
