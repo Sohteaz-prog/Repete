@@ -1055,6 +1055,16 @@ html:has(.psh),html:has(.psh) body{overflow:hidden;overscroll-behavior:none}   /
 .mkbar{display:flex;align-items:center;gap:8px;margin:8px 0 2px;font-family:system-ui,sans-serif}
 .mkhint{font-size:13px;color:var(--mute);flex:1;line-height:1.35}
 .mkdone{font:700 14px system-ui,sans-serif;color:var(--accent-ink);background:none;border:0;padding:10px 4px;min-height:44px;white-space:nowrap}
+/* 2.09 (457, M213) : étoiles (prestiges), or des badges */
+.str{display:inline-flex;align-items:center;gap:1px;font-weight:700;color:#E3A71F;white-space:nowrap}
+[data-theme=dark] .str{color:#F2BE3A}
+.str .stv{flex:none}
+.str.dn{font-size:11px;line-height:1;margin-top:1px}
+.str.big{font-size:18px}.str.big .stv{width:18px;height:18px}
+.stv.dim{color:var(--mute);vertical-align:-2px}
+.stn{font-weight:600;margin-right:4px}
+.m13p{display:block;font-size:11px;font-weight:700;color:#B98510;line-height:1.1}
+[data-theme=dark] .m13p{color:#F2BE3A}
 </style>
 </head>
 <body>
@@ -1075,6 +1085,25 @@ html:has(.psh),html:has(.psh) body{overflow:hidden;overscroll-behavior:none}   /
 <g id="rp-pad"><path d="M51 56V49a9 9 0 0 1 18 0V56" fill="none" stroke="#9aa0ab" stroke-width="4.6" stroke-linecap="round"/><rect x="44" y="55" width="32" height="25" rx="5.5" fill="#9aa0ab"/><rect x="44" y="55" width="32" height="25" rx="5.5" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="1"/><circle cx="60" cy="65.5" r="3.4" fill="#1d2027"/><path d="M60 66v7" stroke="#1d2027" stroke-width="3" stroke-linecap="round"/></g><g id="rp-lk-round"><circle cx="60" cy="60" r="58" fill="url(#rp-lk)"/><circle cx="60" cy="60" r="57" fill="none" stroke="#b9bec8" stroke-opacity=".34" stroke-width="1.4"/><circle cx="60" cy="60" r="47" fill="#101318" fill-opacity=".5"/><circle cx="60" cy="60" r="46.5" fill="none" stroke="#fff" stroke-opacity=".07" stroke-width="1"/><use href="#rp-pad"/></g><g id="rp-lk-hex"><path d="M60 2L110.2 31L110.2 89L60 118L9.8 89L9.8 31Z" fill="url(#rp-lk)" stroke="#b9bec8" stroke-opacity=".34" stroke-width="1.4" stroke-linejoin="round"/><path d="M60 15L99 37.5L99 82.5L60 105L21 82.5L21 37.5Z" fill="#101318" fill-opacity=".5"/><path d="M60 15L99 37.5L99 82.5L60 105L21 82.5L21 37.5Z" fill="none" stroke="#fff" stroke-opacity=".07" stroke-width="1"/><use href="#rp-pad"/></g><circle id="rp-sil-round" cx="60" cy="60" r="58"/><path id="rp-sil-hex" stroke-linejoin="round" d="M60 2L110.2 31L110.2 89L60 118L9.8 89L9.8 31Z"/>
 <g id="rp-lkb-round"><circle cx="60" cy="60" r="58" fill="url(#rp-lk)"/><circle cx="60" cy="60" r="57" fill="none" stroke="#b9bec8" stroke-opacity=".34" stroke-width="1.4"/><circle cx="60" cy="60" r="47" fill="#101318" fill-opacity=".5"/><circle cx="60" cy="60" r="46.5" fill="none" stroke="#fff" stroke-opacity=".07" stroke-width="1"/></g><g id="rp-lkb-hex"><path d="M60 2L110.2 31L110.2 89L60 118L9.8 89L9.8 31Z" fill="url(#rp-lk)" stroke="#b9bec8" stroke-opacity=".34" stroke-width="1.4" stroke-linejoin="round"/><path d="M60 15L99 37.5L99 82.5L60 105L21 82.5L21 37.5Z" fill="#101318" fill-opacity=".5"/><path d="M60 15L99 37.5L99 82.5L60 105L21 82.5L21 37.5Z" fill="none" stroke="#fff" stroke-opacity=".07" stroke-width="1"/></g><g id="rp-pad2"><circle cx="60" cy="87" r="15" fill="#101318" fill-opacity=".8"/><circle cx="60" cy="87" r="14.5" fill="none" stroke="#b9bec8" stroke-opacity=".32"/><g transform="translate(60 87) scale(.5) translate(-60 -60)"><use href="#rp-pad"/></g></g><g id="rp-lk-flame"><use href="#rp-lkb-round"/><g style="--gl:#6d6a76;--lite:#85828f;--dark:#25232b;--rim:#6d6a76;--face:#6d6a76;opacity:.5;filter:saturate(.15)"><use href="#rp-g-flame"/></g><use href="#rp-pad2"/></g><g id="rp-lk-target"><use href="#rp-lkb-round"/><g style="--gl:#6d6a76;--lite:#85828f;--dark:#25232b;--rim:#6d6a76;--face:#6d6a76;opacity:.5;filter:saturate(.15)"><use href="#rp-g-target"/></g><use href="#rp-pad2"/></g><g id="rp-lk-masks"><use href="#rp-lkb-round"/><g style="--gl:#6d6a76;--lite:#85828f;--dark:#25232b;--rim:#6d6a76;--face:#6d6a76;opacity:.5;filter:saturate(.15)"><use href="#rp-g-masks"/></g><use href="#rp-pad2"/></g><g id="rp-lk-lines"><use href="#rp-lkb-round"/><g style="--gl:#6d6a76;--lite:#85828f;--dark:#25232b;--rim:#6d6a76;--face:#6d6a76;opacity:.5;filter:saturate(.15)"><use href="#rp-g-lines"/></g><use href="#rp-pad2"/></g><g id="rp-lk-star"><use href="#rp-lkb-hex"/><g style="--gl:#6d6a76;--lite:#85828f;--dark:#25232b;--rim:#6d6a76;--face:#6d6a76;opacity:.5;filter:saturate(.15)"><use href="#rp-g-star"/></g><use href="#rp-pad2"/></g><g id="rp-lk-curtain"><use href="#rp-lkb-hex"/><g style="--gl:#6d6a76;--lite:#85828f;--dark:#25232b;--rim:#6d6a76;--face:#6d6a76;opacity:.5;filter:saturate(.15)"><use href="#rp-g-curtain"/></g><use href="#rp-pad2"/></g>
 </defs></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<linearGradient id="rs-rim-gold" gradientUnits="userSpaceOnUse" x1="14" y1="6" x2="106" y2="114"><stop offset="0" stop-color="#fff6cf"/><stop offset=".2" stop-color="#f6cd5a"/><stop offset=".46" stop-color="#9a6410"/><stop offset=".72" stop-color="#E3A71F"/><stop offset="1" stop-color="#fff2b8"/></linearGradient>
+<linearGradient id="rs-gl-gold" gradientUnits="userSpaceOnUse" x1="30" y1="26" x2="90" y2="96"><stop offset="0" stop-color="#fffbe2"/><stop offset=".34" stop-color="#ffe08a"/><stop offset=".68" stop-color="#E3A71F"/><stop offset="1" stop-color="#a26b0b"/></linearGradient>
+<linearGradient id="rs-rim-iris" gradientUnits="userSpaceOnUse" x1="8" y1="8" x2="112" y2="112"><stop offset="0" stop-color="#fff4dc"/><stop offset=".16" stop-color="#ffc2e6"/><stop offset=".34" stop-color="#c4b0ff"/><stop offset=".52" stop-color="#8fe3ff"/><stop offset=".7" stop-color="#aef7d2"/><stop offset=".86" stop-color="#ffe59a"/><stop offset="1" stop-color="#fff6e8"/></linearGradient>
+<linearGradient id="rs-rim-iris2" gradientUnits="userSpaceOnUse" x1="112" y1="8" x2="8" y2="112"><stop offset="0" stop-color="#ffd7ef"/><stop offset=".3" stop-color="#b9a6ff"/><stop offset=".55" stop-color="#7fd9ff"/><stop offset=".8" stop-color="#b6ffd9"/><stop offset="1" stop-color="#fff0b0"/></linearGradient>
+<radialGradient id="rs-face-night" cx=".42" cy=".3" r=".85"><stop offset="0" stop-color="#34449a"/><stop offset=".5" stop-color="#18215e"/><stop offset="1" stop-color="#070a26"/></radialGradient>
+<radialGradient id="rs-glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe9a6" stop-opacity=".75"/><stop offset=".45" stop-color="#ffd25e" stop-opacity=".22"/><stop offset="1" stop-color="#ffd25e" stop-opacity="0"/></radialGradient>
+<radialGradient id="rs-glow-w" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".4" stop-color="#cfe6ff" stop-opacity=".25"/><stop offset="1" stop-color="#cfe6ff" stop-opacity="0"/></radialGradient>
+<linearGradient id="rs-ed" gradientUnits="userSpaceOnUse" x1="14" y1="14" x2="106" y2="106"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></linearGradient>
+<linearGradient id="rs-ed2" gradientUnits="userSpaceOnUse" x1="106" y1="106" x2="14" y2="14"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".6"/></linearGradient>
+<radialGradient id="rs-shade" cx=".5" cy=".5" r=".5" fx=".6" fy=".64"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></radialGradient>
+<linearGradient id="rs-gloss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".32"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<linearGradient id="rs-lk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4b505a"/><stop offset="1" stop-color="#1f232a"/></linearGradient>
+<filter id="rs-bv" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceAlpha" stdDeviation="1.1" result="b"/><feSpecularLighting in="b" surfaceScale="2.6" specularConstant=".9" specularExponent="16" lighting-color="#fff" result="s"><feDistantLight azimuth="225" elevation="50"/></feSpecularLighting><feComposite in="s" in2="SourceAlpha" operator="in" result="hl"/><feOffset in="SourceAlpha" dx=".9" dy="1.7" result="o"/><feGaussianBlur in="o" stdDeviation=".9" result="ob"/><feComponentTransfer in="ob" result="sh"><feFuncA type="linear" slope=".5"/></feComponentTransfer><feMerge><feMergeNode in="sh"/><feMergeNode in="SourceGraphic"/><feMergeNode in="hl"/></feMerge></filter>
+<filter id="rs-gray" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values=".08"/><feComponentTransfer><feFuncR type="linear" slope=".72"/><feFuncG type="linear" slope=".72"/><feFuncB type="linear" slope=".76"/></feComponentTransfer></filter>
+<path id="rs-sp" d="M0-7C.8-2 2-.8 7 0C2 .8.8 2 0 7C-.8 2-2 .8-7 0C-2-.8-.8-2 0-7Z" fill="#fff"/>
+<g id="rs-pad"><path d="M51 56V49a9 9 0 0 1 18 0V56" fill="none" stroke="#9aa0ab" stroke-width="4.6" stroke-linecap="round"/><rect x="44" y="55" width="32" height="25" rx="5.5" fill="#9aa0ab"/><rect x="44" y="55" width="32" height="25" rx="5.5" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="1"/><circle cx="60" cy="65.5" r="3.4" fill="#1d2027"/><path d="M60 66v7" stroke="#1d2027" stroke-width="3" stroke-linecap="round"/></g>
+<g id="rs-pad2"><circle cx="60" cy="87" r="15" fill="#101318" fill-opacity=".8"/><circle cx="60" cy="87" r="14.5" fill="none" stroke="#b9bec8" stroke-opacity=".32"/><g transform="translate(60 87) scale(.5) translate(-60 -60)"><use href="#rs-pad"/></g></g>
+<clipPath id="rs-cf"><path d="M60 18L101.85 48.4L85.86 97.6L34.14 97.6L18.15 48.4Z"/></clipPath><symbol id="rs-frame-etoile-montante" viewBox="0 0 120 120" overflow="visible"><path d="M60 6L113.26 44.7L92.92 107.3L27.08 107.3L6.74 44.7Z" fill="#000" fill-opacity=".35" stroke="#000" stroke-opacity=".35" stroke-width="5" stroke-linejoin="round" transform="translate(.8 1.5)"/><path d="M60 6L113.26 44.7L92.92 107.3L27.08 107.3L6.74 44.7Z" fill="url(#rs-rim-gold)" stroke="url(#rs-rim-gold)" stroke-width="5" stroke-linejoin="round"/><path d="M60 6L113.26 44.7L104.7 47.48L60 15Z" fill="#fff" fill-opacity="0.05"/><path d="M113.26 44.7L92.92 107.3L87.63 100.02L104.7 47.48Z" fill="#2a1600" fill-opacity="0.38"/><path d="M92.92 107.3L27.08 107.3L32.37 100.02L87.63 100.02Z" fill="#2a1600" fill-opacity="0.3"/><path d="M27.08 107.3L6.74 44.7L15.3 47.48L32.37 100.02Z" fill="#fff" fill-opacity="0.16"/><path d="M6.74 44.7L60 6L60 15L15.3 47.48Z" fill="#fff" fill-opacity="0.38"/><path d="M60 7.5L111.83 45.16L92.03 106.09L27.97 106.09L8.17 45.16Z" fill="none" stroke="url(#rs-ed)" stroke-width="1.4" stroke-linejoin="round"/><path d="M60 15L104.7 47.48L87.63 100.02L32.37 100.02L15.3 47.48Z" fill="none" stroke="url(#rs-ed2)" stroke-width="2.4" stroke-linejoin="round"/><path d="M60 16.5L103.27 47.94L86.74 98.81L33.26 98.81L16.73 47.94Z" fill="#04061a" fill-opacity=".75" stroke="#04061a" stroke-opacity=".75" stroke-width="2" stroke-linejoin="round"/><path d="M60 18L101.85 48.4L85.86 97.6L34.14 97.6L18.15 48.4Z" fill="url(#rs-face-night)" stroke="url(#rs-face-night)" stroke-width="2" stroke-linejoin="round"/><path d="M60 18L101.85 48.4L85.86 97.6L34.14 97.6L18.15 48.4Z" fill="url(#rs-shade)" stroke-linejoin="round"/><path d="M60 18.4L101.47 48.53L85.63 97.27L34.37 97.27L18.53 48.53Z" fill="none" stroke="#ffe08a" stroke-opacity=".32" stroke-width=".6" stroke-linejoin="round"/><path clip-path="url(#rs-cf)" d="M14 56C20 26 42 12 60 12S100 26 106 56C84 45 36 45 14 56Z" fill="url(#rs-gloss)"/></symbol><symbol id="rs-motif-etoile-montante" viewBox="0 0 120 120" overflow="visible"><path d="M32 57L46 75L60 57L74 75L88 57" fill="none" stroke="#ffe7a1" stroke-opacity=".75" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="0.1 0"/><circle cx="32" cy="57" r="12" fill="url(#rs-glow)"/><circle cx="46" cy="75" r="12" fill="url(#rs-glow)"/><circle cx="60" cy="57" r="12" fill="url(#rs-glow)"/><circle cx="74" cy="75" r="12" fill="url(#rs-glow)"/><circle cx="88" cy="57" r="12" fill="url(#rs-glow)"/><g filter="url(#rs-bv)"><path d="M32 48.4L34.33 53.8L40.18 54.34L35.76 58.22L37.05 63.96L32 60.96L26.95 63.96L28.24 58.22L23.82 54.34L29.67 53.8Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.4" stroke-linejoin="round"/><path d="M32 57L29.67 53.8L32 48.4ZM32 57L34.33 53.8L40.18 54.34ZM32 57L35.76 58.22L37.05 63.96ZM32 57L32 60.96L26.95 63.96ZM32 57L28.24 58.22L23.82 54.34Z" fill="#fff" fill-opacity=".38"/><path d="M32 57L32 48.4L34.33 53.8ZM32 57L40.18 54.34L35.76 58.22ZM32 57L37.05 63.96L32 60.96ZM32 57L26.95 63.96L28.24 58.22ZM32 57L23.82 54.34L29.67 53.8Z" fill="#5a3500" fill-opacity=".26"/></g><g filter="url(#rs-bv)"><path d="M46 66.4L48.33 71.8L54.18 72.34L49.76 76.22L51.05 81.96L46 78.96L40.95 81.96L42.24 76.22L37.82 72.34L43.67 71.8Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.4" stroke-linejoin="round"/><path d="M46 75L43.67 71.8L46 66.4ZM46 75L48.33 71.8L54.18 72.34ZM46 75L49.76 76.22L51.05 81.96ZM46 75L46 78.96L40.95 81.96ZM46 75L42.24 76.22L37.82 72.34Z" fill="#fff" fill-opacity=".38"/><path d="M46 75L46 66.4L48.33 71.8ZM46 75L54.18 72.34L49.76 76.22ZM46 75L51.05 81.96L46 78.96ZM46 75L40.95 81.96L42.24 76.22ZM46 75L37.82 72.34L43.67 71.8Z" fill="#5a3500" fill-opacity=".26"/></g><g filter="url(#rs-bv)"><path d="M60 46.8L62.76 53.2L69.7 53.85L64.46 58.45L66 65.25L60 61.69L54 65.25L55.54 58.45L50.3 53.85L57.24 53.2Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.46" stroke-linejoin="round"/><path d="M60 57L57.24 53.2L60 46.8ZM60 57L62.76 53.2L69.7 53.85ZM60 57L64.46 58.45L66 65.25ZM60 57L60 61.69L54 65.25ZM60 57L55.54 58.45L50.3 53.85Z" fill="#fff" fill-opacity=".38"/><path d="M60 57L60 46.8L62.76 53.2ZM60 57L69.7 53.85L64.46 58.45ZM60 57L66 65.25L60 61.69ZM60 57L54 65.25L55.54 58.45ZM60 57L50.3 53.85L57.24 53.2Z" fill="#5a3500" fill-opacity=".26"/></g><g filter="url(#rs-bv)"><path d="M74 66.4L76.33 71.8L82.18 72.34L77.76 76.22L79.05 81.96L74 78.96L68.95 81.96L70.24 76.22L65.82 72.34L71.67 71.8Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.4" stroke-linejoin="round"/><path d="M74 75L71.67 71.8L74 66.4ZM74 75L76.33 71.8L82.18 72.34ZM74 75L77.76 76.22L79.05 81.96ZM74 75L74 78.96L68.95 81.96ZM74 75L70.24 76.22L65.82 72.34Z" fill="#fff" fill-opacity=".38"/><path d="M74 75L74 66.4L76.33 71.8ZM74 75L82.18 72.34L77.76 76.22ZM74 75L79.05 81.96L74 78.96ZM74 75L68.95 81.96L70.24 76.22ZM74 75L65.82 72.34L71.67 71.8Z" fill="#5a3500" fill-opacity=".26"/></g><g filter="url(#rs-bv)"><path d="M88 48.4L90.33 53.8L96.18 54.34L91.76 58.22L93.05 63.96L88 60.96L82.95 63.96L84.24 58.22L79.82 54.34L85.67 53.8Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.4" stroke-linejoin="round"/><path d="M88 57L85.67 53.8L88 48.4ZM88 57L90.33 53.8L96.18 54.34ZM88 57L91.76 58.22L93.05 63.96ZM88 57L88 60.96L82.95 63.96ZM88 57L84.24 58.22L79.82 54.34Z" fill="#fff" fill-opacity=".38"/><path d="M88 57L88 48.4L90.33 53.8ZM88 57L96.18 54.34L91.76 58.22ZM88 57L93.05 63.96L88 60.96ZM88 57L82.95 63.96L84.24 58.22ZM88 57L79.82 54.34L85.67 53.8Z" fill="#5a3500" fill-opacity=".26"/></g></symbol><symbol id="rs-frame-star" viewBox="0 0 120 120" overflow="visible"><path d="M60 6L113.26 44.7L92.92 107.3L27.08 107.3L6.74 44.7Z" fill="#000" fill-opacity=".35" stroke="#000" stroke-opacity=".35" stroke-width="5" stroke-linejoin="round" transform="translate(.8 1.5)"/><path d="M60 6L113.26 44.7L92.92 107.3L27.08 107.3L6.74 44.7Z" fill="url(#rs-rim-iris)" stroke="url(#rs-rim-iris)" stroke-width="5" stroke-linejoin="round"/><path d="M60 6L113.26 44.7L104.7 47.48L60 15Z" fill="#fff" fill-opacity="0.05"/><path d="M113.26 44.7L92.92 107.3L87.63 100.02L104.7 47.48Z" fill="#2a1600" fill-opacity="0.38"/><path d="M92.92 107.3L27.08 107.3L32.37 100.02L87.63 100.02Z" fill="#2a1600" fill-opacity="0.3"/><path d="M27.08 107.3L6.74 44.7L15.3 47.48L32.37 100.02Z" fill="#fff" fill-opacity="0.16"/><path d="M6.74 44.7L60 6L60 15L15.3 47.48Z" fill="#fff" fill-opacity="0.38"/><path d="M60 7.5L111.83 45.16L92.03 106.09L27.97 106.09L8.17 45.16Z" fill="none" stroke="url(#rs-ed)" stroke-width="1.4" stroke-linejoin="round"/><path d="M60 15L104.7 47.48L87.63 100.02L32.37 100.02L15.3 47.48Z" fill="none" stroke="url(#rs-ed2)" stroke-width="2.4" stroke-linejoin="round"/><path d="M60 16.5L103.27 47.94L86.74 98.81L33.26 98.81L16.73 47.94Z" fill="#04061a" fill-opacity=".75" stroke="#04061a" stroke-opacity=".75" stroke-width="2" stroke-linejoin="round"/><path d="M60 18L101.85 48.4L85.86 97.6L34.14 97.6L18.15 48.4Z" fill="url(#rs-face-night)" stroke="url(#rs-face-night)" stroke-width="2" stroke-linejoin="round"/><path d="M60 18L101.85 48.4L85.86 97.6L34.14 97.6L18.15 48.4Z" fill="url(#rs-shade)" stroke-linejoin="round"/><path d="M60 18.4L101.47 48.53L85.63 97.27L34.37 97.27L18.53 48.53Z" fill="none" stroke="#ffe08a" stroke-opacity=".32" stroke-width=".6" stroke-linejoin="round"/><path clip-path="url(#rs-cf)" d="M14 56C20 26 42 12 60 12S100 26 106 56C84 45 36 45 14 56Z" fill="url(#rs-gloss)"/><circle cx="60" cy="8.5" r="9" fill="url(#rs-glow)"/><g filter="url(#rs-bv)"><path d="M60 1.3L61.95 5.82L66.85 6.28L63.15 9.52L64.23 14.32L60 11.81L55.77 14.32L56.85 9.52L53.15 6.28L58.05 5.82Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.4" stroke-linejoin="round"/><path d="M60 8.5L58.05 5.82L60 1.3ZM60 8.5L61.95 5.82L66.85 6.28ZM60 8.5L63.15 9.52L64.23 14.32ZM60 8.5L60 11.81L55.77 14.32ZM60 8.5L56.85 9.52L53.15 6.28Z" fill="#fff" fill-opacity=".38"/><path d="M60 8.5L60 1.3L61.95 5.82ZM60 8.5L66.85 6.28L63.15 9.52ZM60 8.5L64.23 14.32L60 11.81ZM60 8.5L55.77 14.32L56.85 9.52ZM60 8.5L53.15 6.28L58.05 5.82Z" fill="#5a3500" fill-opacity=".26"/></g><circle cx="110.88" cy="45.47" r="9" fill="url(#rs-glow)"/><g filter="url(#rs-bv)"><path d="M110.88 38.27L112.83 42.79L117.73 43.24L114.03 46.49L115.11 51.29L110.88 48.78L106.65 51.29L107.73 46.49L104.03 43.24L108.93 42.79Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.4" stroke-linejoin="round"/><path d="M110.88 45.47L108.93 42.79L110.88 38.27ZM110.88 45.47L112.83 42.79L117.73 43.24ZM110.88 45.47L114.03 46.49L115.11 51.29ZM110.88 45.47L110.88 48.78L106.65 51.29ZM110.88 45.47L107.73 46.49L104.03 43.24Z" fill="#fff" fill-opacity=".38"/><path d="M110.88 45.47L110.88 38.27L112.83 42.79ZM110.88 45.47L117.73 43.24L114.03 46.49ZM110.88 45.47L115.11 51.29L110.88 48.78ZM110.88 45.47L106.65 51.29L107.73 46.49ZM110.88 45.47L104.03 43.24L108.93 42.79Z" fill="#5a3500" fill-opacity=".26"/></g><circle cx="91.45" cy="105.28" r="9" fill="url(#rs-glow)"/><g filter="url(#rs-bv)"><path d="M91.45 98.08L93.39 102.6L98.29 103.06L94.6 106.31L95.68 111.11L91.45 108.59L87.21 111.11L88.3 106.31L84.6 103.06L89.5 102.6Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.4" stroke-linejoin="round"/><path d="M91.45 105.28L89.5 102.6L91.45 98.08ZM91.45 105.28L93.39 102.6L98.29 103.06ZM91.45 105.28L94.6 106.31L95.68 111.11ZM91.45 105.28L91.45 108.59L87.21 111.11ZM91.45 105.28L88.3 106.31L84.6 103.06Z" fill="#fff" fill-opacity=".38"/><path d="M91.45 105.28L91.45 98.08L93.39 102.6ZM91.45 105.28L98.29 103.06L94.6 106.31ZM91.45 105.28L95.68 111.11L91.45 108.59ZM91.45 105.28L87.21 111.11L88.3 106.31ZM91.45 105.28L84.6 103.06L89.5 102.6Z" fill="#5a3500" fill-opacity=".26"/></g><circle cx="28.55" cy="105.28" r="9" fill="url(#rs-glow)"/><g filter="url(#rs-bv)"><path d="M28.55 98.08L30.5 102.6L35.4 103.06L31.7 106.31L32.79 111.11L28.55 108.59L24.32 111.11L25.4 106.31L21.71 103.06L26.61 102.6Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.4" stroke-linejoin="round"/><path d="M28.55 105.28L26.61 102.6L28.55 98.08ZM28.55 105.28L30.5 102.6L35.4 103.06ZM28.55 105.28L31.7 106.31L32.79 111.11ZM28.55 105.28L28.55 108.59L24.32 111.11ZM28.55 105.28L25.4 106.31L21.71 103.06Z" fill="#fff" fill-opacity=".38"/><path d="M28.55 105.28L28.55 98.08L30.5 102.6ZM28.55 105.28L35.4 103.06L31.7 106.31ZM28.55 105.28L32.79 111.11L28.55 108.59ZM28.55 105.28L24.32 111.11L25.4 106.31ZM28.55 105.28L21.71 103.06L26.61 102.6Z" fill="#5a3500" fill-opacity=".26"/></g><circle cx="9.12" cy="45.47" r="9" fill="url(#rs-glow)"/><g filter="url(#rs-bv)"><path d="M9.12 38.27L11.07 42.79L15.97 43.24L12.27 46.49L13.35 51.29L9.12 48.78L4.89 51.29L5.97 46.49L2.27 43.24L7.17 42.79Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.4" stroke-linejoin="round"/><path d="M9.12 45.47L7.17 42.79L9.12 38.27ZM9.12 45.47L11.07 42.79L15.97 43.24ZM9.12 45.47L12.27 46.49L13.35 51.29ZM9.12 45.47L9.12 48.78L4.89 51.29ZM9.12 45.47L5.97 46.49L2.27 43.24Z" fill="#fff" fill-opacity=".38"/><path d="M9.12 45.47L9.12 38.27L11.07 42.79ZM9.12 45.47L15.97 43.24L12.27 46.49ZM9.12 45.47L13.35 51.29L9.12 48.78ZM9.12 45.47L4.89 51.29L5.97 46.49ZM9.12 45.47L2.27 43.24L7.17 42.79Z" fill="#5a3500" fill-opacity=".26"/></g></symbol><symbol id="rs-motif-star" viewBox="0 0 120 120" overflow="visible"><path d="M60 31L89.48 52.42L78.22 87.08L41.78 87.08L30.52 52.42Z" fill="none" stroke="#ffe7a1" stroke-opacity=".7" stroke-width="1.2" stroke-linejoin="round"/><circle cx="60" cy="63" r="34" fill="url(#rs-glow)"/><circle cx="60" cy="31" r="9" fill="url(#rs-glow)"/><circle cx="89.48" cy="52.42" r="9" fill="url(#rs-glow)"/><circle cx="78.22" cy="87.08" r="9" fill="url(#rs-glow)"/><circle cx="41.78" cy="87.08" r="9" fill="url(#rs-glow)"/><circle cx="30.52" cy="52.42" r="9" fill="url(#rs-glow)"/><g filter="url(#rs-bv)"><path d="M60 43.5L65.41 56.06L79.02 57.32L68.75 66.34L71.76 79.68L60 72.7L48.24 79.68L51.25 66.34L40.98 57.32L54.59 56.06Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.9" stroke-linejoin="round"/><path d="M60 63.5L54.59 56.06L60 43.5ZM60 63.5L65.41 56.06L79.02 57.32ZM60 63.5L68.75 66.34L71.76 79.68ZM60 63.5L60 72.7L48.24 79.68ZM60 63.5L51.25 66.34L40.98 57.32Z" fill="#fff" fill-opacity=".38"/><path d="M60 63.5L60 43.5L65.41 56.06ZM60 63.5L79.02 57.32L68.75 66.34ZM60 63.5L71.76 79.68L60 72.7ZM60 63.5L48.24 79.68L51.25 66.34ZM60 63.5L40.98 57.32L54.59 56.06Z" fill="#5a3500" fill-opacity=".26"/></g><g filter="url(#rs-bv)"><path d="M60 24.8L61.68 28.69L65.9 29.08L62.71 31.88L63.64 36.02L60 33.85L56.36 36.02L57.29 31.88L54.1 29.08L58.32 28.69Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.4" stroke-linejoin="round"/><path d="M60 31L58.32 28.69L60 24.8ZM60 31L61.68 28.69L65.9 29.08ZM60 31L62.71 31.88L63.64 36.02ZM60 31L60 33.85L56.36 36.02ZM60 31L57.29 31.88L54.1 29.08Z" fill="#fff" fill-opacity=".38"/><path d="M60 31L60 24.8L61.68 28.69ZM60 31L65.9 29.08L62.71 31.88ZM60 31L63.64 36.02L60 33.85ZM60 31L56.36 36.02L57.29 31.88ZM60 31L54.1 29.08L58.32 28.69Z" fill="#5a3500" fill-opacity=".26"/></g><g filter="url(#rs-bv)"><path d="M89.48 46.22L91.16 50.11L95.38 50.5L92.2 53.3L93.13 57.44L89.48 55.27L85.84 57.44L86.77 53.3L83.59 50.5L87.81 50.11Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.4" stroke-linejoin="round"/><path d="M89.48 52.42L87.81 50.11L89.48 46.22ZM89.48 52.42L91.16 50.11L95.38 50.5ZM89.48 52.42L92.2 53.3L93.13 57.44ZM89.48 52.42L89.48 55.27L85.84 57.44ZM89.48 52.42L86.77 53.3L83.59 50.5Z" fill="#fff" fill-opacity=".38"/><path d="M89.48 52.42L89.48 46.22L91.16 50.11ZM89.48 52.42L95.38 50.5L92.2 53.3ZM89.48 52.42L93.13 57.44L89.48 55.27ZM89.48 52.42L85.84 57.44L86.77 53.3ZM89.48 52.42L83.59 50.5L87.81 50.11Z" fill="#5a3500" fill-opacity=".26"/></g><g filter="url(#rs-bv)"><path d="M78.22 80.88L79.9 84.77L84.12 85.16L80.93 87.96L81.87 92.1L78.22 89.93L74.58 92.1L75.51 87.96L72.32 85.16L76.54 84.77Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.4" stroke-linejoin="round"/><path d="M78.22 87.08L76.54 84.77L78.22 80.88ZM78.22 87.08L79.9 84.77L84.12 85.16ZM78.22 87.08L80.93 87.96L81.87 92.1ZM78.22 87.08L78.22 89.93L74.58 92.1ZM78.22 87.08L75.51 87.96L72.32 85.16Z" fill="#fff" fill-opacity=".38"/><path d="M78.22 87.08L78.22 80.88L79.9 84.77ZM78.22 87.08L84.12 85.16L80.93 87.96ZM78.22 87.08L81.87 92.1L78.22 89.93ZM78.22 87.08L74.58 92.1L75.51 87.96ZM78.22 87.08L72.32 85.16L76.54 84.77Z" fill="#5a3500" fill-opacity=".26"/></g><g filter="url(#rs-bv)"><path d="M41.78 80.88L43.46 84.77L47.68 85.16L44.49 87.96L45.42 92.1L41.78 89.93L38.13 92.1L39.07 87.96L35.88 85.16L40.1 84.77Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.4" stroke-linejoin="round"/><path d="M41.78 87.08L40.1 84.77L41.78 80.88ZM41.78 87.08L43.46 84.77L47.68 85.16ZM41.78 87.08L44.49 87.96L45.42 92.1ZM41.78 87.08L41.78 89.93L38.13 92.1ZM41.78 87.08L39.07 87.96L35.88 85.16Z" fill="#fff" fill-opacity=".38"/><path d="M41.78 87.08L41.78 80.88L43.46 84.77ZM41.78 87.08L47.68 85.16L44.49 87.96ZM41.78 87.08L45.42 92.1L41.78 89.93ZM41.78 87.08L38.13 92.1L39.07 87.96ZM41.78 87.08L35.88 85.16L40.1 84.77Z" fill="#5a3500" fill-opacity=".26"/></g><g filter="url(#rs-bv)"><path d="M30.52 46.22L32.19 50.11L36.41 50.5L33.23 53.3L34.16 57.44L30.52 55.27L26.87 57.44L27.8 53.3L24.62 50.5L28.84 50.11Z" fill="url(#rs-gl-gold)" stroke="#7a4e06" stroke-opacity=".55" stroke-width="0.4" stroke-linejoin="round"/><path d="M30.52 52.42L28.84 50.11L30.52 46.22ZM30.52 52.42L32.19 50.11L36.41 50.5ZM30.52 52.42L33.23 53.3L34.16 57.44ZM30.52 52.42L30.52 55.27L26.87 57.44ZM30.52 52.42L27.8 53.3L24.62 50.5Z" fill="#fff" fill-opacity=".38"/><path d="M30.52 52.42L30.52 46.22L32.19 50.11ZM30.52 52.42L36.41 50.5L33.23 53.3ZM30.52 52.42L34.16 57.44L30.52 55.27ZM30.52 52.42L26.87 57.44L27.8 53.3ZM30.52 52.42L24.62 50.5L28.84 50.11Z" fill="#5a3500" fill-opacity=".26"/></g></symbol><symbol id="rs-lk-etoile-montante" viewBox="0 0 120 120" overflow="visible"><path d="M60 6L113.26 44.7L92.92 107.3L27.08 107.3L6.74 44.7Z" fill="url(#rs-lk)" stroke="url(#rs-lk)" stroke-width="5" stroke-linejoin="round"/><path d="M60 6L113.26 44.7L92.92 107.3L27.08 107.3L6.74 44.7Z" fill="none" stroke="#b9bec8" stroke-opacity=".34" stroke-width="1.4" stroke-linejoin="round"/><path d="M60 16.5L103.27 47.94L86.74 98.81L33.26 98.81L16.73 47.94Z" fill="#101318" fill-opacity=".55" stroke="#101318" stroke-opacity=".55" stroke-width="2" stroke-linejoin="round"/><path d="M60 16.5L103.27 47.94L86.74 98.81L33.26 98.81L16.73 47.94Z" fill="none" stroke="#fff" stroke-opacity=".07"/><g filter="url(#rs-gray)" opacity=".5"><use href="#rs-motif-etoile-montante" width="120" height="120"/></g><use href="#rs-pad2"/></symbol><symbol id="rs-lk-star" viewBox="0 0 120 120" overflow="visible"><path d="M60 6L113.26 44.7L92.92 107.3L27.08 107.3L6.74 44.7Z" fill="url(#rs-lk)" stroke="url(#rs-lk)" stroke-width="5" stroke-linejoin="round"/><path d="M60 6L113.26 44.7L92.92 107.3L27.08 107.3L6.74 44.7Z" fill="none" stroke="#b9bec8" stroke-opacity=".34" stroke-width="1.4" stroke-linejoin="round"/><path d="M60 16.5L103.27 47.94L86.74 98.81L33.26 98.81L16.73 47.94Z" fill="#101318" fill-opacity=".55" stroke="#101318" stroke-opacity=".55" stroke-width="2" stroke-linejoin="round"/><path d="M60 16.5L103.27 47.94L86.74 98.81L33.26 98.81L16.73 47.94Z" fill="none" stroke="#fff" stroke-opacity=".07"/><g filter="url(#rs-gray)" opacity=".5"><use href="#rs-motif-star" width="120" height="120"/></g><use href="#rs-pad2"/></symbol></defs></svg>
 
 
 <div id="app"></div>
@@ -2693,31 +2722,41 @@ const BADGES = [
   { id:'streak', name:'Série', g:'S', desc:'Reviens réviser, jour après jour.', T:[3, 7, 14, 21, 28] },
   { id:'obj', name:'Objectif du jour', g:'O', desc:'Atteins ton objectif du jour, encore et encore.', T:[1, 5, 15, 30, 50] },
   { id:'scenes', name:'Scènes jouées', g:'R', desc:'Répète l’équivalent de scènes entières, en une ou plusieurs fois.', T:[1, 10, 30, 75, 150] },
-  { id:'solid', name:'Répliques solides', g:'%', desc:'Rends tes répliques solides.', T:[10, 25, 50, 75, 100] },
+  /* 2.09 (460) : 25 %, 50 %, 100 % de solides, puis tout ★1, tout ★3 (valeur = % de solides, ou 100 + étoile globale quand tout est solide) */
+  { id:'solid', name:'Répliques solides', g:'%', desc:'Rends tes répliques solides, puis fais-les briller.', T:[25, 50, 100, 101, 103] },
   { id:'perfect', name:'Scène parfaite', g:'P', unique:true, desc:'Maîtrise une scène à 100 %.' },
-  { id:'ready', name:'Prêt pour le jour J', g:'J', unique:true, desc:'Arrive prêt à la représentation.' }
+  { id:'ready', name:'Prêt pour le jour J', g:'J', unique:true, desc:'Arrive prêt à la représentation.' },
+  /* 2.09 : badges secrets « prestige » (fiche : badges-secrets-integration.md) ; titres Révélation / Monstre sacré */
+  { id:'rising', name:'Étoile montante', g:'etoile-montante', unique:true, secret:true, desc:'Donne 5 étoiles à toutes les répliques d’une scène.', title:'Révélation' },
+  { id:'star', name:'Star', g:'star', unique:true, secret:true, desc:'Donne 5 étoiles à toutes les répliques de toutes tes scènes.', title:'Monstre sacré' }
 ];
 function badgeVals(){
   const items = allStats(), H = saved.hist || {};
-  let T = 0, SOL = 0, perfect = false, allKnown = items.length > 0;
-  items.forEach(x => { T += x.st.total; SOL += x.st.counts.solid; if (x.st.pct >= 100) perfect = true; if (x.st.counts.new || x.st.counts.ko) allKnown = false; });
+  let T = 0, SOL = 0, perfect = false, rising = false, fresh7 = true;
+  items.forEach(x => { T += x.st.total; SOL += x.st.counts.solid; if (x.st.pct >= 100) perfect = true; if (x.st.star >= 5) rising = true; if (x.st.lines.some(l => l.age === null || l.age > 6)) fresh7 = false; });
+  const full = T > 0 && SOL === T, gs = full ? Math.min(...items.map(x => x.st.star)) : 0;
+  /* 2.09 (459) : « Prêt pour le jour J » = 100 % depuis 14 jours de suite (saved.fullSince) et toutes les répliques validées dans les 7 derniers jours, avant la date objectif */
+  if (full) { if (!saved.fullSince || saved.fullSince > today()) saved.fullSince = today(); } else delete saved.fullSince;
   return { streak: streakInfo().n,
     obj: Object.keys(H).filter(d => H[d].obj && H[d].done && H[d].done.length >= H[d].obj.need).length,
-    solid: T ? SOL / T * 100 : 0, perfect,
-    ready: T > 0 && allKnown && SOL / T >= 2 / 3 && calToday() <= saved.goalDate };
+    solid: !T ? 0 : full ? 100 + gs : SOL / T * 100, perfect, rising, star: full && gs >= 5,
+    ready: full && !!saved.fullSince && daysBetween(saved.fullSince, today()) >= 13 && fresh7 && calToday() <= saved.goalDate };
 }
 function checkBadges(){
-  const v = badgeVals(); saved.bgc = saved.bgc || {}; saved.bg = saved.bg || {};
+  const fs0 = saved.fullSince, v = badgeVals(); saved.bgc = saved.bgc || {}; saved.bg = saved.bg || {};
   const g = saved.bgc, fresh = [];
   /* 2.04 : en mode admin, un badge réglé à la main reste fixe (la progression du profil de test ne le change plus) */
   const fix = (ADMIN && saved.bgFix) || {};
   ['streak', 'obj', 'solid'].forEach(k => { if (!fix[k]) g[k] = Math.max(g[k] || 0, v[k]); });
   if (v.perfect && !fix.perfect) g.perfect = 1; if (v.ready && !fix.ready) g.ready = 1;
+  if (v.rising && !fix.rising) g.rising = 1; if (v.star && !fix.star) g.star = 1;
+  /* 2.09 (460) : nouveaux paliers « Répliques solides » : le palier affiché est recalculé une fois (il peut baisser) */
+  if (!saved.bgSol2) { saved.bgSol2 = 1; const sb = BADGES.find(b => b.id === 'solid'); if (!fix.solid) saved.bg.solid = sb.T.filter(t => (g.solid || 0) >= t - 1e-9).length; }
   BADGES.forEach(b => { if (fix[b.id]) return;
     const cur = b.unique ? (g[b.id] ? 1 : 0) : b.T.filter(t => (g[b.id] || 0) >= t - 1e-9).length;
     if (cur > (saved.bg[b.id] || 0)) { saved.bg[b.id] = cur; fresh.push({ b, tier: cur }); }
   });
-  if (fresh.length) persist();
+  if (fresh.length || saved.fullSince !== fs0) persist();
   return fresh;
 }
 function badgeProg(b){
@@ -2726,12 +2765,13 @@ function badgeProg(b){
   const prev = tier ? b.T[tier - 1] : 0, next = b.T[tier];
   return Math.max(0, Math.min(100, Math.round((val - prev) / (next - prev) * 100)));
 }
-const BADGE_GLYPH = { streak:'flame', obj:'target', scenes:'masks', solid:'lines', perfect:'star', ready:'curtain' };
+const BADGE_GLYPH = { streak:'flame', obj:'target', scenes:'masks', solid:'lines', perfect:'star', ready:'curtain', rising:'etoile-montante', star:'star' };
 const BADGE_FRAME = { perfect:'sp', ready:'jj' };
 const RPT = ['bronze','argent','or','platine','diamant'];
 /* t = 0 verrouillé, 1..5 palier ; les badges uniques : t >= 1 = obtenu */
 function badgeArt(b, t){
   const g = BADGE_GLYPH[b.id] || 'star';
+  if (b.secret) return t ? `<svg class="rp t-secret" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><use href="#rs-frame-${g}"/><use href="#rs-motif-${g}"/></svg>` : `<svg class="rp" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><use href="#rs-lk-${g}"/></svg>`;
   if (!t) return `<svg class="rp" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><use href="#rp-lk-${g}"/></svg>`;
   if (b.unique) return `<svg class="rp t-violet" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><use href="#rp-hex-${BADGE_FRAME[b.id] || 'sp'}"/><use href="#rp-g-${g}"/></svg>`;
   const k = RPT[Math.max(0, Math.min(4, t - 1))];
@@ -2741,7 +2781,7 @@ const medal = (b, t) => `<span class="medal">${badgeArt(b, t)}</span>`;
 /* 2.07 (317) : compteur = paliers obtenus (4 badges × 5 grades + 2 uniques = 22) */
 const BADGE_MAX = BADGES.reduce((n, b) => n + (b.unique ? 1 : 5), 0);
 const badgePts = () => { const bg = saved.bg || {}; return BADGES.reduce((n, b) => n + Math.min(b.unique ? 1 : 5, bg[b.id] || 0), 0); };
-const TIER_UNIT = { streak:n => n + ' jour' + (n > 1 ? 's' : ''), obj:n => n + ' fois', scenes:n => n + ' scène' + (n > 1 ? 's' : ''), solid:n => n + ' %' };
+const TIER_UNIT = { streak:n => n + ' jour' + (n > 1 ? 's' : ''), obj:n => n + ' fois', scenes:n => n + ' scène' + (n > 1 ? 's' : ''), solid:n => n <= 100 ? n + ' %' : 'tout ★' + (n - 100) };
 /* 2.07 (317, M114) : « Collection » — grades obtenus avec leur objectif, % pour le prochain, « ??? » pour les autres */
 function badgeTiers(b, t, p){
   const GCH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
@@ -2760,7 +2800,7 @@ function badgesView(){
   h += '</div>';
   const sel = BADGES.find(b => b.id === S.bsel);
   if (sel) { const t = bg[sel.id] || 0, p = sel.unique ? null : badgeProg(sel);
-    h += `<div class="bov" data-act="badgeclose"><section class="card bdet" role="dialog" aria-label="${esc(sel.name)}"><button class="bx" data-act="badgeclose" aria-label="Fermer">✕</button><div class="bigart">${badgeArt(sel, t)}</div><h3>${esc(sel.name)}</h3><p>${esc(sel.desc)}</p>
+    h += `<div class="bov" data-act="badgeclose"><section class="card bdet" role="dialog" aria-label="${esc(sel.name)}"><button class="bx" data-act="badgeclose" aria-label="Fermer">✕</button><div class="bigart">${badgeArt(sel, t)}</div><h3>${esc(sel.name)}</h3><p>${sel.secret && !t ? 'Badge secret.' : esc(sel.desc)}</p>${sel.secret && t ? `<p class="mute small">Titre débloqué : ${esc(sel.title)}</p>` : ''}
       ${sel.unique ? `<p class="mute small">${t ? 'Obtenu.' : 'Pas encore obtenu.'}</p>`
         : p === null ? `<p class="mute small">Palier maximum atteint.</p>`
         : `<div class="prog"><i style="width:${p}%"></i></div><div class="pcount"><span>${p} % vers le palier suivant</span><span></span></div>`}
@@ -3014,7 +3054,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 157, APP_LABEL = '2.09 · essai 1'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 158, APP_LABEL = '2.09 · essai 2'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -3658,16 +3698,32 @@ function stats(p, s){
     const r = L[i]; let st = 'new', stale = false, age = null;
     if (r) {
       if (r.ko) st = 'ko'; else if (r.n >= 5) st = 'solid'; else if (r.n >= 1) st = 'known';
-      if (!r.ko && r.n >= 1 && r.ok) { age = daysBetween(r.ok, day); stale = age >= 7; }
+      if (!r.ko && r.n >= 1 && r.ok) { age = daysBetween(r.ok, day); stale = age >= staleDays(r); }   /* 2.09 (456) : 3 j connue, 5 j solide, 7 j étoilée */
       out.pts += Math.min(5, r.n | 0);
     }
     out.counts[st]++; if (stale) out.stale++;
-    const o = { i, st, stale, age, n: r ? Math.min(5, r.n) : 0, g: r ? r.g || null : null };
+    const o = { i, st, stale, age, n: r ? Math.min(5, r.n) : 0, g: r ? r.g || null : null, p: st === 'solid' ? Math.min(5, r.p | 0) : 0, s: st === 'solid' ? r.s | 0 : 0 };
     out.lines.push(o); if (st === 'ko' || stale) out.att.push(o);
   });
   out.pct = out.total ? Math.round(out.pts / (5 * out.total) * 100) : 0;
+  /* 2.09 (457) : étoile de la scène = la plus petite étoile de mes répliques (0 si une n'est pas solide) */
+  out.star = out.total && out.counts.solid === out.total ? Math.min(...out.lines.map(l => l.p)) : 0;
   return out;
 }
+/* 2.09 (456) : délai avant « à rafraîchir » selon le statut */
+const staleDays = r => (r.p | 0) >= 1 ? 7 : r.n >= 5 ? 5 : 3;
+/* 2.09 (456, 457) : « à rafraîchir » depuis une semaine = ratée, une seule fois : connue / solide −2 jours (jamais « nouvelle »),
+   étoilée −1 étoile ; elle passe « à répéter ». Fait une fois par jour, pour toutes les scènes. */
+function decayAll(){
+  const day = today(); if (saved.decayDay === day) return false; saved.decayDay = day; let ch = true;
+  Object.values(saved.lines || {}).forEach(L => Object.values(L || {}).forEach(r => {
+    if (!r || r.ko || !(r.n >= 1) || !r.ok || daysBetween(r.ok, day) < staleDays(r) + 7) return;
+    if ((r.p | 0) >= 1) { r.p--; r.s = 0; r.pf = null; } else { r.n = Math.max(1, (r.n | 0) - 2); r.s = 0; }
+    r.ko = true; r.ok = null; r.kd = day; }));
+  return ch;
+}
+/* 2.09 (457) : étoile globale = la plus petite étoile de toutes mes scènes */
+const globalStar = () => { const it = allStats(); return it.length ? Math.min(...it.map(x => x.st.star)) : 0; };
 const lvlOf = p => Math.min(50, Math.floor(50 * Math.pow(Math.max(0, p) / 100, 2 / 3) + 1e-9));
 const lvlAt = n => 100 * Math.pow(n / 50, 1.5);
 const TITLES = [[50, 'Tête d’affiche'], [40, 'Premier rôle'], [30, 'Second rôle'], [20, 'Doublure'], [10, 'Figurant']];
@@ -3678,7 +3734,9 @@ function levelInfo(pctExact){
   const lvl = saved.levelMax || 0;
   let toNext = 100;
   if (lvl < 50) { const lo = lvlAt(lvl), hi = lvlAt(lvl + 1); toNext = Math.max(0, Math.min(100, Math.round((pctExact - lo) / (hi - lo) * 100))); }
-  return { lvl, title: titleOf(lvl), toNext, max: lvl >= 50 };
+  /* 2.09 : titres de prestige des badges secrets (surclassent les titres de niveau) */
+  const bg = saved.bg || {}, pt = bg.star ? 'Monstre sacré' : bg.rising ? 'Révélation' : '';
+  return { lvl, title: pt || titleOf(lvl), toNext, max: lvl >= 50 };
 }
 const mineList = () => saved.mine.map(k => { const [pid, sid] = k.split('/'); return findScene(pid, sid); }).filter(Boolean);
 const allStats = () => mineList().map(([p, s]) => ({ p, s, k: keyOf(p, s), st: stats(p, s) })).filter(x => x.st && x.st.total);
@@ -3701,6 +3759,7 @@ function buildObj(items){
 }
 function ensureDay(){
   const day = today(); saved.hist = saved.hist || {};
+  if (decayAll()) persist();
   const h = saved.hist[day] = saved.hist[day] || { done:[], streak:false, obj:null, base:{} };
   const items = allStats(); let changed = false;
   items.forEach(x => { if (h.base[x.k] === undefined) { h.base[x.k] = x.st.pts; changed = true; } });
@@ -3820,6 +3879,8 @@ function progData(){
   const pctExact = T ? P / (5 * T) * 100 : 0;
   return { list, T, SOL, KO, withMe, pct: Math.round(pctExact), pctExact, lv: levelInfo(pctExact) };
 }
+const STAR_SVG = '<svg class="stv" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg>';
+const starTag = (n, cls) => n >= 1 ? `<span class="str${cls ? ' ' + cls : ''}" aria-label="${n} étoile${n > 1 ? 's' : ''}">${STAR_SVG}${n}</span>` : '';
 /* 2.02 : détail de la maîtrise (M20-A) — fenêtre par-dessus, croix, fond et bouton retour la ferment */
 function openMastery(st, title, sc, src){
   const L = st.lines, c = st.counts, T = st.total || 1;
@@ -3829,6 +3890,9 @@ function openMastery(st, title, sc, src){
   const GCH = '<svg class="gch" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
   const lnum = i => { let n = 0; for (let j = 0; j <= i; j++) if (sc.items[j].k === 'l') n++; return n; };
   const mrows = (f, g, deep) => !sc ? '' : L.filter(f).map(l => `<li class="mrl${deep ? ' deep' : ''}" data-r="${g}" hidden><span><b>${lnum(l.i)}.</b> ${esc(tail(sc.items[l.i].t))}</span></li>`).join('');
+  /* 2.09 (457, M213 a) : groupes de solides par étoile et par série en cours (seulement ceux qui existent), la plus haute étoile d'abord */
+  const sgm = {}; L.filter(l => l.st === 'solid').forEach(l => { const k = l.p + '_' + (l.p >= 5 ? 0 : l.s); sgm[k] = (sgm[k] || 0) + 1; });
+  const sgrp = Object.keys(sgm).map(k => { const [p, s] = k.split('_').map(Number); return [p, s, sgm[k]]; }).sort((a, b) => b[0] - a[0] || b[1] - a[1]);
   const pips = n => `<span class="pips">${[1, 2, 3, 4, 5].map(x => `<i class="${x <= n ? 'on' : ''}"></i>`).join('')}</span>`;
   const old = document.getElementById('appcf'); if (old) old.remove();
   const d = document.createElement('div'); d.id = 'appcf'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); d.setAttribute('aria-label', 'Détail de la maîtrise');
@@ -3837,19 +3901,21 @@ function openMastery(st, title, sc, src){
   d.innerHTML = `<div class="mbk"></div><div class="mwin" data-winbg="#appcf .mbk"><button type="button" class="mwx" data-cf="no" aria-label="Fermer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     <h3>Maîtrise de la scène</h3>
     <div class="mute small">${esc(title)}</div>
-    <div class="mbig"><b>${st.pct} %</b><span class="mute small">${st.total} réplique${st.total > 1 ? 's' : ''}</span><button type="button" class="mwi" aria-label="Comment ça marche ?" aria-expanded="false">i</button></div>
+    <div class="mbig"><b>${st.pct} %</b>${starTag(st.star, 'big')}<span class="mute small">${st.total} réplique${st.total > 1 ? 's' : ''}</span><button type="button" class="mwi" aria-label="Comment ça marche ?" aria-expanded="false">i</button></div>
     <ul class="mwinfo" hidden>
       <li><b>Je connais</b> : +1 jour (un seul par jour).</li>
       <li><b>Solide</b> : 5 jours validés, sur des jours différents.</li>
       <li><b>À répéter</b> : −2 jours, une seule fois par jour.</li>
       <li><b>Soufflée</b> : la réplique n’avance pas.</li>
-      <li><b>À rafraîchir</b> : pas validée depuis 7 jours.</li>
+      <li><b>Étoiles</b> : une fois solide, 5 nouveaux jours validés = 1 étoile (5 au plus). Un raté remet la série à zéro ; deux ratés de suite enlèvent une étoile.</li>
+      <li><b>À rafraîchir</b> : pas validée depuis 3 jours (connue), 5 jours (solide) ou 7 jours (étoilée). Une semaine de plus sans la valider : elle compte comme ratée.</li>
     </ul>
     <div class="mbar"><i class="solid" style="width:${w(c.solid)}"></i><i class="known" style="width:${w(c.known)}"></i><i class="ko" style="width:${w(c.ko)}"></i></div>
     <ul class="mlist">
-      <li class="mop" data-g="solid" ${c.solid ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span><i class="dot solid"></i>Solides ${c.solid ? GCH : ''}</span><b>${c.solid}</b></li>${mrows(l => l.st === 'solid', 'solid')}
-      <li class="mkn" ${c.known ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span><i class="dot known"></i>Connues ${c.known ? GCH : ''}</span><b>${c.known}</b></li>
-      ${[4, 3, 2, 1].filter(n => kn(n)).map(n => `<li class="ms mop" data-g="k${n}" hidden ${kn(n) ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span>${pips(n)}${n} jour${n > 1 ? 's' : ''} sur 5 ${kn(n) ? GCH : ''}</span><b>${kn(n)}</b></li>${mrows(l => l.st === 'known' && l.n === n, 'k' + n, true)}`).join('')}
+      <li class="mkn" data-sub="s" ${c.solid ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span><i class="dot solid"></i>Solides ${c.solid ? GCH : ''}</span><b>${c.solid}</b></li>
+      ${sgrp.map(([p, s, n]) => `<li class="ms mop" data-p="s" data-g="s${p}_${s}" hidden role="button" aria-expanded="false" tabindex="0"><span>${p ? starTag(p) : '<span class="stn">Solide</span>'}${p < 5 ? pips(s) + `<span class="mute small">→ ${STAR_SVG.replace('class="stv"', 'class="stv dim"')}${p + 1}</span>` : ''} ${GCH}</span><b>${n}</b></li>${mrows(l => l.st === 'solid' && l.p === p && l.s === s, 's' + p + '_' + s, true)}`).join('')}
+      <li class="mkn" data-sub="k" ${c.known ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span><i class="dot known"></i>Connues ${c.known ? GCH : ''}</span><b>${c.known}</b></li>
+      ${[4, 3, 2, 1].filter(n => kn(n)).map(n => `<li class="ms mop" data-p="k" data-g="k${n}" hidden ${kn(n) ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span>${pips(n)}${n} jour${n > 1 ? 's' : ''} sur 5 ${kn(n) ? GCH : ''}</span><b>${kn(n)}</b></li>${mrows(l => l.st === 'known' && l.n === n, 'k' + n, true)}`).join('')}
       <li class="mop" data-g="ko" ${c.ko ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span><i class="dot ko"></i>À répéter ${c.ko ? GCH : ''}</span><b>${c.ko}</b></li>${mrows(l => l.st === 'ko', 'ko')}
       <li class="mop" data-g="new" ${c.new ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span><i class="dot new"></i>Nouvelles ${c.new ? GCH : ''}</span><b>${c.new}</b></li>${mrows(l => l.st === 'new', 'new')}
       <li><span>${CLOCK} À rafraîchir</span><b>${st.stale}</b></li>
@@ -3861,7 +3927,8 @@ function openMastery(st, title, sc, src){
   d._cancel = close;
   d.addEventListener('click', e => {
     const inf = e.target.closest('.mwi'); if (inf) { const x = d.querySelector('.mwinfo'); x.hidden = !x.hidden; inf.setAttribute('aria-expanded', String(!x.hidden)); return; }
-    const kn = e.target.closest('.mkn[role=button]'); if (kn) { const op = kn.getAttribute('aria-expanded') !== 'true'; kn.setAttribute('aria-expanded', String(op)); d.querySelectorAll('.ms').forEach(x => { x.hidden = !op; }); if (!op) shut(); return; }
+    const kn = e.target.closest('.mkn[role=button]'); if (kn) { const op = kn.getAttribute('aria-expanded') !== 'true'; shut(); d.querySelectorAll('.mkn[role=button]').forEach(x => x.setAttribute('aria-expanded', 'false')); d.querySelectorAll('.ms').forEach(x => { x.hidden = true; });
+      if (op) { kn.setAttribute('aria-expanded', 'true'); d.querySelectorAll(`.ms[data-p="${kn.dataset.sub}"]`).forEach(x => { x.hidden = false; }); } return; }
     if (e.target.closest('.mrl')) { shut(); return; }   /* 2.08 essai 6 (447) : toucher une réplique referme sa liste */
     const mo = e.target.closest('.mop[role=button]'); if (mo) { const g = mo.dataset.g, op = mo.getAttribute('aria-expanded') !== 'true'; shut(); if (op) { mo.setAttribute('aria-expanded', 'true'); d.querySelectorAll(`.mrl[data-r="${g}"]`).forEach(x => { x.hidden = false; }); } return; }
     if (e.target.closest('[data-cf]') || e.target === d || e.target.classList.contains('mbk')) close(); });
@@ -3877,9 +3944,9 @@ function donut(st, k){
       : `<path d="M ${pt(f0)} A 34 34 0 ${f1 - f0 > 0.5 ? 1 : 0} 1 ${pt(f1)}" fill="none" style="stroke:${col[k]}" stroke-width="9"/>`;
     off += c[k] / tot * C; });
   const it = (k, n, w) => `<span class="dli"><i class="dot ${k}"></i>${n} ${k === 'ko' ? w : w + (n > 1 ? 's' : '')}</span>`;
-  const l1 = [['solid', c.solid, 'solide'], ['known', c.known, 'connue']].filter(x => x[1]).map(x => it(...x)).join('<span class="dsep">·</span>');
+  const l1 = [['solid', c.solid, 'solide'], ['known', c.known, 'connue']].filter(x => x[1]).map(x => it(...x)).join('<span class="dsep">·</span>') + (st.star ? '<span class="dsep">·</span>' + starTag(st.star) : '');
   const l2 = [['ko', c.ko, 'à répéter'], ['new', c.new, 'nouvelle']].filter(x => x[1]).map(x => it(...x)).join('<span class="dsep">·</span>');
-  return `<div class="dnrow b"><div class="dn" ${k ? `data-act="mdet" data-k="${esc(k)}" role="button" aria-label="Détail de la maîtrise"` : ''}><svg width="64" height="64" viewBox="0 0 80 80" role="img" aria-label="Statut des répliques">${segs}</svg><div class="dnt"><b>${st.pct} %</b></div></div><div class="dnlg b">${l1 ? `<div>${l1}</div>` : ''}${l2 ? `<div>${l2}</div>` : ''}</div></div>`;
+  return `<div class="dnrow b"><div class="dn" ${k ? `data-act="mdet" data-k="${esc(k)}" role="button" aria-label="Détail de la maîtrise"` : ''}><svg width="64" height="64" viewBox="0 0 80 80" role="img" aria-label="Statut des répliques">${segs}</svg><div class="dnt"><b>${st.pct} %</b>${starTag(st.star, 'dn')}</div></div><div class="dnlg b">${l1 ? `<div>${l1}</div>` : ''}${l2 ? `<div>${l2}</div>` : ''}</div></div>`;
 }
 function mineView(){
   const D = progData(), list = D.list;
@@ -4059,8 +4126,9 @@ function progressView(){
       <div class="hm"><div class="hti">${lv.title ? esc(lv.title) : 'Niveau ' + lv.lvl}</div>${(() => {
         /* 2.07 essai 2 (362, M159) : quadrillage 2 × 2 ; meilleure série ternie, en couleur et un peu plus grande quand la série en cours est la meilleure */
         const rb = streakBest(), cur = t ? t.streak.n : 0, live = rb > 0 && cur >= rb, g = t && t.gain > 0 ? t.gain : 0;
+        const gst = globalStar();   /* 2.09 (457, M213 b) */
         const cell = (v, l, c) => `<div${c ? ` class="${c}"` : ''}><b>${v}</b><small>${l}</small></div>`;
-        return `<div class="hg">${cell(D.pct + ' %', 'maîtrise')}${cell((g ? '+' : '') + g + ' %', 'aujourd’hui', g ? 'up' : '')}${cell(D.SOL + ' / ' + D.T, 'solides' + (D.KO ? '<br>' + D.KO + ' à répéter' : ''))}${cell(`<span class="fl${live ? ' live' : ''}">${flameCrop(rb, live ? 17 : 14)}</span>${rb} j`, 'meilleure série', live ? '' : 'tarn')}</div>`; })()}</div></div>
+        return `<div class="hg">${cell(D.pct + ' %', 'maîtrise' + (gst ? `<span class="m13p">Prestige ${gst}</span>` : ''))}${cell((g ? '+' : '') + g + ' %', 'aujourd’hui', g ? 'up' : '')}${cell(D.SOL + ' / ' + D.T, 'solides' + (D.KO ? '<br>' + D.KO + ' à répéter' : ''))}${cell(`<span class="fl${live ? ' live' : ''}">${flameCrop(rb, live ? 17 : 14)}</span>${rb} j`, 'meilleure série', live ? '' : 'tarn')}</div>`; })()}</div></div>
       ${D.withMe < D.list.length ? (() => { const no = D.list.filter(([p, sc]) => !stats(p, sc)).map(([p, sc]) => '<b class="hnm">« ' + esc(sc.title) + ' »</b>');
         return `<p class="hint" style="margin:10px 0 0">Choisis ton personnage dans ${no.length > 1 ? no.length + ' scènes : ' + no.join(', ') : no[0]} pour suivre ta progression.</p>`; })() : ''}</section>`;
   if (t) {
@@ -4078,7 +4146,7 @@ function progressView(){
   }
   const got = BADGES.filter(b => bg[b.id]).length;
   h += `<section class="card bgcard" data-act="badgesopen"><button class="hdtog" data-act="badgesopen"><span class="lbl" style="margin:0">Mes badges · ${badgePts()} / ${BADGE_MAX}</span><span class="tg">Voir ›</span></button>
-    <div class="bstrip">${BADGES.map(b => `<span class="bsc ${b.unique ? 'u' : ''}">${medal(b, bg[b.id] || 0)}</span>`).join('')}</div></section>
+    <div class="bstrip">${BADGES.filter(b => !b.secret || bg[b.id]).map(b => `<span class="bsc ${b.unique ? 'u' : ''}">${medal(b, bg[b.id] || 0)}</span>`).join('')}</div></section>
     ${rankCard()}
 `;
   return h;
@@ -4590,10 +4658,13 @@ function grade(v){
   /* 2.01 : une erreur fait reculer de 2 jalons (au lieu de tout remettre à zéro).
      Avec indice : la réplique ne recule pas et ne progresse pas (sauf nouvelle → 1/5) ; elle perd « à répéter » et « à rafraîchir ». */
   /* un seul recul de 2 jalons par jour et par réplique ; une réussite le même jour la remet « connue » sans la faire avancer */
-  if (v === 'ko') { if (r0.kd !== day) { r0.n = Math.max(0, (r0.n | 0) - 2); r0.kd = day; } r0.ko = true; r0.ok = null; }
+  /* 2.09 (457) : étoilée (★1 et plus) : un raté remet la série vers l'étoile suivante à 0 ; un 2e raté de suite (autre jour, sans réussite entre les deux) enlève une étoile.
+     Solide sans étoile, connue : −2 jours comme avant. */
+  if (v === 'ko') { if (r0.kd !== day) { if ((r0.p | 0) >= 1) { r0.s = 0; if (r0.pf) { r0.p--; r0.pf = null; } else r0.pf = day; } else { r0.n = Math.max(0, (r0.n | 0) - 2); r0.s = 0; } r0.kd = day; } r0.ko = true; r0.ok = null; }
   else if (r0.kd === day) { r0.ko = false; if (!(r0.n > 0)) r0.n = 1; r0.ok = day; if (S.hint && (S.rehHide || S.cards)) S.hinted.add(si); }
   else if (S.hint && (S.rehHide || S.cards)) { r0.ko = false; if (!(r0.n > 0)) r0.n = 1; r0.ok = day; S.hinted.add(si); }
-  else { r0.ko = false; if (r0.ok !== day) { r0.n = Math.min(5, r0.n + 1); r0.ok = day; } }
+  /* 2.09 (457) : une fois solide, chaque nouveau jour validé avance la série ; 5 jours = une étoile (5 au plus) */
+  else { r0.ko = false; if (r0.ok !== day) { if (r0.n >= 5) { if ((r0.p | 0) < 5) { r0.s = (r0.s | 0) + 1; if (r0.s >= 5) { r0.p = (r0.p | 0) + 1; r0.s = 0; } } } else r0.n = Math.min(5, r0.n + 1); r0.ok = day; r0.pf = null; } }
   S.trans = S.trans || {}; S.trans[si] = { from: (S.trans[si] && S.trans[si].from) || before, to: stOf(r0) };
   checkDay();
   persist();
@@ -4653,9 +4724,10 @@ document.addEventListener('click', e => {
         S.scene = S.play.scenes.find(s => s.id === d.scene);
         const m = saved.me[key()];
         S.me = S.scene.characters.includes(m) ? m : null;
-        Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, prepOpen:false, tab:'text', mode:'all', textHide:false, eph:EPH(), annOpen:null, boldI:null, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set()});
+        Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, prepOpen:false, tab:'text', mode:'all', textHide:false, eph:EPH(), annOpen:null, boldI:null, vdet:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set()});
         saved.last = { play:S.play.id, scene:S.scene.id }; persist();
-        if (d.go && S.me) { S.tab = 'reh'; if (d.cards) S.rmode = 'cards'; }   /* 2.07 : « Répéter » garde le dernier mode choisi */
+        S.rmode = (saved.rmSc || {})[key()] || 'reh';   /* 2.09 (essai 1 · 10) : chaque scène garde son mode */
+        if (d.go && S.me) { S.tab = 'reh'; if (d.cards) S.rmode = 'cards'; }
         render(); window.scrollTo(0,0); };
       const pl0 = LIBRARY.find(p => p.id === d.play), sc0 = pl0 && pl0.scenes.find(s => s.id === d.scene);
       if (d.go && sc0 && sc0.characters.includes(saved.me[pl0.id + '/' + sc0.id])) tmGuard(go); else go();
@@ -4763,7 +4835,7 @@ document.addEventListener('click', e => {
       const k = d.k, cut = k.indexOf('/'), pl = LIBRARY.find(p => p.id === k.slice(0, cut)), sc = pl && pl.scenes.find(x => x.id === k.slice(cut + 1));
       if (!pl || !sc) return;
       S.play = pl; S.scene = sc; S.me = saved.me[k];
-      Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, tab:'reh', rmode:d.m === 'reh' ? 'reh' : 'cards', mode:'all', textHide:false, eph:EPH(), annOpen:null, boldI:null, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set(), weakK:null, weakMenu:null});
+      Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, tab:'reh', rmode:d.m === 'reh' ? 'reh' : 'cards', mode:'all', textHide:false, eph:EPH(), annOpen:null, boldI:null, vdet:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set(), weakK:null, weakMenu:null});
       saved.last = { play:pl.id, scene:sc.id }; persist(); window.scrollTo(0,0);
       const st = stats(pl, sc), list = (st ? st.att : []).filter(a => d.v === 'ko' ? a.st === 'ko' : (a.stale && a.st !== 'ko')).map(a => a.i).sort((x, y) => x - y);
       if (!list.length) { render(); return; }
@@ -4796,7 +4868,7 @@ document.addEventListener('click', e => {
     case 'guideplay': { const k = (saved.mine || []).find(x => saved.me && saved.me[x]) || (saved.mine || [])[0]; if (!k) { saved.libTab = 'all'; persist(); render(); break; }
       const cut = k.indexOf('/'), pl = LIBRARY.find(p => p.id === k.slice(0, cut)), sc = pl && pl.scenes.find(x => x.id === k.slice(cut + 1)); if (!pl || !sc) break;
       S.play = pl; S.scene = sc; S.me = saved.me[k] || null;
-      Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, tab: S.me ? 'reh' : 'text', rmode:'reh', mode:'all', textHide:false, eph:EPH(), annOpen:null, boldI:null, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set()});
+      Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, tab: S.me ? 'reh' : 'text', rmode:'reh', mode:'all', textHide:false, eph:EPH(), annOpen:null, boldI:null, vdet:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set()});
       render(); window.scrollTo(0, 0); break; }
     case 'guideinst': instGo(); break;   /* 2.09 (465) */
     case 'guideskip': saved.guideDone = true; persist(); render(); break;
@@ -4815,7 +4887,7 @@ document.addEventListener('click', e => {
       S.me = b.dataset.c || null; S.pick = false; S.mode = (S.me ? S.mode : 'all'); S.revealed = new Set();
       S.started = false; S.steps = []; S.pos = 0; S.done = false; S.missed = new Set();
       saved.me[key()] = S.me; persist(); render(); break;
-    case 'tab': { const v = b.dataset.v, top = !!b.dataset.top; const go = () => { stopSpeech(); S.tab = v; render(); if (top) window.scrollTo(0, 0); }; if (v === 'reh') tmGuard(go); else go(); break; }   /* 2.06 : data-top = bouton de fin du texte */
+    case 'tab': { const v = b.dataset.v, top = !!b.dataset.top; const go = () => { stopSpeech(); S.tab = v; S.vdet = false; render(); if (top) window.scrollTo(0, 0); }; if (v === 'reh') tmGuard(go); else go(); break; }   /* 2.06 : data-top = bouton de fin du texte */
     case 'tmspd': tmSetSpeed(+b.dataset.v); renderSheet(); break;
     case 'tmjump': tmUnlock(); tmAdmJump(b.dataset.v); break;
     case 'tmtest': tmUnlock(); tmBeep(3); break;
@@ -4847,7 +4919,7 @@ document.addEventListener('click', e => {
         if (!list.length) { flashMsg('Aucune réplique « à répéter » dans cette scène.'); break; } beginSteps(list, 0, false); break; }
       const st = allSteps(); beginSteps(st, firstPos(st), true); break; }
     case 'startital': { S.missed = new Set(); const st = allSteps(); beginSteps(st, S.eph.italGo === false ? 0 : firstPos(st), true, null, false, true); break; }
-    case 'rmode': S.rmode = ['cards', 'ital'].includes(b.dataset.v) ? b.dataset.v : 'reh'; S.vdet = false; render(); break;   /* 351 : les détails de la voix se referment */
+    case 'rmode': S.rmode = ['cards', 'ital'].includes(b.dataset.v) ? b.dataset.v : 'reh'; S.vdet = false; if (S.play && S.scene) { saved.rmSc = saved.rmSc || {}; saved.rmSc[key()] = S.rmode; persist(); } render(); break;   /* 2.09 (essai 1 · 10) : mode retenu par scène */   /* 351 : les détails de la voix se referment */
     case 'hdupd': b.disabled = true; b.lastChild && (b.lastChild.textContent = 'Mise à jour…'); updApply(); break;   /* 2.06 (260) ; essai 6 : attend la nouvelle version */
     case 'hdsave': bkAsk(); break;   /* 2.08 (M177 a, M178 a) */
     case 'hdinst': instGo(); break;   /* 2.09 (465, M210 b) : sans proposition du téléphone → fenêtre d'aide (plus de renvoi aux Réglages) */
