@@ -213,7 +213,7 @@ h2{font-size:var(--fs-20);margin:0 0 2px}
 .nb.has{background:var(--card);border-color:var(--line);color:var(--mute);font-weight:600;height:28px;padding:0 8px}
 .line[data-act=lineopen]{cursor:pointer}
 .lacts{display:flex;flex-wrap:nowrap;gap:6px;margin-top:8px;font-family:system-ui,sans-serif}
-.la{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:1 1 auto;min-width:0;white-space:nowrap;min-height:40px;padding:0 8px;border:1px solid var(--line);border-radius:var(--r-10);background:var(--card);color:var(--ink);font:600 13px system-ui,sans-serif}
+.la{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:1 1 50%;min-width:0;white-space:nowrap;min-height:40px;padding:0 8px;border:1px solid var(--line);border-radius:var(--r-10);background:var(--card);color:var(--ink);font:600 13px system-ui,sans-serif}
 .la svg{width:16px;height:16px}
 .txl{color:var(--accent-ink);font-weight:600}
 
@@ -343,6 +343,7 @@ button.tapk,.fpv.tapk{animation:tapk .18s ease-out}
 .rmenu button{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:44px;padding:0 14px;border:0;border-top:1px solid var(--line);background:var(--card);color:var(--ink);font:15px system-ui,sans-serif;text-align:left}
 .rmenu.wrm{margin:-4px 0 10px}.rmenu button.no{color:var(--mute)}
 .rmenu button:first-child{border-top:0}.rmenu button.on{font-weight:700;color:var(--accent-ink)}
+#appcf .mbk{position:absolute;inset:0;background:rgba(10,8,6,.55)}
 .mwin{position:relative;width:100%;max-width:360px;max-height:86vh;overflow:auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:var(--r-16);padding:16px 16px 10px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
 .mwin h3{margin:0 36px 2px 0;font-size:var(--fs-18);display:flex;align-items:center;gap:8px}
 .mwx{position:absolute;top:6px;right:6px;width:40px;height:40px;border:0;background:none;color:var(--mute);display:inline-flex;align-items:center;justify-content:center;padding:0;-webkit-tap-highlight-color:transparent}
@@ -983,7 +984,7 @@ html:has(.psh),html:has(.psh) body{overflow:hidden;overscroll-behavior:none}   /
 .hg .fl{display:inline-block;margin-right:3px;line-height:0}.hg .fl svg{vertical-align:baseline}.hg .tarn .fl svg{filter:grayscale(1) opacity(.55)}.hg .fl.live svg{vertical-align:-1.3px}
 /* 2.07 essai 2 (367, M161) : choix du mode sous « Répéter d'ici » */
 .la.on{border-color:color-mix(in srgb,var(--accent) 60%,var(--line))}.la .sncv{width:14px;height:14px}
-.rmenu.fm{margin:8px 0 0}.weak .rmenu.fm{margin:4px auto 0;max-width:none}.fm button{justify-content:flex-start;gap:12px;font-weight:600}.fm button svg{color:var(--accent-ink);flex:none;width:18px;height:18px}
+.rmenu.fm{margin:8px 0 0}.weak .rmenu.fm{margin:4px 0 0 auto}.fm button{justify-content:flex-start;gap:12px;font-weight:600}.fm button svg{color:var(--accent-ink);flex:none;width:18px;height:18px}
 /* 2.07 essai 4 : fenêtres uniformes (js/fenetres.js) */
 .ugrip{flex:none;display:flex;justify-content:center;align-items:center;height:22px;touch-action:none}
 .ugrip i{display:block;width:40px;height:4px;border-radius:2px;background:var(--line)}
@@ -1032,6 +1033,28 @@ html:has(.psh),html:has(.psh) body{overflow:hidden;overscroll-behavior:none}   /
 .vpl{margin:4px 0 10px}.vpt{margin:8px 0 3px}
 .vps{display:flex;gap:6px}.vps select{flex:1;min-width:0;min-height:44px}
 .vpb{flex:none;min-width:44px;display:inline-flex;align-items:center;justify-content:center}
+/* 2.09 (465, 467 ; M210 b, M211) : fenêtre d'aide à l'installation */
+.ihw{width:100%;max-width:340px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:20px 18px 16px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.iht1{margin:4px 0 6px;font-size:17px;line-height:1.4;font-weight:600;text-align:center}
+.ihg{margin:0 0 16px;font-size:14px;line-height:1.4;text-align:center}
+.ihs{display:flex;gap:10px;align-items:center;margin:0 0 10px;font-size:15px;line-height:1.35}
+.ihs .iht{flex:1}
+.ihn{flex:none;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#1d1406;font:700 13px system-ui,sans-serif;display:flex;align-items:center;justify-content:center}
+.ihc{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:5px 9px;font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap}
+.ihn2{margin:8px 0 0;font-size:13px;line-height:1.4;text-align:center}
+.ihb{width:100%;min-height:48px;margin-top:16px}
+.ihb.pri{font-size:16px}
+.ihb+.ihb{margin-top:10px}
+.ihi{display:flex;align-items:center;justify-content:center;gap:8px}
+.ihx{display:block;margin:12px auto 0;min-height:44px;font-size:14px}
+/* 2.09 (462, M214 e) : « Annoter ▾ » (menu collé à droite) et mots en gras */
+.rmenu.fm.amenu{margin:8px 0 0 auto}
+.mkb{font-weight:700;color:var(--accent-ink)}
+.bw{border-bottom:1.5px dotted color-mix(in srgb,var(--ink) 35%,transparent);padding:0 1px;cursor:pointer}
+.bw.on{font-weight:700;color:var(--accent-ink)}
+.mkbar{display:flex;align-items:center;gap:8px;margin:8px 0 2px;font-family:system-ui,sans-serif}
+.mkhint{font-size:13px;color:var(--mute);flex:1;line-height:1.35}
+.mkdone{font:700 14px system-ui,sans-serif;color:var(--accent-ink);background:none;border:0;padding:10px 4px;min-height:44px;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -2216,6 +2239,11 @@ const fmt = t => {
   s = esc(s).replace(/\n/g, '<br>').replace(/\(([^)]*)\)/g, '<span class="aside">($1)</span>');
   return s.replace(/\u0001/g, '<b class="bi">').replace(/\u0002/g, '</b>');
 };
+/* 2.09 (462, M214 e) : mots en gras dans mes répliques — saved.bolds[scène][n° de réplique] = n° des mots (morceaux sans espace) */
+function fmtB(i){ const t = S.scene.items[i].t, b = (saved.bolds || {})[key()], set = b && b[i];
+  if (!set || !set.length) return fmt(t);
+  let n = -1; const m = t.replace(/\S+/g, w => (++n, set.includes(n) ? '\u0003' + w + '\u0004' : w));
+  return fmt(m).replace(/\u0003/g, '<b class="mkb">').replace(/\u0004/g, '</b>'); }
 const spokenText = t => t.replace(/\([^)]*\)/g,' ').replace(/(\p{L})\/e\b/gu,'$1').replace(/\s+/g,' ').trim();
 const words = t => spokenText(t).split(' ').filter(w => /[\p{L}\p{N}]/u.test(w));
 const tail = t => { const w = words(t); return w.length > 9 ? '… ' + w.slice(-9).join(' ') : w.join(' '); };
@@ -2287,11 +2315,13 @@ if (!saved.notes || typeof saved.notes !== 'object' || Array.isArray(saved.notes
 
 const synth = ('speechSynthesis' in window) ? window.speechSynthesis : null;
 const FS = [[16,19],[18,22],[21,26],[25,31]];
+/* 2.09 (463, M209) : options « oubliées » (modes d'exercice) — elles reviennent à leur réglage par défaut à chaque ouverture de scène */
+const EPH = () => ({ showProg:false, rehKo:false, cardKo:false, italGo:true, italNotes:false, italHf:false, italAudio:true });
 const S = {
   view:'library', play:null, scene:null, tab:'text', pick:false,
-  me:null, mode:'all', textHide:false, cue:true, revealed:new Set(),
+  me:null, mode:'all', textHide:false, eph:EPH(), cue:true, revealed:new Set(),
   rehHide: true,
-  audio: synth ? (saved.audio !== undefined ? saved.audio : true) : false,
+  audio: synth ? (saved.audio !== undefined ? saved.audio : false) : false,   /* 2.09 (463) : coupée par défaut, puis gardée */
   rate: Math.min(2, Math.max(1, saved.rate || 1)), voice: saved.voice || '',
   fs: saved.fs !== undefined ? saved.fs : 1, bold: saved.bold === true,
   tts:{status:'idle'}, started:false, stepsAll:true, steps:[], pos:0, done:false, stepRevealed:false, hint:false, missed:new Set()
@@ -2417,12 +2447,63 @@ window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); instal
 window.addEventListener('appinstalled', () => { installEvt = null; try { if (S.settings) renderSheet(); } catch(x) {} });
 function installBlock(){
   if (isStandalone()) return '';   // masqué seulement quand l'appli tourne installée (pas de mémoire : un autre téléphone doit voir le bouton)
-  let body;
-  if (installEvt) body = '<button class="btn sm" data-act="installapp" style="width:100%">Installer Répète sur ce téléphone</button><div class="mute small" style="margin-top:6px">Icône sur l’écran d’accueil, plein écran, fonctionne hors ligne.</div>';
-  else if (isIOS) body = '<div class="mute small">Sur iPhone, dans Safari : bouton Partager, puis « Sur l’écran d’accueil ».</div>';
-  else body = '<div class="mute small">Menu ⋮ du navigateur, puis « Installer l’application » (ou « Installer et créer un raccourci »).</div>';
-  return '<div class="lbl">Application</div>' + body;
+  /* 2.09 (465, M210 c) : bouton toujours présent ; il installe si le téléphone le propose, sinon il ouvre la fenêtre d'aide ; plus de légende */
+  return '<div class="lbl">Application</div><button class="btn sm" data-act="installapp" style="width:100%">Installer Répète sur ce téléphone</button>';
 }
+/* 2.09 (465, 467 ; M210 b, M211) : fenêtre d'aide à l'installation, selon le navigateur où Répète est ouverte.
+   chrome = étapes du menu ⋮ ; meta = navigateur intégré de Messenger / Instagram / Facebook ; other = autre navigateur ; ios = Safari. */
+function instWho(){ const u = navigator.userAgent || '', and = /Android/i.test(u);
+  if (/Instagram/i.test(u)) return { k:'meta', n:'Instagram', and };
+  if (/FB_IAB\/(Orca|Messenger)|MessengerLite|FBAN\/Messenger/i.test(u)) return { k:'meta', n:'Messenger', and };
+  if (/FBAN|FBAV|FB_IAB|FBIOS/i.test(u)) return { k:'meta', n:'Facebook', and };
+  if (isIOS) return { k:'ios', and:false };
+  if (/SamsungBrowser/i.test(u)) return { k:'other', n:'Samsung Internet', and };
+  if (/Firefox|FxiOS/i.test(u)) return { k:'other', n:'Firefox', and };
+  if (/EdgA|Edg\//i.test(u)) return { k:'other', n:'Edge', and };
+  if (/OPR\/|Opera/i.test(u)) return { k:'other', n:'Opera', and };
+  if (/; wv\)/.test(u)) return { k:'other', n:'', and };
+  return { k:'chrome', and };
+}
+const IC_IDOTS = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>';
+const IC_IINST = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 7v7M9 11l3 3 3-3"/></svg>';
+const IC_ISHARE = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 12v8h14v-8"/></svg>';
+const IC_IPLUS = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>';
+const IC_IEXT = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
+const IC_ICOPY = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg>';
+const IC_IOK = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>';
+function instHelp(){
+  const w = instWho(), old = document.getElementById('appcf'); if (old) old.remove();
+  const n = i => `<span class="ihn">${i}</span>`, chip = (ic, t) => `<span class="ihc">${ic}${t ? esc(t) : ''}</span>`;
+  const step = (i, t, c) => `<div class="ihs">${n(i)}<span class="iht">${t}</span>${c}</div>`;
+  const T = '<p class="iht1">Installer Répète</p>', G = t => `<p class="mute ihg">${t}</p>`;
+  let body;
+  if (w.k === 'chrome') body = T + G('Ton téléphone ne l’a pas proposé tout seul. Tu peux le faire en 3 gestes dans Chrome :')
+    + step(1, 'Le menu de Chrome', chip(IC_IDOTS)) + step(2, 'Installer l’application', chip(IC_IINST, 'Installer…')) + step(3, 'Confirme', chip('', 'Installer'))
+    + '<p class="mute ihn2">Pas de « Installer » ? Cherche « Ajouter à l’écran d’accueil ».</p><button type="button" data-cf="no" class="btn pri ihb">Compris</button>';
+  else if (w.k === 'ios') body = T + G('Sur iPhone, ça se fait dans Safari, en 3 gestes :')
+    + step(1, 'Le bouton Partager', chip(IC_ISHARE)) + step(2, 'Sur l’écran d’accueil', chip(IC_IPLUS, 'Écran d’accueil')) + step(3, 'Confirme', chip('', 'Ajouter'))
+    + '<button type="button" data-cf="no" class="btn pri ihb">Compris</button>';
+  else body = T + G(w.k === 'meta' ? `Tu es dans le navigateur de <b>${esc(w.n)}</b> : il ne peut pas installer d’appli. Ouvre Répète dans Chrome, puis touche « Installer ».`
+      : w.n ? `Tu utilises <b>${esc(w.n)}</b>. Pour installer Répète, ouvre-la dans Chrome, puis touche « Installer ».` : 'Ce navigateur ne peut pas installer Répète. Ouvre-la dans Chrome, puis touche « Installer ».')
+    + (w.and ? `<button type="button" data-cf="chrome" class="btn pri ihb ihi">${IC_IEXT}Ouvrir dans Chrome</button>` : '')
+    + `<button type="button" data-cf="copy" class="btn ihb ihi">${IC_ICOPY}<span>Copier le lien</span></button><p class="mute ihn2 ihcp" hidden>Colle-le dans la barre d’adresse de Chrome.</p>`
+    + (w.k === 'meta' ? `<p class="mute ihn2">Rien ne s’ouvre ? Touche ${IC_IDOTS.replace('width="18" height="18"', 'width="16" height="16" style="vertical-align:-3px"')} en haut à droite, puis « Ouvrir dans le navigateur ».</p>` : '')
+    + '<button type="button" data-cf="no" class="updlk ihx">Fermer</button>';
+  const d = document.createElement('div'); d.id = 'appcf'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); d.setAttribute('aria-label', 'Installer Répète');
+  d.style.cssText = 'position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(10,8,6,.55)';
+  d.innerHTML = `<div class="ihw">${body}</div>`;
+  const close = () => { d.remove(); }; d._cancel = close;
+  d.addEventListener('click', e => { const t = e.target.closest('[data-cf]'); if (!t) { if (e.target === d) close(); return; }
+    if (t.dataset.cf === 'no') close();
+    else if (t.dataset.cf === 'chrome') { try { location.href = 'intent://' + location.host + location.pathname + location.search + '#Intent;scheme=https;package=com.android.chrome;end'; } catch(x) {} }
+    else if (t.dataset.cf === 'copy') { const url = location.href.split('#')[0], ok = () => { t.innerHTML = IC_IOK + '<span>Lien copié</span>'; const h = d.querySelector('.ihcp'); if (h) h.hidden = false; };
+      try { navigator.clipboard.writeText(url).then(ok, () => { if (instCopy(url)) ok(); }); } catch(x) { if (instCopy(url)) ok(); } } });
+  document.body.appendChild(d);
+}
+function instCopy(t){ try { const a = document.createElement('textarea'); a.value = t; a.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(a); a.select(); const r = document.execCommand('copy'); a.remove(); return r; } catch(e) { return false; } }
+/* installer : la proposition du téléphone si elle existe, sinon la fenêtre d'aide */
+function instGo(){ const ev = installEvt; if (!ev) { instHelp(); return; }
+  ev.prompt(); Promise.resolve(ev.userChoice).then(() => { installEvt = null; render(); if (S.settings) renderSheet(); }).catch(() => {}); }
 /* 2.06 (260 / 261, M92 c) : pastille au milieu de l'en-tête de l'accueil, une seule à la fois :
    « Mise à jour » (nouvelle version prête, prioritaire → recharge) ou « Installer » (appli pas installée → Réglages › Données).
    Nouvelle version prête = le nouveau service worker a pris la main (controllerchange) et son index.html a un APP_VER plus grand. */
@@ -2609,7 +2690,7 @@ ANIM.badge = (d, o) => {
 const TIERS = ['Bronze', 'Argent', 'Or', 'Platine', 'Diamant'];
 const TIERC = ['#B9773A', '#A7ADB8', '#E3A71F', '#7FB5C8', '#5CC3F2'];
 const BADGES = [
-  { id:'streak', name:'Série', g:'S', desc:'Reviens réviser, jour après jour.', T:[3, 7, 14, 30, 60] },
+  { id:'streak', name:'Série', g:'S', desc:'Reviens réviser, jour après jour.', T:[3, 7, 14, 21, 28] },
   { id:'obj', name:'Objectif du jour', g:'O', desc:'Atteins ton objectif du jour, encore et encore.', T:[1, 5, 15, 30, 50] },
   { id:'scenes', name:'Scènes jouées', g:'R', desc:'Répète l’équivalent de scènes entières, en une ou plusieurs fois.', T:[1, 10, 30, 75, 150] },
   { id:'solid', name:'Répliques solides', g:'%', desc:'Rends tes répliques solides.', T:[10, 25, 50, 75, 100] },
@@ -2933,7 +3014,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 156, APP_LABEL = '2.08'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 157, APP_LABEL = '2.09 · essai 1'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -3000,7 +3081,7 @@ function tryRestoreNav(){
     if (!sc) return false;                      // texte pas encore chargé : on réessaie après le chargement des textes partagés
     S.play = pl; S.scene = sc;
     const m = saved.me[key()]; S.me = sc.characters.includes(m) ? m : null;
-    Object.assign(S, { view:'scene', noteK:null, nEdit:null, nList:false, nView:null, tab:(n.t === 'reh' && S.me) ? 'reh' : 'text', rmode:['cards', 'ital'].includes(n.m) ? n.m : 'reh', mode:'all', textHide:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set() });
+    Object.assign(S, { view:'scene', noteK:null, nEdit:null, nList:false, nView:null, tab:(n.t === 'reh' && S.me) ? 'reh' : 'text', rmode:['cards', 'ital'].includes(n.m) ? n.m : 'reh', mode:'all', textHide:false, eph:EPH(), annOpen:null, boldI:null, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set() });
   }
   navPending = null; navY = n.y || 0;
   return true;
@@ -3021,7 +3102,7 @@ let navT = 0;
 window.addEventListener('scroll', () => { clearTimeout(navT); navT = setTimeout(navSave, 300); }, { passive: true });
 document.addEventListener('visibilitychange', () => { if (document.hidden) navSave(); });
 window.addEventListener('pagehide', navSave);
-const navDepth = () => !!(document.getElementById('appcf') || S.prepK || S.prepDel || S.prepEd || S.fromOpen != null || (S.prepOpen && S.view === 'scene') || (typeof tmOpen !== 'undefined' && tmOpen) || S.settings || S.pick || S.pickK || S.dpan || S.nMenu != null || S.nEdit || S.nList || S.nView != null || S.view !== 'library' || S.started || document.querySelector('.rwl.on') || (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()));
+const navDepth = () => !!(document.getElementById('appcf') || S.prepK || S.prepDel || S.prepEd || S.fromOpen != null || S.annOpen != null || S.boldI != null || (S.prepOpen && S.view === 'scene') || (typeof tmOpen !== 'undefined' && tmOpen) || S.settings || S.pick || S.pickK || S.dpan || S.nMenu != null || S.nEdit || S.nList || S.nView != null || S.view !== 'library' || S.started || document.querySelector('.rwl.on') || (typeof RepeteEgg !== 'undefined' && RepeteEgg.isOpen && RepeteEgg.isOpen()));
 
 /* ===== Textes de la classe : fichier textes-classe.json placé à côté de index.html ===== */
 /* 2.08 essai 10 (376) : la progression est rangée par position de réplique ; si une scène partagée change de nombre de répliques
@@ -3348,6 +3429,8 @@ function navBack0(){
   if (S.prepDel) { prepDelOff(); prepKeep(render); return; }
   if (S.prepEd) { S.prepEd = null; render(); return; }
   if (S.fromOpen != null) { S.fromOpen = null; render(); return; }
+  if (S.annOpen != null) { S.annOpen = null; render(); return; }   /* 2.09 (462) */
+  if (S.boldI != null) { S.boldI = null; render(); return; }
   if (S.prepOpen && S.view === 'scene') { S.prepOpen = false; render(); return; }
   if (S.prepK) { prepCloseAnim(); return; }   /* essai 4 : se replie vers le bas */   /* 2.07 (307) : panneau Préparation */
   if (S.nEdit || S.nList) { S.nEdit = null; S.nList = false; render(); return; }
@@ -3447,7 +3530,7 @@ function say(text, pitch, idx, vname){
     synth.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = 'fr-FR';
-    const v = (vname && VOICES.find(v => v.name === vname)) || VOICES.find(v => v.name === S.voice) || VOICES.find(v => /fr-BE|fr-FR/i.test(v.lang)) || VOICES[0];
+    const v = (vname && VOICES.find(v => v.name === vname)) || VOICES.find(v => v.name === curVoice()) || VOICES.find(v => /fr-BE|fr-FR/i.test(v.lang)) || VOICES[0];
     if (v) u.voice = v;
     u.rate = S.rate; u.pitch = pitch || 1;
     S.tts = { status:'wait' }; S.speakI = idx === undefined ? null : idx; ttsMark();
@@ -3467,18 +3550,24 @@ function say(text, pitch, idx, vname){
 function refreshTts(){ if (S.view === 'scene') render(); }
 function speak(i){
   const it = S.scene.items[i]; if (!it || it.k !== 'l') return;
-  say(spokenText(it.t), 1, i, saved.vPer && VOICES.length > 1 ? vMap()[it.c] : null);
+  say(spokenText(it.t), 1, i, vSc().per && VOICES.length > 1 ? vMap()[it.c] : null);
 }
 /* 2.08 essai 4 (M197) : voix des personnages, dans « Détails » ; même présentation, une voix pour tous ou une par personnage.
    saved.vCh[pièce][personnage] = nom de voix. Noms lisibles : le nom donné par le téléphone, sinon « Voix France A / B ». */
-const vMap = () => { saved.vCh = saved.vCh || {}; const k = S.play ? S.play.id : '_'; return saved.vCh[k] = saved.vCh[k] || {}; };
+/* 2.09 (463) : voix, « Une voix par personnage » et voix des personnages propres à chaque scène (communs aux trois exercices) ; la vitesse reste commune.
+   1er passage sur une scène : on reprend les réglages d'avant (voix générale, interrupteur général, voix de la pièce). */
+function vSc(){ saved.vSc = saved.vSc || {}; const k = S.play && S.scene ? key() : '_'; let o = saved.vSc[k];
+  if (!o) { const old = (saved.vCh || {})[S.play ? S.play.id : '_'] || {}; o = saved.vSc[k] = { voice: S.voice || '', per: !!saved.vPer, ch: Object.assign({}, old) }; }
+  return o; }
+const vMap = () => vSc().ch;
+const curVoice = () => S.play && S.scene ? vSc().voice : S.voice;
 function vPerInit(){ const m = vMap(); if (!VOICES.length) return; S.scene.characters.forEach((c, i) => { if (!m[c] || !VOICES.some(v => v.name === m[c])) m[c] = VOICES[i % VOICES.length].name; }); }
 const V_PAYS = { FR:'France', BE:'Belgique', CA:'Canada', CH:'Suisse', LU:'Luxembourg' };
 function vName(v){ const cc = (v.lang.split(/[-_]/)[1] || '').toUpperCase(), pays = V_PAYS[cc] || cc, code = n => /^[a-z]{2,3}[-_][a-z]{2}/i.test(n);
   if (code(v.name)) { const same = VOICES.filter(x => code(x.name) && (x.lang.split(/[-_]/)[1] || '').toUpperCase() === cc); return 'Voix ' + (pays || '?') + (same.length > 1 ? ' ' + 'ABCDEFGHIJKLMNOP'[same.indexOf(v)] : ''); }
   const n = v.name.replace(/^(Google|Microsoft|Samsung|Apple)\s+/i, ''); return n.charAt(0).toUpperCase() + n.slice(1) + (pays && !new RegExp(pays, 'i').test(n) ? ' (' + pays + ')' : ''); }
 const IC_PLAY = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg>';
-function voiceBlock(voiceOpts){ const n = VOICES.length, per = !!saved.vPer && n > 1;
+function voiceBlock(voiceOpts){ const n = VOICES.length, per = !!vSc().per && n > 1;
   const sw = `<label class="sw vpsw"><input type="checkbox" data-act="vper" ${per ? 'checked' : ''} ${n < 2 ? 'disabled' : ''}> <span>Une voix par personnage<span class="mute small vpn">${n} voix française${n > 1 ? 's' : ''} sur ce téléphone${n < 2 ? ' : il en faut au moins 2' : ''}</span></span></label>`;
   if (!per) return sw + `<div class="vpl"><div class="lbl vpt">Tous les personnages</div><div class="vps"><select data-act="voice" aria-label="Voix de tous les personnages">${voiceOpts}</select><button class="btn sm vpb" data-act="ttstest" aria-label="Écouter la voix">${IC_PLAY}</button></div></div>`;
   const m = vMap(); if (S.scene.characters.some(c => !m[c])) vPerInit();
@@ -3508,8 +3597,6 @@ const isFocus = () => S.view === 'scene' && S.tab === 'reh' && !!S.me && S.start
 
 /* ============ VUES ============ */
 /* 2.08 essai 9 (454, M207 e) : le menu « Répliques / Cartes » s'ouvre centré sous le texte de « Répéter ces n répliques », de la largeur de ce texte (+ marges) */
-function weakMenuFit(){ try { const b = document.querySelector('.wcards[aria-expanded=true]'), m = b && b.parentElement.querySelector('.rmenu.fm'); if (!m) return;
-  const r = document.createRange(); r.setStartBefore(b.firstElementChild); r.setEndAfter(b.lastElementChild); m.style.width = Math.min(b.getBoundingClientRect().width, Math.round(r.getBoundingClientRect().width) + 28) + 'px'; } catch(e) {} }
 function render(){
   try { ensureDay(); } catch(e) {}
   let nb = []; try { nb = checkBadges(); } catch(e) {}
@@ -3529,7 +3616,7 @@ function render(){
   try { bindCardSwipe(); } catch(e) {}
   try { keepNow(); } catch(e) {}
   try { tmDock(); } catch(e) {}
-  try { hfAfter(); srSay(); weakMenuFit(); } catch(e) {}   /* 2.08 essai 4 : mains libres (M196), lecteur d'écran (391) */
+  try { hfAfter(); srSay(); } catch(e) {}   /* 2.08 essai 4 : mains libres (M196), lecteur d'écran (391) */
   if (animHold.length && !animHolding()) { const h = animHold.splice(0); h.forEach(x => celebrate(x.kind, x.data)); }
 }
 /* 2.03 : en Répétition, la bulle en cours reste visible au-dessus des boutons */
@@ -3596,25 +3683,29 @@ function levelInfo(pctExact){
 const mineList = () => saved.mine.map(k => { const [pid, sid] = k.split('/'); return findScene(pid, sid); }).filter(Boolean);
 const allStats = () => mineList().map(([p, s]) => ({ p, s, k: keyOf(p, s), st: stats(p, s) })).filter(x => x.st && x.st.total);
 function buildObj(items){
-  const dl = daysBetween(calToday(), saved.goalDate), A = [], B = [], C = [];
+  /* 2.09 (461) : toujours 2 scènes (s'il y en a 2) ; les scènes à 100 % passent après les autres
+     (entre elles : répétées il y a le plus longtemps d'abord) ; 14 derniers jours avant la date : toutes */
+  const dl = daysBetween(calToday(), saved.goalDate), A = [], B = [], C = [], F = [];
   items.forEach(x => {
     const st = x.st, w = st.counts.ko + st.stale, started = st.lines.some(l => l.st !== 'new');
     const last = st.lines.reduce((m, l) => l.g && l.g > m ? l.g : m, '');
-    if (w > 0) A.push({ k:x.k, w }); else if (started) B.push({ k:x.k, last }); else C.push({ k:x.k });
+    if (st.total && st.pts >= 5 * st.total) F.push({ k:x.k, last });
+    else if (w > 0) A.push({ k:x.k, w }); else if (started) B.push({ k:x.k, last }); else C.push({ k:x.k });
   });
-  A.sort((a, b) => b.w - a.w); B.sort((a, b) => a.last < b.last ? -1 : a.last > b.last ? 1 : 0);
-  const order = [...A, ...B, ...C].map(x => x.k);
+  const old = (a, b) => a.last < b.last ? -1 : a.last > b.last ? 1 : 0;
+  A.sort((a, b) => b.w - a.w); B.sort(old); F.sort(old);
+  const order = [...A, ...B, ...C, ...F].map(x => x.k);
   let need = Math.min(2, order.length);
-  if (!A.length && !C.length) need = Math.min(1, order.length);
   if (dl >= 0 && dl <= 14) need = order.length;
-  return { need, list: order.slice(0, need) };
+  return { need, list: order.slice(0, need), r:2 };
 }
 function ensureDay(){
   const day = today(); saved.hist = saved.hist || {};
   const h = saved.hist[day] = saved.hist[day] || { done:[], streak:false, obj:null, base:{} };
   const items = allStats(); let changed = false;
   items.forEach(x => { if (h.base[x.k] === undefined) { h.base[x.k] = x.st.pts; changed = true; } });
-  if (!h.obj && items.length) { h.obj = buildObj(items); changed = true; }
+  /* 2.09 (461) : un objectif calculé avec l'ancienne règle (sans r:2) est recalculé une fois ; les scènes déjà faites restent faites */
+  if ((!h.obj || h.obj.r !== 2) && items.length) { h.obj = buildObj(items); changed = true; }
   if (changed) persist();
   return h;
 }
@@ -3730,7 +3821,7 @@ function progData(){
   return { list, T, SOL, KO, withMe, pct: Math.round(pctExact), pctExact, lv: levelInfo(pctExact) };
 }
 /* 2.02 : détail de la maîtrise (M20-A) — fenêtre par-dessus, croix, fond et bouton retour la ferment */
-function openMastery(st, title, sc){
+function openMastery(st, title, sc, src){
   const L = st.lines, c = st.counts, T = st.total || 1;
   const kn = n => L.filter(l => l.st === 'known' && l.n === n).length, todayN = L.filter(l => l.age === 0).length;
   const w = n => (n / T * 100).toFixed(1) + '%';
@@ -3741,8 +3832,9 @@ function openMastery(st, title, sc){
   const pips = n => `<span class="pips">${[1, 2, 3, 4, 5].map(x => `<i class="${x <= n ? 'on' : ''}"></i>`).join('')}</span>`;
   const old = document.getElementById('appcf'); if (old) old.remove();
   const d = document.createElement('div'); d.id = 'appcf'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); d.setAttribute('aria-label', 'Détail de la maîtrise');
-  d.style.cssText = 'position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(10,8,6,.55)';
-  d.innerHTML = `<div class="mwin"><button type="button" class="mwx" data-cf="no" aria-label="Fermer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  /* 2.09 (464, M212 v3) : même place et même taille, mais la fenêtre sort du cercle touché et y retourne ; fond à part (.mbk) qui s'éclaircit */
+  d.style.cssText = 'position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px';
+  d.innerHTML = `<div class="mbk"></div><div class="mwin" data-winbg="#appcf .mbk"><button type="button" class="mwx" data-cf="no" aria-label="Fermer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     <h3>Maîtrise de la scène</h3>
     <div class="mute small">${esc(title)}</div>
     <div class="mbig"><b>${st.pct} %</b><span class="mute small">${st.total} réplique${st.total > 1 ? 's' : ''}</span><button type="button" class="mwi" aria-label="Comment ça marche ?" aria-expanded="false">i</button></div>
@@ -3756,23 +3848,24 @@ function openMastery(st, title, sc){
     <div class="mbar"><i class="solid" style="width:${w(c.solid)}"></i><i class="known" style="width:${w(c.known)}"></i><i class="ko" style="width:${w(c.ko)}"></i></div>
     <ul class="mlist">
       <li class="mop" data-g="solid" ${c.solid ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span><i class="dot solid"></i>Solides ${c.solid ? GCH : ''}</span><b>${c.solid}</b></li>${mrows(l => l.st === 'solid', 'solid')}
-      <li class="mkn" role="button" aria-expanded="false" tabindex="0"><span><i class="dot known"></i>Connues <svg class="gch" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span><b>${c.known}</b></li>
-      ${[4, 3, 2, 1].map(n => `<li class="ms mop" data-g="k${n}" hidden ${kn(n) ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span>${pips(n)}${n} jour${n > 1 ? 's' : ''} sur 5 ${kn(n) ? GCH : ''}</span><b>${kn(n)}</b></li>${mrows(l => l.st === 'known' && l.n === n, 'k' + n, true)}`).join('')}
+      <li class="mkn" ${c.known ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span><i class="dot known"></i>Connues ${c.known ? GCH : ''}</span><b>${c.known}</b></li>
+      ${[4, 3, 2, 1].filter(n => kn(n)).map(n => `<li class="ms mop" data-g="k${n}" hidden ${kn(n) ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span>${pips(n)}${n} jour${n > 1 ? 's' : ''} sur 5 ${kn(n) ? GCH : ''}</span><b>${kn(n)}</b></li>${mrows(l => l.st === 'known' && l.n === n, 'k' + n, true)}`).join('')}
       <li class="mop" data-g="ko" ${c.ko ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span><i class="dot ko"></i>À répéter ${c.ko ? GCH : ''}</span><b>${c.ko}</b></li>${mrows(l => l.st === 'ko', 'ko')}
       <li class="mop" data-g="new" ${c.new ? 'role="button" aria-expanded="false" tabindex="0"' : ''}><span><i class="dot new"></i>Nouvelles ${c.new ? GCH : ''}</span><b>${c.new}</b></li>${mrows(l => l.st === 'new', 'new')}
       <li><span>${CLOCK} À rafraîchir</span><b>${st.stale}</b></li>
       <li><span>✓ Validées aujourd’hui</span><b>${todayN}</b></li>
     </ul></div>`;
-  const close = () => { d.remove(); };
+  const mw = d.querySelector('.mwin'), from = () => src && document.body.contains(src) ? src : null;
+  const close = () => { if (d.dataset.out) return; d.dataset.out = '1'; winOut(mw, from(), () => d.remove()); };
   const shut = () => { d.querySelectorAll('.mop[aria-expanded=true]').forEach(x => x.setAttribute('aria-expanded', 'false')); d.querySelectorAll('.mrl').forEach(x => { x.hidden = true; }); };
   d._cancel = close;
   d.addEventListener('click', e => {
     const inf = e.target.closest('.mwi'); if (inf) { const x = d.querySelector('.mwinfo'); x.hidden = !x.hidden; inf.setAttribute('aria-expanded', String(!x.hidden)); return; }
-    const kn = e.target.closest('.mkn'); if (kn) { const op = kn.getAttribute('aria-expanded') !== 'true'; kn.setAttribute('aria-expanded', String(op)); d.querySelectorAll('.ms').forEach(x => { x.hidden = !op; }); if (!op) shut(); return; }
+    const kn = e.target.closest('.mkn[role=button]'); if (kn) { const op = kn.getAttribute('aria-expanded') !== 'true'; kn.setAttribute('aria-expanded', String(op)); d.querySelectorAll('.ms').forEach(x => { x.hidden = !op; }); if (!op) shut(); return; }
     if (e.target.closest('.mrl')) { shut(); return; }   /* 2.08 essai 6 (447) : toucher une réplique referme sa liste */
     const mo = e.target.closest('.mop[role=button]'); if (mo) { const g = mo.dataset.g, op = mo.getAttribute('aria-expanded') !== 'true'; shut(); if (op) { mo.setAttribute('aria-expanded', 'true'); d.querySelectorAll(`.mrl[data-r="${g}"]`).forEach(x => { x.hidden = false; }); } return; }
-    if (e.target.closest('[data-cf]') || e.target === d) close(); });
-  document.body.appendChild(d);
+    if (e.target.closest('[data-cf]') || e.target === d || e.target.classList.contains('mbk')) close(); });
+  document.body.appendChild(d); winIn(mw, from());
 }
 function donut(st, k){
   const c = st.counts, tot = st.total || 1, C = 213.6, col = { solid:'var(--st-solid)', known:'var(--st-known)', ko:'var(--st-ko)', new:'color-mix(in srgb,var(--ink) 16%,transparent)' };
@@ -4095,25 +4188,26 @@ function lineHtml(it, i, mine){
   /* 2.03 : « Écouter » retiré ; « Ajouter une note » */
   const acts = open ? `<div class="lacts">
       ${S.me ? `<button class="la${S.fromOpen === i ? ' on' : ''}" data-act="from" data-i="${i}" aria-expanded="${S.fromOpen === i}">${PLAY}<span>Répéter d’ici</span>${prepChev(S.fromOpen === i)}</button>` : ''}
-      <button class="la" data-act="nedit" data-i="${i}">${FICHE}<span>${hasN ? 'Note' : 'Ajouter une note'}</span></button></div>${S.me && S.fromOpen === i ? `<div class="rmenu fm" role="menu" aria-label="Répéter d’ici en mode">${[['reh', ICO_LIST, 'Répliques'], ['cards', ICO_CARDS, 'Cartes'], ['ital', ICO_ITAL, 'Italienne']].map(([v, ic, n]) => `<button role="menuitem" data-act="fromm" data-v="${v}" data-i="${i}">${ic}<span>${n}</span></button>`).join('')}</div>` : ''}` : '';
+      <button class="la${S.annOpen === i ? ' on' : ''}" data-act="annot" data-i="${i}" aria-expanded="${S.annOpen === i}">${FICHE}<span>Annoter</span>${prepChev(S.annOpen === i)}</button></div>${S.annOpen === i ? `<div class="rmenu fm amenu" role="menu" aria-label="Annoter">
+        <button role="menuitem" data-act="nedit" data-i="${i}">${FICHE}<span>${hasN ? 'Note' : 'Ajouter une note'}</span></button>${mine ? `<button role="menuitem" data-act="boldon" data-i="${i}">${IC_BOLD}<span>Mettre en gras</span></button>` : ''}</div>` : ''}${S.me && S.fromOpen === i ? `<div class="rmenu fm" role="menu" aria-label="Répéter d’ici en mode">${[['reh', ICO_LIST, 'Répliques'], ['cards', ICO_CARDS, 'Cartes'], ['ital', ICO_ITAL, 'Italienne']].map(([v, ic, n]) => `<button role="menuitem" data-act="fromm" data-v="${v}" data-i="${i}">${ic}<span>${n}</span></button>`).join('')}</div>` : ''}` : '';
   const ps = mine && S.stMap ? S.stMap[i] : null;
   return `<div class="line ${mine?'me':''} ${ps ? 'ps ' + ps.st : ''} ${open ? 'open' : ''} ${S.follow && trkOf() === i ? 'trk' : ''}" data-line="${i}" data-act="lineopen" data-i="${i}">
     <div class="who2"><span class="num">${lineNo(i)}</span>${esc(it.c)}${ps && ps.stale ? '<span class="stg">À rafraîchir</span>' : ''}${noteBtn(it, 'l' + i)}${noteEditBtn(i)}</div>
-    ${hidden ? `<button class="mask" data-act="reveal" data-i="${i}">Toucher pour révéler · ${wc} mot${wc>1?'s':''}</button>` : `<p>${fmt(it.t)}</p>`}
-    ${hidden ? '' : noteBox(it, 'l' + i)}${noteBubble(i)}${acts}
+    ${hidden ? `<button class="mask" data-act="reveal" data-i="${i}">Toucher pour révéler · ${wc} mot${wc>1?'s':''}</button>` : S.boldI === i ? `<p class="bwp">${boldEdit(i)}</p>` : `<p>${mine ? fmtB(i) : fmt(it.t)}</p>`}
+    ${hidden ? '' : noteBox(it, 'l' + i)}${noteBubble(i)}${S.boldI === i ? `<div class="mkbar"><span class="mkhint">Touche un mot pour le mettre en gras ; retouche-le pour l’enlever.</span><button class="mkdone" data-act="boldend">Terminé</button></div>` : acts}
   </div>`;
 }
 function textView(){
   const items = S.scene.items;
   S.stMap = null;
-  if (S.me && saved.showProg) { const st = stats(S.play, S.scene); if (st) { S.stMap = {}; st.lines.forEach(l => { S.stMap[l.i] = l; }); } }
+  if (S.me && S.eph.showProg) { const st = stats(S.play, S.scene); if (st) { S.stMap = {}; st.lines.forEach(l => { S.stMap[l.i] = l; }); } }
   /* 2.03 (M31-1 B) : options repliées dans un panneau « Affichage » ; 2.06 (254) : le bouton est sur la ligne « Je joue », le panneau juste dessous ;
      « Tout le texte / Mes répliques » devient l'interrupteur « Mes répliques uniquement », après « Cacher mes répliques » */
   let h = (S.dpan ? `<div class="dpan">
     <label class="sw"><input type="checkbox" data-act="hlme" ${saved.noHl ? '' : 'checked'} ${S.me ? '' : 'disabled'}> Surligner mes répliques</label>
     <label class="sw"><input type="checkbox" data-act="thide" ${S.textHide?'checked':''} ${S.me?'':'disabled'}> Cacher mes répliques</label>
     <label class="sw"><input type="checkbox" data-act="onlyme" ${S.mode==='mine'?'checked':''} ${S.me?'':'disabled'}> Mes répliques uniquement</label>
-    <label class="sw"><input type="checkbox" data-act="showprog" ${saved.showProg && S.me ? 'checked' : ''} ${S.me ? '' : 'disabled'}> Voir ma progression</label>
+    <label class="sw"><input type="checkbox" data-act="showprog" ${S.eph.showProg && S.me ? 'checked' : ''} ${S.me ? '' : 'disabled'}> Afficher ma progression</label>
     <label class="sw"><input type="checkbox" data-act="notesopen" ${saved.notesOpen ? 'checked' : ''}> Afficher mes notes</label>
     <label class="sw"><input type="checkbox" data-act="follow" ${S.follow ? 'checked' : ''}> Suivre la lecture</label>
     </div>` : '');   /* 2.06 essai 4 : plus d'avertissement voix dans l'onglet Texte (pas de lecture à voix haute ici) */
@@ -4174,6 +4268,10 @@ function prepItems(k){ return prepRows(k) + prepAddRow(k); }
 function prepAddRow(k){ const a = `data-k="${esc(k)}"`;
   return `<div class="snadd"><input class="in" id="prepin" ${a} maxlength="80" autocomplete="off" enterkeyhint="done" placeholder="Ajouter (ex. « Son : sifflet »)…" aria-label="Ajouter un élément"><button class="pl" data-act="prepadd" ${a} aria-label="Ajouter">＋</button></div>`;
 }
+const IC_BOLD = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h6a4 4 0 0 1 0 8H7z"/><path d="M7 12h7a4 4 0 0 1 0 8H7z"/></svg>';
+/* 2.09 (462) : mode « Mettre en gras » — chaque mot devient touchable */
+function boldEdit(i){ const t = S.scene.items[i].t, set = new Set(((saved.bolds || {})[key()] || {})[i] || []); let n = -1;
+  return t.split(/(\s+)/).map(p => /^\s+$/.test(p) ? (p.includes('\n') ? '<br>' : ' ') : p ? (++n, `<span class="bw${set.has(n) ? ' on' : ''}" data-act="boldw" data-i="${i}" data-w="${n}" role="button" aria-pressed="${set.has(n)}">${esc(p)}</span>`) : '').join(''); }
 const prepChev = up => `<svg class="sncv${up ? ' up' : ''}" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`;
 function prepBlock(k){ const [d, n] = prepCount(k), open = !!S.prepOpen;
   return `<button class="snb ${open ? 'open' : ''}" data-act="prepopen" aria-expanded="${open}">${IC_CLIP}<span class="grow">Préparation</span>${n ? `<small>${d} / ${n} prêt${d > 1 ? 's' : ''}</small>` : ''}${prepChev(open)}</button>${open ? `<div class="snc">${prepItems(k)}</div>` : ''}`; }
@@ -4198,10 +4296,10 @@ function rehView(){
 function introView(){
   const mine = S.scene.items.filter(i => i.k==='l' && i.c===S.me).length;
   const pr = saved.prog[key()];
-  const canResume = !saved.rehKo && pr && pr.me === S.me && !pr.done && pr.pos > 0;   /* 2.08 essai 5 (431) : pas de « Reprendre » avec « à répéter » seulement */
-  const cpr = (saved.cprog || {})[key()], canCRes = !co().ko && cpr && cpr.me === S.me && !cpr.done && cpr.pos > 0;
+  const canResume = !S.eph.rehKo && pr && pr.me === S.me && !pr.done && pr.pos > 0;   /* 2.08 essai 5 (431) : pas de « Reprendre » avec « à répéter » seulement */
+  const cpr = (saved.cprog || {})[key()], canCRes = !S.eph.cardKo && cpr && cpr.me === S.me && !cpr.done && cpr.pos > 0;
   const voiceOpts = VOICES.length
-    ? `<option value="">Voix par défaut</option>` + VOICES.map(v => `<option value="${esc(v.name)}" ${S.voice===v.name?'selected':''}>${esc(vName(v))}</option>`).join('')
+    ? `<option value="">Voix par défaut</option>` + VOICES.map(v => `<option value="${esc(v.name)}" ${curVoice()===v.name?'selected':''}>${esc(vName(v))}</option>`).join('')
     : '';
   const RM = S.rmode === 'cards' || S.rmode === 'ital' ? S.rmode : 'reh';
   return `<div class="card set">
@@ -4216,13 +4314,13 @@ function introView(){
       ${canCRes && RM === 'cards' ? `<button class="btn" data-act="cresume">Reprendre (${cpr.pos+1}/${cardList().length})</button>` : ''}
       ${RM === 'cards' ? `<button class="btn pri" data-act="startcards">${canCRes ? 'Depuis le début' : 'Lancer'}</button>` : RM === 'ital' ? `<button class="btn pri" data-act="startital">Lancer</button>` : `<button class="btn pri" data-act="start">${canResume ? 'Depuis le début' : 'Lancer'}</button>`}
     </div>
-    ${RM === 'cards' ? `<label class="sw"><input type="checkbox" data-act="cardsko" ${co().ko ? 'checked' : ''}> Uniquement les « à répéter »</label>
+    ${RM === 'cards' ? `<label class="sw"><input type="checkbox" data-act="cardsko" ${S.eph.cardKo ? 'checked' : ''}> Uniquement les « à répéter »</label>
     <label class="sw"><input type="checkbox" data-act="cnotes" ${co().notes ? 'checked' : ''}> Afficher mes notes</label>`
-    : RM === 'ital' ? `<label class="sw"><input type="checkbox" data-act="italgo" ${saved.italGo !== false ? 'checked' : ''}> Aller à ma réplique</label>
+    : RM === 'ital' ? `<label class="sw"><input type="checkbox" data-act="italgo" ${S.eph.italGo !== false ? 'checked' : ''}> Aller à ma réplique</label>
     <label class="sw"><input type="checkbox" data-act="italhide" ${saved.italHide ? 'checked' : ''}> Cacher mes répliques</label>
-    <label class="sw"><input type="checkbox" data-act="rehnotes" ${saved.rehNotes ? 'checked' : ''}> Afficher mes notes</label>
+    <label class="sw"><input type="checkbox" data-act="italnotes" ${S.eph.italNotes ? 'checked' : ''}> Afficher mes notes</label>
     ${synth ? hfOpts() : ''}`
-    : `<label class="sw"><input type="checkbox" data-act="rehko" ${saved.rehKo ? 'checked' : ''}> Uniquement les « à répéter »</label>
+    : `<label class="sw"><input type="checkbox" data-act="rehko" ${S.eph.rehKo ? 'checked' : ''}> Uniquement les « à répéter »</label>
     <label class="sw"><input type="checkbox" data-act="rehnotes" ${saved.rehNotes ? 'checked' : ''}> Afficher mes notes</label>`}
     ${synth ? `<label class="sw"><input type="checkbox" data-act="${RM === 'ital' ? 'italaudio' : S.rmode === 'cards' ? 'caudio' : 'audio'}" ${(RM === 'ital' ? italAudio() : S.rmode === 'cards' ? co().audio : S.audio) ? 'checked' : ''}> <span class="vlt">Lecture à voix haute<button type="button" class="vdt" data-act="vdet" aria-expanded="${!!S.vdet}" aria-controls="vdx">Détails</button></span></label>
       ${S.vdet ? `<div class="vdx" id="vdx">${VOICES.length ? voiceBlock(voiceOpts) : ''}
@@ -4256,9 +4354,9 @@ function myCount(){
 }
 /* note personnelle affichée sous ma réplique dévoilée (interrupteur « Afficher mes notes » de l'écran de départ) */
 const FICHE = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;margin-top:1px"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6"/><path d="M9 17h6"/></svg>';
-const co = () => (saved.cardOpt = saved.cardOpt || { audio:true, notes:false, ko:false });
+const co = () => (saved.cardOpt = saved.cardOpt || { audio:false, notes:false });
 function rehNote(si){
-  if (!(S.cards ? co().notes : saved.rehNotes)) return '';
+  if (!notesOn()) return '';
   const n = sceneNotes()[si]; if (!n || !n.x) return '';
   return `<div class="unote">${FICHE}<span>${esc(n.x)}</span></div>`;
 }
@@ -4301,7 +4399,7 @@ function cardView(){
 }
 /* 2.03 (M36) : haut-parleur sur la ligne du compteur ; en Cartes il commande « Lecture à voix haute » des cartes */
 /* essai 4 : en Italienne, la voix a son propre interrupteur (activé par défaut), plus bloqué */
-const italAudio = () => saved.italAudio !== false;
+const italAudio = () => S.eph.italAudio !== false;
 const audioOn = () => S.cards ? co().audio : S.ital ? italAudio() : S.audio;
 function pSpk(){
   if (!synth) return `<button class="ib pspk" data-act="nosound" aria-label="Lecture vocale indisponible">${MUTE}</button>`;
@@ -4310,7 +4408,7 @@ function pSpk(){
 }
 /* 2.03 (M61-G1) : haut-parleur à gauche, drapeau « Terminer ici » à droite, dans une seule pastille */
 /* 2.03 · essai 4 (M65-A) : [notes | haut-parleur] dans une pastille, drapeau dans une pastille à part */
-const notesOn = () => !!(S.cards ? co().notes : saved.rehNotes);
+const notesOn = () => !!(S.cards ? co().notes : S.ital ? S.eph.italNotes : saved.rehNotes);
 const pNote = () => `<button class="ib pnt${notesOn() ? '' : ' off'}" data-act="notestoggle" aria-label="Notes ${notesOn() ? 'affichées' : 'cachées'}" aria-pressed="${notesOn()}">${FICHE}</button>`;
 const pRight = () => { const fl = S.rehHide || S.cards; return `<span class="pcr pcr3${fl ? ' pcrf' : ''}">${S.missed.size ? `<span>${S.missed.size} à répéter</span>` : ''}<span class="pwrap"><span class="pgrp">${pNote()}${pSpk()}</span>${fl ? `<span class="pgrp pgf"><button class="ib pfl" data-act="endhere" aria-label="Terminer ici">${IC_FLAG}</button></span>` : ''}</span></span>`; };
 const IC_TRASH = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>';
@@ -4341,7 +4439,7 @@ function stepView(){
     const x = items[j];
     if (x.k === 'dir') { thr += `<p class="dir${j < prevs[prevs.length - 1] ? ' old' : ''}" data-i="${j}">${fmt(dirTxt(x.t))}</p>`; continue; }
     const old = j !== prevs[prevs.length - 1];
-    thr += `<div class="bub ${x.c === S.me ? 'mine' : 'oth'}${old ? ' old' : ''}" data-i="${j}">${who(j)}<div class="btxt">${fmt(x.t)}</div></div>`;
+    thr += `<div class="bub ${x.c === S.me ? 'mine' : 'oth'}${old ? ' old' : ''}" data-i="${j}">${who(j)}<div class="btxt">${S.ital && x.c === S.me ? fmtB(j) : fmt(x.t)}</div></div>`;   /* 2.09 (462) : gras en Italienne */
   }
   if (hide) {
     /* 2.03 (M49 / M53) : la bulle a déjà la taille de la réplique ; plus de remarque sous « À toi… » */
@@ -4350,7 +4448,7 @@ function stepView(){
       ${S.hint ? `<div class="hintl">${esc(hintText(it.t, S.hint))}</div>` : ''}</div></div></div>`;
   } else {
     const rb = S.revBox && S.revBox.si === si ? S.revBox : null;
-    thr += `<div class="bub ${mine ? 'mine' : 'oth'} now${rb ? ' rvl' : ''}" data-i="${si}"${rb ? ` style="min-height:${rb.h}px;min-width:${rb.w}px"` : ''}>${who(si, noteBtn(it, 'c' + si))}${!mine ? cardSpk(si) : ''}<div class="btxt">${fmt(it.t)}</div>${noteBox(it, 'c' + si)}${mine ? rehNote(si) : ''}</div>`;
+    thr += `<div class="bub ${mine ? 'mine' : 'oth'} now${rb ? ' rvl' : ''}" data-i="${si}"${rb ? ` style="min-height:${rb.h}px;min-width:${rb.w}px"` : ''}>${who(si, noteBtn(it, 'c' + si))}${!mine ? cardSpk(si) : ''}<div class="btxt">${S.ital && mine ? fmtB(si) : fmt(it.t)}</div>${noteBox(it, 'c' + si)}${mine ? rehNote(si) : ''}</div>`;
   }
   let actions;
   /* 2.07 essai 2 (359, M144 b) : en Italienne, on peut revenir à la réplique précédente */
@@ -4412,7 +4510,7 @@ function cardActsNow(rev){ const r = document.querySelector('.actions .arow'); i
 /* ============ ACTIONS ============ */
 const cardList = () => { const items = S.scene.items; return items.map((it, i) => i).filter(i => items[i].k === 'l' && items[i].c === S.me); };
 function beginSteps(steps, pos, all, focus, cards, ital){
-  HF.run = !!(ital && saved.italHf); HF.pause = false;   /* 2.08 essai 4 (M196) */
+  HF.run = !!(ital && S.eph.italHf); HF.pause = false;   /* 2.08 essai 4 (M196) */
   if (HF.run && saved.italBip !== false) hfBipInit();   /* essai 5 : le son se prépare pendant le toucher « Lancer » */
   S.cards = !!cards; S.ital = !!ital; S.early = false; S.bilOpen = null; S.bilTab = 'evo'; S.revBox = null; S.enterFrom = null; S.hinted = new Set(); S.trans = {}; S.focus = focus || null; S.steps = steps; S.pos = pos || 0; S.stepsAll = all !== false; S.started = true; S.done = false; S.stepRevealed = false; S.hint = false;
   S.tab = 'reh'; saveProg();
@@ -4545,12 +4643,7 @@ document.addEventListener('click', e => {
       list.forEach(([bg, tr]) => celebrate('badge', { id:bg.id, name:bg.name, tier:tr, unique:!!bg.unique, label:bg.name })); break; }
       { const k = b.dataset.v, bg = BADGES[S.admB || 0], ti = S.admT == null ? 3 : S.admT;
       celebrate(k, k === 'title' ? { title:TITLE_IDX[ti], lvl:[10,20,30,40,50][ti] } : k === 'badge' ? { id:bg.id, name:bg.name, tier:S.admTier || 3, unique:!!bg.unique, label:bg.name } : { scene:'Test' }); break; }
-    case 'installapp': {
-      const ev = installEvt; if (!ev) break;
-      ev.prompt();
-      Promise.resolve(ev.userChoice).then(c => { installEvt = null; if (S.settings) renderSheet(); }).catch(() => {});
-      break;
-    }
+    case 'installapp': instGo(); break;   /* 2.09 (465) : sans proposition du téléphone → fenêtre d'aide */
     case 'sethaptic': saved.haptic = b.dataset.v; persist(); render(); buzz('tap'); break;
     case 'open': {
       /* 2.08 (370) : « Répéter » de Mes scènes demande, comme l'onglet Répéter, avant d'arrêter le minuteur */
@@ -4560,7 +4653,7 @@ document.addEventListener('click', e => {
         S.scene = S.play.scenes.find(s => s.id === d.scene);
         const m = saved.me[key()];
         S.me = S.scene.characters.includes(m) ? m : null;
-        Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, prepOpen:false, tab:'text', mode:'all', textHide:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set()});
+        Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, prepOpen:false, tab:'text', mode:'all', textHide:false, eph:EPH(), annOpen:null, boldI:null, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set()});
         saved.last = { play:S.play.id, scene:S.scene.id }; persist();
         if (d.go && S.me) { S.tab = 'reh'; if (d.cards) S.rmode = 'cards'; }   /* 2.07 : « Répéter » garde le dernier mode choisi */
         render(); window.scrollTo(0,0); };
@@ -4615,7 +4708,7 @@ document.addEventListener('click', e => {
     case 'setfs': S.fs = +b.dataset.v; applyFs(); persist(); render(); break;
     case 'settheme': saved.theme = b.dataset.v; applyTheme(); persist(); render(); break;
     case 'setcolor': saved.color = b.dataset.v; applyTheme(); persist(); render(); break;
-    case 'lineopen': { const i = +b.dataset.i; S.fromOpen = null;
+    case 'lineopen': { const i = +b.dataset.i; S.fromOpen = null; S.annOpen = null; if (S.boldI != null && S.boldI !== i) S.boldI = null;
       /* 2.03 · essai 6 : en mode suivi, la réplique suivie ouvre ses actions tout de suite ;
          une autre réplique ne réagit qu'au double toucher (elle devient suivie), sans délai ni actions */
       if (S.follow && trkOf() !== i) {
@@ -4636,7 +4729,7 @@ document.addEventListener('click', e => {
     case 'pickf': { const f = document.querySelector(`input[type=file][data-act="${b.dataset.f}"]`); if (f) f.click(); break; }   /* 2.03 : ouverture directe, comme en 2.02 */
     case 'bginfo': S.bgInfo = !S.bgInfo; renderSheet(); break;
     case 'nmenu': { const i = +b.dataset.i; S.nMenu = S.nMenu === i ? null : i; render(); break; }
-    case 'nedit': { S.nMenu = null; const i = +b.dataset.i, n = noteOf(i); S.nEdit = { i, x: n ? n.x : '' }; S.nView = null; render(); break; }
+    case 'nedit': { S.nMenu = null; S.annOpen = null; const i = +b.dataset.i, n = noteOf(i); S.nEdit = { i, x: n ? n.x : '' }; S.nView = null; render(); break; }
     case 'nsave': if (S.nEdit) {
       const ta = document.getElementById('ntext'); if (ta) S.nEdit.x = ta.value;
       if (!(S.nEdit.x || '').trim()) { S.nEdit.err = true; renderNotes(); break; }
@@ -4670,7 +4763,7 @@ document.addEventListener('click', e => {
       const k = d.k, cut = k.indexOf('/'), pl = LIBRARY.find(p => p.id === k.slice(0, cut)), sc = pl && pl.scenes.find(x => x.id === k.slice(cut + 1));
       if (!pl || !sc) return;
       S.play = pl; S.scene = sc; S.me = saved.me[k];
-      Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, tab:'reh', rmode:d.m === 'reh' ? 'reh' : 'cards', mode:'all', textHide:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set(), weakK:null, weakMenu:null});
+      Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, tab:'reh', rmode:d.m === 'reh' ? 'reh' : 'cards', mode:'all', textHide:false, eph:EPH(), annOpen:null, boldI:null, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set(), weakK:null, weakMenu:null});
       saved.last = { play:pl.id, scene:sc.id }; persist(); window.scrollTo(0,0);
       const st = stats(pl, sc), list = (st ? st.att : []).filter(a => d.v === 'ko' ? a.st === 'ko' : (a.stale && a.st !== 'ko')).map(a => a.i).sort((x, y) => x - y);
       if (!list.length) { render(); return; }
@@ -4679,7 +4772,7 @@ document.addEventListener('click', e => {
       tmGuard(go); break; }
     case 'noop': break;
     case 'mdet': { const k = b.dataset.k, cut = k.indexOf('/'), pl = LIBRARY.find(p => p.id === k.slice(0, cut)), sc = pl && pl.scenes.find(x => x.id === k.slice(cut + 1));
-      if (!pl || !sc) break; const st = stats(pl, sc); if (st) openMastery(st, sc.title + ' · ' + st.c, sc); break; }
+      if (!pl || !sc) break; const st = stats(pl, sc); if (st) openMastery(st, sc.title + ' · ' + st.c, sc, b); break; }
     case 'weaktog': { const y0 = b.getBoundingClientRect().top, k = b.dataset.k; S.weakK = S.weakK === k ? null : k; S.weakMenu = null; render();   /* 2.08 essai 6 (443) : le panneau qui se replie au-dessus ne fait plus remonter l'écran */
       const nb = [...document.querySelectorAll('[data-act=weaktog]')].find(x => x.dataset.k === k); if (nb) { const dy = nb.getBoundingClientRect().top - y0; if (Math.abs(dy) > 1) window.scrollBy(0, dy); } break; }
     case 'weaktab': S.weakTab = S.weakTab || {}; S.weakTab[b.dataset.k] = b.dataset.v; render(); break;
@@ -4703,9 +4796,9 @@ document.addEventListener('click', e => {
     case 'guideplay': { const k = (saved.mine || []).find(x => saved.me && saved.me[x]) || (saved.mine || [])[0]; if (!k) { saved.libTab = 'all'; persist(); render(); break; }
       const cut = k.indexOf('/'), pl = LIBRARY.find(p => p.id === k.slice(0, cut)), sc = pl && pl.scenes.find(x => x.id === k.slice(cut + 1)); if (!pl || !sc) break;
       S.play = pl; S.scene = sc; S.me = saved.me[k] || null;
-      Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, tab: S.me ? 'reh' : 'text', rmode:'reh', mode:'all', textHide:false, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set()});
+      Object.assign(S, {view:'scene', lineOpen:null, noteK:null, nEdit:null, nList:false, nView:null, tab: S.me ? 'reh' : 'text', rmode:'reh', mode:'all', textHide:false, eph:EPH(), annOpen:null, boldI:null, pick:false, started:false, steps:[], pos:0, done:false, revealed:new Set(), missed:new Set()});
       render(); window.scrollTo(0, 0); break; }
-    case 'guideinst': openSettings(); S.setSec = 'data'; renderSheet(); break;
+    case 'guideinst': instGo(); break;   /* 2.09 (465) */
     case 'guideskip': saved.guideDone = true; persist(); render(); break;
     case 'libtab': saved.libTab = b.dataset.v; persist(); render(); window.scrollTo(0,0); break;
     case 'togglemine': {
@@ -4735,26 +4828,29 @@ document.addEventListener('click', e => {
     case 'ttstest': if (S.speakI === 't') stopSpeech(); else say('Bonjour, ceci est un test de la voix.', 1, 't'); break;
     case 'fpo': { const f = document.querySelector(`input[data-act=fpt][data-k="${b.dataset.k}"]`); if (f) f.click(); break; }
     case 'fpdyn': { const f = document.createElement('input'); f.type = 'file'; f.accept = '.json,application/json'; f.click(); break; }
-    case 'notestoggle': if (S.cards) co().notes = !co().notes; else saved.rehNotes = !saved.rehNotes; persist(); render(); break;
-    case 'audiotoggle': if (S.cards) co().audio = !co().audio; else if (S.ital) saved.italAudio = !italAudio(); else S.audio = !S.audio; persist(); if (!audioOn()) stopSpeech(); else autoSpeak(); render(); break;
+    case 'notestoggle': if (S.cards) co().notes = !co().notes; else if (S.ital) S.eph.italNotes = !S.eph.italNotes; else saved.rehNotes = !saved.rehNotes; persist(); render(); break;
+    case 'audiotoggle': if (S.cards) co().audio = !co().audio; else if (S.ital) S.eph.italAudio = !italAudio(); else S.audio = !S.audio; persist(); if (!audioOn()) stopSpeech(); else autoSpeak(); render(); break;
     /* 2.07 essai 2 (367, M161) : « Répéter d'ici » déplie le choix du mode */
-    case 'from': S.fromOpen = S.fromOpen === +b.dataset.i ? null : +b.dataset.i; render(); break;
+    case 'from': S.fromOpen = S.fromOpen === +b.dataset.i ? null : +b.dataset.i; S.annOpen = null; render(); break;
+    /* 2.09 (462, M214 e) : « Annoter ▾ » (note ou gras) ; mode « Mettre en gras » */
+    case 'annot': S.annOpen = S.annOpen === +b.dataset.i ? null : +b.dataset.i; S.fromOpen = null; render(); break;
+    case 'boldon': S.boldI = +b.dataset.i; S.annOpen = null; render(); break;
+    case 'boldend': S.boldI = null; render(); break;
+    case 'boldw': { const i = +b.dataset.i, w = +b.dataset.w; saved.bolds = saved.bolds || {}; const sb = saved.bolds[key()] = saved.bolds[key()] || {}, a = sb[i] = sb[i] || [];
+      const k = a.indexOf(w); if (k >= 0) a.splice(k, 1); else a.push(w); if (!a.length) delete sb[i]; if (!Object.keys(sb).length) delete saved.bolds[key()];
+      persist(); { const y = window.scrollY; render(); window.scrollTo(0, y); } break; }
     case 'fromm': { const i = +b.dataset.i, m = b.dataset.v; S.fromOpen = null; tmGuard(() => { S.missed = new Set(); S.rmode = m;
       if (m === 'cards') { const L = cardList(), k = L.findIndex(x => x >= i); beginSteps(L, k < 0 ? 0 : k, true, null, true); }
       else { const all = allSteps(); beginSteps(all, Math.max(0, all.indexOf(i)), true, null, false, m === 'ital'); } }); break; }
     case 'start': { S.missed = new Set();
-      if (saved.rehKo) { const st0 = stats(S.play, S.scene), ko = st0 ? st0.lines.filter(l => l.st === 'ko').map(l => l.i) : []; const list = withCues(ko);   /* 2.08 essai 5 (431, M199 c) */
+      if (S.eph.rehKo) { const st0 = stats(S.play, S.scene), ko = st0 ? st0.lines.filter(l => l.st === 'ko').map(l => l.i) : []; const list = withCues(ko);   /* 2.08 essai 5 (431, M199 c) */
         if (!list.length) { flashMsg('Aucune réplique « à répéter » dans cette scène.'); break; } beginSteps(list, 0, false); break; }
       const st = allSteps(); beginSteps(st, firstPos(st), true); break; }
-    case 'startital': { S.missed = new Set(); const st = allSteps(); beginSteps(st, saved.italGo === false ? 0 : firstPos(st), true, null, false, true); break; }
+    case 'startital': { S.missed = new Set(); const st = allSteps(); beginSteps(st, S.eph.italGo === false ? 0 : firstPos(st), true, null, false, true); break; }
     case 'rmode': S.rmode = ['cards', 'ital'].includes(b.dataset.v) ? b.dataset.v : 'reh'; S.vdet = false; render(); break;   /* 351 : les détails de la voix se referment */
     case 'hdupd': b.disabled = true; b.lastChild && (b.lastChild.textContent = 'Mise à jour…'); updApply(); break;   /* 2.06 (260) ; essai 6 : attend la nouvelle version */
     case 'hdsave': bkAsk(); break;   /* 2.08 (M177 a, M178 a) */
-    case 'hdinst':   /* 2.06 (261, essai 2) : même effet que le bouton « Installer Répète sur ce téléphone » des Réglages ;
-                        sans proposition d'installation du navigateur (iPhone…) : Réglages › Données, où se trouve la marche à suivre */
-      if (installEvt) { const ev = installEvt; ev.prompt(); Promise.resolve(ev.userChoice).then(() => { installEvt = null; render(); if (S.settings) renderSheet(); }).catch(() => {}); }
-      else { openSettings(); S.setSec = 'data'; renderSheet(); }
-      break;
+    case 'hdinst': instGo(); break;   /* 2.09 (465, M210 b) : sans proposition du téléphone → fenêtre d'aide (plus de renvoi aux Réglages) */
     case 'vdet': e.preventDefault(); S.vdet = !S.vdet; render(); break;   /* 2.06 (253, M90-1 A) : « Détails » ne bascule pas l’interrupteur */
     case 'cresume': {
       const p = (saved.cprog || {})[key()], L = cardList();
@@ -4763,9 +4859,9 @@ document.addEventListener('click', e => {
     case 'startcards': {
       const items = S.scene.items, mine = cardList();
       let list = mine;
-      if (co().ko) { const st = stats(S.play, S.scene), ko = new Set(st ? st.lines.filter(l => l.st === 'ko').map(l => l.i) : []); list = mine.filter(i => ko.has(i));
+      if (S.eph.cardKo) { const st = stats(S.play, S.scene), ko = new Set(st ? st.lines.filter(l => l.st === 'ko').map(l => l.i) : []); list = mine.filter(i => ko.has(i));
         if (!list.length) { appAlert('Aucune réplique « à répéter » dans cette scène.'); break; } }
-      S.missed = new Set(); beginSteps(list, 0, !co().ko, null, true); break; }
+      S.missed = new Set(); beginSteps(list, 0, !S.eph.cardKo, null, true); break; }
     case 'resume': {
       const p = saved.prog[key()];
       S.missed = new Set((p && p.missed) || []);
@@ -4846,7 +4942,7 @@ document.addEventListener('change', e => {
       persist(); t.value = '';
       appAlert((n ? n + ' scène(s) ajoutée(s).' : 'Rien de nouveau.') + (bad ? '\n' + bad + ' fichier(s) illisible(s) ignoré(s).' : ''), null, !!bad); render(); }); return; }
   if (a === 'admpicks') { S[t.dataset.k] = +t.value; renderSheet(); return; }
-  if (a === 'showprog') { saved.showProg = t.checked; persist(); render(); }
+  if (a === 'showprog') { S.eph.showProg = t.checked; render(); }
   else if (a === 'hlme') { saved.noHl = !t.checked; persist(); render(); }
   else if (a === 'thide') { S.textHide = t.checked; S.revealed = new Set(); render(); }
   else if (a === 'onlyme') { S.mode = t.checked ? 'mine' : 'all'; render(); }   /* 2.06 (254) : remplace « Tout le texte / Mes répliques » */
@@ -4856,21 +4952,22 @@ document.addEventListener('change', e => {
   else if (a === 'soundck') { saved.sound = t.checked ? 'on' : 'off'; persist(); render(); if (t.checked) rwSound(() => { RepeteSons.unlock(); RepeteSons.badge('or'); }); }
   else if (a === 'audio') { S.audio = t.checked; persist(); render(); }
   else if (a === 'rehnotes') { saved.rehNotes = t.checked; persist(); }
+  else if (a === 'italnotes') { S.eph.italNotes = t.checked; }   /* 2.09 (463) : notes de l'Italienne séparées de Répliques, oubliées */
   /* 2.07 essai 3 : les options de l'Italienne passent ici (les interrupteurs ne déclenchent pas l'action au clic) */
   else if (a === 'italhide') { saved.italHide = t.checked; persist(); }
-  else if (a === 'italgo') { saved.italGo = t.checked; persist(); }
-  else if (a === 'italaudio') { saved.italAudio = t.checked; persist(); }
-  else if (a === 'italhf') { saved.italHf = t.checked; persist(); render(); }   /* 2.08 essai 4 (M196) */
+  else if (a === 'italgo') { S.eph.italGo = t.checked; }
+  else if (a === 'italaudio') { S.eph.italAudio = t.checked; render(); }
+  else if (a === 'italhf') { S.eph.italHf = t.checked; render(); }   /* 2.08 essai 4 (M196) */
   else if (a === 'italhear') { saved.italHear = t.checked; persist(); }
   else if (a === 'italslow') { saved.italSlow = t.checked; persist(); }
   else if (a === 'italbip') { saved.italBip = t.checked; persist(); }   /* 2.08 essai 5 (434) */
-  else if (a === 'rehko') { saved.rehKo = t.checked; persist(); render(); }   /* 2.08 essai 5 (431) */
-  else if (a === 'vper') { saved.vPer = t.checked; if (t.checked) vPerInit(); persist(); render(); }   /* 2.08 essai 4 (M197) */
+  else if (a === 'rehko') { S.eph.rehKo = t.checked; render(); }   /* 2.08 essai 5 (431) */
+  else if (a === 'vper') { vSc().per = t.checked; if (t.checked) vPerInit(); persist(); render(); }   /* 2.08 essai 4 (M197) */
   else if (a === 'vch') { vMap()[t.dataset.c] = t.value; persist(); }
-  else if (a === 'cardsko') { co().ko = t.checked; persist(); }
+  else if (a === 'cardsko') { S.eph.cardKo = t.checked; render(); }
   else if (a === 'cnotes') { co().notes = t.checked; persist(); }
   else if (a === 'caudio') { co().audio = t.checked; persist(); render(); }
-  else if (a === 'voice') { S.voice = t.value; persist(); }
+  else if (a === 'voice') { S.voice = t.value; vSc().voice = t.value; persist(); }   /* 2.09 (463) : voix propre à la scène (S.voice = dernière choisie, sert de départ aux autres scènes) */
   else if (a === 'goaldate') { if (t.value) { saved.goalDate = t.value; persist(); render(); } }
   else if (a === 'rate') { S.rate = parseFloat(t.value); persist(); render(); }
 });
@@ -5013,7 +5110,7 @@ function hfArrive(){
 }
 /* fin d'une lecture à voix haute (voix.js) */
 function hfSpoken(){ if (!HF.run || HF.pause || !hfOn()) return; clearTimeout(HF.tm); HF.tm = setTimeout(hfNext, 200); }   /* 2.08 essai 5 (436) : le mode lent n'allonge que mon blanc ; essai 6 (444) : 0,2 s */
-function hfStart(){ HF.run = !!saved.italHf; HF.pause = false; }
+function hfStart(){ HF.run = !!S.eph.italHf; HF.pause = false; }
 function hfToggle(){ HF.pause = !HF.pause; if (HF.pause) { hfClear(); stopSpeech(); render(); } else { render(); autoSpeak(); hfArrive(); } }
 /* « À toi… n s » à la place du bouton de droite, mis à jour sans tout redessiner */
 function hfPaint(){ const b = document.querySelector('.actions .arow > .btn:last-child'); if (!b) return;
@@ -5054,9 +5151,9 @@ function hfBip(){ hfBipInit(); if (!hfAC) return; try { const t = hfAC.currentTi
 /* 2.08 essai 5 (M202, M204 b) : options de l'Italienne ; cadre (style du bloc « Détails ») qui s'ouvre quand « Mains libres » est coché,
    sous-options décalées, « Mains libres » ne bouge pas */
 function hfOpts(){
-  const lab = `<label class="sw"><input type="checkbox" data-act="italhf" ${saved.italHf ? 'checked' : ''}> <span class="vlt">Mains libres<button type="button" class="info" data-act="infohf" aria-label="À quoi sert « Mains libres » ?" aria-expanded="${S.infoHf ? 'true' : 'false'}" style="margin-left:8px">i</button></span></label>`;
+  const lab = `<label class="sw"><input type="checkbox" data-act="italhf" ${S.eph.italHf ? 'checked' : ''}> <span class="vlt">Mains libres<button type="button" class="info" data-act="infohf" aria-label="À quoi sert « Mains libres » ?" aria-expanded="${S.infoHf ? 'true' : 'false'}" style="margin-left:8px">i</button></span></label>`;
   const info = S.infoHf ? `<div class="infobox"><p>La voix lit les autres personnages, laisse un blanc pour ta réplique (selon sa longueur), puis enchaîne toute seule. Toucher l’écran : pause / reprise.</p><p class="hfil"><b>Entendre ma réplique</b> : la voix la dit après le blanc.<br><b>Mode lent</b> : un blanc plus long, pour réfléchir.<br><b>Bip sonore</b> : un bip court quand c’est à toi.</p></div>` : '';
-  if (!saved.italHf) return lab + info;
+  if (!S.eph.italHf) return lab + info;
   return `<div class="hfbx">${lab}${info}
     <label class="sw hfsub"><input type="checkbox" data-act="italhear" ${saved.italHear !== false ? 'checked' : ''}> Entendre ma réplique</label>
     <label class="sw hfsub"><input type="checkbox" data-act="italslow" ${saved.italSlow ? 'checked' : ''}> Mode lent</label>
