@@ -306,7 +306,7 @@ button.tapk,.fpv.tapk{animation:tapk .18s ease-out}
 .btn.soft{background:var(--accent-bg);border-color:transparent;color:var(--accent-ink)}
 .iconb{display:inline-flex;align-items:center;justify-content:center;gap:6px}
 .gsb{width:100%;background:none;border:0;text-align:left;color:var(--ink);cursor:pointer;font:inherit;font-size:var(--fs-15);padding:9px 0}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.sr{position:absolute;top:0;left:0;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .plh{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:0;text-align:left;color:inherit;cursor:pointer}
 .plh > span{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.plh h2{margin:0}
 .plh .gch{color:var(--mute);flex:none;transition:transform .15s}.plc.fold .plh .gch{transform:rotate(-90deg)}
@@ -414,7 +414,7 @@ button.tapk,.fpv.tapk{animation:tapk .18s ease-out}
 .bn{font-weight:700;line-height:1.15;font-size:clamp(12px,2dvh,14px)}
 .bcell .bt{font-size:var(--fs-12);color:var(--mute);flex:none;white-space:normal;font-weight:400}
 .bgrid .bcell{gap:2px;justify-content:flex-start;padding:min(14px,1.5dvh) 6px}
-.bgrid .medal{width:min(88px,30vw,11.5dvh);margin:0 0 min(8px,1dvh)}
+.bgrid .medal{width:min(88px,30vw,calc(20dvh - 68px));margin:0 0 min(8px,1dvh)}
 .bov .bdet .bigart{width:min(132px,36vw,20dvh);margin:2px auto min(20px,2.6dvh)}
 .bov .bdet{max-height:calc(100dvh - 40px);overflow:auto;width:100%;max-width:340px;margin:0;position:relative;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.35)}
 .bov{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}
@@ -823,7 +823,7 @@ h2.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(-
 .bgt2 .bgu{display:flex;flex-direction:column;gap:1px;margin:0 0 9px}.bgt2 .bgu small{color:var(--mute);font-size:var(--fs-12);line-height:1.35}
 .bgt2 .bgu .ttl{display:block;color:#B98510;font-weight:600}[data-theme=dark] .bgt2 .bgu .ttl{color:#F2BE3A}
 /* 2.09 (474, M217) : outils admin dans l'appli (même cadre que le menu admin) */
-.admctx{margin-top:12px;padding:10px 10px 12px;border:1.5px dashed color-mix(in srgb,#7C5CFF 55%,var(--line));border-radius:var(--r-14);background:color-mix(in srgb,#7C5CFF 7%,var(--card))}
+.admctx{margin:12px 0 0;padding:10px 10px 12px;border:1.5px dashed color-mix(in srgb,#7C5CFF 55%,var(--line));border-radius:var(--r-14);background:color-mix(in srgb,#7C5CFF 7%,var(--card))}
 .admctx > .lbl{margin:0 0 6px;color:color-mix(in srgb,#7C5CFF 75%,var(--ink))}
 .admctx .admgrid{margin-top:0}
 .admrow2{display:grid;grid-template-columns:1fr 64px 52px;gap:8px;align-items:center;margin-top:8px;font-size:var(--fs-14)}
@@ -2825,13 +2825,15 @@ function checkBadges(){
   ['streak', 'obj', 'solid'].forEach(k => { if (!fix[k]) g[k] = Math.max(g[k] || 0, v[k]); });
   if (v.perfect && !fix.perfect) g.perfect = 1; if (v.ready && !fix.ready) g.ready = 1;
   if (v.rising && !fix.rising) g.rising = 1; if (v.star && !fix.star) g.star = 1;
+  /* 2.09 essai 4 (484) : une seule fois, « Prêt pour le jour J » obtenu avec les anciennes conditions (plus faciles) tombe si les nouvelles ne sont pas remplies */
+  let mig = false; if (!saved.bgJJ2) { saved.bgJJ2 = 1; mig = true; if (!fix.ready && !v.ready) { g.ready = 0; saved.bg.ready = 0; } }
   /* 2.09 (460) : nouveaux paliers « Répliques solides » : le palier affiché est recalculé une fois (il peut baisser) */
   if (!saved.bgSol2) { saved.bgSol2 = 1; const sb = BADGES.find(b => b.id === 'solid'); if (!fix.solid) saved.bg.solid = sb.T.filter(t => (g.solid || 0) >= t - 1e-9).length; }
   BADGES.forEach(b => { if (fix[b.id]) return;
     const cur = b.unique ? (g[b.id] ? 1 : 0) : b.T.filter(t => (g[b.id] || 0) >= t - 1e-9).length;
     if (cur > (saved.bg[b.id] || 0)) { saved.bg[b.id] = cur; fresh.push({ b, tier: cur }); }
   });
-  if (fresh.length || saved.fullSince !== fs0) persist();
+  if (fresh.length || saved.fullSince !== fs0 || mig) persist();
   return fresh;
 }
 function badgeProg(b){
@@ -3044,6 +3046,11 @@ function admTiers(){
     + `<div class="bgk">Uniques</div>` + BADGES.filter(b => b.unique && !b.secret).map(b => u(b, C[b.id] || esc(b.desc))).join('')
     + `<div class="bgk">Secrets</div>` + BADGES.filter(b => b.secret).map(b => u(b, C[b.id] || esc(b.desc))).join('') + '</div>';
 }
+/* 2.09 essai 4 (481, M221 b) : mêmes boutons que « Date du jour », sous « Mes scènes » */
+function admDayBox(){ const n = saved.dayShift | 0, d = new Date(Date.parse(calToday() + 'T12:00:00')).toLocaleDateString('fr-BE', { weekday:'short', day:'numeric', month:'short' });
+  return `<div class="admctx"><div class="lbl">Admin · ${n ? 'jour simulé : J' + (n > 0 ? '+' : '−') + Math.abs(n) + ' · ' + d : 'jour réel · ' + d}</div><div class="admgrid">
+    <button class="admb" data-act="adm" data-op="shift" data-v="-1">Jour −1</button><button class="admb" data-act="adm" data-op="shift" data-v="1">Jour +1</button>
+    <button class="admb" data-act="adm" data-op="shift" data-v="7">Jour +7</button><button class="admb" data-act="adm" data-op="shift" data-v="0">Jour réel</button></div></div>`; }
 let offMsg = '';
 async function checkOffline(){
   offMsg = 'Vérification…'; renderSheet();
@@ -3180,7 +3187,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 159, APP_LABEL = '2.09 · essai 3'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 160, APP_LABEL = '2.09 · essai 4'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -4107,7 +4114,8 @@ function mineView(){
     }
     h += `</section>`;
   });
-  return h;
+  /* 2.09 essai 4 (481, M221 b) : en mode admin, changer de jour sous la liste */
+  return h + (ADMIN ? admDayBox() : '');
 }
 /* ---- Classement (feuille Google + Apps Script ; voir claude/classement-concept.md) ---- */
 const RANK_URL = 'https://script.google.com/macros/s/AKfycbwAjizlS7bYfNKiqNpTfNEWg8Ce_KGkxilsifDI92WMbaxVzZFGsgd7SbUrIbvTk33Ngg/exec';
@@ -4875,7 +4883,7 @@ document.addEventListener('click', e => {
       if (op === 'progreset') { appConfirm('Réinitialiser la progression ?\n\nRépliques, séries, objectifs et badges du profil de test repartent de zéro. Tes notes, tes textes et tes réglages sont gardés. Ta vraie progression n’est pas touchée.', 'Réinitialiser', () => { animMute = true; try { admOp('progreset', 0); admFeedback('progreset', 0); render(); } finally { animMute = false; } }, true); break; }
       if (op === 'wipe') { appConfirm('Effacer le profil de test ?\n\nToute la progression du mode admin sera effacée. Ta vraie progression n’est pas touchée.', 'Effacer', () => admOp('wipe', 0), true); break; }
       if (['mastery','level','streak','lit','objdone','ko','stale','rand'].includes(op)) { animMute = true; try { admOp(op, v); admFeedback(op, v, b.dataset.v); render(); } finally { animMute = false; } break; }
-      admOp(op, v); admFeedback(op, v, b.dataset.v); break; }
+      admOp(op, v); admFeedback(op, v, b.dataset.v); if (op === 'shift' && !S.settings) render(); break; }
     case 'badgesopen': S.view = 'badges'; S.bsel = null; render(); window.scrollTo(0, 0); break;
     case 'importopen': S.imp = S.imp || impNew(); S.imp.step = 1; S.view = 'import'; render(); window.scrollTo(0, 0); break;
     case 'importback': navBack(); break;
