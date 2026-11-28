@@ -1130,7 +1130,7 @@ html:has(.psh),html:has(.psh) body{overflow:hidden;overscroll-behavior:none}   /
 .str{display:inline-flex;align-items:center;gap:1px;font-weight:700;color:#E3A71F;white-space:nowrap}
 [data-theme=dark] .str{color:#F2BE3A}
 .str .stv{flex:none}
-.str.dn{font-size:11px;line-height:1;margin-top:1px}
+.str.stdn{font-size:11px;line-height:1;margin-top:1px}   /* essai 7 : « dn » était déjà la classe du cercle (64 × 64) */
 .str.big{font-size:18px}.str.big .stv{width:18px;height:18px}
 .stv.dim{color:var(--mute);vertical-align:-2px}
 .stn{font-weight:600;margin-right:4px}
@@ -3344,7 +3344,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 162, APP_LABEL = '2.09 · essai 6'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 163, APP_LABEL = '2.09 · essai 7'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -4303,7 +4303,7 @@ function donut(st, k){
   const it = (k, n, w) => `<span class="dli"><i class="dot ${k}"></i>${n} ${k === 'ko' ? w : w + (n > 1 ? 's' : '')}</span>`;
   const l1 = [['solid', c.solid, 'solide'], ['known', c.known, 'connue']].filter(x => x[1]).map(x => it(...x)).join('<span class="dsep">·</span>') + (st.star ? '<span class="dsep">·</span>' + starTag(st.star) : '');
   const l2 = [['ko', c.ko, 'à répéter'], ['new', c.new, 'nouvelle']].filter(x => x[1]).map(x => it(...x)).join('<span class="dsep">·</span>');
-  return `<div class="dnrow b"><div class="dn" ${k ? `data-act="mdet" data-k="${esc(k)}" role="button" aria-label="Détail de la maîtrise"` : ''}><svg width="64" height="64" viewBox="0 0 80 80" role="img" aria-label="Statut des répliques">${segs}</svg><div class="dnt"><b>${st.pct} %</b>${starTag(st.star, 'dn')}</div></div><div class="dnlg b">${l1 ? `<div>${l1}</div>` : ''}${l2 ? `<div>${l2}</div>` : ''}</div></div>`;
+  return `<div class="dnrow b"><div class="dn" ${k ? `data-act="mdet" data-k="${esc(k)}" role="button" aria-label="Détail de la maîtrise"` : ''}><svg width="64" height="64" viewBox="0 0 80 80" role="img" aria-label="Statut des répliques">${segs}</svg><div class="dnt"><b>${st.pct} %</b>${starTag(st.star, 'stdn')}</div></div><div class="dnlg b">${l1 ? `<div>${l1}</div>` : ''}${l2 ? `<div>${l2}</div>` : ''}</div></div>`;
 }
 function mineView(){
   const D = progData(), list = D.list;
