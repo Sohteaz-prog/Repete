@@ -137,6 +137,30 @@ h2{font-size:var(--fs-20);margin:0 0 2px}
 .gsec.open .gch{transform:rotate(180deg)}
 .gbd{padding:0 2px 16px}
 .gbd>.lbl:first-child{margin-top:4px}
+/* 2.09 (458, M215 v2) : Réglages › Profil */
+.prf{display:flex;align-items:center;margin:0 0 10px;border:1px solid var(--line);border-radius:var(--r-14);background:var(--card);padding-right:6px}
+.prf.on{border:2px solid var(--accent);margin-bottom:8px;padding-right:5px}
+.prf.on .prfm{min-height:63px;padding-left:10px}
+.gbd>.prf:first-child{margin-top:4px}
+.prfm{flex:1;min-width:0;display:flex;align-items:center;gap:10px;min-height:65px;padding:8px 6px 8px 11px;border:0;background:none;text-align:left;color:var(--ink);font:inherit}
+.prfr{flex:none;width:20px;height:20px;border-radius:50%;border:2px solid var(--line);margin:-2px 0 0 1px}
+.prf.on .prfr{border:2.5px solid var(--accent);background:var(--accent);box-shadow:inset 0 0 0 3px var(--card);margin-top:0}
+.prft{display:flex;flex-direction:column;gap:5px;min-width:0}
+.prft b{font-size:var(--fs-15);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prft span{font-size:var(--fs-13);color:var(--mute)}
+.prfa+.prfa{margin-left:6px}
+.prfa{flex:none;width:44px;height:44px;margin-top:-2px;display:inline-flex;align-items:center;justify-content:center;border:0;background:none;color:var(--mute);border-radius:var(--r-10)}
+.btn.prfadd{width:100%;flex:none;display:block;border-width:1px;font-size:var(--fs-16)}
+.pfw{width:100%;max-width:340px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:20px 18px 16px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.pft{margin:4px 0 14px;font-size:17px;font-weight:600;text-align:center}
+.pfw .lbl{display:block;margin:0 0 8px}
+.pfin{display:block;width:100%;min-height:46px;font-size:17px;padding:8px 12px;border:1.5px solid var(--line);border-radius:var(--r-10);background:var(--bg);color:var(--ink);margin-bottom:11px}
+.pferr{margin:-8px 0 12px;font-size:var(--fs-13);color:color-mix(in srgb,var(--st-ko) 75%,var(--ink))}
+.pferr[hidden]{display:none}
+.pfw .dateinp{display:block}
+.pfbt{display:flex;gap:10px;margin-top:16px}
+.pfbt .btn{flex:1;min-height:48px}
+.pfbt .btn.pri:disabled{opacity:.45}
 .updlk{border:0;background:none;padding:6px 4px;font-size:inherit;font-weight:600;color:var(--mute);text-decoration:underline;min-height:32px;position:relative}
 .btn.sm{min-height:44px;flex:0 0 auto;font-size:var(--fs-14)}
 .row2{display:flex;gap:10px;margin-top:10px}
@@ -1002,6 +1026,8 @@ html.tmlock,html.tmlock body{overflow:hidden;overscroll-behavior:none}
 .hdpw{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex}
 .hdp{white-space:nowrap;flex:none;display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 11px 0 9px;border-radius:999px;border:0;background:var(--accent-bg);color:var(--accent-ink);box-shadow:inset 0 0 0 1.5px var(--accent);font-weight:700;font-size:var(--fs-13);position:relative;margin:0}
 .hdp::after{content:"";position:absolute;inset:-6px -4px}
+/* 2.09 (458, M215 d) : nom du profil à la place des pastilles (au moins 2 profils) */
+.hdn{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:0;background:none;padding:6px 0;color:var(--mute);font-weight:600;font-size:var(--fs-14);min-height:44px}
 /* 2.06 essai 4 (M95-4 c) : avertissement voix compact ; « Aide » en lien ; ✕ petit, dans le coin, zone 48 × 44 */
 .warnbox.wsm{font-size:13px;line-height:1.35;padding:8px 34px 8px 36px}.warnbox.wsm::before{left:10px;top:9px;width:18px;height:18px}
 .wbh{border:0;background:none;padding:0;color:var(--accent-ink);font:inherit;font-weight:600;text-decoration:underline;text-underline-offset:2px;position:relative}.wbh::after{content:"";position:absolute;inset:-12px -8px}
@@ -2329,7 +2355,28 @@ const findScene = (pid, sid) => { const p = LIBRARY.find(p => p.id === pid); con
 let ACTIVE = 'main';
 try { ACTIVE = localStorage.getItem('repete.active') === 'admin' ? 'admin' : 'main'; } catch(e) {}
 const ADMIN = ACTIVE === 'admin';
-const KEY = ADMIN ? 'repete.admin' : 'repete.v1';
+/* 2.09 (458, M215 v2) : plusieurs profils réels. « Académie » (id v1) garde la clé d'origine repete.v1, toujours complète
+   (progression + réglages : une ancienne version qui s'ouvrirait par erreur la lit telle quelle) ; les autres profils : repete.p.<id>.
+   Liste : repete.profs = [{ id, name, goal }] ; profil ouvert : repete.prof ; réglages et textes ajoutés communs : repete.common.
+   Le profil de test de l'admin (repete.admin) reste à part, avec ses propres réglages. */
+const COMMON_KEYS = new Set(['audio','rate','voice','rehHide','fs','bold','theme','color','dirc','cb','anim','sound','haptic','timer','tmRun',
+  'italBip','italHear','italSlow','italHide','italGo','italAudio','italHf','showProg','noHl','notesOpen','rehNotes','cardOpt','heroOpen',
+  'libFold','vSc','vCh','vPer','rmSc','userLib','bk','guideDone','ansAll']);
+const ACAD = 'v1', ACAD_NAME = 'Académie', PROF_MAX = 14;
+let PROF_GONE = false;   /* profil ouvert supprimé ou données remplacées : plus rien n'est enregistré avant le rechargement */
+const profKey = id => id === ACAD ? 'repete.v1' : 'repete.p.' + id;
+const jsonLS = k => { try { const v = JSON.parse(localStorage.getItem(k) || 'null'); return v; } catch(e) { return null; } };
+function profList(){ let l = jsonLS('repete.profs');
+  if (!Array.isArray(l)) l = []; l = l.filter(p => p && typeof p.id === 'string' && /^[A-Za-z0-9]+$/.test(p.id));
+  if (!l.some(p => p.id === ACAD)) { const v = jsonLS('repete.v1'); l.unshift({ id:ACAD, name:ACAD_NAME, goal:(v && v.goalDate) || '2027-01-19' }); }
+  l.forEach(p => { if (p.id === ACAD) p.name = ACAD_NAME; else p.name = String(p.name || '').slice(0, PROF_MAX); });
+  return l; }
+function profSave(l){ try { localStorage.setItem('repete.profs', JSON.stringify(l)); } catch(e) {} }
+let PROFS = ADMIN ? [] : profList(), PID = ACAD;
+if (!ADMIN) { let a = null; try { a = localStorage.getItem('repete.prof'); } catch(e) {}
+  if (a && PROFS.some(p => p.id === a)) PID = a;
+  if (!jsonLS('repete.profs')) profSave(PROFS); }
+const KEY = ADMIN ? 'repete.admin' : profKey(PID);
 const admHash = t => { let h = 5381; for (const c of String(t)) h = ((h * 33) ^ c.charCodeAt(0)) >>> 0; return h; };
 const ADM_OK = 1760501547;
 let saved = {};
@@ -2361,6 +2408,20 @@ saved.prog = saved.prog || {}; saved.me = saved.me || {};
 saved.mine = saved.mine || []; saved.lines = saved.lines || {};
 if (!saved.goalDate) saved.goalDate = '2027-01-19';
 if (!saved.profile) saved.profile = ADMIN ? 'Profil de test' : 'Présentation du 19 janvier';
+/* 2.09 (458) : réglages communs (repete.common) ; la 1re fois, repris du profil Académie ; « Présentation du 19 janvier » devient « Académie » */
+let COMMON_BAD = false;
+if (!ADMIN) {
+  let c = null; const rc = (() => { try { return localStorage.getItem('repete.common'); } catch(e) { return null; } })();
+  if (rc !== null) { try { c = JSON.parse(rc); } catch(e) {} if (!isObj(c)) { COMMON_BAD = true; c = jsonLS('repete.common.bak'); } }
+  if (!isObj(c)) { const v = PID === ACAD ? saved : (jsonLS('repete.v1') || {}); c = {}; COMMON_KEYS.forEach(k => { if (k in v) c[k] = v[k]; }); }
+  COMMON_KEYS.forEach(k => { if (k in c) saved[k] = c[k]; else if (PID !== ACAD) delete saved[k]; });
+  if (saved.ansAll == null) saved.ansAll = saved.nAns | 0;
+  const me = PROFS.find(p => p.id === PID);
+  if (PID === ACAD) saved.profile = ACAD_NAME; else { saved.profile = me.name; delete saved.rank; }
+  if (me.goal !== saved.goalDate) { me.goal = saved.goalDate; profSave(PROFS); }
+}
+if (saved.ansAll == null) saved.ansAll = saved.nAns | 0;   /* 2.09 (458) : réponses de tous les profils (rappel de sauvegarde) */
+const profName = () => saved.profile;
 /* Saisons (préparation, sans effet visible pour l'instant) : un profil appartient à une saison ; la bibliothèque n'affiche que les pièces de la saison du profil actif.
    Une pièce sans champ « season » appartient à la saison d'origine (2027-01). Le classement sera lui aussi filtré par saison.
    Au prochain profil (après le 19 janvier) : saison différente, nouveaux textes avec "season":"…" dans leurs fichiers. */
@@ -2403,9 +2464,10 @@ const S = {
 const key = () => S.play.id + '/' + S.scene.id;
 const lineNo = i => { let n = 0; const it = S.scene.items; for (let j = 0; j <= i; j++) if (it[j].k === 'l') n++; return n; };
 /* Copie automatique : l'état précédent (valide) est recopié au plus toutes les 5 min ; une copie bien plus petite n'écrase jamais une grosse copie. */
-function autoBackup(){
+function autoBackup(K){
+  K = K || KEY; const BAK = K + '.bak';
   try {
-    const prev = localStorage.getItem(KEY), now = Date.now(), last = +localStorage.getItem(BAK + '.t') || 0;
+    const prev = localStorage.getItem(K), now = Date.now(), last = +localStorage.getItem(BAK + '.t') || 0;
     if (!prev || now - last < 300000) return;
     const o = JSON.parse(prev); if (!isObj(o)) return;
     const old = localStorage.getItem(BAK);
@@ -2431,10 +2493,19 @@ function saveFailMsg(){
     document.body.appendChild(d); } catch(e) {}
 }
 function persist(){
+  if (PROF_GONE) return;   /* 2.09 (458) : profil ouvert supprimé, rechargement en cours */
   try {
     saved.audio = S.audio; saved.rate = S.rate; saved.voice = S.voice; saved.rehHide = S.rehHide; saved.fs = S.fs; saved.bold = S.bold;
     autoBackup();
-    localStorage.setItem(KEY, JSON.stringify(saved));
+    if (ADMIN) localStorage.setItem(KEY, JSON.stringify(saved));
+    else {   /* 2.09 (458) : le profil (Académie : complet) + les réglages communs */
+      const c = {}, o = PID === ACAD ? saved : {};
+      Object.keys(saved).forEach(k => { if (COMMON_KEYS.has(k)) c[k] = saved[k]; else if (PID !== ACAD) o[k] = saved[k]; });
+      localStorage.setItem(KEY, JSON.stringify(o));
+      if (!COMMON_BAD) autoBackup('repete.common');
+      localStorage.setItem('repete.common', JSON.stringify(c)); COMMON_BAD = false;
+      const me = PROFS.find(p => p.id === PID); if (me && me.goal !== saved.goalDate) { me.goal = saved.goalDate; profSave(PROFS); }
+    }
   } catch(e) {   /* 2.06 (261) : l'enregistrement a échoué (mémoire pleine, navigation privée…) : on prévient, au plus une fois par minute */
     if (Date.now() - (persist.warned || 0) > 60000) { persist.warned = Date.now(); saveFailMsg(); }
   }
@@ -2506,7 +2577,7 @@ const FS_NAMES = ['Petit','Moyen','Grand','Très grand'];
 const HAPTICS = [['off','Aucune'],['low','Légère'],['high','Forte']];
 const canVibe = typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function';
 /* Le profil de test n'a pas ses propres réglages : il reprend la vibration choisie dans le vrai profil (sinon « Légère » = 10 ms, quasi imperceptible) */
-const mainHaptic = () => { try { return (JSON.parse(localStorage.getItem('repete.v1') || '{}') || {}).haptic || 'low'; } catch(e) { return 'low'; } };
+const mainHaptic = () => { try { return (JSON.parse(localStorage.getItem('repete.common') || 'null') || JSON.parse(localStorage.getItem('repete.v1') || '{}') || {}).haptic || 'low'; } catch(e) { return 'low'; } };   /* 2.09 (458) : réglages communs */
 const hapticMode = () => saved.haptic || (ADMIN ? mainHaptic() : 'low');
 function buzz(kind){
   const m = hapticMode(); if (m === 'off' || !canVibe) return;
@@ -2605,7 +2676,7 @@ function hdPill(){
   /* 2.08 (M177 a) : « Sauvegarder » passe avant « Installer » (sinon, appli pas installée, le rappel ne s'afficherait jamais) */
   if (bkDue()) return `<span class="hdpw"><button class="hdp" data-act="hdsave">${IC_HDSV}Sauvegarder</button></span>`;
   if (!isStandalone()) return `<span class="hdpw"><button class="hdp" data-act="hdinst">${IC_HDDL}Installer</button></span>`;
-  return '';
+  return hdName();   /* 2.09 (458, M215 d) : sinon le nom du profil (au moins 2 profils) */
 }
 /* 2.06 (261) : demander au navigateur de ne pas effacer les données de l'appli (stockage persistant) */
 try { if (navigator.storage && navigator.storage.persist) navigator.storage.persisted().then(p => { if (!p) return navigator.storage.persist(); }).catch(() => {}); } catch(e) {}
@@ -2637,6 +2708,7 @@ function sheetInner(){
   const nm = (arr, v) => (arr.find(x => x[0] === v) || ['', ''])[1];
   const cbName = nm(CB_MODES, saved.cb || '').toLowerCase();
   return `<div class="sh-head"><h2>Réglages</h2><button class="ib shx" data-act="closesettings" aria-label="Fermer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      ${ADMIN ? '' : secBlock('prof', 'user', 'Profil', esc(profName()), profBlock())}
       ${secBlock('txt', 'text', 'Texte', 'Texte ' + FS_NAMES[S.fs].toLowerCase(), `
       <div class="lbl">Taille du texte</div>
       <div class="seg sm">${FS_NAMES.map((n, i) => `<button class="${S.fs === i ? 'on' : ''}" data-act="setfs" data-v="${i}">${n}</button>`).join('')}</div>
@@ -2698,6 +2770,83 @@ function updApply(){ const go = () => appReload(); if (!('serviceWorker' in navi
 try { document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') updCheckSoon(); }); setInterval(() => { if (document.visibilityState === 'visible') updCheckSoon(); }, 5 * 60000);
   /* 2.09 (470) : aussi au lancement de l'appli (avant, il fallait attendre un retour au premier plan ou 5 min) */
   setTimeout(updCheckSoon, 1500); } catch(e) {}   /* essai 3 (417) : toutes les 5 min tant que l'appli est affichée */
+/* ============ 2.09 (458, M215 v2 + M215 d) : profils ============
+   Réglages › Profil (en premier) : une ligne par profil, le profil ouvert entouré ; toucher une ligne = changer de profil (rechargement,
+   accueil, « Mes scènes ») ; ✎ nom + date, 🗑 après confirmation (pas pour « Académie »). Accueil : nom du profil s'il y en a au moins 2. */
+const profDate = ds => { const [y, m, d] = String(ds).split('-').map(Number); try { return new Date(y, m - 1, d).toLocaleDateString('fr-BE', { day:'numeric', month:'long', year:'numeric' }); } catch(e) { return esc(ds); } };
+function profBlock(){
+  const pen = PEN.replace('<svg ', '<svg width="18" height="18" '), bin = IC_TRASH.replace('width="16" height="16"', 'width="18" height="18"');
+  return PROFS.map(p => { const on = p.id === PID, ac = p.id === ACAD, n = esc(p.name);
+    return `<div class="prf${on ? ' on' : ''}"><button class="prfm" data-act="profgo" data-id="${p.id}" aria-pressed="${on}" aria-label="${on ? 'Profil ouvert : ' + n : 'Ouvrir le profil ' + n}"><span class="prfr" aria-hidden="true"></span><span class="prft"><b>${n}</b><span>${profDate(p.goal)}${ac ? ' · classement' : ''}</span></span></button>`
+      + (ac ? '' : `<button class="prfa" data-act="profedit" data-id="${p.id}" aria-label="Modifier le profil ${n}">${pen}</button><button class="prfa" data-act="profdel" data-id="${p.id}" aria-label="Supprimer le profil ${n}">${bin}</button>`) + '</div>'; }).join('')
+    + `<button class="btn prfadd" data-act="profnew">＋ Nouveau profil</button>`;
+}
+function profSwitch(id){ if (ADMIN || id === PID || !PROFS.some(p => p.id === id)) return;
+  persist(); blog('profil : ' + PID + ' → ' + id);
+  try { localStorage.setItem('repete.prof', id); sessionStorage.removeItem('repete.reopenSet'); sessionStorage.setItem('repete.toMine', '1'); } catch(e) {}
+  appReload(); }
+const profClean = v => String(v || '').replace(/\s+/g, ' ').trim().slice(0, PROF_MAX);
+function profAsk(id){
+  const p = id ? PROFS.find(x => x.id === id) : null; if (ADMIN || (id && (!p || id === ACAD))) return;
+  const old = document.getElementById('appcf'); if (old) old.remove();
+  const d = document.createElement('div'); d.id = 'appcf'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); d.setAttribute('aria-label', p ? 'Modifier le profil' : 'Nouveau profil');
+  d.style.cssText = 'position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(10,8,6,.55)';
+  d.innerHTML = `<div class="pfw"><p class="pft">${p ? 'Modifier le profil' : 'Nouveau profil'}</p>
+    <label class="lbl" for="pfnm">Nom</label><input id="pfnm" class="pfin" maxlength="${PROF_MAX}" autocomplete="off" autocapitalize="sentences" enterkeyhint="next" value="${p ? esc(p.name) : ''}">
+    <div class="pferr" hidden>Ce nom est déjà pris.</div>
+    <label class="lbl" for="pfdt">Date objectif</label><input id="pfdt" type="date" class="dateinp" value="${p ? esc(p.goal) : ''}">
+    <div class="pfbt"><button type="button" data-cf="no" class="btn">Annuler</button><button type="button" data-cf="ok" class="btn pri" disabled>${p ? 'Enregistrer' : 'Créer'}</button></div></div>`;
+  const nm = d.querySelector('#pfnm'), dt = d.querySelector('#pfdt'), ok = d.querySelector('[data-cf=ok]'), er = d.querySelector('.pferr');
+  const chk = () => { const n = profClean(nm.value).toLowerCase(), dup = !!n && (n === ACAD_NAME.toLowerCase() || PROFS.some(x => x.id !== id && x.name.toLowerCase() === n));
+    er.hidden = !dup; ok.disabled = !n || dup || !/^\d{4}-\d{2}-\d{2}$/.test(dt.value); };
+  ['input', 'change'].forEach(ev => { nm.addEventListener(ev, chk); dt.addEventListener(ev, chk); }); chk();
+  nm.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); try { dt.focus(); } catch(x) {} } });
+  const close = () => d.remove(); d._cancel = close;
+  d.addEventListener('click', e => { const t = e.target.closest('[data-cf]');
+    if (t && t.dataset.cf === 'ok') { chk(); if (ok.disabled) return; const n = profClean(nm.value), g = dt.value; close(); profStore(id, n, g); }
+    else if (t || e.target === d) close(); });
+  document.body.appendChild(d);
+  if (!p) try { nm.focus(); } catch(e) {}
+}
+function profStore(id, name, goal){
+  try {
+    if (!id) {   /* nouveau profil : vide, mêmes textes et réglages ; les recalculs « une seule fois » des badges sont déjà faits */
+      id = 'p' + Date.now().toString(36);
+      localStorage.setItem(profKey(id), JSON.stringify({ profile:name, goalDate:goal, season:LEGACY_SEASON, mine:[], libTab:'mine', bgSol2:1, bgJJ2:1, bgSc2:1 }));
+      PROFS.push({ id, name, goal });
+    } else {
+      const p = PROFS.find(x => x.id === id); if (!p) return;
+      if (id === PID) { saved.profile = name; saved.goalDate = goal; }
+      else { const o = jsonLS(profKey(id)); if (isObj(o)) { o.profile = name; o.goalDate = goal; localStorage.setItem(profKey(id), JSON.stringify(o)); } }
+      p.name = name; p.goal = goal;
+    }
+    localStorage.setItem('repete.profs', JSON.stringify(PROFS));
+  } catch(e) { appAlert('Enregistrement impossible (stockage plein ?).', null, true); return; }
+  if (id === PID) persist();
+  renderSheet(); try { render(); } catch(e) {}
+}
+function profDel(id){
+  const p = PROFS.find(x => x.id === id); if (ADMIN || !p || id === ACAD) return;
+  appConfirm('Supprimer le profil « ' + p.name + ' » ? Ses scènes, sa progression et ses notes seront effacées de ce téléphone.', 'Supprimer', () => {
+    const k = profKey(id);
+    try { ['', '.bak', '.bak.t', '.corrupt', '.corruptAt'].forEach(x => localStorage.removeItem(k + x)); sessionStorage.removeItem('repete.nav.' + k); } catch(e) {}
+    PROFS = PROFS.filter(x => x.id !== id); profSave(PROFS); blog('profil supprimé : ' + id);
+    if (id === PID) {   /* 494 b : le profil ouvert est supprimé → retour sur « Académie » */
+      PROF_GONE = true;
+      try { localStorage.setItem('repete.prof', ACAD); sessionStorage.removeItem('repete.reopenSet'); sessionStorage.setItem('repete.toMine', '1'); } catch(e) {}
+      appReload(); return; }
+    renderSheet(); try { render(); } catch(e) {}
+  }, true);
+}
+/* Accueil (M215 d) : le nom du profil, centré à la place des pastilles ; texte jusqu'à 12 px, puis « … » ; au moins 8 px d'écart */
+const hdName = () => !ADMIN && PROFS.length >= 2 ? `<span class="hdpw hdnw"><button class="hdn" data-act="hdprof" aria-label="Profil : ${esc(profName())}. Changer de profil">${esc(profName())}</button></span>` : '';
+try { window.addEventListener('resize', () => { try { hdFit(); } catch(e) {} }); } catch(e) {}
+function hdFit(){ try {
+  const b = document.querySelector('.hdn'); if (!b) return; const hd = b.closest('.hd'), h1 = hd.querySelector('h1'), r = hd.querySelector('.hd-r');
+  const H = hd.getBoundingClientRect(), c = H.left + H.width / 2, room = 2 * Math.min(c - h1.getBoundingClientRect().right, r.getBoundingClientRect().left - c) - 16;
+  b.style.maxWidth = Math.max(40, Math.floor(room)) + 'px'; b.style.fontSize = '';
+  for (let f = parseFloat(getComputedStyle(b).fontSize); b.scrollWidth > b.clientWidth + 0.5 && f > 12; ) { f = Math.max(12, f - 0.5); b.style.fontSize = f + 'px'; }
+} catch(e) {} }
 /* ---- Animations : déclencheurs et file d'attente (les visuels seront branchés dans ANIM) ---- */
 const ANIM = {};   /* ANIM.applause / ANIM.title / ANIM.badge = (data, {animate}) => Promise. Absent = rien ne s'affiche. */
 const ANIM_MODES = [['on','Activées'],['off','Réduites'],['none','Désactivées']];
@@ -3195,7 +3344,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 161, APP_LABEL = '2.09 · essai 5'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 162, APP_LABEL = '2.09 · essai 6'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
@@ -3246,6 +3395,8 @@ let backLoad = false;
 const NAV_KEY = 'repete.nav.' + KEY;
 let navPending = null, navY = 0;
 try { navPending = JSON.parse(sessionStorage.getItem(NAV_KEY) || 'null'); } catch(e) {}
+/* 2.09 (458) : on vient de changer de profil → accueil, onglet « Mes scènes » */
+try { if (sessionStorage.getItem('repete.toMine')) { sessionStorage.removeItem('repete.toMine'); sessionStorage.removeItem(NAV_KEY); navPending = null; saved.libTab = 'mine'; } } catch(e) {}
 function navSave(){
   if (navPending) return;                       // pas avant d'avoir restauré (ou renoncé à restaurer)
   try {
@@ -3357,18 +3508,25 @@ const noteCount = n => Object.keys(n || {}).reduce((a, k) => a + Object.keys(n[k
 const profTag = () => ADMIN ? 'admin' : 'perso';
 const fileTag = () => (ADMIN ? '-admin' : '') + '-' + String(saved.season || '').replace(/[^0-9A-Za-z_-]/g, '');
 const profLabel = t => t === 'admin' ? 'du profil de test (admin)' : t === 'perso' ? 'du profil personnel' : '';
+/* 2.09 (458) : données d'un profil sans les réglages communs ; nom du profil dans les fichiers « un seul élément » (493) */
+const profOnly = o => { const r = {}; Object.keys(o || {}).forEach(k => { if (!COMMON_KEYS.has(k) && k !== 'dayShift') r[k] = o[k]; }); return r; };
+const commonOf = o => { const r = {}; COMMON_KEYS.forEach(k => { if (o && k in o) r[k] = o[k]; }); return r; };
+const profSlug = () => ADMIN || PID === ACAD ? '' : '-' + (String(saved.profile).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || PID);
 function exportProg(){
-  const o = {}; Object.keys(saved).forEach(k => { if (k !== 'userLib' && k !== 'notes' && k !== 'dayShift') o[k] = saved[k]; });
-  dlJson('progression-repete' + fileTag() + '.json', { repete:'progression', profil:profTag(), saison:saved.season, v:APP_VER, date:today(), data:o });
+  const o = {}; Object.keys(saved).forEach(k => { if (k !== 'userLib' && k !== 'notes' && k !== 'dayShift' && (ADMIN || !COMMON_KEYS.has(k))) o[k] = saved[k]; });
+  dlJson('progression-repete' + fileTag() + profSlug() + '.json', { repete:'progression', profil:profTag(), nom:saved.profile, saison:saved.season, v:APP_VER, date:today(), data:o });
 }
 function exportNotes(){
   if (!noteCount(saved.notes)) { appAlert('Aucune note à exporter.'); return; }
-  dlJson('notes-repete' + fileTag() + '.json', { repete:'notes', profil:profTag(), saison:saved.season, v:APP_VER, date:today(), data:saved.notes });
+  dlJson('notes-repete' + fileTag() + profSlug() + '.json', { repete:'notes', profil:profTag(), nom:saved.profile, saison:saved.season, v:APP_VER, date:today(), data:saved.notes });
 }
-/* 2.01 : sauvegarde complète (tout le profil actif) en un seul fichier */
+/* 2.01 : sauvegarde complète en un seul fichier ; 2.09 (458) : toute l'appli (format 2 : tous les profils + réglages communs) */
 function exportAll(){
-  const o = JSON.parse(JSON.stringify(saved)); delete o.dayShift;
-  dlJson('sauvegarde-complete-repete' + fileTag() + '.json', { repete:'complet', profil:profTag(), saison:saved.season, v:APP_VER, date:today(), data:o });
+  if (ADMIN) { const o = JSON.parse(JSON.stringify(saved)); delete o.dayShift;
+    dlJson('sauvegarde-complete-repete' + fileTag() + '.json', { repete:'complet', profil:profTag(), saison:saved.season, v:APP_VER, date:today(), data:o }); bkDone(); return; }
+  persist();
+  const profils = PROFS.map(p => ({ id:p.id, name:p.name, goal:p.goal, data: profOnly(p.id === PID ? JSON.parse(JSON.stringify(saved)) : (jsonLS(profKey(p.id)) || {})) }));
+  dlJson('sauvegarde-complete-repete' + fileTag() + '.json', { repete:'complet', format:2, profil:'perso', saison:saved.season, v:APP_VER, date:today(), actif:PID, commun:commonOf(saved), profils });
   bkDone();
 }
 /* 2.08 (377 / 412, M177 a + c, M178) : rappel de sauvegarde = pastille « Sauvegarder » de l'accueil.
@@ -3383,12 +3541,12 @@ function bkInit(){ if (!saved.bk || typeof saved.bk !== 'object' || Array.isArra
   if (b.snooze && daysBetween(d, b.snooze) > BK_LATER) b.snooze = bkAdd(d, BK_LATER); return b; }
 const bkAdd = (s, n) => { const [y, m, d] = s.split('-').map(Number); return ymd(new Date(y, m - 1, d + n)); };
 function bkDue(){ const b = bkInit(), d = today();
-  if (b.off || !((saved.nAns | 0) > (b.ans | 0))) return false;
+  if (b.off || !((saved.ansAll | 0) > (b.ans | 0))) return false;   /* 2.09 (458) : réponses de tous les profils */
   if (b.snooze && daysBetween(d, b.snooze) > 0) return false;
   if (daysBetween(b.last || b.from, d) >= BK_DAYS) return true;
   const j = daysBetween(calToday(), saved.goalDate);
   return j >= 0 && j <= BK_GOAL && !(b.last && daysBetween(b.last, saved.goalDate) <= BK_GOAL); }
-function bkDone(){ const b = bkInit(); b.last = today(); b.ans = saved.nAns | 0; b.snooze = null; persist(); try { if (S.view === 'library') render(); } catch(e) {} }
+function bkDone(){ const b = bkInit(); b.last = today(); b.ans = saved.ansAll | 0; b.snooze = null; persist(); try { if (S.view === 'library') render(); } catch(e) {} }
 function bkLine(){ const b = bkInit(); if (!b.last) return 'Aucune sauvegarde pour l’instant';
   const n = daysBetween(b.last, today()); return 'Dernière sauvegarde : ' + (n <= 0 ? 'aujourd’hui' : n === 1 ? 'hier' : 'il y a ' + n + ' jours'); }
 function bkAsk(){
@@ -3410,7 +3568,9 @@ function bkAsk(){
   try { d.querySelector('[data-cf=later]').focus(); } catch(e) {}
 }
 function importAll(f){
-  readJsonFile(f, 'complet', data => {
+  readJsonFile(f, 'complet', (data, old, j) => {
+    if (!ADMIN && j.format === 2) return importAll2(j);
+    if (!ADMIN) return importOld(data);
     appConfirm('Remplacer toutes les données de ce téléphone (progression, notes, textes ajoutés, réglages) par celles du fichier ?\n\nUne copie de l’état actuel est gardée en sauvegarde automatique.', 'Remplacer', () => {
       try {
         const cur = localStorage.getItem(KEY); if (cur) { localStorage.setItem(BAK, cur); localStorage.setItem(BAK + '.t', String(Date.now())); }
@@ -3420,23 +3580,70 @@ function importAll(f){
     }, true);
   });
 }
+/* 2.09 (458) : restaurer un fichier « toute l'appli » : tous les profils et les réglages sont remplacés */
+function importAll2(j){
+  const ps = j.profils.filter(p => p && typeof p.id === 'string' && /^[A-Za-z0-9]+$/.test(p.id) && isObj(p.data));
+  if (!ps.some(p => p.id === ACAD) || (j.commun != null && !isObj(j.commun))) { appAlert('Fichier illisible.', null, true); return; }
+  appConfirm('Remplacer toutes les données de ce téléphone (tous les profils, réglages et textes ajoutés) par celles du fichier ?\n\nUne copie de l’état actuel est gardée en sauvegarde automatique.', 'Remplacer', () => {
+    try {
+      const keep = k => { const cur = localStorage.getItem(k); if (cur) { localStorage.setItem(k + '.bak', cur); localStorage.setItem(k + '.bak.t', String(Date.now())); } };
+      PROFS.forEach(p => { keep(profKey(p.id)); if (!ps.some(x => x.id === p.id)) localStorage.removeItem(profKey(p.id)); });
+      keep('repete.common');
+      const c = j.commun || {}, list = ps.map(p => { const d = profOnly(p.data);
+        d.profile = p.id === ACAD ? ACAD_NAME : profClean(p.name || d.profile) || 'Profil';
+        if (typeof d.goalDate !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(d.goalDate)) d.goalDate = /^\d{4}-\d{2}-\d{2}$/.test(p.goal || '') ? p.goal : '2027-01-19';
+        localStorage.setItem(profKey(p.id), JSON.stringify(p.id === ACAD ? Object.assign(d, c) : d));
+        return { id:p.id, name:d.profile, goal:d.goalDate }; });
+      localStorage.setItem('repete.common', JSON.stringify(c));
+      localStorage.setItem('repete.profs', JSON.stringify(list));
+      localStorage.setItem('repete.prof', list.some(p => p.id === j.actif) ? j.actif : ACAD);
+      sessionStorage.removeItem('repete.reopenSet'); sessionStorage.setItem('repete.toMine', '1');
+    } catch(e) { appAlert('Import impossible (stockage plein ?).', null, true); return; }
+    PROF_GONE = true; appReload();
+  }, true);
+}
+/* 2.09 (492) : fichier d'avant les profils : il remplace « Académie » et les réglages ; les autres profils ne sont pas touchés ;
+   les textes ajoutés depuis (absents du fichier) sont gardés */
+function importOld(data){
+  appConfirm('Ce fichier date d’avant les profils : il remplace le profil « Académie » et les réglages. Les autres profils ne sont pas touchés.\n\nUne copie de l’état actuel est gardée en sauvegarde automatique.', 'Remplacer', () => {
+    try {
+      ['repete.v1', 'repete.common'].forEach(k => { const cur = localStorage.getItem(k); if (cur) { localStorage.setItem(k + '.bak', cur); localStorage.setItem(k + '.bak.t', String(Date.now())); } });
+      const c = commonOf(data), lib = Array.isArray(c.userLib) ? c.userLib : [];
+      (saved.userLib || []).forEach(pl => { if (!lib.some(x => x.id === pl.id)) lib.push(pl); }); c.userLib = lib;
+      const d = Object.assign({}, data, c); d.profile = ACAD_NAME; delete d.dayShift;
+      localStorage.setItem('repete.v1', JSON.stringify(d)); localStorage.setItem('repete.common', JSON.stringify(c));
+      const l = PROFS.map(p => p.id === ACAD ? { id:ACAD, name:ACAD_NAME, goal:/^\d{4}-\d{2}-\d{2}$/.test(d.goalDate || '') ? d.goalDate : '2027-01-19' } : p);
+      localStorage.setItem('repete.profs', JSON.stringify(l)); localStorage.setItem('repete.prof', ACAD);
+      sessionStorage.removeItem('repete.reopenSet'); sessionStorage.setItem('repete.toMine', '1');
+    } catch(e) { appAlert('Import impossible (stockage plein ?).', null, true); return; }
+    PROF_GONE = true; appReload();
+  }, true);
+}
 function readJsonFile(f, kind, cb){
   f.text().then(txt => { let j = null; try { j = JSON.parse(txt); } catch(e) {}
-    if (!j || j.repete !== kind || !isObj(j.data)) { appAlert('Ce fichier n’est pas un fichier « ' + (kind === 'notes' ? 'notes' : kind === 'complet' ? 'sauvegarde complète' : 'progression') + ' » de Répète.', null, true); return; }
+    const v2 = !!j && kind === 'complet' && j.format === 2 && Array.isArray(j.profils);
+    if (!j || j.repete !== kind || (!v2 && !isObj(j.data)) || (v2 && ADMIN)) { appAlert('Ce fichier n’est pas un fichier « ' + (kind === 'notes' ? 'notes' : kind === 'complet' ? 'sauvegarde complète' : 'progression') + ' » de Répète.', null, true); return; }
     if (j.profil && j.profil !== profTag()) { appAlert('Ce fichier vient ' + profLabel(j.profil) + '. Tu es dans ' + (ADMIN ? 'le profil de test (admin)' : 'le profil personnel') + '. Import refusé pour éviter les mélanges.', null, true); return; }
     if (j.saison && j.saison !== saved.season) { appAlert('Ce fichier est de la saison « ' + j.saison + ' », ce profil est en saison « ' + saved.season + ' ». Import refusé pour éviter les mélanges.', null, true); return; }
-    cb(j.data, !j.profil); }, () => appAlert('Fichier illisible.', null, true));
+    /* 2.09 (498) : fichier d'un autre profil : on demande d'abord, puis la confirmation habituelle */
+    if (!ADMIN && kind !== 'complet' && typeof j.nom === 'string' && j.nom && j.nom !== saved.profile) {
+      appConfirm('Ce fichier vient du profil « ' + j.nom + ' ». L’importer dans « ' + saved.profile + ' » ?', 'Importer', () => cb(j.data, !j.profil, j)); return; }
+    cb(j.data, !j.profil, j); }, () => appAlert('Fichier illisible.', null, true));
 }
 function importProg(f){
   readJsonFile(f, 'progression', (data, old) => {
     const n = Object.keys(data.prog || {}).length + Object.keys(data.lines || {}).length;
-    appConfirm((old ? 'Ancien fichier : son profil n’est pas indiqué.\n\n' : '') + 'Remplacer la progression de ce téléphone par celle du fichier ?\n\nTes notes et tes textes ajoutés sont conservés. Une copie de l’état actuel est gardée en sauvegarde automatique.', 'Remplacer', () => {
+    appConfirm((old ? 'Ancien fichier : son profil n’est pas indiqué.\n\n' : '') + (ADMIN ? 'Remplacer la progression de ce téléphone par celle du fichier ?' : 'Remplacer la progression du profil « ' + saved.profile + ' » par celle du fichier ?') + '\n\nTes notes et tes textes ajoutés sont conservés. Une copie de l’état actuel est gardée en sauvegarde automatique.', 'Remplacer', () => {
     try {
       const cur = localStorage.getItem(KEY); if (cur) { localStorage.setItem(BAK, cur); localStorage.setItem(BAK + '.t', String(Date.now())); }
-      const nw = Object.assign({}, data, { userLib: saved.userLib, notes: saved.notes });
+      let nw = Object.assign({}, data, { userLib: saved.userLib, notes: saved.notes });
+      if (!ADMIN) {   /* 2.09 (458) : la progression seulement ; ce profil garde son nom, sa date et les réglages communs */
+        nw = profOnly(nw); nw.notes = saved.notes; nw.profile = saved.profile; nw.goalDate = saved.goalDate;
+        if (PID !== ACAD) delete nw.rank; else Object.assign(nw, commonOf(saved));
+      }
       localStorage.setItem(KEY, JSON.stringify(nw));
     } catch(e) { appAlert('Import impossible (stockage plein ?).', null, true); return; }
-    appReload();
+    if (!ADMIN) PROF_GONE = true; appReload();
     }, true);
   });
 }
@@ -3791,6 +3998,7 @@ function render(){
   $('#app').innerHTML = (ADMIN ? admBar() : '') + (S.view === 'library' ? libView() : S.view === 'badges' ? badgesView() : S.view === 'progress' ? progressView() : S.view === 'rank' ? rankView() : S.view === 'import' ? importView() : sceneView());
   renderSheet();
   renderNotes();
+  try { hdFit(); } catch(e) {}   /* 2.09 (458, M215 d) */
   try { ttsMark(); } catch(e) {}
   navSave();
   try { wakeSync(); } catch(e) {}
@@ -3982,6 +4190,7 @@ const ICO = {
   text:'<path d="M4 15v-6.5a3.5 3.5 0 0 1 7 0V15"/><path d="M4 12h7"/><circle cx="17.5" cy="14.5" r="2.5"/><path d="M20 12v5"/>',
   palette:'<path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25"/><circle cx="8.5" cy="10.5" r=".5"/><circle cx="12.5" cy="7.5" r=".5"/><circle cx="16.5" cy="10.5" r=".5"/>',
   sparkles:'<path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/>',
+  user:'<path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"/><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/>',   /* 2.09 (458) : Réglages › Profil */
   database:'<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6a8 3 0 0 0 16 0v-6"/><path d="M4 12v6a8 3 0 0 0 16 0v-6"/>',
   cal:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/><rect x="8" y="15" width="2" height="2"/>'
 };
@@ -4099,7 +4308,7 @@ function donut(st, k){
 function mineView(){
   const D = progData(), list = D.list;
   if (!list.length) return `<p class="hint big">Aucune scène pour l’instant.<br>Dans la bibliothèque, touche l’étoile à côté des scènes que tu joues.</p>
-    <button class="btn pri" style="width:100%" data-act="libtab" data-v="all">Ouvrir la bibliothèque</button>`;
+    <button class="btn pri" style="width:100%" data-act="libtab" data-v="all">Ouvrir la bibliothèque</button>` + (ADMIN ? admDayBox() : '');   /* 2.09 (488) : cadre admin aussi quand « Mes scènes » est vide */
   const lv = D.lv, dl = daysBetween(calToday(), saved.goalDate);
   const items = allStats(), t = items.length ? todayInfo(items) : null;
   let h = `<button class="band" data-act="progressopen" aria-label="Ouvrir Ma progression">
@@ -4176,11 +4385,13 @@ async function rankLoad(){
 /* 2.07 (316) : force = envoyer même si le dernier envoi date de moins d'une minute ; la liste n'est lue qu'APRÈS l'envoi
    (avant, les deux partaient en même temps et la liste pouvait revenir avec ses anciens chiffres). */
 let rankP = null;
-function rankSync(force){ if (ADMIN) return Promise.resolve(); const r = rk(); let p = Promise.resolve();
+function rankSync(force){ if (ADMIN || rankOff()) return Promise.resolve(); const r = rk(); let p = Promise.resolve();
   if (r.del) p = rankDelete(); else if (r.on) p = rankSend(force);
   return S.view === 'rank' ? p.then(rankLoad, rankLoad) : p; }
 /* 2.07 (316) : un envoi bloqué par la limite d'une minute est reprogrammé à la fin de la minute (avant, il était perdu). */
-function rankSoon(){ if (ADMIN || !saved.rank || !saved.rank.on) return; clearTimeout(rankT);
+/* 2.09 (458) : le classement est réservé au profil Académie */
+const rankOff = () => !ADMIN && PID !== ACAD, RANK_OFF_MSG = 'Classement réservé au profil Académie.';
+function rankSoon(){ if (ADMIN || rankOff() || !saved.rank || !saved.rank.on) return; clearTimeout(rankT);
   const wait = Math.max(5000, RANK_EVERY - (Date.now() - (rk().last || 0)) + 500); rankT = setTimeout(() => rankSend(), wait); }
 function rankFoot(){ const el = document.getElementById('rankfoot'); if (el) el.innerHTML = rankFootText(); }
 function rankFootText(){
@@ -4222,8 +4433,8 @@ const rankM = p => (typeof p.mastery === 'number' && isFinite(p.mastery)) ? p.ma
 const rankSort = arr => arr.slice().sort((a, b) => (b.level | 0) - (a.level | 0) || rankM(b) - rankM(a) || (b.badgeCount | 0) - (a.badgeCount | 0) || (b.streak | 0) - (a.streak | 0));
 /* carte « Classement » de Ma progression : ta place, l'écart avec la personne devant, tes voisins */
 function rankCard(){
-  const r = rk(), c = r.cache, head = `<button class="hdtog" data-act="rankopen"><span class="lbl" style="margin:0">Classement</span><span class="tg">Voir ›</span></button>`;
-  const msg = ADMIN ? 'Profil de test : le classement est désactivé.'
+  const r = rankOff() ? {} : rk(), c = r.cache, head = `<button class="hdtog" data-act="rankopen"><span class="lbl" style="margin:0">Classement</span><span class="tg">Voir ›</span></button>`;
+  const msg = ADMIN ? 'Profil de test : le classement est désactivé.' : rankOff() ? RANK_OFF_MSG
     : !r.on ? 'Pour voir ta place, inscris-toi au classement : touche « Voir », puis « Participer ».'
     : !c || !c.players || !c.players.length ? 'Ouvre le classement pour charger ta place.' : '';
   if (msg) return `<section class="card rkcard" data-act="rankopen">${head}<div class="mute small" style="margin-top:4px">${msg}</div></section>`;
@@ -4241,10 +4452,11 @@ function rankCard(){
     ${nb.map(p => `<div class="rkv ${p.you ? 'you' : ''}"><span>${L.indexOf(p) + 1}. ${esc(p.pseudo)}</span><span>Niv. ${p.level | 0}</span></div>`).join('')}</section>`;
 }
 function rankView(){
-  const r = rk(), c = r.cache;
+  const r = rankOff() ? {} : rk(), c = r.cache;
   let h = `<div class="bhead"><button class="ghost back" data-act="rankback" aria-label="Retour">${BACK}</button><h2>Classement</h2>${S.rankUpd ? '<button class="ghost" data-act="rankrefresh" disabled>Mise à jour…</button>' : '<button class="ghost" data-act="rankrefresh">Actualiser</button>'}</div>
     <p class="mute small" style="margin:-4px 2px 12px">${esc(saved.profile)}</p>`;
   if (ADMIN) return h + '<section class="card"><p class="mute">Profil de test : le classement est désactivé (rien n’est envoyé).</p></section>';
+  if (rankOff()) return h + '<section class="card"><p class="mute">' + RANK_OFF_MSG + '</p></section>';   /* 2.09 (458) */
   const info = `<div class="infobox" style="margin-top:10px"><p><b>Qu’est-ce qui est envoyé ?</b> Seuls ton pseudo et tes chiffres de progression : niveau, maîtrise globale, série, badges et nombre de répliques entraînées (chaque réponse compte). Aucun texte, aucun nom.</p>
       <p>Ordre : niveau, puis maîtrise, puis badges, puis série. Un pseudo ne peut être utilisé que par une seule personne.</p>
       <p>Tu peux voir le classement sans participer. Tu peux te retirer à tout moment : ta ligne est alors supprimée.</p></div>`;
@@ -4797,7 +5009,7 @@ function grade(v){
   const before = stOf(L[si]);
   const r0 = L[si] = L[si] || { n:0, ok:null, ko:false }, day = today();
   r0.g = day;
-  saved.nAns = (saved.nAns | 0) + 1;   /* 2.07 (316) : nombre total de réponses données (classement), reparti de 0 */
+  saved.nAns = (saved.nAns | 0) + 1; saved.ansAll = (saved.ansAll | 0) + 1;   /* 2.09 (458) : ansAll = tous les profils (rappel de sauvegarde) */   /* 2.07 (316) : nombre total de réponses données (classement), reparti de 0 */
   /* 2.03 : « Scènes jouées » en équivalent scène — chaque réponse compte ; quand le nombre de réponses atteint
      le nombre de mes répliques dans la scène, une scène est comptée (en une ou plusieurs fois, sans limite par jour). */
   { const mk = mKey(S.play, S.scene, S.me), tot = S.scene.items.filter(it => it.k === 'l' && it.c === S.me).length;
@@ -4907,7 +5119,7 @@ document.addEventListener('click', e => {
     case 'mytexts': { const y = window.scrollY; S.myTexts = !S.myTexts; render(); window.scrollTo(0, y); break; }   /* 2.06 essai 2 (M93 C) */
     case 'importdel': { const pl = b.dataset.play, sc = b.dataset.scene; appConfirm('Supprimer ce texte de ce téléphone ?', 'Supprimer', () => { impDelete(pl, sc); render(); }, true); break; }
     case 'progressopen': S.view = 'progress'; S.menuK = null; S.infoObj = false; render(); window.scrollTo(0, 0); break;
-    case 'rankopen': S.view = 'rank'; S.rankUpd = !ADMIN; render(); window.scrollTo(0, 0); rankSync(true).finally(rankUpdEnd); break;   /* essai 7 (M176 b) : « Mise à jour… » pendant l'envoi et la lecture */   /* 2.07 (316) : envoie ses chiffres, puis lit la liste (comme « Actualiser ») */
+    case 'rankopen': S.view = 'rank'; S.rankUpd = !ADMIN && !rankOff(); render(); window.scrollTo(0, 0); rankSync(true).finally(rankUpdEnd); break;   /* essai 7 (M176 b) : « Mise à jour… » pendant l'envoi et la lecture */   /* 2.07 (316) : envoie ses chiffres, puis lit la liste (comme « Actualiser ») */
     case 'rankrefresh': { if (b.disabled) break; S.rankUpd = true; b.disabled = true; b.textContent = 'Mise à jour…';   /* essai 7 : même « Mise à jour… » que l'ouverture */
       (rk().on && rankClean(rk().pseudo) ? rankSend(true) : Promise.resolve()).then(rankLoad).finally(rankUpdEnd); break; }
     case 'inforank': e.preventDefault(); S.infoRank = !S.infoRank; render(); break;   /* 2.06 essai 5 (M96 b) : dans le libellé, ne bascule pas l'interrupteur */
@@ -5003,7 +5215,7 @@ document.addEventListener('click', e => {
     case 'ttshelp': S.ttsHelp = true; render(); break;   /* 2.06 essai 4 (M95-4 c) */
     case 'ttsclose': S.ttsOff = S.tts; S.ttsHelp = false; render(); break;
     case 'admsavefail': closeSettings(); saveFailMsg(); break;
-    case 'admbk': { const k = bkInit(); Object.assign(k, { from: bkAdd(today(), -BK_DAYS), last: null, snooze: null, off: false, ans: (saved.nAns | 0) - 1 }); persist(); closeSettings(); S.view = 'library'; render(); break; }   /* 2.08 essai 3 (419) */
+    case 'admbk': { const k = bkInit(); Object.assign(k, { from: bkAdd(today(), -BK_DAYS), last: null, snooze: null, off: false, ans: (saved.ansAll | 0) - 1 }); persist(); closeSettings(); S.view = 'library'; render(); break; }   /* 2.08 essai 3 (419) */
     /* 2.07 (312 / 318) : journal du bouton retour */
     case 'blogrf': renderSheet(); break;
     case 'blogcp': { const t = blogRead().join('\n'); try { navigator.clipboard.writeText(t).then(() => flashMsg('Journal copié'), () => flashMsg('Copie impossible')); } catch(e) { flashMsg('Copie impossible'); } break; }
@@ -5075,7 +5287,12 @@ document.addEventListener('click', e => {
     case 'startital': { S.missed = new Set(); const st = allSteps(); beginSteps(st, S.eph.italGo === false ? 0 : firstPos(st), true, null, false, true); break; }
     case 'rmode': S.rmode = ['cards', 'ital'].includes(b.dataset.v) ? b.dataset.v : 'reh'; S.vdet = false; if (S.play && S.scene) { saved.rmSc = saved.rmSc || {}; saved.rmSc[key()] = S.rmode; persist(); } render(); break;   /* 2.09 (essai 1 · 10) : mode retenu par scène */   /* 351 : les détails de la voix se referment */
     case 'hdupd': b.disabled = true; b.lastChild && (b.lastChild.textContent = 'Mise à jour…'); updApply(); break;   /* 2.06 (260) ; essai 6 : attend la nouvelle version */
-    case 'hdsave': bkAsk(); break;   /* 2.08 (M177 a, M178 a) */
+    case 'hdsave': bkAsk(); break;
+    case 'hdprof': S.setSec = 'prof'; openSettings(); break;   /* 2.09 (458, M215 d) : nom du profil → Réglages › Profil */
+    case 'profgo': profSwitch(b.dataset.id); break;   /* 2.09 (458, M215 v2) */
+    case 'profnew': profAsk(null); break;
+    case 'profedit': profAsk(b.dataset.id); break;
+    case 'profdel': profDel(b.dataset.id); break;   /* 2.08 (M177 a, M178 a) */
     case 'hdinst': instGo(); break;   /* 2.09 (465, M210 b) : sans proposition du téléphone → fenêtre d'aide (plus de renvoi aux Réglages) */
     case 'vdet': e.preventDefault(); S.vdet = !S.vdet; render(); break;   /* 2.06 (253, M90-1 A) : « Détails » ne bascule pas l’interrupteur */
     case 'cresume': {
