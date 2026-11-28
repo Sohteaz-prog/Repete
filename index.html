@@ -2796,7 +2796,7 @@ const TIERC = ['#B9773A', '#A7ADB8', '#E3A71F', '#7FB5C8', '#5CC3F2'];
 const BADGES = [
   { id:'streak', name:'Série', g:'S', desc:'Reviens réviser, jour après jour.', T:[3, 7, 14, 21, 28] },
   { id:'obj', name:'Objectif du jour', g:'O', desc:'Atteins ton objectif du jour, encore et encore.', T:[1, 5, 15, 30, 50] },
-  { id:'scenes', name:'Scènes jouées', g:'R', desc:'Répète l’équivalent de scènes entières, en une ou plusieurs fois.', T:[1, 10, 30, 75, 150] },
+  { id:'scenes', name:'Scènes jouées', g:'R', desc:'Répète l’équivalent de scènes entières, en une ou plusieurs fois.', T:[3, 15, 35, 60, 100] },   /* 2.09 essai 5 (487) : avant 1 / 10 / 30 / 75 / 150 */
   /* 2.09 (460) : 25 %, 50 %, 100 % de solides, puis tout ★1, tout ★3 (valeur = % de solides, ou 100 + étoile globale quand tout est solide) */
   { id:'solid', name:'Répliques solides', g:'%', desc:'Rends tes répliques solides, puis fais-les briller.', T:[25, 50, 100, 101, 103] },
   { id:'perfect', name:'Scène parfaite', g:'P', unique:true, desc:'Maîtrise une scène à 100 %.' },
@@ -2827,6 +2827,8 @@ function checkBadges(){
   if (v.rising && !fix.rising) g.rising = 1; if (v.star && !fix.star) g.star = 1;
   /* 2.09 essai 4 (484) : une seule fois, « Prêt pour le jour J » obtenu avec les anciennes conditions (plus faciles) tombe si les nouvelles ne sont pas remplies */
   let mig = false; if (!saved.bgJJ2) { saved.bgJJ2 = 1; mig = true; if (!fix.ready && !v.ready) { g.ready = 0; saved.bg.ready = 0; } }
+  /* 2.09 essai 5 (487) : nouveaux paliers « Scènes jouées » : palier recalculé une fois (il peut baisser) */
+  if (!saved.bgSc2) { saved.bgSc2 = 1; mig = true; const sb = BADGES.find(b => b.id === 'scenes'); if (!fix.scenes) saved.bg.scenes = sb.T.filter(t => (g.scenes || 0) >= t - 1e-9).length; }
   /* 2.09 (460) : nouveaux paliers « Répliques solides » : le palier affiché est recalculé une fois (il peut baisser) */
   if (!saved.bgSol2) { saved.bgSol2 = 1; const sb = BADGES.find(b => b.id === 'solid'); if (!fix.solid) saved.bg.solid = sb.T.filter(t => (g.solid || 0) >= t - 1e-9).length; }
   BADGES.forEach(b => { if (fix[b.id]) return;
@@ -2955,17 +2957,22 @@ function admFeedback(op, v, raw){
 }
 try { const m = sessionStorage.getItem('admToast'); if (m) { sessionStorage.removeItem('admToast'); setTimeout(() => admToast(m), 300); } } catch(e) {}
 const admBar = () => `<div class="admbar"><span><b>Mode admin</b> · profil de test, ta vraie progression n’est pas touchée</span><button data-act="admquit">Quitter</button></div>`;
-function admLines(){   // toutes les répliques de tes personnages, pour toutes les scènes de la bibliothèque
+/* 2.09 essai 5 (486) : seulement les scènes de « Mes scènes » (avant : toutes les scènes de la bibliothèque, ajoutées d'office) */
+function admLines(){   // toutes les répliques de tes personnages, dans « Mes scènes »
   const out = [];
   LIBRARY.forEach(p => p.scenes.forEach(s => {
-    const k = keyOf(p, s); let c = saved.me[k];
+    const k = keyOf(p, s); if (!(saved.mine || []).includes(k)) return; let c = saved.me[k];
     if (!c || !s.characters.includes(c)) { const cnt = {}; s.items.forEach(it => { if (it.k === 'l') cnt[it.c] = (cnt[it.c] || 0) + 1; }); c = s.characters.slice().sort((a, b) => (cnt[b] || 0) - (cnt[a] || 0))[0]; }
     s.items.forEach((it, i) => { if (it.k === 'l' && it.c === c) out.push({ p, s, k, c, i }); });
   }));
   return out;
 }
+/* 486 : « Mes scènes » vide → 3 scènes prises au hasard (avec des répliques) ; le personnage le plus présent est choisi s'il manque */
 function admPrepare(){
-  admLines().forEach(x => { if (!saved.mine.includes(x.k)) saved.mine.push(x.k); saved.me[x.k] = x.c; });
+  saved.mine = (saved.mine || []).filter(k => findScene(...k.split('/')));
+  if (!saved.mine.length) { const all = []; LIBRARY.forEach(p => p.scenes.forEach(s => { if (s.items.some(it => it.k === 'l')) all.push(keyOf(p, s)); }));
+    for (let i = 0; i < 3 && all.length; i++) saved.mine.push(all.splice(Math.floor(Math.random() * all.length), 1)[0]); }
+  admLines().forEach(x => { saved.me[x.k] = x.c; });
 }
 function admOp(op, v){
   const day = today();
@@ -3003,7 +3010,7 @@ function admOp(op, v){
 /* 2.09 (474, M217) : outils de test des prestiges, pour une scène (clé « pièce/scène ») ou toutes les scènes */
 function admScene(op, k, v){
   const day = today(), back = n => new Date((dayNum(day) - n) * 86400000).toISOString().slice(0, 10);
-  if (op !== 'jj') admPrepare();
+  admPrepare();
   const L = admLines().filter(x => op === 'jj' || x.k === k), rec = x => { const m = saved.lines[mKey(x.p, x.s, x.c)] = saved.lines[mKey(x.p, x.s, x.c)] || {}; return m[x.i] = m[x.i] || { n:0, ok:null, ko:false, g:null }; };
   const up = r => { r.ko = false; r.pf = null; if ((r.n | 0) < 5) r.n = (r.n | 0) + 1; else if ((r.p | 0) < 5) { r.s = (r.s | 0) + 1; if (r.s >= 5) { r.p = (r.p | 0) + 1; r.s = 0; } } r.ok = day; };
   let msg = '';
@@ -3050,7 +3057,8 @@ function admTiers(){
 function admDayBox(){ const n = saved.dayShift | 0, d = new Date(Date.parse(calToday() + 'T12:00:00')).toLocaleDateString('fr-BE', { weekday:'short', day:'numeric', month:'short' });
   return `<div class="admctx"><div class="lbl">Admin · ${n ? 'jour simulé : J' + (n > 0 ? '+' : '−') + Math.abs(n) + ' · ' + d : 'jour réel · ' + d}</div><div class="admgrid">
     <button class="admb" data-act="adm" data-op="shift" data-v="-1">Jour −1</button><button class="admb" data-act="adm" data-op="shift" data-v="1">Jour +1</button>
-    <button class="admb" data-act="adm" data-op="shift" data-v="7">Jour +7</button><button class="admb" data-act="adm" data-op="shift" data-v="0">Jour réel</button></div></div>`; }
+    <button class="admb" data-act="adm" data-op="shift" data-v="7">Jour +7</button><button class="admb" data-act="adm" data-op="shift" data-v="0">Jour réel</button>
+    <button class="admb" data-act="adm" data-op="rand" style="grid-column:1/3">Progression au hasard (mes scènes)</button></div></div>`; }
 let offMsg = '';
 async function checkOffline(){
   offMsg = 'Vérification…'; renderSheet();
@@ -3187,7 +3195,7 @@ function renderSheet(){
    deux appuis rapprochés (2 s) pour quitter. Mécanisme : l'historique contient l'entrée de départ (« base ») puis
    TOP_DEPTH entrées « sentinelle » ; chaque retour du téléphone arrive dans le gestionnaire popstate, l'appli agit, puis les
    sentinelles manquantes sont remises (après coup, à chaque toucher et au retour au premier plan). */
-const APP_VER = 160, APP_LABEL = '2.09 · essai 4'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
+const APP_VER = 161, APP_LABEL = '2.09 · essai 5'; /* APP_VER = numéro interne (comparaison des mises à jour) ; APP_LABEL = version affichée */
 /* 2.06 (264) : journal du bouton retour retiré ; on efface seulement l'ancien journal resté sur le téléphone */
 try { localStorage.removeItem('repete.hlog'); } catch(e) {}
 let baseIdx = 0, leaving = false, jumping = false, rearmT = 0;
